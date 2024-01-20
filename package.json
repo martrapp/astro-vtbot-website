@@ -1,57 +1,31 @@
 {
-  "name": "astro-vtbot",
-  "version": "1.3.1",
-  "description": "A Bag of Tricks for Astro's View Transitions",
-  "homepage": "https://github.com/martrapp/astro-vt-bot#readme",
+  "name": "astro-vtbot-website",
+  "version": "1.3.2",
+  "description": "The Website for the Bag of Tricks for Astro's View Transitions",
+  "homepage": "https://github.com/martrapp/astro-vtbot#readme",
   "bugs": {
-    "url": "https://github.com/martrapp/astro-vt-bot/issues"
+    "url": "https://github.com/martrapp/astro-vtbot-website/issues"
   },
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martrapp/astro-vt-bot.git"
+    "url": "git+https://github.com/martrapp/astro-vtbot-website.git"
   },
   "type": "module",
-  "files": [
-    "components",
-    "animations",
-    "integration"
-  ],
-  "exports": {
-    ".": "./integration/index.ts",
-    "./components/*.astro": {
-      "import": "./components/*.astro",
-      "types": "./components/*.d.ts"
-    },
-    "./animations/*.astro": {
-      "import": "./animations/*.astro",
-      "types": "./animations/*.d.ts"
-    },
-    "./animations/*": "./animations/*.ts",
-    "./package.json": "./package.json",
-    "./vtext": "./integration/view-transition-extension.ts",
-    "./vite-plugin-extend": "./integration/vite-plugin-extend.ts"
-  },
+  "files": [],
+  "exports": [],
   "keywords": [
-    "astro-component",
-    "astro-integration",
     "view-transition",
     "view transition",
     "view transitions",
     "transition",
-    "transitions",
-    "swap",
-    "load",
-    "linter",
-    "debug"
+    "transitions"
   ],
   "scripts": {
-    "format": "prettier -w components integration animations",
-    "dev": "cd example && astro dev",
-    "build": "cd example && astro build",
-    "preview": "cd example && astro preview",
-    "test": "mkdir -p test/fixture/node_modules && (cd test/fixture/node_modules && rm -f astro-vtbot; ln -sT ../../.. astro-vtbot) &&  npx playwright test",
-    "relocate": "cd example && ./bin/relocate.sh"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "relocate": "./bin/relocate.sh"
   },
   "peerDependencies": {
     "astro": "^4.0.0"
@@ -60,13 +34,11 @@
     "@astrojs/mdx": "^2.0.0",
     "@changesets/changelog-github": "0.5.0",
     "@changesets/cli": "^2.27.1",
-    "@playwright/test": "^1.40.0",
     "@types/dom-view-transitions": "^1.0.4",
     "@types/node": "^20.10.4",
     "astro": "^4.0.3",
     "astro-expressive-code": "^0.31.0",
-    "prettier": "^3.1.0",
-    "prettier-plugin-astro": "^0.12.2",
+    "astro-vtbot": "^1.3.1",
     "remark-toc": "^9.0.0",
     "typescript": "^5.3.3"
   },
