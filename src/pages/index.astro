@@ -4,7 +4,7 @@ import Layout from 'src/layouts/Layout.astro';
 import fi from 'src/assets/fi.png';
 ---
 
-<Layout title="Bag of Tricks for View Transition">
+<Layout title="Bag of Tricks for Astro's View Transitions">
 	<meta
 		slot="head"
 		name="description"
@@ -32,8 +32,8 @@ import fi from 'src/assets/fi.png';
 	/>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
-	<h1 class="hit-the-floor">Welcome to the Bag of Tricks for Astro View Transitions</h1>
-	<span id="ken" transition:animate="slide" transition:name="ken">🦘</span>
+	<h1 class="hit-the-floor">Welcome to the <br/>👜 Bag of Tricks ✨<br/>for Astro's View<br/> Transitions</h1>
+	<span id="ken" transition:animate="slide" transition:name="ken"></span>
 	<div id="outer">
 		<div id="new">
 			<a href="https://www.npmjs.com/package/astro-vtbot"
@@ -45,10 +45,10 @@ import fi from 'src/assets/fi.png';
 			</a>
 		</div>
 	</div>
-	<a href="/components/" transition:name="reuse">Reusable Components</a>
+	<a href="/components/" transition:name="reuse">Reusable Components</a><br/>
 	<a href="/demos/" transition:name="demos">Tech Demos</a>
 	<div class="fancy">&nbsp;</div>
-	<div style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:1vh; right: 3vw">
+	<div style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:8vh; right: 8vw">
 		Visit <a
 			style="text-decoration: dotted underline; color: coral"
 			href="https://github.com/martrapp/astro-vtbot#readme"><code>astro-vtbot</code></a
@@ -56,6 +56,9 @@ import fi from 'src/assets/fi.png';
 	</div>
 </Layout>
 <style is:global>
+	body {
+		margin: 1.5em 2em
+	}
 	body > a {
 		font-family: sans-serif;
 		display: inline-block;
@@ -67,9 +70,10 @@ import fi from 'src/assets/fi.png';
 		margin-left: 2ex;
 		margin-top: 1ex;
 		text-decoration: dotted underline;
+		width: 11em;
 	}
 	html {
-		background: linear-gradient(330deg, #000, rgb(135, 206, 235));
+		background: linear-gradient(330deg, #000, rgb(22, 54, 66));
 		overflow: hidden;
 	}
 	body {
@@ -96,10 +100,10 @@ import fi from 'src/assets/fi.png';
 		background-image: radial-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2));
 		border: 9px dotted orange;
 		position: absolute;
-		bottom: 5vh;
-		left: 3vw;
+		bottom: 25vh;
+		right: 5vw;
 		max-width: 60%;
-		transform: rotate3d(10, 4, -3, 10deg);
+		transform: rotate3d(10, 4, 3, 10deg);
 		border-radius: 50px;
 	}
 
@@ -146,22 +150,23 @@ import fi from 'src/assets/fi.png';
 		z-index: -1;
 		position: fixed;
 		top: 5vh;
-		left: 5vw;
+		right: 10vw;
 		width: min(25vh, 25vw);
 		height: min(25vh, 25vw);
+		transform: rotateY(180deg)
 	}
 	#ken {
 		font-size: min(25vh, 25vw);
 		position: fixed;
-		bottom: 5vh;
-		right: 1vw;
+		top: 5vh;
+		right: 5vw;
 		z-index: -1;
 	}
 
 	.hit-the-floor {
 		padding: 0 0.5ex;
-		color: lightblue;
-		font-size: max(8vh, 8vw);
+		color: #add8e6;
+		font-size: max(6vh, 6vw);
 		font-weight: bold;
 		font-family: sans-serif;
 		text-shadow:

@@ -13,8 +13,11 @@ With the `<Portal>` component you can force all view transitions through an inte
 
 ## Why would I use this component?
 
-You have some pages that will take long to load? You can not prefetch them or don't want to? You might place loading indicators your pages. But if you want to have a more elaborated loading experience, you can use the Portal component. This component allows you to have the loading animation on a separate page and it forces all transition through tat page, stopping there until the target page is loaded.
+You have some pages that will take long to load? You can not prefetch them or don't want to? You might place loading indicators on your pages, see [Loading Demo](https://events-3bg.pages.dev/loading/one/). But if you want to have a more elaborated loading experience, you can use the Portal component.
 
+This component allows you to have the loading animation on a separate page and it forces all transition through that page, stopping there until the target page is loaded.
+
+You can use this to quickly display a skeleton page, perhaps copying parts of the old page as persisted elements to the portal page and then on to the target page.
 
 ## How does it work?
 

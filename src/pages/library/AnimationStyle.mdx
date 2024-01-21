@@ -154,5 +154,9 @@ Of course this also works with functions
 <div transition:animate={adapter(mySpecialAnimationFunction(withParameters))}>
 ...
 ```
-Now you can use other direction names than `forwards` and `backwards` in your animation. Make sure to select proper direction values by setting `e.direction` to one of your custom direction names in the event handler for `astro:before-preparation`. See this in action in the [FishPond Tech Demo](/fish-pond/center/)
+Now you can use other direction names than `forwards` and `backwards` in your animation. Make sure to select proper direction values by setting `e.direction` to one of your custom direction names in the event handler for `astro:before-preparation`.
+
+> **Incompatibility Notice** For the `forwards` and `backwards` styles, you must use the divergent direction names `forward` and `back` when setting `e.direction`.
+
+See this in action in the [FishPond Tech Demo](/fish-pond/center/)
 

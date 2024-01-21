@@ -10,14 +10,15 @@ const { title } = Astro.props;
 
 <MdxLayout title={title}>
 	<VtBotDebug production slot="head" />
+	<link rel="icon" href="/favicon.svg" slot="head" />
 	<main transition:animate="fade">
 		<h1>{title}</h1>
 		<h3>Open the browser console to see the debug information</h3>
-		<h2 id="loading">⏳ Loading...</h2>
+		<!--h2 id="loading">⏳ LoadingIndicator...</h2-->
 
 		<p>
 			This is a page with some text and a link to another page. That next page will take really long
-			to load. Therefore there will be a loading indicator.
+			to load. Therefore a loading indicator will appear.
 		</p>
 		<slot />
 		<div style="height:100vh"></div>
