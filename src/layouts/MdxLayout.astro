@@ -1,6 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import Linter from 'astro-vtbot/components/Linter.astro';
+
 import 'src/css/light-dark.css';
 
 interface Props {
@@ -17,10 +17,9 @@ const { frontmatter, title} = Astro.props;
 <html lang="en">
 	<head>
 		<ViewTransitions />
-		<Linter />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+		<link rel="icon" href="/favicon.png" />
 		<title>{frontmatter?.title ?? title + ' | vtbot'}</title>
 		<slot name="head" />
 	</head>
@@ -104,6 +103,12 @@ const { frontmatter, title} = Astro.props;
 				border: 1px solid #cccc;
 				box-shadow: 2px 2px 2px #cccc;
 			}
+
+	#vtbot-loading-indicator img {
+		border: 0pt;
+		box-shadow: none;
+	}
+
 			pre {
 				padding: 1rem;
 				border: 1px solid #888;

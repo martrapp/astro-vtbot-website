@@ -3,6 +3,8 @@ import mdx from '@astrojs/mdx';
 import remarkToc from 'remark-toc';
 import expressiveCode from 'astro-expressive-code';
 
+import vtbot from "astro-vtbot";
+
 // https://astro.build/config
 export default defineConfig({
 	prefetch: true,
@@ -11,18 +13,20 @@ export default defineConfig({
 		shikiConfig: {
 			experimentalThemes: {
 				light: 'github-light',
-				dark: 'github-dark',
+				dark: 'github-dark'
 			},
-			wrap: false,
-		},
+			wrap: false
+		}
 	},
 	trailingSlash: 'always',
-	integrations: [expressiveCode(), mdx()],
+	integrations: [expressiveCode(), mdx(), vtbot({
+		loadingIndicator: true, autoLint: false
+	})],
 	vite: {
 		server: {
 			fs: {
 				allow: ['/home/']
-			},
-		},
-	},
+			}
+		}
+	}
 });
