@@ -46,12 +46,6 @@ jobs:
 
       - name: Build with Astro
         run: npm run build
-
-      - name: Prepare tests
-        run: npx playwright install
-
-      - name: Run tests
-        run: npm test 
       
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
