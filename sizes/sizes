@@ -1,0 +1,17 @@
+#! /bin/sh
+
+set -e
+size() {
+	cp $1 src/pages/index.astro
+	rm -rf dist
+	astro build > /dev/null
+	tar cf dist.tar dist
+	brotli -f dist.tar
+	expr $(du -b dist.tar.br|awk '{print $1}') - $2
+}
+
+base=$(size Nothing.astro 0)
+for i in Use*.astro ; do
+	s=$(size $i ${base})
+	echo $i $s
+done

@@ -1,0 +1,16 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Linter from 'astro-vtbot/components/Linter.astro'
+import Mini from './Mini.astro'
+---
+<html>
+	<head>
+		<ViewTransitions />
+		<Linter />
+	</head>
+	<body>
+		<h1>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>

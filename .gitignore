@@ -13,3 +13,5 @@ dist
 /blob-report/
 /playwright/.cache/
 
+sizes/dist.tar.br
+sizes/dist.tar

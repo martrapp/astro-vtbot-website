@@ -1,0 +1,16 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import { customZoom } from 'astro-vtbot/animations/zoom'
+import Mini from './Mini.astro'
+const scope = customZoom("zoom",{})
+---
+<html>
+	<head>
+		<ViewTransitions />
+	</head>
+	<body>
+		<h1 data-astro-scope={scope}>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>

@@ -1,0 +1,16 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Portal from 'astro-vtbot/components/Portal.astro'
+import Mini from './Mini.astro'
+---
+<html>
+	<head>
+		<ViewTransitions />
+		<Portal page=""/>
+	</head>
+	<body>
+		<h1>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>
