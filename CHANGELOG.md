@@ -1,5 +1,12 @@
 # The Bag of Tricks for View Transitions
 
+## 1.3.3 2024-01-22
+
+### Patch Changes
+
+- 4133ca1: Documents new LoadingIndicator
+- d1f6314: Adds script to compute Brotli bytes of components
+
 ## 1.3.2 2024-01-20
 
 ### Patch Changes
