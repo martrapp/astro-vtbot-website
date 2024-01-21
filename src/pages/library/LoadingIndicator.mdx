@@ -7,7 +7,7 @@ vtn: loading-3
 
 <h1 style="display: inline-block; view-transition-name: loading-1"><span style="display:inline-block; view-transition-name:loading-2;">⏳</span> The Loading Indicator</h1>
 
-The `<LoadingIndicator />` component adds a loading indicator to your view transitions. [See it in action](/loading/one/)
+The `<LoadingIndicator />` component adds a loading indicator to your view transitions. <a data-astro-reload href="/loading/one/">See it in action</a>
 
 ## Contents
 
@@ -17,7 +17,7 @@ The loading indicator is a great way to let your users know that something is ha
 
 ## How does it work?
 
-The default behavior of the load indicator is to provide visual feedback by displaying a pulsating image in the upper right corner of the viewport.  The image used is the favicon of the current page. This works better with images with good resolution of various formats. It works worse or not at all with the `.ico` format. Good news is that it works well with SVG files. The image is contained in a `<div>` element which has the id `vtbot-loading-indicator`. 
+The default behavior of the load indicator is to provide visual feedback by displaying a pulsating image in the upper right corner of the viewport.  The image used is the favicon of site.  This works better with images with good resolution of various formats. It works worse or not at all with the `.ico` format. Good news is that it works well with SVG files. The image is contained in a `<div>` element which has the id `vtbot-loading-indicator`. Once defined it will be persisted across view transitions.
 
 ```html title="your-page.html"
 <div id="vtbot-loading-indicator">
