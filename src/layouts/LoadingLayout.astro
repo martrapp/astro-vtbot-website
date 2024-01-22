@@ -1,6 +1,7 @@
 ---
 import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 import MdxLayout from './MdxLayout.astro';
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
 interface Props {
 	title: string;
 	background: string;
@@ -10,6 +11,7 @@ const { title } = Astro.props;
 
 <MdxLayout title={title}>
 	<VtBotDebug production slot="head" />
+	<BrakePad />
 	<link rel="icon" href="/favicon.svg" slot="head" />
 	<main transition:animate="fade">
 		<h1>{title}</h1>
@@ -25,22 +27,6 @@ const { title } = Astro.props;
 	</main>
 </MdxLayout>
 
-<script is:inline>
-	document.addEventListener('astro:before-preparation', (event) => {
-		const originalLoader = event.loader;
-		event.loader = async () => {
-			console.log('[loading] Simulating slow load. Waiting 2 seconds');
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			await originalLoader();
-		};
-	});
-	document.addEventListener('astro:before-preparation', () => {
-		document.querySelector('#loading').classList.add('show');
-	});
-	document.addEventListener('astro:after-preparation', () => {
-		document.querySelector('#loading').classList.remove('show');
-	});
-</script>
 
 <style is:global>
 	main {
