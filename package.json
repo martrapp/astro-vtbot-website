@@ -1,6 +1,6 @@
 {
   "name": "astro-vtbot-website",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "The Website for the Bag of Tricks for Astro's View Transitions",
   "homepage": "https://github.com/martrapp/astro-vtbot#readme",
   "bugs": {
@@ -12,23 +12,11 @@
     "url": "git+https://github.com/martrapp/astro-vtbot-website.git"
   },
   "type": "module",
-  "files": [],
-  "exports": [],
-  "keywords": [
-    "view-transition",
-    "view transition",
-    "view transitions",
-    "transition",
-    "transitions"
-  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "relocate": "./bin/relocate.sh"
-  },
-  "peerDependencies": {
-    "astro": "^4.0.0"
   },
   "devDependencies": {
     "@astrojs/mdx": "^2.0.0",
