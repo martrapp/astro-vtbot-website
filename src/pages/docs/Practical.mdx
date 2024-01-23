@@ -44,7 +44,7 @@ Yes, you can do that by overriding the `loader` property of the `astro:before-pr
 
 ### The default swapping of view transitions resets iframes and animations
 
-Define your own swap algorithm: overwrite the `swap` property in the `astro:before-swap` event. Instead of throwing the `newDocument` on the old one, do a diff of the two structures and only change the bare minimum of the existing DOM to finally reflect the desired outcome. See [demo](/noreset/one/).
+Define your own swap algorithm: overwrite the `swap` property in the `astro:before-swap` event. Instead of throwing the `newDocument` on the old one, do a diff of the two structures and only change the bare minimum of the existing DOM to finally reflect the desired outcome. See [demo](/no-reset/one/).
 
 ## Syncronous vs. asynchronous code
 
@@ -144,3 +144,4 @@ All event listeners have a single parameter of type `Event`. This type does not 
     }
   }
 ```
+
