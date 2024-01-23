@@ -3,7 +3,7 @@ layout: src/layouts/NavBarMdxLayout.astro
 title: Practitioners' Guide
 ---
 
-# A Guide for Practitioners<br/>on View Transition Events
+# A guide for practitioners on View Transitions
 
 ## Contents
 
@@ -144,4 +144,27 @@ All event listeners have a single parameter of type `Event`. This type does not 
     }
   }
 ```
+### How exectly is the DOM changed when I navigate to the next page?
 
+These are implementation details, not part of the API and might change without prio notice, but if you are interested in the details:
+
+This is how the default swap method works. As parameter it gets the new DOM and it alters the current DOM in place.
+
+1. The scripts of the new DOM are scanned. Scripts that already ran since the last full reload are marked to prevent execution after `astro:after-swap`.
+2. The attributes of the `<html>` element are changed to mirror those of the new DOM.
+3. Direct children of the `<head>` that are not present in the new DOM are removed, `<head>` children that are only present in the new DOM are added. `<head>` children that are in both DOMs remain untouched. 
+4. Focus and selection are saved
+5. The body is swapped
+6. Focus and selection are restored
+
+Body swapping is done in two steps:
+1. The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM. 
+2. Elemets that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
+
+If you use `astro-vtbot`'s [&lt;ReplacementSwap/> component](/library/ReplacementSwap/), the body is only altered for elements that are marked with `data-vtbot-replace`, the others are left untouched. `data-astro-transition-persist` attributes are ignored.
+
+For attributes of the `<html>` element and child elements of the `<head>` element, their order might change  during swap. But if they are part of the current and the new DOM they are not moved/added/removed but just left unchanged. The `<html>` and `<head>` elements themselves are never removed or added.  
+
+Event listeners on `window` and `window.document` are retained. References to elements of the old DOM that didn't make it to the current DOM are invalid after swap. Event listeners for elements that are no longer part of the current DOM after the swap are never called and newly added elements have no listeners unless they have been explicitly set in the `astro:after-swap` or `astro:page-load` handlers.
+
+Scripts found in the new DOM will be executed between `astro:after-swap` and `astro:page-load` but only if they hadn't been marked as "known and already ran" in step 1 above.
