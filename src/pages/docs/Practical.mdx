@@ -150,9 +150,11 @@ These are implementation details, not part of the API and might change without p
 
 This is how the default swap method works. As parameter it gets the new DOM and it alters the current DOM in place.
 
-1. The scripts of the new DOM are scanned. Scripts that already ran since the last full reload are marked to prevent execution after `astro:after-swap`.
+1. The scripts of the new DOM are scanned. Scripts that are already present on the current page  are marked to prevent re-execution after `astro:after-swap`.
 2. The attributes of the `<html>` element are changed to mirror those of the new DOM.
-3. Direct children of the `<head>` that are not present in the new DOM are removed, `<head>` children that are only present in the new DOM are added. `<head>` children that are in both DOMs remain untouched. 
+3. Direct children of the `<head>` are removed and those present in the new DOM are moved in.  Some children of the current DOM are skipped and remain untouched, i.e. they are not deleted and their matching counterpart is not moved into the current DOM: 
+  a. Stylesheet links with same href that are already present in both DOMs
+	b. Elements with same `data-astro-transition-persist` name in both DOMS
 4. Focus and selection are saved
 5. The body is swapped
 6. Focus and selection are restored
