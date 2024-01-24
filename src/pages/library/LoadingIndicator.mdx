@@ -38,29 +38,33 @@ As soon as the user clicks the link, the CSS class `loading` is added to the bod
 
 The default CSS covers positioning, sizing, and pulsing of the indicator. 
 
-```css title="LoadingIndicator.astro"    
-@keyframes vtbot-blink {
-	0%, 30%  { opacity: 0.0; }
-	40%      { opacity: 0.5; }
-	50%, 60% { opacity: 0.0; }
-	80%      { opacity: 0.3; }
-}
-#vtbot-loading-indicator {
-	position: fixed;
-	top: 3vh;
-	right: 3vw;
-	width: min(10vw, 10vh);
-	z-index: 1000;
-	opacity: 0;
-}
-#vtbot-loading-indicator img {
-		width: min(10vw, 10vh);
-		height: auto;
-	}
+```astro title="LoadingIndicator.astro"
+<style is:global>
+	@layer vtbot {
+		@keyframes vtbot-blink {
+			0%, 30%  { opacity: 0.0; }
+			40%      { opacity: 0.5; }
+			50%, 60% { opacity: 0.0; }
+			80%      { opacity: 0.3; }
+		}
+		#vtbot-loading-indicator {
+			position: fixed;
+			top: 3vh;
+			right: 3vw;
+			width: min(10vw, 10vh);
+			z-index: 1000;
+			opacity: 0;
+		}
+		#vtbot-loading-indicator img {
+				width: min(10vw, 10vh);
+				height: auto;
+			}
 
-.loading #vtbot-loading-indicator {
-	animation: vtbot-blink 1s infinite;
-}
+		html.loading #vtbot-loading-indicator {
+			animation: vtbot-blink 1s infinite;
+		}
+	}
+</style>
 ```
 You can override it with your own styling. Best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
 
@@ -117,13 +121,13 @@ import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
 <div id="vtbot-loading-indicator"> <!-- make sure to use this id -->
   ...
 <div>
-<style>
+<style is:global>
 	#vtbot-loading-indicator { 
 	/* basic styling, typically with position: fixed */
 	/* hide the indicator with display: none, opacity: 0, visibility: hidden, right: -100vw, ... */
 		...
 	}
-	.loading #vtbot-loading-indicator {
+	html.loading #vtbot-loading-indicator {
 	/* show the indicator with display: block, opacity: 1, visibility: visible, right: 3vw, ... */
 		...
 	}
