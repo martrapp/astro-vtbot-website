@@ -153,15 +153,15 @@ This is how the default swap method works. As parameter it gets the new DOM and 
 1. The scripts of the new DOM are scanned. Scripts that are already present on the current page  are marked to prevent re-execution after `astro:after-swap`.
 2. The attributes of the `<html>` element are changed to mirror those of the new DOM.
 3. Direct children of the `<head>` are removed and those present in the new DOM are moved in.  Some children of the current DOM are skipped and remain untouched, i.e. they are not deleted and their matching counterpart is not moved into the current DOM: 
-  a. Stylesheet links with same href that are already present in both DOMs
-	b. Elements with same `data-astro-transition-persist` name in both DOMS
+   - Stylesheet links with same href that are already present in both DOMs
+   - Elements with same `data-astro-transition-persist` name in both DOMS
 4. Focus and selection are saved
 5. The body is swapped
 6. Focus and selection are restored
 
 Body swapping is done in two steps:
-1. The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM. 
-2. Elemets that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
+* The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM. 
+* Elemets that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
 
 If you use `astro-vtbot`'s [&lt;ReplacementSwap/> component](/library/ReplacementSwap/), the body is only altered for elements that are marked with `data-vtbot-replace`, the others are left untouched. `data-astro-transition-persist` attributes are ignored.
 
