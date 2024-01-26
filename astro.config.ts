@@ -7,7 +7,7 @@ import vtbot from "astro-vtbot";
 
 // https://astro.build/config
 export default defineConfig({
-	prefetch: true,
+	prefetch: false,
 	markdown: {
 		remarkPlugins: [remarkToc],
 		shikiConfig: {
@@ -19,7 +19,7 @@ export default defineConfig({
 		}
 	},
 	trailingSlash: 'always',
-	integrations: [expressiveCode(), mdx(), vtbot()],
+	integrations: [expressiveCode(), mdx(), vtbot({ loadingIndicator: false })],
 	vite: {
 		server: {
 			fs: {

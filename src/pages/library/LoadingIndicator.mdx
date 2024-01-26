@@ -114,13 +114,17 @@ The logic for showing and hiding the loading indicator will be handled by the `<
 ---
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
 ---
-<!-- By rendering <LoadingIndicator/> here, you inherit the logic that sets the loading CSS class -->
+
+{/* By rendering <LoadingIndicator/> here, 
+		you inherit the logic that sets the "loading" CSS class */}
 <LoadingIndicator />
 
-<!-- Defining this div is only necessary if you do not want to use the default favicon image -->
+{/* Defining this div is only necessary 
+		if you do not want to use the default element that holds the favicon image  */}
 <div id="vtbot-loading-indicator"> <!-- make sure to use this id -->
   ...
 <div>
+	
 <style is:global>
 	#vtbot-loading-indicator { 
 	/* basic styling, typically with position: fixed */
