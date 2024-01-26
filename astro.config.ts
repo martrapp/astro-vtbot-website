@@ -19,7 +19,7 @@ export default defineConfig({
 		}
 	},
 	trailingSlash: 'always',
-	integrations: [expressiveCode(), mdx(), vtbot({ loadingIndicator: false })],
+	integrations: [expressiveCode(), mdx(), vtbot()],
 	vite: {
 		server: {
 			fs: {
