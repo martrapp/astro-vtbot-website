@@ -16,15 +16,13 @@ import Content from 'src/mdx/no-reset/four.mdx';
 			differ between page two and page three: The heading, the link, and the main text at the
 			bottom. Theses are marked with <code>data-swap="unique-name"</code>. Then this demo indeed use
 			the <code>astro:before-swap</code> event to define a new implementation for <code>swap()</code
-			> that overwrites the marked elements in the current DOM with the coressponing elements from
-			newDocument and leaves everything else as it is.
+			> that overwrites the marked elements in the current DOM with the coressponing elements from newDocument
+			and leaves everything else as it is.
 		</p>
-		<Content/>
+		<Content />
 		<p>
 			Seen that the title of the browsers tab is still on page two? So we swapped those three marked
 			elements in, but we didn't yet swap the HTML <code>&lt;head></code> with the title, yet :)
 		</p>
-
 	</main>
 </NoResetLayout>
-

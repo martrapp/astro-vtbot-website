@@ -32,7 +32,9 @@ import fi from 'src/assets/fi.png';
 	/>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
-	<h1 class="hit-the-floor">Welcome to the <br/>👜 Bag of Tricks ✨<br/>for Astro's View<br/> Transitions</h1>
+	<h1 class="hit-the-floor">
+		Welcome to the <br />👜 Bag of Tricks ✨<br />for Astro's View<br /> Transitions
+	</h1>
 	<span id="ken" transition:animate="slide" transition:name="ken"></span>
 	<div id="outer">
 		<div id="new">
@@ -45,12 +47,15 @@ import fi from 'src/assets/fi.png';
 			</a>
 		</div>
 	</div>
-	<a href="/components/" transition:name="reuse">Reusable Components</a><br/>
+	<a href="/components/" transition:name="reuse">Reusable Components</a><br />
 	<a href="/demos/" transition:name="demos">Tech Demos</a>
 	<a href="/docs/Jotter/" transition:name="jotter">The Jotter</a>
 
 	<div class="fancy">&nbsp;</div>
-	<div style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:25vh; transform: rotateZ(90deg); right: 8vw; transform-origin: bottom right">⭐ Star <a
+	<div
+		style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:25vh; transform: rotateZ(90deg); right: 8vw; transform-origin: bottom right"
+	>
+		⭐ Star <a
 			style="text-decoration: dotted underline; color: coral"
 			href="https://github.com/martrapp/astro-vtbot"><code>astro-vtbot</code></a
 		> on GitHub
@@ -58,7 +63,7 @@ import fi from 'src/assets/fi.png';
 </Layout>
 <style is:global>
 	body {
-		margin: 1.5em 2em
+		margin: 1.5em 2em;
 	}
 	body > a {
 		font-family: sans-serif;
@@ -154,7 +159,7 @@ import fi from 'src/assets/fi.png';
 		right: 10vw;
 		width: min(25vh, 25vw);
 		height: min(25vh, 25vw);
-		transform: rotateY(180deg)
+		transform: rotateY(180deg);
 	}
 	#ken {
 		font-size: min(25vh, 25vw);

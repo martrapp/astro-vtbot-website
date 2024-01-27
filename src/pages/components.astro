@@ -52,114 +52,150 @@ import { Content } from 'src/mdx/components.mdx';
 			what="Feature / < 0.5k Brotli bytes"
 			name="loading"
 		>
-			<p>Have you often wondered if the app has noticed the click in apps that use view transitions? Or have you ever been annoyed and clicked on a link several times because nothing seemed to happen?
+			<p>
+				Have you often wondered if the app has noticed the click in apps that use view transitions?
+				Or have you ever been annoyed and clicked on a link several times because nothing seemed to
+				happen?
 			</p><p>
-Then you need an indicator that gives you visual feedback that the app has responded: The loading indicator!</code
-				>
+				Then you need an indicator that gives you visual feedback that the app has responded: The
+				loading indicator!
 			</p>
-			<h3>Status</h3><p>Base functionality and default behavior released.</p>
-			<h3>Future direction</h3><ul>
-				<li>Offer "Custom loading indicators" to support different styles and as examples for further custom contributions</li>
-			</ul>
 		</Card>
-		<Card
-			href="/library/AnimationStyle/"
-			title="AnimationStyle"
-			icon="✨"
-			what="Animation / < 0.1k Brotli bytes"
-			name="animstyle"
-		>
-			<p>
-				This is a component that can generate style sheets for view transition animations. This
-				works for native view transitions and for Astro's view transition simulation for browsers
-				that do not support them natively.
-			</p><p>
-				This component is used together with the functions offered by <code>animation-style.ts</code
-				>
-			</p>
-			<h3>Status</h3><p>Used as part of the <code>Zoom</code> and <code>Swing</code> components.</p>
-			<h3>Future direction</h3><ul>
-				<li>Add more utility functions</li>
-			</ul>
-		</Card>
+		<h3>Status</h3><p>Base functionality and default behavior released.</p>
+		<h3>Future direction</h3><ul>
+			<li>
+				Offer "Custom loading indicators" to support different styles and as examples for further
+				custom contributions
+			</li>
+		</ul>
+	</ul>
+	<Card
+		href="/library/AnimationStyle/"
+		title="AnimationStyle"
+		icon="✨"
+		what="Animation / < 0.1k Brotli bytes"
+		name="animstyle"
+	>
+		<p>
+			This is a component that can generate style sheets for view transition animations. This works
+			for native view transitions and for Astro's view transition simulation for browsers that do
+			not support them natively.
+		</p><p>
+			This component is used together with the functions offered by <code>animation-style.ts</code>
+		</p>
+		<h3>Status</h3><p>Used as part of the <code>Zoom</code> and <code>Swing</code> components.</p>
+		<h3>Future direction</h3><ul>
+			<li>Add more utility functions</li>
+		</ul>
+	</Card>
 
-		<Card href="/library/Zoom/" title="Zoom" icon="🔎🔍" what="Animation / < 0.5k Brotli bytes" name="zoom">
-			<p>
-				<code>Zoom</code> offers animation effects for view transitions. It can be used as a replacement
-				for the standard Astro animations <code>fade()</code> and <code>slide()</code>.
-			</p><p>
-				Zoom animations can enlarge the current transition group or shrink it to a point. And the
-				zooming can be combined with a fade effect.
-			</p>
-			<h3>Status</h3><p>Ready to use, see demos.</p>
-			<h3>Future direction</h3><ul>
-				<li>Harden implementation</li>
-			</ul>
-		</Card>
+	<Card
+		href="/library/Zoom/"
+		title="Zoom"
+		icon="🔎🔍"
+		what="Animation / < 0.5k Brotli bytes"
+		name="zoom"
+	>
+		<p>
+			<code>Zoom</code> offers animation effects for view transitions. It can be used as a replacement
+			for the standard Astro animations <code>fade()</code> and <code>slide()</code>.
+		</p><p>
+			Zoom animations can enlarge the current transition group or shrink it to a point. And the
+			zooming can be combined with a fade effect.
+		</p>
+		<h3>Status</h3><p>Ready to use, see demos.</p>
+		<h3>Future direction</h3><ul>
+			<li>Harden implementation</li>
+		</ul>
+	</Card>
 
-		<Card href="/library/Swing/" title="Swing" icon="🎷" what="Animation / < 0.5k Brotli bytes" name="swing">
-			<p>
-				<code>Swing</code> offers animation effects similar to <code>Zoom</code>. The effects allow
-				rotations around all axis in 3D space.
-			</p>
-			<p>
-				The effect can be used as a drop-in replacement for <code>fade()</code> and <code
-					>slide()</code
-				>
-				but also offers extensive parameters for configuration.
-			</p>
-			<h3>Status</h3>
+	<Card
+		href="/library/Swing/"
+		title="Swing"
+		icon="🎷"
+		what="Animation / < 0.5k Brotli bytes"
+		name="swing"
+	>
+		<p>
+			<code>Swing</code> offers animation effects similar to <code>Zoom</code>. The effects allow
+			rotations around all axis in 3D space.
+		</p>
+		<p>
+			The effect can be used as a drop-in replacement for <code>fade()</code> and <code
+				>slide()</code
+			>
+			but also offers extensive parameters for configuration.
+		</p>
+		<h3>Status</h3>
 
-			<p>Ready to use, see demos!</p>
+		<p>Ready to use, see demos!</p>
 
-			<h3>Future direction</h3><ul>
-				<li>Show more parametrizations in demos</li>
-			</ul>
-		</Card>
+		<h3>Future direction</h3><ul>
+			<li>Show more parametrizations in demos</li>
+		</ul>
+	</Card>
 
-		<Card
-			href="/library/ReplacementSwap/"
-			title="ReplacementSwap"
-			icon="↹"
-			iconStyle="color: darkorange"
-			what="Feature / < 0.5k Brotli bytes"
-			name="replswap"
-		>
-			<p>
-				The <code>ReplacementSwap</code> component solves the problem that view transitions lose the
-				content of <i>persisted</i> iframes and the state of animations on transtions.
-			</p><p>
-				The component changes how the new page replaces the old page during view transitions. It
-				only replaces the parts that are marked for replacement. Hence the name.
-			</p>
-			<h3>Status</h3><p>Ready to use</p>
-			<h3>Future direction</h3><ul>
-				<li>Find and resolve potential bugs.</li>
-			</ul>
-		</Card>
+	<Card
+		href="/library/ReplacementSwap/"
+		title="ReplacementSwap"
+		icon="↹"
+		iconStyle="color: darkorange"
+		what="Feature / < 0.5k Brotli bytes"
+		name="replswap"
+	>
+		<p>
+			The <code>ReplacementSwap</code> component solves the problem that view transitions lose the content
+			of <i>persisted</i> iframes and the state of animations on transtions.
+		</p><p>
+			The component changes how the new page replaces the old page during view transitions. It only
+			replaces the parts that are marked for replacement. Hence the name.
+		</p>
+		<h3>Status</h3><p>Ready to use</p>
+		<h3>Future direction</h3><ul>
+			<li>Find and resolve potential bugs.</li>
+		</ul>
+	</Card>
 
-		<Card href="/library/Portal/" title="Portal" icon="🚪" what="Feature / < 0.3k Brotli bytes" name="portal">
-			<p>
-				The <code>Portal</code> forces all navigations through a single intermediate page. This page
-				can be used to show some loading animation. The transition automatically resumes to the target
-				page of the transition once that page is loaded.
-			</p><p>
-				The benefit of a portal page is that the animation effect can be confined on that very page.
-				A limitation compared to *pure* view transitions is that presisted elements and transition groups from the current page to the target page are only possible if those are also supported by the portal page.
-			</p>
-			<h3>Status</h3><p>Brand new.</p>
-			<h3>Future direction</h3><ul>
-				<li>Add properties for more fine grained contol</li>
-			</ul>
-		</Card>
-		<Card href="/library/NoScroll/" title="NoScroll" icon="📜" what="Utility / < 0.2k Brotli bytes" name="noscroll">
-			<p>Sometimes you want to opt out of the default scroll behavior of navigation.</p><p></p> Putting the <code>&lt;NoScroll&gt;</code> component in the <code>&lt;head&gt;</code> of your page prevents scrolling on transitions. The vertical and horizontal scroll positions just stay where the were before you clicked a link.</p>
-			<h3>Status</h3><p>Brand new.</p>
-			<h3>Future direction</h3><ul>
-				<li>Do we need properties for more fine grained contol?</li>
-			</ul>
-		</Card>
-		<!--
+	<Card
+		href="/library/Portal/"
+		title="Portal"
+		icon="🚪"
+		what="Feature / < 0.3k Brotli bytes"
+		name="portal"
+	>
+		<p>
+			The <code>Portal</code> forces all navigations through a single intermediate page. This page can
+			be used to show some loading animation. The transition automatically resumes to the target page
+			of the transition once that page is loaded.
+		</p><p>
+			The benefit of a portal page is that the animation effect can be confined on that very page. A
+			limitation compared to *pure* view transitions is that presisted elements and transition
+			groups from the current page to the target page are only possible if those are also supported
+			by the portal page.
+		</p>
+		<h3>Status</h3><p>Brand new.</p>
+		<h3>Future direction</h3><ul>
+			<li>Add properties for more fine grained contol</li>
+		</ul>
+	</Card>
+	<Card
+		href="/library/NoScroll/"
+		title="NoScroll"
+		icon="📜"
+		what="Utility / < 0.2k Brotli bytes"
+		name="noscroll"
+	>
+		<p>Sometimes you want to opt out of the default scroll behavior of navigation.</p><p></p> Putting
+		the <code>&lt;NoScroll&gt;</code> component in the <code>&lt;head&gt;</code> of your page prevents
+		scrolling on transitions. The vertical and horizontal scroll positions just stay where the were before
+		you clicked a link.</Card
+	>
+	<h3>Status</h3><p>Brand new.</p>
+	<h3>Future direction</h3><ul>
+		<li>Do we need properties for more fine grained contol?</li>
+	</ul>
+</MdxLayout>
+<!--
 			<Card
 				href="/library/Activator/"
 				title="Activator"
@@ -183,8 +219,6 @@ Then you need an indicator that gives you visual feedback that the app has respo
 				<p>Work in progress.</p>
 			</Card>
 -->
-	</ul>
-</MdxLayout>
 
 <style is:global>
 	:root {

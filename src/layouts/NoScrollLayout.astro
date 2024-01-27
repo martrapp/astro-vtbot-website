@@ -10,7 +10,7 @@ const { title } = Astro.props;
 ---
 
 <MdxLayout title={title}>
-	<NoScroll slot="head"/>
+	<NoScroll slot="head" />
 	<div transition:animate="slide">
 		<slot />
 	</div>
@@ -41,4 +41,3 @@ const { title } = Astro.props;
 		color: white;
 	}
 </style>
-

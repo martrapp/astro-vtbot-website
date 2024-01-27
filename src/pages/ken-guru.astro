@@ -25,21 +25,20 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 					trigger view transitions if the URL ends with a hash, it does if the URL does not contain
 					a hash fragment.
 					<br /><br />
-					 (Click on the kangaroo to see the transitions in action)
+					(Click on the kangaroo to see the transitions in action)
 				</li><li style="display: none">
 					As the page is already loaded, we do not need to load it again. The loader function in the
-
 
 					<code>astro:before-preparation</code> event is overwritten with an empty function. Thus we
 					do not load any HTML but just keep what we have.
 				</li>
 				<li style="display: none">
-					The <code>swap</code> property of the <code>astro:before-swap</code> event is also
-					overridden. In the new function, we just look for the kangaroo and nudge it a bit around.
-					And it selects the next item to display from this list.
+					The <code>swap</code> property of the <code>astro:before-swap</code> event is also overridden.
+					In the new function, we just look for the kangaroo and nudge it a bit around. And it selects
+					the next item to display from this list.
 					<br /><br />
-					 On browsers that support view transitions, the kangaroo will smoothly transition to its
-					new position. On others it will just jump around.
+					On browsers that support view transitions, the kangaroo will smoothly transition to its new
+					position. On others it will just jump around.
 				</li>
 			</ol>
 		</div>

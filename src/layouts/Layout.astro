@@ -17,6 +17,7 @@ const { title, background = '' } = Astro.props;
 		<meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover" />
 		<link rel="icon" href="/favicon.png" />
 		<title>{title + ' | vtbot'}</title>
+		<slot name="head2" />
 	</head>
 	<body>
 		<slot />

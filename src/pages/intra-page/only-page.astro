@@ -19,16 +19,16 @@ import Layout from 'src/layouts/Layout.astro';
 		recipe for get intra-page view transitions is as follows:
 		<ul>
 			<li>
-				add an search parameter, e.g. <code>?vt</code> to the intra-page URL, thus forcing view
-				transitions and events.
+				add an search parameter, e.g. <code>?vt</code> to the intra-page URL, thus forcing view transitions
+				and events.
 			</li>
 			<li>
-				in an <code>astro:before-preparation</code> listener: redefine the <code>loader()</code> to
-				do nothing
+				in an <code>astro:before-preparation</code> listener: redefine the <code>loader()</code> to do
+				nothing
 			</li>
 			<li>
-				in an <code>astro:before-swap</code> listener: redefine <code>swap()</code> to do nothing
-				(besides removing old instances of <code>.astro-route-announcer</code>)
+				in an <code>astro:before-swap</code> listener: redefine <code>swap()</code> to do nothing (besides
+				removing old instances of <code>.astro-route-announcer</code>)
 			</li>
 
 			<li>
@@ -44,9 +44,9 @@ import Layout from 'src/layouts/Layout.astro';
 				</ol>
 			</li>
 		</ul>
-		 The first alternative has the benefit, that the artificially introduced parameter does not show
-		up in the browsers address bar. The second alternative has the benefit, that you also get
-		intra-page view transitions when traversing back and forth through the browser history.
+		The first alternative has the benefit, that the artificially introduced parameter does not show up
+		in the browsers address bar. The second alternative has the benefit, that you also get intra-page
+		view transitions when traversing back and forth through the browser history.
 	</p>
 	<p>
 		A third approach would be to link to the same page without any hash fragment as in <a

@@ -12,7 +12,7 @@ const { title } = Astro.props;
 <MdxLayout title={title}>
 	<VtBotDebug production slot="head" />
 	<BrakePad />
-	<link rel="icon" href="/favicon.svg" slot="head" />
+	<link rel="icon" href="/favicon.svg" slot="head2" />
 	<main transition:animate="fade">
 		<h1>{title}</h1>
 		<h3>Open the browser console to see the debug information</h3>
@@ -25,7 +25,6 @@ const { title } = Astro.props;
 		<div style="height:100vh"></div>
 	</main>
 </MdxLayout>
-
 
 <style is:global>
 	main {
