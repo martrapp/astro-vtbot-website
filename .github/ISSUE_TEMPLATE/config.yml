@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: astro-vtbot library repository
+  - name: astro-vtbot Library Repository
     url: https://github.com/martrapp/astro-vtbot
-    about: You are in the repository **of the website** for 👜✨The Bag. Is your issue, request, discussion related rather to the **astro-vtbot library** than to the website? Then please visit the library repository.
+    about: You are in the repository of the WEBSITE for The Bag 👜✨. Is your issue, request, discussion related rather to the **astro-vtbot library** than to the website? Then please visit the library repository.
   - name: GitHub Discussions
     url: https://github.com/martrapp/astro-vtbot/discussions
     about: Does the issue involve a lot of explanation, or are you not sure how it can be split into actionable tasks? Consider starting a discussion first.
