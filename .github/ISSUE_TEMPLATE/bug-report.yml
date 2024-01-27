@@ -1,5 +1,5 @@
 name: "\U0001F41B Website Bug Report"
-description: Report an issue or possible bug with THE WEBSITE for The Bag.
+description: Report an issue or possible bug with **THE WEBSITE** for The Bag. Please report issues for the npm package on the [astro-vtbot library repository](https://github.com/martrapp/astro-vtbot).
 labels: []
 assignees: []
 body:
