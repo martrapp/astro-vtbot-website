@@ -26,7 +26,7 @@
     "@types/dom-view-transitions": "^1.0.4",
     "@types/node": "^20.11.10",
     "astro": "^4.2.6",
-    "astro-expressive-code": "^0.31.0",
+    "astro-expressive-code": "^0.32.3",
     "astro-vtbot": "^1.4.3",
     "prettier": "^3.1.0",
     "prettier-plugin-astro": "^0.13.0",
