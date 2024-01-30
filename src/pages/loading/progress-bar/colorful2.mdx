@@ -1,0 +1,48 @@
+---
+layout: src/layouts/ColorfulLayout.astro
+title: Colorful Progress Bar 2
+---
+
+# Colorful styled progress bar: Page Two
+
+The listing shows the structure of the layout that was used for this example:
+
+```astro ColorfulLayout.astro
+---
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
+import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
+import MdxLayout from './MdxLayout.astro';
+---
+
+<MdxLayout {...Astro.props}>
+	<ProgressBar />
+	{/* Adding transition:name defines a transition group for the morph effect */}
+	<div transition:name="main">
+		<slot />
+	</div>
+</MdxLayout>
+
+<style is:global>
+	main a { ... }
+	@keyframes shift { ... }
+	@keyframes cycle { ... }
+
+	.swup-progress-bar { ... }
+	.swup-progress-bar::before { ... }
+	.swup-progress-bar::after { ... }
+
+	html.loading main {
+		position: absolute;
+		animation: shift 1s linear both;
+	}
+	html.loading header,
+	html.loading footer {
+		display: none;
+	}
+	html.loading a {
+		opacity: 0;
+		transition: opacity 0.3s linear;
+	}
+</style>
+```

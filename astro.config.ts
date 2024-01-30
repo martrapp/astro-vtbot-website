@@ -1,9 +1,9 @@
-import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import remarkToc from 'remark-toc';
 import expressiveCode from 'astro-expressive-code';
+import { defineConfig } from 'astro/config';
+import remarkToc from 'remark-toc';
 
-import vtbot from "astro-vtbot";
+import vtbot from 'astro-vtbot';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,18 +13,18 @@ export default defineConfig({
 		shikiConfig: {
 			experimentalThemes: {
 				light: 'github-light',
-				dark: 'github-dark'
+				dark: 'github-dark',
 			},
-			wrap: false
-		}
+			wrap: false,
+		},
 	},
 	trailingSlash: 'always',
 	integrations: [expressiveCode(), mdx(), vtbot()],
 	vite: {
 		server: {
 			fs: {
-				allow: ['/home/']
-			}
-		}
-	}
+				allow: ['/home/'],
+			},
+		},
+	},
 });

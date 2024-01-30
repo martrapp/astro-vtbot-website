@@ -9,7 +9,7 @@ const { title, background = '' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" style={'background: ' + background}>
+<html lang="en">
 	<head>
 		<slot name="head" />
 		<ViewTransitions />
@@ -19,7 +19,7 @@ const { title, background = '' } = Astro.props;
 		<title>{title + ' | vtbot'}</title>
 		<slot name="head2" />
 	</head>
-	<body>
+	<body style={background ? `background: ${background}` : ''}>
 		<slot />
 	</body>
 </html>

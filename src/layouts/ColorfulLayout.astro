@@ -1,0 +1,89 @@
+---
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
+import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
+import MdxLayout from './MdxLayout.astro';
+---
+
+<MdxLayout {...Astro.props}>
+	{/* Including <ProgressBar/> alone would be enough to get the basic effect */}
+	<ProgressBar />
+	{/* <VtBotDEbug/> let's us observe the flow */}
+	<VtBotDebug production slot="head" />
+	{/* Now we need an artificial network lag of three seconds to see the effect */}
+	<BrakePad duration={3000} />
+	{/* Adding transition:name defines a transition group for the morph effect */}
+	<div transition:name="main">
+		<slot />
+	</div>
+</MdxLayout>
+
+<style is:global>
+	main a {
+		/* Showtime! */
+		margin: 1ex;
+		font-size: 4rem;
+		display: inline-block;
+		transform: rotateZ(3deg) translateX(40%);
+		text-shadow:
+			-1px 1px 8px #ffc,
+			1px -1px 8px #fff;
+	}
+
+	@keyframes shift {
+		from {
+			top: 50px;
+		}
+		to {
+			top: 100px;
+		}
+	}
+	@keyframes cycle {
+		from {
+			background-position: 0 0;
+		}
+		to {
+			background-position: 400% 0;
+		}
+	}
+	.swup-progress-bar {
+		height: 100px;
+		border-radius: 0px 100px 20px 0px;
+		top: 2ex;
+		left: 2ex;
+		background-color: white;
+		-webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+	}
+	.swup-progress-bar::before {
+		content: '';
+		position: absolute;
+		inset: 5px;
+		border-radius: 0px 100px 20px 0px;
+		background: linear-gradient(90deg, #00ff0088, #ffff0088, #ff00a088);
+		animation: cycle 20s linear infinite;
+		background-size: 400%;
+	}
+	.swup-progress-bar::after {
+		content: '';
+		position: absolute;
+		inset: 5px;
+		border-radius: 0px 100px 20px 0px;
+		background: linear-gradient(90deg, #00ff00, #ffff00, #ff00a0);
+		animation: cycle 20s linear infinite;
+		background-size: 400%;
+		filter: blur(10px);
+	}
+
+	html.loading main {
+		position: absolute;
+		animation: shift 1s linear both;
+	}
+	html.loading header,
+	html.loading footer {
+		display: none;
+	}
+	html.loading a {
+		opacity: 0;
+		transition: opacity 0.3s linear;
+	}
+</style>

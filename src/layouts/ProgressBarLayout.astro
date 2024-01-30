@@ -1,0 +1,26 @@
+---
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
+import MdxLayout from './MdxLayout.astro';
+---
+
+<MdxLayout {...Astro.props}>
+	{
+		/* This is the custom component.
+		 * It can be put into the <head> or the <body> of your page
+		 */
+	}
+	<ProgressBar />
+
+	{/* To observe the effect it is necessary to simulate a 2000ms loading time */}
+	<BrakePad duration={2000} />
+
+	<slot />
+</MdxLayout>
+
+{/* You can style the progress bar by defining the swup-progress-bar class */}
+<style is:global>
+	.swup-progress-bar {
+		background-color: rgb(64, 128, 192);
+	}
+</style>

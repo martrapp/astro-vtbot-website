@@ -12,7 +12,7 @@ import Linter_light from "src/assets/linter.light.png";
 <h1 style="display: inline-block; view-transition-name: linter-1"><span style="display:inline-block; view-transition-name:linter-2;">🧹</span> The Linter</h1>
 
 
-The `<Linter />` component helps you to avoid common issues when using view transitions. 
+The `<Linter />` component helps you to avoid common issues when using view transitions.
 
 ## Contents
 
@@ -46,7 +46,7 @@ The `<Linter/>` component writes its results to the browser console while you na
 Unique view transitions names are a requirement of the view transition API. Chrome will display an error message in the console - even without the linter - if this rule is violated. But at least as of version 120, Chrome only reports violations for the page you are navigating away from, not the one you are navigating to. The `<Linter>` component always reports both sides of a navigation.
 
 ### Where do view transition names come from?
-When looking for view transition names, the linter considers these sources: 
+When looking for view transition names, the linter considers these sources:
 * Astro's `transition:name` directive with or without an explicite identifier
 * The implicite definition of a `view-transition-name` via Astro's `transition:animate` directive
 * CSS rules that define `view-transition-name: identifier` in style attributes of HTML elements or style sheets inlined or linked on the page
@@ -57,7 +57,7 @@ Nested elements that define `transition:persist` or `data-vtbot-replace` can lea
 ### Identifiers for `transition:persist`
 In Astro, `transition:persist` can be used without an explicit identifier. Then the name of the view transition element is used, which is fine if it was set by `transition:name=...`. If neither `transition:name` nor an identifier for `transition:persist` is specified, Astro implicitly uses the identifier of the transition area, which looks like this: `astro-ya3eq23s-4`. Often this matches the desired element on the target page, but it is also quite fragile. It is best practice to use explicit names. So if you use `transition:persist` with an implicit, generated identifier, the `<Linter>` component will issue a warning.
 
-### Loss of transition names and scoped styles 
+### Loss of transition names and scoped styles
 
 Astro emits scoped styles by default, with different strategies to bind styles to elements. What they all have in common is that they use special identifiers for CSS classes (`astro-xxxxxxxx`) or custom data attributes (`data-astro-cid-xxxxxxxxxx`). If a DOM element gets copied to another DOM with `transition:persist` or `data-vtbot-replace` , these identifiers are copied together with the element. This typically results in the link to the style sheet being broken if the style sheet to which the identifier refers is not also copied. If you want to use the same style sheets on different pages, you can define global styles with the `is:global` directive, for example.
 
@@ -65,18 +65,24 @@ The way Astro links elements with their view-transition-name uses a very similar
 
 The `<Linter>` component will issue a warning in these situations.  They are probably errors, but the `<Linter>` does not know if the effects are intended.
 
+You can make the linter keep its mouth shut for false positives by adding a meta element that lists transition names that should be ignored to the `<head>` of your page:
+```html
+<meta name="vtbot-linter-ignore" content="zoom1 zoom2 zoom3 swing1 swing2 swing3" />
+
+```
+
 ### Valid identifiers for view-transition-names
 When you use `transition:name` or `transition:persist`, Astro normalizes the specified identifier to ensure that it is a valid CSS `<custom-ident>` value. But it is also possible to define `view-transition-names`directly in style attributes or stylsheets. In this case, the `<Linter>` component will issue a warning if the identifier is not valid.
 
 Valid custom identifiers must not start with a number, i.e. a digit, or a "`-`" sign followed by a digit. Characters beside letters, digits, underscoe and the minus-sign must be properly escaped. The reserved names `unset`, `initial`, `inherit` and `none` are also invalid identifiers for `view-transition-names`.
 
 ### Script types not handled by the router
-`<script>` elements might have a `type` attribute. The most common value for this attribute is `"module"` to indicate that the script is an ESM. Other valid values are `""` and `text/javascript`. Both indicate that this script is JavaScript. As this is the default anyways, authors are encouraged to not use these values. 
+`<script>` elements might have a `type` attribute. The most common value for this attribute is `"module"` to indicate that the script is an ESM. Other valid values are `""` and `text/javascript`. Both indicate that this script is JavaScript. As this is the default anyways, authors are encouraged to not use these values.
 
-If the `type` attribute is set to anything else, the script is ignored by the browser. This is fine for e.g. `"text/partytown"` where the partytown lib searches and executes such scripts. Some optimization techniques that instrument HTML might also use there own values. Even though the script will be executed eventually, this typically happens after the `astro:page-load` event. If you define an event listener for `astro:page-load` in those scripts, it will not be called. The `<Linter>` component will issue a warning in these situations. 
+If the `type` attribute is set to anything else, the script is ignored by the browser. This is fine for e.g. `"text/partytown"` where the partytown lib searches and executes such scripts. Some optimization techniques that instrument HTML might also use there own values. Even though the script will be executed eventually, this typically happens after the `astro:page-load` event. If you define an event listener for `astro:page-load` in those scripts, it will not be called. The `<Linter>` component will issue a warning in these situations.
 
 ## Usage
-[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node module with `npm install astro-vtbot`. If you choose the integration option, `vtbot` will automatically add the `<Linter/>` component to all the pages that use `<ViewTransitions>`. 
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node module with `npm install astro-vtbot`. If you choose the integration option, `vtbot` will automatically add the `<Linter/>` component to all the pages that use `<ViewTransitions>`.
 
 If you do not choose the integration, you have to add the `<Linter/>` component to your pages manually: Insert the `<Linter/>` component near the `<ViewTransitions/>` component into the `<head>` of your page.
 

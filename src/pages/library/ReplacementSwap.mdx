@@ -20,11 +20,11 @@ If you use **`transition:persist`** for **iframes or elements with CSS animation
 * Iframes are reloaded on transitions and lose their content
 * CSS animations are interrupted during transitions and start from the beginning.
 
-This is because the standard `swap()` action of `<ViewTransitions/>` replaces the entire `<body>` of your page with the body of the new page. Even if they are only copied: for the current DOM, it looks as if frames and elements with CSS animations have just been recreated. 
+This is because the standard `swap()` action of `<ViewTransitions/>` replaces the entire `<body>` of your page with the body of the new page. Even if they are only copied: for the current DOM, it looks as if frames and elements with CSS animations have just been recreated.
 
 The `<ReplacementSwap/>` component is intended for situations in which you do not want to replace the entire `<body>` of your current page with a new version, but want to leave some parts of the old page untouched.
 
-## Usage 
+## Usage
 
 [Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node module with `npm install astro-vtbot`.
 
@@ -47,14 +47,14 @@ import ReplacementSwap from 'astro-vtbot/components/ReplacementSwap.astro';
 		...
 	</head>
 	<body>
-    <header />
+    <header>...</header>
 		<main data-vtbot-replace="main"><slot /></main>
-		<footer />
+		<footer>...<footer>
 	</body>
 </html>
 ```
 
-Elements with CSS animations or iframes located outside the `<main>` element, e.g. in the `<header>` or `<footer>`,  are not affected by the replacement. They are not reloaded or interrupted during navigation. 
+Elements with CSS animations or iframes located outside the `<main>` element, e.g. in the `<header>` or `<footer>`,  are not affected by the replacement. They are not reloaded or interrupted during navigation.
 
 Setting `transition:persist` has no effect for `<ReplacementSwap>`.
 
@@ -66,7 +66,7 @@ The elements with the same identifier do not have to be the same type of HTML el
 
 
 
-If the old page and the new page have no replacement identifiers in common, `<ReplacementSwap>` falls back to the normal swap behavior of astro view transitions. 
+If the old page and the new page have no replacement identifiers in common, `<ReplacementSwap>` falls back to the normal swap behavior of astro view transitions.
 
 ## An important note on styling
 

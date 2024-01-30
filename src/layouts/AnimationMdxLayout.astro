@@ -94,7 +94,11 @@ const { scope: slideScope, styles: slideStyles } = createAnimationScope('slide',
 
 <MdxLayout {...Astro.props}>
 	<NoScroll slot="head" />
-	<meta name="vtbot-linter-ignore" content="none fade slide swing1 swing2 swing3" slot="head" />
+	<meta
+		name="vtbot-linter-ignore"
+		content="none fade slide zoom1 zoom2 zoom3 swing1 swing2 swing3"
+		slot="head"
+	/>
 	<span id="saver" data-animation="zoom1" transition:persist="saver"></span>
 	<div class="button-grid" id="buttonGrid" transition:name="grid" transition:animate={swing()}>
 		<button data-scope={zoom1Scope}>zoom1</button>

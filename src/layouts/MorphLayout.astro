@@ -7,7 +7,7 @@ interface Props {
 const { title, background } = Astro.props;
 ---
 
-<Layout title={title} background={background}>
+<Layout title={title} {background}>
 	<h1>{title}</h1>
 	<slot />
 </Layout>

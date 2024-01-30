@@ -1,22 +1,16 @@
 
 ### Coding
 
-The loading indicator you see in the top right corner on this page is the default loading indicator of the 👜 Bag of Tricks ✨. 
+The loading indicator you see in the top right corner on this page is the default loading indicator of the 👜 Bag of Tricks ✨.
 It is automatically activated if you <a data-astro-reload href="/library/Installation/">install astro-vtbot</a> as an astro integration.
 
-The default icon that is displayed is the favicon of the current page. 
+The default icon that is displayed is the favicon of the current page.
 Of course, you can tweak the look & feel of the <a data-astro-reload href="/library/LoadingIndicator/">&lt;LoadingIndicator/> component</a> to your liking.
 
-If you want to know what happens behind the scenes, here is a rough sketch of the code that can be used to display a loading indicator if you do not use the reusable `<LoadingIndicator/>` component:
+If you want to know what happens behind the scenes, here is a rough sketch of the code that is used to display a loading indicator if you use the reusable `<LoadingIndicator/>` component or the TypeScript pendant `loading-indicator.ts`:
 
-```javascript title="loading.js"
-document.addEventListener('astro:before-preparation', beforePreparation);
-document.addEventListener('astro:after-preparation', afterPreparation);
-
-function beforePreparation() {
-	document.querySelector('#loading').classList.add('show');
-}
-function afterPreparation() {
-	document.querySelector('#loading').classList.remove('show');
-}
+```javascript title="loading-indicator.js"
+document.addEventListener(TRANSITION_PAGE_LOAD, doInit); // optional: dynamically setup the indicator
+document.addEventListener(TRANSITION_BEFORE_PREPARATION, doShow); // show the indicator
+document.addEventListener(TRANSITION_BEFORE_SWAP, doHide); // hide the indicator
 ```

@@ -1,7 +1,16 @@
 ---
 import LoadingLayout from 'src/layouts/LoadingLayout.astro';
+import Content from 'src/mdx/loading/one.mdx';
 ---
 
 <LoadingLayout title="Page One" background="rgb(181, 190, 181)">
+	<p>
+		This is a page with some text and a link to another page. Thanks to the <a
+			href="/library/BrakePad/"><code>&lt;BreakPad&gt;</code> component</a
+		> that next page will take really long to load. Therefore the default loading indicator of the 👜
+		Bag of Tricks ✨ will appear.
+	</p>
+
 	<a href="/loading/two/">Go to page two</a>
+	<Content />
 </LoadingLayout>

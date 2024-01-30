@@ -1,0 +1,30 @@
+---
+layout: src/layouts/ProgressBarLayout.astro
+title: Progress Bar 2
+---
+
+# Progress Bar: Page Two
+
+This link takes you back to the <a href="javascript:history.back()">previous page</a>.
+
+
+This listing shows how the custom loading indicator uses swup and the `loading()` function offered by `loading-indicator.ts`.
+
+```astro title="componets/ProgressBar.astro"
+---
+export interface Props {}
+---
+
+<script>
+	import 'https://unpkg.com/@swup/progress-plugin@3';
+  import { loading } from './loading-indicator';
+	//@ts-ignore
+	const plugin = new SwupProgressPlugin();
+
+	document.addEventListener('astro:after-swap', () => plugin.progressBar.installStyleElement());
+	loading(
+		() => plugin.startShowingProgress(),
+		() => plugin.stopShowingProgress()
+	);
+</script>
+```

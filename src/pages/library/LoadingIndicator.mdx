@@ -13,11 +13,39 @@ The `<LoadingIndicator />` component adds a loading indicator to your view trans
 
 ## Why should I use this component?
 
-The loading indicator is a great way to let your users know that something is happening. For view transitions, this is even more important than for normal page loads, as the view transition animation only starts after the target page has fully loaded. With a slow internet connection this can take quite a while. From the instant the user clicked the link up to the start of the view transition animation the user typically gets no visual feedback. This gap is now filled by the loading indicator. 
+The loading indicator is a great way to let your users know that something is happening. For view transitions, this is even more important than for normal page loads, as the view transition animation only starts after the target page has fully loaded. With a slow internet connection or heavy server-side rendering, this can take quite a while. From the instant the user clicked the link up to the start of the view transition animation the user typically gets no visual feedback. This gap is now filled by the loading indicator.
 
 ## How does it work?
 
-The default behavior of the load indicator is to provide visual feedback by displaying a pulsating image in the upper right corner of the viewport.  The image used is the favicon of site.  This works better with images with good resolution of various formats. It works worse or not at all with the `.ico` format. Good news is that it works well with SVG files. The image is contained in a `<div>` element which has the id `vtbot-loading-indicator`. 
+The bag offers very versatile support for loading indicators.
+The common feature is to start an action with the click on the link and stop it again when the target page is fully loaded.
+
+To achieve this, `<LoadingIndicator/>` inserts a `loading` class into the html element of the page and removes it later. You can also have it call your Javascript code to show and hide something.
+
+Without any further configuration, the LoadingIndicator component displays a pulsating version of your favicon in the top right corner of the screen during loading.
+
+## Usage
+
+In good Astro tradition this component works out of the box without any configuration. But if you want you can also customize it completely to your needs.
+
+### Alternative 1: Use it as an Astro integration
+
+The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all  pages that use the `<ViewTransitons/>` component.
+
+If you want to keep the integration, e.g. for the automatic linter support, but want to (temporarily) disable the loading indicator, set loadingIndicator to false in the configuration:
+
+```js title="astro.config.mjs"
+integrations: [vtbot({ loadingIndicator: false })]
+```
+
+#### Favicon image
+
+You should have a `<link rel="icon" href="/favicon.xyz">` in your page `<head>` element. This will be used as the image for the loading indicator. If you do not have a favicon link, `<LoadingIndicator>` will try to load the standard `/favicon.ico`. If that is not there, it will show a grey circle as loading indicator.
+
+`<LoadingIndicator/>` supports various image formats but it works best with raster images with a minimal resolution of 128 x 128 or with `.svg` files. It works not so well  with small `.ico` files.
+
+
+The image is contained in a `<div>` element which has the id `vtbot-loading-indicator` and you might apply your own styling to it. The generates code will look like this
 
 ```html title="your-page.html"
 <div id="vtbot-loading-indicator">
@@ -30,13 +58,53 @@ or
 	<svg>...</svg>
 </div>
 ```
-You can style this element to your liking.
 
+### Alternative 2: Use the &lt;LoadingIndicator /> component
+
+If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component shoud be put inside the `<head>` element **behind the `<ViewTransitions/>` component**.
+
+
+```astro title="YourComponent.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions'
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
+---
+<html>
+  <head>
+    <ViewTransitions />
+		<LoadingIndicator />
+		...
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+
+Without further configuration, the `<LoadingIndicator />` component will display a pulsating [version of your favicon](#favicon-image) in the top right corner of the screen during loading.
+
+You can configure the source of the image as well as the position. These is the interface:
+```astro title="LoadingIndicator.astro"
+---
+export interface Props {
+	top?: string;
+	bottom?: string;
+	left?: string;
+	right?: string;
+	src?: string;
+}
+---
+```
+The `src` attribute is a href, the position strings are values for the corresponding CSS attributes, e.g.
+```astro
+<LoadingIndicator bottom="3vh" left="3vh" imageURL="/some/other.png"/>
+```
+As long as you include the `<LoadingIndicator />` component behind the `<ViewTransitions />` in the `<head>` its attributes will override the defaults of the `<LoadingIndicator />` component that is installed by the Astro integration. So it is ok to have the default via integration on most pages and override it on some pages with an explicit `<LoadingIndicator>` element.
 
 ### Styling with CSS
-As soon as the user clicks the link, the CSS class `loading` is added to the body element of the page. Once the target page is loaded completely and the view transition is about to begin, the `loading` CSS class is removed again. This allows you to customize the loading indicator via CSS. 
+As soon as the user clicks the link, the CSS class `loading` is added to the body element of the page. Once the target page is loaded completely and the view transition is about to begin, the `loading` CSS class is removed again. This allows you to customize the loading indicator via CSS.
 
-The default CSS covers positioning, sizing, and pulsing of the indicator. 
+The default CSS covers positioning, sizing, and pulsing of the indicator.
 
 ```astro title="LoadingIndicator.astro"
 <style is:global>
@@ -70,63 +138,32 @@ You can override it with your own styling. Best way to do this is to [define you
 
 > **Trick:** The animation defined above runs a one second cycle over and over. It keeps the loading indicator invisible for the first 30% of the cycle. I.e. for the first 300 ms your indicator does not show. Or in other words: Even though the `.loading` class is added  immediatelly after the user clicks the link, the indicator will not appear for the first 300 ms. This is a good thing, as it only shows the indicator for slow loading pages and not for a page that is already in the browser cache.
 
-### Alternative #vtbot-loading-indicator
+### Use your own #vtbot-loading-indicator
 
-If you want to use your own loading indicator element, you can do so by adding an HTML element with the ID `vtbot-loading-indicator` to your page. In this case, the `<LoadingIndicator/>` component does not insert its own loading indicator. Again, best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
+If you want to use your own loading indicator element, you can do so by adding an HTML element with the ID `vtbot-loading-indicator` to your page. In this case the `<LoadingIndicator/>` component does not insert its own loading indicator. Again, best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
 
-## Usage
+### Using CSS to define your custom loading indicator
 
-In good Astro tradition this component works out of the box without any configuration. But if you want you can also customize it completely to your needs. There will even be support for sharable plugins in the future. 
+You can define a custom loading indicator by extending the `<LoadingIndicator />` component.
+Typically, your component will define an HTML element and styling.
+The logic for showing and hiding the loading indicator will be handled by the `<LoadingIndicator />` component.
 
-### As an Astro integration
-
-The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all your pages with view transitions. 
-
-### Using the &lt;LoadingIndicator /> component
-
-If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in the configuration, you have to install the `<LoadingIndicator />` component directly your page. The `<LoadingIndicator />` component can be put anywhere on the page, in the `<head>` or in the `<body>`. 
-
-
-```astro title="YourComponent.astro" {3,8}
----
-import { ViewTransitions } from 'astro:transitions'
-import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
----
-<html>
-  <head>
-    <ViewTransitions />
-		<LoadingIndicator />
-		...
-  </head>
-  <body>
-    ...
-  </body>
-</html>
-```
-
-### Define your own custom CSS loading indicator
-
-You can define a custom loading indicator by extending the `<LoadingIndicator />` component. 
-Typically, your component will define an HTML element and styling. 
-The logic for showing and hiding the loading indicator will be handled by the `<LoadingIndicator />` component. 
-
-```astro title="MyCustomLoadingIndicator.astro" {8}
+Here is the template that you also find in the `astro-vtbot` package.
+```astro title="components/template/LoadingIndicatorTemplate_CSS.astro" {2,6,10}
 ---
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
 ---
-
-{/* By rendering <LoadingIndicator/> here, 
+{/* By rendering <LoadingIndicator/> here,
 		you inherit the logic that sets the "loading" CSS class */}
 <LoadingIndicator />
 
-{/* Defining this div is only necessary 
+{/* Defining this div is only necessary
 		if you do not want to use the default element that holds the favicon image  */}
 <div id="vtbot-loading-indicator"> <!-- make sure to use this id -->
   ...
 <div>
-	
 <style is:global>
-	#vtbot-loading-indicator { 
+	#vtbot-loading-indicator {
 	/* basic styling, typically with position: fixed */
 	/* hide the indicator with display: none, opacity: 0, visibility: hidden, right: -100vw, ... */
 		...
@@ -137,37 +174,59 @@ import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
 	}
 </style>
 ```
-If you are happy with the default loading indicator html you can keep it. Otherwise you define your own, see line 8 above and [the section on alternative elements](#alternative-vtbot-loading-indicator).
+If you are happy with the default loading indicator html you can keep it. Otherwise you define your own, see line 10 above and [the section on alternative elements](#alternative-vtbot-loading-indicator).
 
-### Define your own custom JS loading indicator
+### Using JavaScript to define your custom loading indicator
 
-You do not want to craft animations with CSS and prefer to use some JavaScript library like 
-GSAP et.al? No problem. Also in that case you can craft your own custom loading indicator using `loading-indicator.ts`: 
+You do not want to craft animations soley with CSS and prefer to use some JavaScript library like
+GSAP et.al? No problem. Also in that case you can craft your custom loading indicator. Instead of `<LoadingIndicator/>` component use the `loading-indicator.ts` script.
 
-```astro title="MyJAvascriptLoadingIndicator.astro" {5}
+Here is the template that you also find in the `astro-vtbot` package.
+
+```astro title="components/template/LoadingIndicatorTemplate_JS.astro" {19,20}
 ---
+// Just define javascript or typescript code for hide & show functions
+// in the script below.
+
+// You also have to provide the HTML for the loading indicator.
+// Include it on your pages, preferable via a common layout
+// or - if it is simple - generate it dynamically in the `show` function.
+
+// If you have time consuming setup tasks, you should not run them in `show`.
+// It is better to move them to the optional `initializer` function,
+// which is executed shortly after a page has been loaded,
+// and not when the indicator is already to be displayed
+
+// You can generate the default loading indicator of the back of tricks
+// by calling `vtbotLoadingIndicator()`, preferably in the `initializer` function.
 ---
+
 <script>
-	import {loading } from 'astro-vtbot/components/loading-indicator'
-	loading(show, hide);
+	import { loading } from 'astro-vtbot/components/loading-indicator';
+	loading(show, hide, initializer);
 
-	let background:string;
-	
 	function show() {
-		console.log("show!");
-		background = document.body.style.backgroundImage;
-		document.body.style.backgroundImage = "linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)";
+		// show loading indicator
 	}
 	function hide() {
-		console.log("hide!");
-		document.body.style.backgroundImage = background;
+		// hide loading indicator
+	}
+
+	function initializer() {
+		// this function is optional
+		// remove the init parameter in the call to loading above if you do not need it
 	}
 </script>
 ```
-To do this, you just define the two functions show and hide and tell the `loading-indicator` about them. In the body of these two functions you can craft your special effects!
+You just define the two functions show and hide and tell the `loading-indicator` about them. In the body of these two functions you can craft your special effects!
 
 ### Using custom loading indicators
-Your custom loading indicator components can then be used in the **`<body>`** of a page. No need anymore for the `<LoadingIndicator />` component in the `<head>`
+Your custom loading indicator components can then be used instead of `<LoadingIndicator>`. No need anymore for the `<LoadingIndicator />` component in the `<head>`. Whether your custom component needs to be inserted into the head or the body depends on the *HTML elements* the template section of your component *directly inserts* into the DOM:
+
+- No elements at all? Your component can go either to the `<head>` or to the `<body>`
+- `<meta>` or other `<head>` stuff? Your component goes into the `<head>`
+- `<div>` or other `<body>` stuff? Your component goes into the `<body>`
+- Both? No good idea. Maybe you can generate the body part dynamically?
 
 ```astro title="YourPage.astro" {11}
 ---
@@ -186,7 +245,7 @@ import MyCustomLoadingIndicator from './MyCustomLoadingIndicator.astro'
 </html>
 ```
 
-### Slowing things down during development
+### &lt;BrakePad/&gt;: Slowing things down during development
 
 Testing loading indicators is hard with your slick local server. Transitions happen in no time and you can not even get a climpse of your flashy indicator? You can use your browser's developer tools to simulate a slow network connection!
 
@@ -210,12 +269,11 @@ import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
   </body>
 </html>
 ```
-The duration value tells the `<BrakePad>` how many miliseconds the simulated loading should last. The default is 2000 ms.
+The duration value tells the `<BrakePad/>` how many miliseconds the simulated loading should last. The default is 2000 ms.
 
-<a id="Pocyocli"/>
-## Publish or contribute your own custom loading indicator!  (Pocyocli!)
+<a id="Pocycli"/>
+## Publish or contribute your custom loading indicator!  (Pocycli!)
 
-> I'm curious to see **what you will build!** 
+> I'm curious to see **what you will build!**
 
 If you define your own custom loading indicator - either by extending `<LoadingIndicator/>` or by defining `show` & `hide` with `loading-indicator.ts` as described above: Please drop me a line (issue or pull request at https://github.com/martrapp/astro-vtbot-website, or DM @Martin at Astro's Discord server) **and I will gladly link to your extension or you add it as a contribution to the 👜 Bag of Tricks. ✨**
-

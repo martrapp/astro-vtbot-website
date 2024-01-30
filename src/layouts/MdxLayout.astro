@@ -12,13 +12,13 @@ interface Props {
 const { frontmatter } = Astro.props;
 const title = frontmatter?.title ?? Astro.props.title ?? '';
 if (!title) {
-	console.log('Title not set for ' + Astro.request.url);
+	console.log('Title not set for ' + Astro.url.pathname);
 }
 ---
 
 <Layout {title}>
-	<slot name="head" slot="head"/>
-	<slot name="head2" slot="head2"/>
+	<slot name="head" slot="head" />
+	<slot name="head2" slot="head2" />
 	<header>
 		<a href="javascript:history.back()">⮌ back</a>
 		{frontmatter?.overview && <a href={frontmatter.overview}> | Overview</a>} | <a

@@ -1,16 +1,15 @@
 ---
-import Layout from './MdxLayout.astro';
+import MdxLayout from './MdxLayout.astro';
 
 interface Props {
 	title: string;
-	background: string;
 }
-const { title, background } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<Layout title={title} background={background}>
+<MdxLayout {title}>
 	<slot />
-</Layout>
+</MdxLayout>
 
 <style is:global>
 	body {

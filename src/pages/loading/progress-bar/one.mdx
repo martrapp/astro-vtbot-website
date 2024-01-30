@@ -1,0 +1,40 @@
+---
+layout: src/layouts/ProgressBarLayout.astro
+title: Progress Bar 1
+---
+
+# Progress Bar: Page One
+
+[Goto page two](../two/)
+
+This page shows a custom progress bar based on an idea by [@kb](https://github.com/k16e-me). It utilizes the [swup progress bar plugin](https://swup.js.org/plugins/progress-plugin/).
+
+It is used like this:
+```astro title="UseProgressBar.astro"
+---
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
+import MdxLayout from './MdxLayout.astro';
+---
+
+<MdxLayout {...Astro.props}>
+	{
+		/* This is the custom component.
+		 * It can be put into the <head> or the <body> of your page
+		 */
+	}
+	<ProgressBar />
+
+	{/* To observe the effect it is necessary to simulate 2000ms loading time */}
+	<BrakePad duration={2000} />
+
+	<slot />
+</MdxLayout>
+
+{/* You can style the progress bar by defining the swup-progress-bar class */}
+<style is:global>
+	.swup-progress-bar {
+		background-color: rgb(64, 128, 192);
+	}
+</style>
+```
