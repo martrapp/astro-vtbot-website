@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from 'src/layouts/Layout.astro';
 import fi from 'src/assets/fi.png';
+import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 ---
 
 <Layout title="Bag of Tricks for Astro's View Transitions">
@@ -32,35 +33,40 @@ import fi from 'src/assets/fi.png';
 	/>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
-	<h1 class="hit-the-floor">
-		Welcome to the <br />👜 Bag of Tricks ✨<br />for Astro's View<br /> Transitions
+	<h1 class="massive">
+		Welcome to the <br />
+		<span class="bang"
+			><Image transition:name="bot" id="bot" src={bot} alt="A bag of tricks" />
+			<span class="grad">Bag of Tricks</span>
+		</span>
+		<br /> for Astro's View Tran&shy;si&shy;tions
 	</h1>
-	<span id="ken" transition:animate="slide" transition:name="ken"></span>
-	<div id="outer">
-		<div id="new">
-			<a href="https://www.npmjs.com/package/astro-vtbot"
-				>Install from npm!<br /><img
-					alt="npm"
-					id="badge"
-					src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5)"
-				/>
-			</a>
-		</div>
-	</div>
-	<a href="/components/" transition:name="reuse">Reusable Components</a>
-	<a href="/demos/" transition:name="demos">Tech Demos</a><br />
-	<a href="/docs/Jotter/" transition:name="jotter">The Jotter</a>
-
-	<div class="fancy">&nbsp;</div>
-	<div
-		style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:20vh; transform: rotateZ(90deg); right: 6vw; transform-origin: bottom right"
-	>
-		⭐ Star <a
-			style="text-decoration: dotted underline; color: coral"
-			href="https://github.com/martrapp/astro-vtbot"><code>astro-vtbot</code></a
-		> on GitHub
-	</div>
 </Layout>
+<div id="outer">
+	<div id="new">
+		<a href="https://www.npmjs.com/package/astro-vtbot"
+			>Install from npm!<br /><img
+				alt="npm"
+				id="badge"
+				src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5)"
+			/>
+		</a>
+	</div>
+</div>
+<a href="/components/" transition:name="reuse">Reusable Components</a>
+<a href="/demos/" transition:name="demos">Tech Demos</a><br />
+<a href="/docs/Jotter/" transition:name="jotter">The Jotter</a>
+
+<div class="fancy">&nbsp;</div>
+<div
+	style="font-size:min(5vw,5vh); color: white; position:fixed; bottom:20vh; transform: rotateZ(90deg); right: 6vw; transform-origin: bottom right; z-index:40"
+>
+	⭐ Star <a
+		style="text-decoration: dotted underline; color: coral"
+		href="https://github.com/martrapp/astro-vtbot"><code>astro-vtbot</code></a
+	> on GitHub
+</div>
+
 <style is:global>
 	body {
 		margin: 1.5em 2em;
@@ -69,14 +75,19 @@ import fi from 'src/assets/fi.png';
 		font-family: sans-serif;
 		display: inline-block;
 		font-size: min(4.5vh, 4.5vw);
-		background: linear-gradient(330deg, #fa5e, #eefc);
-		color: #444;
+		font-weight: 800;
+		background: linear-gradient(330deg, #8f681080, rgba(255, 127, 80, 0.5));
+		color: #3333;
 		border-radius: 10px;
 		padding: 1ex;
 		margin-left: 2ex;
 		margin-top: 1ex;
-		text-decoration: dotted underline;
-		width: 11em;
+		text-decoration: none;
+		width: 13em;
+		box-shadow: -1px -1px 2px 0px white;
+		text-shadow:
+			1px 1px 1px #000c,
+			2px 2px 2px rgba(255, 127, 80, 0.5);
 	}
 	html {
 		background: linear-gradient(330deg, #000, rgb(22, 54, 66));
@@ -106,11 +117,12 @@ import fi from 'src/assets/fi.png';
 		background-image: radial-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2));
 		border: 9px dotted orange;
 		position: absolute;
-		bottom: 10vh;
-		right: 8vw;
-		max-width: 60%;
-		transform: rotate3d(10, 4, 3, 10deg);
+		bottom: 5vh;
+		left: 50vw;
+		transform: rotateZ(5deg) translateX(-50%);
 		border-radius: 50px;
+		z-index: 30;
+		transition: all 0.5s ease-in-out;
 	}
 
 	#new {
@@ -152,46 +164,56 @@ import fi from 'src/assets/fi.png';
 			transform: translate(-50%, -50%) scale(1.4) rotate(1turn);
 		}
 	}
+
 	#fi {
 		z-index: -1;
 		position: fixed;
-		top: 5vh;
-		right: 10vw;
+		bottom: 20vh;
+		left: 0;
 		width: min(25vh, 25vw);
 		height: min(25vh, 25vw);
-		transform: rotateY(180deg);
+		transform: rotateY(0deg);
+		transition: all 0.5s ease-in-out;
 	}
-	#ken {
-		font-size: min(25vh, 25vw);
-		position: fixed;
-		top: 5vh;
-		right: 5vw;
-		z-index: -1;
+	#bot {
+		height: 2.5ex;
+		width: auto;
+		display: inline-block;
+		vertical-align: text-top;
 	}
 
-	.hit-the-floor {
-		padding: 0 0.5ex;
-		color: #add8e6;
-		font-size: max(6vh, 6vw);
+	.massive {
+		color: #abc;
+		padding: 1ex 1.5ex;
+		font-size: min(7vh, 7vw);
 		font-weight: bold;
-		font-family: sans-serif;
-		text-shadow:
-			0 0.005em 0 rgba(0, 0, 0, 0.2),
-			0 0.005em 0 currentColor,
-			0 0.01em 0 rgba(0, 0, 0, 0.25),
-			0 0.01em 0 currentColor,
-			0 0.015em 0 rgba(0, 0, 0, 0.3),
-			0 0.015em 0 currentColor,
-			0 0.02em 0 rgba(0, 0, 0, 0.35),
-			0 0.02em 0 currentColor,
-			0 0.025em 0 rgba(0, 0, 0, 0.4),
-			0 0.025em 0 currentColor,
-			0 0.03em 0.005em rgba(0, 0, 0, 0.1),
-			0 0 0.025em rgba(0, 0, 0, 0.1),
-			0 0.005em 0.015em rgba(0, 0, 0, 0.3),
-			0 0.015em 0.025em rgba(0, 0, 0, 0.2),
-			0 0.025em 0.05em rgba(0, 0, 0, 0.25),
-			0 0.05em 0.05em rgba(0, 0, 0, 0.2),
-			0 0.1em 0.1em rgba(0, 0, 0, 0.15);
+		font-family: Arial, Helvetica, sans-serif;
+		text-shadow: -0.05em -0.05em -0.05em rgba(255, 255, 255, 0.2);
+		text-shadow: 0.1em 0.1em 0.1em rgba(0, 0, 0, 0.2);
+	}
+	html .bang {
+		padding: 0.5ex 0;
+		display: inline-block;
+		font-size: min(9vw, 20vh);
+	}
+	.grad {
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		-moz-background-clip: text;
+		-moz-text-fill-color: transparent;
+		background-image: linear-gradient(45deg, coral, #8f6810 30%, coral 90%);
+		background-size: 10%;
+		background-repeat: repeat;
+	}
+	@media screen and (min-aspect-ratio: 1/1.1) {
+		#fi {
+			left: 75vw;
+			bottom: 75vh;
+			transform: rotateY(180deg);
+		}
+		#outer {
+			left: 65vw;
+			transform: rotateZ(5deg) translateX(0);
+		}
 	}
 </style>
