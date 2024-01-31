@@ -12,7 +12,7 @@ const { title } = Astro.props;
 
 <MdxLayout title={title}>
 	<VtBotDebug production slot="head" />
-	<LoadingIndicator top="5vh" src="/favicon.svg" slot="head2" />
+	<LoadingIndicator top="5vh" src="/astro.svg" slot="head2" />
 	<BrakePad />
 	<div transition:animate="slide">
 		<h1>{title}</h1>
