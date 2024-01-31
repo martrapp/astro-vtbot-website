@@ -3,7 +3,9 @@ layout: src/layouts/NavBarMdxLayout.astro
 title: Jotter
 ---
 
-# The Jotter
+<h1><span class="text-gradient" style="view-transition-name:jotter">The Jotter</span></h1>
+
+<div style="view-transition-name:bot">
 
 This page is the entry point to notes I took about things I learned while working with view transitions.
 
@@ -33,7 +35,7 @@ How to decide which event to use for a given situation? Let's look at typical us
 
 ## Page Navigation
 
-This page is also a view transition demo: in the lower right corner, there is a navigaton bar that leads you to the other pages of the jotter. This navigation bar is a peristed element that is shared between all pages of this jotter using `transition:persist='name'`. 
+This page is also a view transition demo: in the lower right corner, there is a navigaton bar that leads you to the other pages of the jotter. This navigation bar is a peristed element that is shared between all pages of this jotter using `transition:persist='name'`.
 
 After each navigation within the jotter, the current page is highlighted in the navigation bar by assigning the CSS class `active` for styling to the current entry via a listener for the `astro:after-swap` event.
 
@@ -55,3 +57,4 @@ After each navigation within the jotter, the current page is highlighted in the 
 </script>
 ```
 
+</div>

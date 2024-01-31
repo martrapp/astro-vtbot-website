@@ -11,7 +11,7 @@ import Content from 'src/mdx/demos.mdx';
 	</h1>
 
 	<Content />
-	<ul role="list" class="link-card-grid">
+	<ul role="list" class="link-card-grid" transition:name="bot">
 		<Card
 			href="/docs/Jotter/"
 			title="VT-BoT Jotter"
@@ -139,7 +139,7 @@ import Content from 'src/mdx/demos.mdx';
 
 <style is:global>
 	::view-transition-group(root) {
-		animation-duration: 0s;
+		animation-duration: 1s;
 	}
 	:root {
 		--accent: 135, 206, 235;

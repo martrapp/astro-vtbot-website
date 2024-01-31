@@ -1,6 +1,6 @@
 {
   "name": "astro-vtbot-website",
-  "version": "1.3.4",
+  "version": "1.3.6",
   "description": "The Website for the Bag of Tricks for Astro's View Transitions",
   "homepage": "https://github.com/martrapp/astro-vtbot#readme",
   "bugs": {
@@ -17,7 +17,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "relocate": "./bin/relocate.sh"
+    "relocate": "./bin/relocate.sh",
+    "prepDev": "npm link ../astro-vtbot",
+    "prepProd": "npm i"
   },
   "devDependencies": {
     "@astrojs/mdx": "^2.1.0",
@@ -27,7 +29,7 @@
     "@types/node": "^20.11.10",
     "astro": "^4.2.6",
     "astro-expressive-code": "^0.32.3",
-    "astro-vtbot": "^1.4.4",
+    "astro-vtbot": "^1.4.5",
     "prettier": "^3.1.0",
     "prettier-plugin-astro": "^0.13.0",
     "remark-toc": "^9.0.0",
