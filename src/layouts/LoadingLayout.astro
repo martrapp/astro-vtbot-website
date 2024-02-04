@@ -13,15 +13,10 @@ const { title } = Astro.props;
 <MdxLayout title={title}>
 	<VtBotDebug production slot="head" />
 	<LoadingIndicator top="5vh" src="/astro.svg" slot="head2" />
-	<BrakePad />
+	<BrakePad production />
 	<div transition:animate="slide">
 		<h1>{title}</h1>
 		<h3>Open the browser console to see the debug information</h3>
-
-		<p>
-			This is a page with some text and a link to another page. That next page will take really long
-			to load. Therefore a loading indicator will appear.
-		</p>
 		<slot />
 		<div style="height:100vh"></div>
 	</div>

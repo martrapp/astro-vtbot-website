@@ -104,6 +104,30 @@ import Linter from 'astro-vtbot/components/Linter.astro';
 ```
 
 
+### Properties
+
+The `<Linter/>` component offers two properties to control its behaviour:
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| production | boolean | Activate brake pad in production mode. Typically, the brake pad is active in DEV mode, only. Set this property if you want to feature a delay effect in production, too.|
+| expanded | boolean | In the log that is written to the browsers console, the top level groups are collapsed by default. With `expand` you can force them open from the start.|
+
+```astro title="YourDevelopentPage.astro" {8}
+---
+import { ViewTransitions } from 'astro:transitions'
+import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
+---
+<html>
+  <head>
+    <ViewTransitions />
+		<Linter expanded production>
+		...
+  </head>
+</html>
+```
+
+
 <style>{`
 
 img {

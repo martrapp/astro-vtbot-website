@@ -245,31 +245,11 @@ import MyCustomLoadingIndicator from './MyCustomLoadingIndicator.astro'
 </html>
 ```
 
-### &lt;BrakePad/&gt;: Slowing things down during development
+### &lt;BrakePad/&gt;: Slowing things down during development 🦥
 
 Testing loading indicators is hard with your slick local server. Transitions happen in no time and you can not even get a climpse of your flashy indicator? You can use your browser's developer tools to simulate a slow network connection!
 
-But you can also put the brakes on, with  `<BrakePad/>`from the Bag of Tricks. The `<BrakePad/>` simulates a slow loading page where you can specify how long the wait will be.
-
-```astro title="YourDevelopentPage.astro" {9}
----
-import { ViewTransitions } from 'astro:transitions'
-import MyCustomLoadingIndicator from './MyCustomLoadingIndicator.astro'
-import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
----
-<html>
-  <head>
-    <ViewTransitions />
-		<BrakePad duration={3000}>
-		...
-  </head>
-  <body>
-    <MyCustomLoadingIndicator />
-    ...
-  </body>
-</html>
-```
-The duration value tells the `<BrakePad/>` how many miliseconds the simulated loading should last. The default is 2000 ms.
+But you can also put the brakes on, with the [&lt;BrakePad/&gt;](/library/BrakePad/) from the Bag of Tricks.
 
 <a id="Pocycli"/>
 ## Publish or contribute your custom loading indicator!  (Pocycli!)

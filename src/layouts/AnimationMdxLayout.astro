@@ -73,15 +73,15 @@ const swing3Scope = customSwing('swing3', {
 	},
 });
 
-const { scope: noneScope, styles: noneStyles } = styleSheet({
+const { scope: _noneScope, styles: noneStyles } = styleSheet({
 	transitionName: 'none',
 	animations: {},
 });
-const { scope: fadeScope, styles: fadeStyles } = styleSheet({
+const { scope: _fadeScope, styles: fadeStyles } = styleSheet({
 	transitionName: 'fade',
 	animations: extend(fade({ duration: 300 })),
 });
-const { scope: slideScope, styles: slideStyles } = createAnimationScope('slide', { ...slide() });
+const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide', { ...slide() });
 ---
 
 <AnimationStyle name="swing1" />

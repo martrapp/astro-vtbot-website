@@ -99,7 +99,7 @@ import Layout from 'src/layouts/Layout.astro';
 			previousScrollY = scrollY;
 		}
 	});
-	document.addEventListener('astro:after-swap', (e) => {
+	document.addEventListener('astro:after-swap', () => {
 		if (enabled(location.pathname)) {
 			if (previousScrollY > 0) {
 				window.scrollTo({ behavior: 'auto', top: 0 });

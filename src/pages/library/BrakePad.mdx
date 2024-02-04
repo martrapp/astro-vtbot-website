@@ -1,0 +1,75 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Brake Pad
+overview: /components/
+vtn: brakepad-3
+---
+
+<h1 style="display: inline-block; view-transition-name: brakepad-1"><span style="display:inline-block; view-transition-name:brakepad-2">🦥</span>Slam on the brakes!</h1>
+
+The `<BrakePad/>` simulates a slow loading page where you can specify how long the wait will be.
+
+
+## Contents
+
+## Why would I use this component?
+
+As a developer, you want to define and control how your website behaves on slow connections. If pages load too quickly to observe the effects, you can manually throttle the network speed in the browser's developer tools.
+
+Alternatively, you can use the `<BrakePad/>` component to simulate a slow loading page. It gives you finer control over where and how the slowdown should occur. You also don't have to keep changing the browser settings.
+
+The `<BrakePad/>` is a great way to test your loading indicators and to see how your pages look & feel when it takes a little longer to load.
+
+There might also be use cases where you want to simulate a slow loading page for a specific user experience.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
+
+### Usage
+
+Place the `<BrakePad/>` component in the `<head>` of a page near Astro's `<ViewTransitions/>`. Now when you leave that page using a view transition, the page will simulate a slow loading time of 2000ms. By default, the delay is only active in DEV mode and not if you build for productiom.
+
+```astro title="YourDevelopentPage.astro" {8}
+---
+import { ViewTransitions } from 'astro:transitions'
+import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
+---
+<html>
+  <head>
+    <ViewTransitions />
+		<BrakePad />
+		...
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+
+### Properties
+
+The `<PageBreak />` component offers two properties to control its behaviour:
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| duration | number | The duration of the delay in miliseconds. The default is 2000 ms.|
+| production | boolean | Activate brake pad in production mode. Typically, the brake pad is active in DEV mode, only. Set this property if you want to feature a delay effect in production, too.|
+
+Use them like this:
+
+```astro title="YourDevelopentPage.astro" {8}
+---
+import { ViewTransitions } from 'astro:transitions'
+import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
+---
+<html>
+  <head>
+    <ViewTransitions />
+		<BrakePad duration={3000} production />
+		...
+  </head>
+</html>
+```
+
+

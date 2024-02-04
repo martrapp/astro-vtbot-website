@@ -13,26 +13,26 @@ import vtd2_light from "src/assets/vtd2.light.png";
 
 <h1 style="display: inline-block; view-transition-name: vtbotdebug-1"><span style="display:inline-block; view-transition-name:vtbotdebug-2">🐛</span>The Debug Component</h1>
 
-The `<VtBotDebug/>` component logs the view transition events and their data. 
+The `<VtBotDebug/>` component logs the view transition events and their data.
 
 
 ## Contents
 
 ## Why would I need this component
 
-When View Transitions do not behave the way you expect and you need support in hunting down the bugs, the `<VtBotDebug/>` component can help you. 
+When View Transitions do not behave the way you expect and you need support in hunting down the bugs, the `<VtBotDebug/>` component can help you.
 
 
 ### Example Output
 
 During view transitions, the `<VtBotDebug>` component logs four types of information to the console:
-* Astro's view transition events and their properties 
+* Astro's view transition events and their properties
 * Start and end of the execution of `loader()` and `swap()`
 * The transition groups that participate in the transition
 * The viewTransition promises `ready`, `updateCallbackDone` and `finished`, how they are resolved or rejected
 * The `::view-transition` pseudo-elements that the browser inserts to control the animations of the view transitions
 * The scripts that will be executed between `astro:after-swap` and `astro:page-load`
-* Upcoming: The animations that run during view transitions 
+* Upcoming: The animations that run during view transitions
 
 ```console title="console.log" {1,6,7,12,15}
    18:09:18.024 [vtbot-debug] Event handler for astro:before-preparation
@@ -73,17 +73,17 @@ The detailled view of the properties shows one line for each property of the eve
    18:09:18.027 formData: undefined
    18:09:18.027 loader changed from function () { [native code] } to async () => {
 		                  await originalLoader();
-											if (event.navigationType !== "traverse") {    
+											if (event.navigationType !== "traverse") {
 										  ...
 	 ...
    18:09:18.027 [vtbot-debug] before execution of loader()
    18:09:18.376 [vtbot-debug] newDocument changed from a1: v1 (18.24 kB) to a2: v2 (11.04 kB)
    18:09:18.376 [vtbot-debug] after execution of loader()
-```	
+```
 
 ### Transition groups
 
-The `<VtBotDebug>` component logs the transition groups that participate in the transition. Beside the name of the transition group, the component shows the CSS selector that matches the elements on the current page and the target page of the navigation. `(nowhere)` is used as placeholder if the transition name does not appear on both pages. 
+The `<VtBotDebug>` component logs the transition groups that participate in the transition. Beside the name of the transition group, the component shows the CSS selector that matches the elements on the current page and the target page of the navigation. `(nowhere)` is used as placeholder if the transition name does not appear on both pages.
 
 ```console title="console.log" {1, 5}
 ⯆ 18:09:18.412 [vtbot-debug] Transitions from /morph/two/ to /morph/three/
@@ -95,7 +95,7 @@ The `<VtBotDebug>` component logs the transition groups that participate in the 
    18:09:18.414 [ transition] 6 "a31" from (nowhere) --to-> html > body > p:nth-of-type(3) > a
 ```
 
-#### Pseudo elements (since v1.1.3)
+### Pseudo elements
 
 `<VtBotDebug>` now logs the `::view-transition` CSS pseudo-elements that the browser inserts to control the animations of the view transitions. Here an example with collapsed output:
 
@@ -107,17 +107,19 @@ The `<VtBotDebug>` component logs the transition groups that participate in the 
 <Picture class="light" src={vtd2_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
 
 ### Scripts
-Inline scripts of the new page are executed between `astro:after-swap` and `astro:page-load` if they had not been on the old page. Module scripts are executed the first time they are found after a full page reload. Later occurences on other pages will not result in re-execution as module scrips can only be refreshed in the browser by full page loads.
+Scripts of the new page are executed between `astro:after-swap` and `astro:page-load` if they had not been on the old page. Module scripts are executed the first time they are found after a full page reload. Later occurences on other pages will not result in re-execution as module scrips can only be refreshed in the browser by full page loads.
 
-\[Example output tbd\]
 
-```console title="console.log" {1, 2, 3}
-	 18:09:18.447 [vtbot-debug] Event handler for astro:page-load
-	 18:09:18.447 [vtbot-debug] Scripts to be executed between astro:after-swap and astro:page-load
-	 18:09:18.447 [vtbot-debug] 1: <script>console.log("inline script 1")</script>
-	 18:09:18.447 [vtbot-debug] 2: <script>console.log("inline script 2")</script>
-	 18:09:18.447 [vtbot-debug] 3: <script>console.log("inline script 3")</script>
-``` 
+```console title="console.log" {1,3}
+⯆  14:11:45.146 [vtbot-debug] Scripts executions from now to astro:page-load: (1)
+   14:11:45.147  script 1 type="module" src="/_astro/ec.sgewm.js"
+⯆  14:11:45.147 [vtbot-debug] Scripts that will NOT be executed: (3)
+ ⯈ 14:11:45.147  script 2 data-astro-exec="" inline script
+   14:11:45.147  script 3 type="module" src="/_astro/hoisted.Fi6PpNGw.js" data-astro-exec=""
+ ⯈ 14:11:45.147  script 4 type="module" data-astro-exec="" inline script
+```
+`<VtBotDebug/>` shows the scripts that will be executed and those that won't. For inline scripts, it can show the source, for other scrips it shows the source URL.
+
 
 ### View Transition promises
 
@@ -131,6 +133,38 @@ After the view transition got startet, the API provides three promises that can 
    18:09:18.710 [vtbot-debug] resolve viewTransition.finished
 ```
 
+### Animations
+
+Sometimes it can be quite difficult to keep track of the individual animations of a view transitions. Each definition of a `transition:name` defines three different animations and there are also three implicit ones for the `root` element! Now, with the `<VtBotDebug>` component, there is a way to look at all these animations in order to better understand what is happening here simultaneously.
+
+```console title="console.log" {2,10}
+⯆  15:36:40.625 [vtbot-debug] Animations
+ ⯆ 15:36:40.625 transition 1 root
+   15:36:40.625 ::view-transition-group(root) -ua-view-transition-group-anim-root from 0.00 to 626.40
+  ⯆15:36:40.625 ::view-transition-old(root)
+   15:36:40.626 -ua-mix-blend-mode-plus-lighter from 0.10 to 626.50
+   15:36:40.626 -ua-view-transition-fade-out from 0.10 to 626.50
+  ⯆15:36:40.626 ::view-transition-new(root)
+   15:36:40.626 -ua-mix-blend-mode-plus-lighter from 0.10 to 626.50
+   15:36:40.626 -ua-view-transition-fade-in from 0.10 to 626.40
+ ⯆ 15:36:40.626 transition 2 astro-izu6424p-1
+   15:36:40.626 ::view-transition-group(astro-izu6424p-1) -ua-view-transition-group-anim-astro-izu6424p-1 from 0.00 to 626.30
+  ⯆15:36:40.626 ::view-transition-old(astro-izu6424p-1)
+   15:36:40.626 astroFadeOut from 0.10 to 76.90
+   15:36:40.626 astroSlideToLeft from 0.10 to 191.40
+  ⯆15:36:40.626 ::view-transition-new(astro-izu6424p-1)
+   15:36:40.626 astroFadeIn from 0.10 to 208.30
+   15:36:40.626 astroSlideFromRight from 0.10 to 224.50
+```
+
+Animations where the name beginns with `-ua ` are browser defined. Those might be static like `-ua-view-transition-fade-in` or even denamically generated depending on your page like `-ua-view-transition-group-anim-astro-izu6424p-1` in the example above.
+
+The three kinds of animations generated for each transition are:
+1. The group or morph animation (`view-transition-group`) that matches elements with same transition name on the old and new page and morphs one into the other. This is done be transitioning the old images size and position to the new images size and position.
+2. The old-animation(s) (`::view-transition-old`) that fade out the old image.
+3. The new-animation(s) (`::view-transition-new`) that fade in the new image.
+
+The [pseudo elements](#pseudo-elements) for the old an new image can have multiple animations at once.
 
 ## Usage
 
@@ -152,14 +186,15 @@ import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
   ...
 </html>
 ```
-### Attributes
+### Properties
 
-The `<VtBotDebug>` component offers three boolean properties to control its behaviour:
+The `<VtBotDebug>` component offers a boolean property to control its behaviour:
 
 |   Property | Effect |
 |------------|---------|
 | production | Be active in production mode. Helpful when chasing bugs the do not show up in development mode but only in a full build.|
 
+Use it like this:
 
 ```astro title="PageToDebug.astro" {3}
 <html>

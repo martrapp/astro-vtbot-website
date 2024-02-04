@@ -5,23 +5,22 @@ import { Content } from 'src/mdx/components.mdx';
 ---
 
 <MdxLayout title="Reusable Components">
-	<Content />
-
-	<ul role="list" class="link-card-grid" transition:name="bot">
+	<div transition:name="bot">
+		<Content />
+	</div>
+	<ul role="list" class="link-card-grid">
 		<Card
 			href="/library/VtBotDebug/"
 			title="VtBotDebug"
 			icon="🐛"
-			what="Debugging / ~2k Brotli bytes"
+			what="Debugging / ~2.6k Brotli bytes"
 			name="vtbotdebug"
 		>
 			<p>
-				<code>VtBotDebug</code> is a component that helps to understand transition events. It shows the
-				events, their properties, and the overall timing during the processing.
-			</p><p>
-				By default, the component logs to the browser console, but the output can be redirected to a
-				page overlay.
+				<code>VtBotDebug</code> is a component that helps to understand transition events. It logs the
+				events, their properties, and the overall timing during the processing to the browser console.
 			</p>
+
 			<h3>Status</h3><p>Feature complete for the logging part and ready to use.</p>
 			<h3>Future direction</h3><ul>
 				<li>Fix bugs and extend functionality</li>
@@ -51,7 +50,7 @@ import { Content } from 'src/mdx/components.mdx';
 			href="/library/LoadingIndicator/"
 			title="LoadingIndicator"
 			icon="⏳"
-			what="Feature / < 0.5k Brotli bytes"
+			what="Feature / ~ 0.6k Brotli bytes"
 			name="loading"
 		>
 			<p>
@@ -177,7 +176,7 @@ import { Content } from 'src/mdx/components.mdx';
 				groups from the current page to the target page are only possible if those are also
 				supported by the portal page.
 			</p>
-			<h3>Status</h3><p>Brand new.</p>
+			<h3>Status</h3><p>Not bulletproof yet.</p>
 			<h3>Future direction</h3><ul>
 				<li>Add properties for more fine grained contol</li>
 			</ul>
@@ -187,7 +186,7 @@ import { Content } from 'src/mdx/components.mdx';
 			href="/library/NoScroll/"
 			title="NoScroll"
 			icon="📜"
-			what="Utility / < 0.2k Brotli bytes"
+			what="Utility / < 0.1k Brotli bytes"
 			name="noscroll"
 		>
 			<p>Sometimes you want to opt out of the default scroll behavior of navigation.</p><p></p> Putting
@@ -198,6 +197,28 @@ import { Content } from 'src/mdx/components.mdx';
 			<h3>Status</h3><p>Brand new.</p>
 			<h3>Future direction</h3><ul>
 				<li>Do we need properties for more fine grained contol?</li>
+			</ul>
+		</Card>
+
+		<Card
+			href="/library/BrakePad/"
+			title="BrakePad"
+			icon="🦥"
+			what="Utility / < 0.1k Brotli bytes"
+			name="brakepad"
+		>
+			<p>
+				As a developer, you want to define and control how your website behaves on slow connections.
+				The <code>&lt;BrakePad&gt;</code> component gives you control over when and how to simulate slow
+				loading. By default, the brake pad is a DEV mode only feature.
+			</p><p>
+				But you can also switch it active for production if you want to force some delay during view
+				transitions. Admittedly, you typically want transitions to be slick and snappy. So this is a
+				bit of a niche feature, but it can be very helpful for testing and debugging.
+			</p>
+			<h3>Status</h3><p>New but reliable</p>
+			<h3>Future direction</h3><ul>
+				<li>Do we need additional properties for more fine grained contol?</li>
 			</ul>
 		</Card>
 	</ul>
@@ -212,8 +233,14 @@ import { Content } from 'src/mdx/components.mdx';
 		font-family: sans-serif;
 		background: linear-gradient(330deg, #000, rgb(13, 20, 23));
 	}
+	::view-transition-new(*) {
+		animation: none;
+	}
 	::view-transition-group(root) {
-		animation-duration: 0s;
+		animation: none;
+	}
+	::view-transition-old(root) {
+		animation: none;
 	}
 	html body {
 		max-width: 90%;

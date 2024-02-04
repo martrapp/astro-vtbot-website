@@ -1,0 +1,17 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import BrakePad from 'astro-vtbot/components/BrakePad.astro';
+import Mini from './Mini.astro';
+---
+
+<html>
+	<head>
+		<ViewTransitions />
+		<BrakePad production />
+	</head>
+	<body>
+		<h1>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>

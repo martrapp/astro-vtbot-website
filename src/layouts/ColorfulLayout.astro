@@ -11,7 +11,7 @@ import MdxLayout from './MdxLayout.astro';
 	{/* <VtBotDEbug/> let's us observe the flow */}
 	<VtBotDebug production slot="head" />
 	{/* Now we need an artificial network lag of three seconds to see the effect */}
-	<BrakePad duration={3000} />
+	<BrakePad production duration={3000} />
 	{/* Adding transition:name defines a transition group for the morph effect */}
 	<div transition:name="main">
 		<slot />
