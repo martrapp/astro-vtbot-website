@@ -44,6 +44,6 @@
     "url": "https://github.com/sponsors/martrapp"
   },
   "dependencies": {
-    "@astrojs/check": "^0.4.1"
+    "@astrojs/check": "^0.5.4"
   }
 }
