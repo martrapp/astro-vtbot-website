@@ -68,6 +68,22 @@ The elements with the same identifier do not have to be the same type of HTML el
 
 If the old page and the new page have no replacement identifiers in common, `<ReplacementSwap>` falls back to the normal swap behavior of astro view transitions.
 
+### Properties
+
+The `<ReplacementSwap />` component can be told to preserve attributes of the `<html>` root element.
+The default swap removes the current attributes of the root element and replaces them with the attributes of the new page. If you want to keep some of the current attributes, you can specify them in the `rootAttributesToPreserve` property of the `<ReplacementSwap />` component. The arttribute accepts a comma-separated list of attribute names. The default value is the empty string. The `rootAttributesToPreserve` property is optional.
+
+```astro title="Layout.astro" {4}
+<html>
+  <head>
+    <ViewTransitions />
+		<ReplacementSwap rootAttributesToPreserve="data-theme, lang"/>
+		...
+```
+This feature is mainly ment to be used with dynamically added attributes, e.g. for theming.
+
+***Caution:*** If you use this property, values set in the new page will be ignored for the specified attributes. For example if you have a `lang` attribute on each page and set `rootAttributesToPreserve="lang"`, the value of the `lang` attribute of the current page is retained, even if the new page has a different value for the `lang` attribute.
+
 ## An important note on styling
 
 The `<ReplacementSwap/>` component copies DOM trees from the new `<body>` into the current `<body>`. It also changes the `<head>` of the current page to reflect the `<head>` of the new page. This sounds good, but may have unexpected side effects:
@@ -75,3 +91,6 @@ The `<ReplacementSwap/>` component copies DOM trees from the new `<body>` into t
 * The part of the page that remains untouched could lose its styling if the necessary CSS is not included in the `<head>` of the new page or in the remaining DOM of the current page.
 * In particular, if you use scoped styles in the untouched part of your page, they may not be provided by the new page.
 * If the tree being copied uses inline styles, these may need to be copied explicitly using appropriate `data-vtbot-replace` attributes.
+
+An easy way to ensure consistence is to define the part that is common to all pages in the sites base layout, together with the necessary CSS. This way, the common part is not affected by the replacement and the necessary CSS is always available.
+

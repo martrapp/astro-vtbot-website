@@ -11,10 +11,11 @@ export interface Props {
 }
 
 const { name, href, title, body, icon, iconStyle = '', what, reload } = Astro.props;
+const hrefProps = reload ? { 'data-astro-reload': true } : {};
 ---
 
 <li class="link-card">
-	<a href={href} data-astro-reload={reload}>
+	<a href={href} {...hrefProps}>
 		<tt>{what}</tt>
 		<h2>
 			{
