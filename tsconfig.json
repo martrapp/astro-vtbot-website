@@ -1,11 +1,10 @@
 {
   "extends": "astro/tsconfigs/strictest",
-  "files": [],
   "exclude": ["node_modules", "sizes", "dist"],
   "compilerOptions": {
     "allowJs": true,
     "jsx": "preserve",
     "baseUrl": ".",
   },
-  "include": ["node_modules/@astrojs/language-server/types/astro-jsx.d.ts"]
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.astro", "**/*.mdx"]
 }

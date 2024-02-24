@@ -37,13 +37,13 @@ const { pages, index } = Astro.props;
 							history.pushState({ index: historyIndex + i, scrollX, scrollY }, '', pages[i]);
 						}
 						// go to the last entry
-						event.to = new URL(pages[pages.length - 1], location.href);
+						event.to = new URL(pages[pages.length - 1]!, location.href);
 						event.direction = 'back';
 					}
 				} else {
 					// history traversals
 					const here = index();
-					event.direction = event.to.href.endsWith(pages[(here + 1) % pages.length])
+					event.direction = event.to.href.endsWith(pages[(here + 1) % pages.length]!)
 						? 'forward'
 						: 'back';
 				}

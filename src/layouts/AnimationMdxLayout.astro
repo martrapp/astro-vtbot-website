@@ -16,6 +16,7 @@ import Zoom3 from '../mdx/animations/zoom3.mdx';
 const { scope: zoom1Scope, styles: zoom1Styles } = styleSheet({
 	transitionName: 'zoom1',
 	animations: extend(zoom({ duration: '0.3s' })),
+	scope: undefined
 });
 
 const zoom2Scope = customZoom('zoom2', {
@@ -76,10 +77,12 @@ const swing3Scope = customSwing('swing3', {
 const { scope: _noneScope, styles: noneStyles } = styleSheet({
 	transitionName: 'none',
 	animations: {},
+	scope: undefined
 });
 const { scope: _fadeScope, styles: fadeStyles } = styleSheet({
 	transitionName: 'fade',
 	animations: extend(fade({ duration: 300 })),
+	scope: undefined
 });
 const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide', { ...slide() });
 ---
@@ -158,18 +161,18 @@ import &lcub; swing &rcub; from "astro-vtbot/animations/swing";
 		const buttons = buttonGrid.getElementsByTagName('button');
 		const demo = document.querySelector('#demo') as HTMLElement;
 
-		demo.dataset.astroTransitionScope = saver.dataset.scope ?? buttons[0].dataset.scope;
+		demo.dataset.astroTransitionScope = saver.dataset.scope ?? buttons[0]!.dataset.scope;
 		for (let i = 0; i < buttons.length; i++) {
-			if (buttons[i].innerText === saver.dataset.animation) {
-				buttons[i].classList.add('selected');
-				demo.dataset.astroTransitionScope = buttons[i].dataset.scope;
+			if (buttons[i]!.innerText === saver.dataset.animation) {
+				buttons[i]!.classList.add('selected');
+				demo.dataset.astroTransitionScope = buttons[i]!.dataset.scope;
 			}
-			buttons[i].addEventListener('click', click);
+			buttons[i]!.addEventListener('click', click);
 		}
 
 		function click(ev: MouseEvent) {
 			for (let j = 0; j < buttons.length; j++) {
-				buttons[j].classList.remove('selected');
+				buttons[j]!.classList.remove('selected');
 			}
 			const that = ev.target as HTMLButtonElement;
 			that?.classList.add('selected');

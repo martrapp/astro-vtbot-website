@@ -34,7 +34,7 @@
 						pseudoElement: !!document.startViewTransition
 							? '::view-transition-new(root)'
 							: undefined, // for browsers that do not yet support the API
-					}
+					} as KeyframeAnimationOptions
 				);
 			});
 		}

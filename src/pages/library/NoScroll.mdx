@@ -20,13 +20,13 @@ You can see this component in action in the <a data-astro-reload href="/no-scrol
 
 [Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
 
-### Usage
+
 
 Place the `<NoScroll/>` component in the `<head>` of a page near Astro's `<ViewTransitions/>`. That will prevent scrolling for all view transitions that leave this page to other pages that also have the `<NoScroll/>` in their head.
 
 ```astro title="MyPage.astro" {3,8}
 ---
-import { ViewTransitions } from 'astro:transitions'; 
+import { ViewTransitions } from 'astro:transitions';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
 ---
 <html>
@@ -40,3 +40,7 @@ import NoScroll from 'astro-vtbot/components/NoScroll.astro';
 ```
 
 There are no parameters to configure.
+
+## Discussion
+
+Need more fine graned control? Maybe we need an attribute on the link to enable per link control over the scroll behavior. What do you think? [Join the discussion](https://github.com/martrapp/astro-vtbot/discussions/35).
