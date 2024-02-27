@@ -14,7 +14,7 @@ The zoom animation is a simple animation that zooms or shrinks the content of a 
 
 ## Why would I use this component?
 
-Astro allows users to create their own animations for view transitions. The `astro-vtbot` zoom animation is a ready-made solution that can be easily inserted into Astro's `transition:animate` property. It also supports parameters for fine-tuning the animation to your needs. It is even possible to customize the underlying keyframes when used together with the `<AnimationStyle/>` component.  
+Astro allows users to create their own animations for view transitions. The `astro-vtbot` zoom animation is a ready-made solution that can be easily inserted into Astro's `transition:animate` property. It also supports parameters for fine-tuning the animation to your needs. It is even possible to customize the underlying keyframes when used together with the `<AnimationStyle/>` component.
 
 ## Usage
 
@@ -56,7 +56,7 @@ You can set the following parameters:
 | direction     | animation-direction | normal |
 | fillMode			| animation-fill-mode | both |
 
-
+If you explicitly set a value for the delay, this value is used for both the in and out animation. This is typically not what you want. If you want to use different values for the in and out animation, use the `customZoom` function as described in the next section.
 
 ###  Extended parametrized usage
 
@@ -70,11 +70,12 @@ The function returns a scope identifier to be used with the `data-astro-transiti
 ```astro title="MyComponent.astro"
 ---
 import { customZoom } from "astro-vtbot/animations/zoom";
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
 
 const zoomScope = customZoom('myZoom', {
 	keyframes: { scale: { forwardOut: 0, backwardIn: 0 } },
 	base: { duration: '0.3s', easing: 'cubic-bezier(.16,.73,.05,1.52)' },
-	animations: {
+	extensions: {
 		forwards: { new: { 'animation-delay': '0.2s' } },
 		backwards: { new: { 'animation-delay': '0.2s' } },
 	},
@@ -95,11 +96,13 @@ type ZoomKeyframeParameter = {
 	opacity?: { forwardOut?: number; forwardIn?: number; backwardOut?: number; backwardIn?: number; };
 };
 ```
-The default values are all 0 with the exception of `forwards.out.scale` and `backwrds.in.scale` which are 5. 
+The `forwardOut` values say how big the old image should be zoomed when leaving the page (starting from it's original size). The `forwardIn` value is the start value for the new image when entering the new page (before it is zoomd to its natural size). Values `< 1` shrink the image, values `> 1` enlarge it. The `backwards` values are for history back navigation. Opacity values follow the same logic.
+
+The default values are all 0 with the exception of `forwards.out.scale` and `backwrds.in.scale` which are 5.
 
 <details>
 <summary>The values are used as parameters in the following keyframe style sheet</summary>
-```
+```css
 @keyframes ${keyframeNamePrefix}FwdZoomOut {
 		from {
 			transform: scale(1);
@@ -150,4 +153,4 @@ The value of the `base` property is used to call the `zoom()` function as define
 
 #### Extensions
 
-With the `extensions` property you can define all those CSS properties that can not be defined by `zoom()` directly. You can specify different values for `forwards` and `backwards`, `in` and `out` animations. These values are merged with the result of calling`zoom()` with base parameters and overwrite its properties. 
+With the `extensions` property you can define all those CSS properties that can not be defined by `zoom()` directly. You can specify different values for `forwards` and `backwards`, `in` and `out` animations. These values are merged with the result of calling`zoom()` with base parameters and overwrite its properties.

@@ -1,0 +1,182 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Move Animation
+overview: /animations/one/
+vtn: move-3
+---
+
+<h1 style="display: inline-block; view-transition-name: move-1"><span style="display:inline-block; view-transition-name:move-2">🚟</span>The Move Animation</h1>
+
+The motion animation moves the content of a transition group along two connected edges in 3D space. For live examples visit the [animation demo page](/animations/one/) and select one of the `move` presets in the button grid at the top of the page.
+
+## Contents
+
+## Why would I use this component?
+
+Astro allows users to create their own animations for view transitions. The `astro-vtbot` move animation is a ready-made solution that can be easily inserted into Astro's `transition:animate` property. It also supports parameters for fine-tuning the animation to your needs. It is even possible to customize the underlying keyframes when used together with the `<AnimationStyle/>` component.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
+
+### Basic usage
+
+The most basic usage is to apply the 'move()' animation without any parameters. This will use the default values for the animation.
+
+```astro title="MyComponent.astro"
+---
+import { move } from "astro-vtbot/animations/move";
+---
+...
+<h1 transition:animate={move()}>Move</h1>
+...
+```
+The effect will in a first step move the *old*-image away from the viewer into the background and than with the second step move it to the left. The *new*-image uses the first step to move in from the right. That happens in the background. In the second step the image is moved to the front.
+
+### Parametrized usage
+
+The default values for the animation can be overwritten by passing an object with the desired values to the `move()` function. The following example shows how to change the duration and easing of the animation.
+
+```astro title="MyComponent.astro"
+---
+import { move } from "astro-vtbot/animations/move";
+---
+...
+<h1 transition:animate={move({duration:'1.5s', easing: 'cubic-bezier(.16,.73,.05,1.52)' })}>Move</h1>
+...
+```
+You can set the following parameters:
+| Property name | CSS property | Default value |
+|---------------|--------------|---------------|
+| duration      | animation-duration | 0.15s |
+| easing        | animation-timing-function | ease-in-out |
+| delay					| animation-delay | (see below) |
+| direction     | animation-direction | normal |
+| fillMode			| animation-fill-mode | both |
+
+If you explicitly set a value for the delay, this value is used for both the in and out animation. This is typically not what you want. If you want to use different values for the in and out animation, use the `customMove` function as described in the next section.
+
+
+###  Extended parametrized usage
+
+If you want to use more than the 5 properties supported by `move()` or want to have more control over the animations keyframes, you can use the `customMove()` function. This function takes a name for the transition and an object with the following optional properties:
+* `keyframes`: An object with parameters for the keyframes for the animation.
+* `base`: An object with the same properties as the `move()` function.
+* `extensions`: An object with arbitrary CSS properties to be used in the forwards/backwards old/new animation.
+
+The function returns a scope identifier to be used with the `data-astro-transition-scope` attribute of the HTML element you want to animate. Under the hood, `customMove()` generates a style sheet with keyframe information and the defined CSS properties. You  need to add these extended styles to your page by using the [`<AnimationStyle/>`](../AnimationStyle/) component. **Note:** Only use `<AnimationStyle/>` in conjunction with `customMove()`, not with `move()`.
+
+```astro title="MyComponent.astro"
+---
+import { customMove } from "astro-vtbot/animations/move";
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
+
+const moveScope = customMove('myMove', {
+	keyframes: {
+		enter: { y: '-50cm', z: '-50cm' },
+		enterMid: { y: '10cm', z: '-25cm', angel: '10deg' },
+		leaveMid: { y: '-10cm', z: '-25cm', angel: '-10deg' },
+		leave: { y: '50cm', z: '50cm' },
+		axis: { x: 1, y: 1, z: 1 }
+	}
+	base: { duration: '300ms' },
+	extensions: {
+		forwards: { new: { 'animation-delay': '0.2s' } },
+		backwards: { new: { 'animation-delay': '0.2s' } },
+	},
+});
+---
+...
+<AnimationStyle name="myMove"/>
+<h1 data-astro-transition-scope={moveScope}>Move</h1>
+...
+```
+#### Keyframes
+
+The keyframes object of the `customMove()` function has the following properties:
+
+```typescript
+type MoveKeyframeParameter = {
+	enter?: { x?: string; y?: string; z?: string, angel?: string; };
+	enterMid?: { x?: string; y?: string; z?: string, angel?: string; };
+	leaveMid?: { x?: string; y?: string; z?: string, angel?: string; };
+	leave?: { x?: string; y?: string; z?: string, angel?: string; };
+	axis?: { x?: number; y?: number; z?: number; };
+};
+```
+
+The two edges for moving the new image onto the page are `enter` to `enterMid` and `enterMid` to `final`. The two edges for moving the old image out are `original` to `leaveMid` and `leaveMid` to `leave`. Here `original` and `final` are the natural positions of the image. There coordinates are implicite. For the other endpoints `enter`, `enterMid`, `leaveMid` and `leave` give relative positions on all three axis.
+In addition to these moves, the image can also be rotated at the endpoints (with values of 0deg for `original` and `final`). For the other endpoints the rotation is around the same axis which is defined by `axis`. The default values for all keyframe paramaters are all 0 with the exception of `axis.z = 1`.
+
+<details>
+<summary>The values are used as parameters in the following keyframe style sheet</summary>
+```css
+	@keyframes ${keyframeNamePrefix}FwdMoveOut {
+		from {
+			transform: translate3d(0, 0, 0)	rotate3d(1, 0, 0, 0);
+			opacity: 1;
+		}
+		50% {
+			transform: translate3d(${leaveXm}, ${leaveYm}, ${leaveZm}) rotate3d(${x}, ${y}, ${z}, ${leaveAm});
+			opacity: 1;
+		}
+		to {
+			transform: translate3d(${leaveX}, ${leaveY}, ${leaveZ}) rotate3d(${x}, ${y}, ${z}, ${leaveA});
+			opacity: 0;
+		}
+	}
+	@keyframes ${keyframeNamePrefix}FwdMoveIn {
+		from {
+			transform: translate3d(${enterX}, ${enterY}, ${enterZ}) rotate3d(${x}, ${y}, ${z}, ${enterA});
+			opacity: 0;
+		}
+		50% {
+			transform: translate3d(${enterXm}, ${enterYm}, ${enterZm}) rotate3d(${x}, ${y}, ${z}, ${enterAm});
+			opacity: 1;
+		}
+		to {
+			transform: translate3d(0, 0, 0) rotate3d(1,0,0,0);
+			opacity: 1;
+		}
+	}
+	@keyframes ${keyframeNamePrefix}BwdMoveOut {
+		from {
+			transform: translate3d(0, 0, 0) rotate3d(1,0,0,0);
+			opacity: 1;
+		}
+		50% {
+			transform: translate3d(${enterXm}, ${enterYm}, ${enterZm}) rotate3d(${x}, ${y}, ${z}, ${enterAm});
+			opacity: 1;
+		}
+		to {
+			transform: translate3d(${enterX}, ${enterY}, ${enterZ}) rotate3d(${x}, ${y}, ${z}, ${enterA});
+			opacity: 0;
+		}
+	}
+	@keyframes ${keyframeNamePrefix}BwdMoveIn {
+		from {
+			transform: translate3d(${leaveX}, ${leaveY}, ${leaveZ}) rotate3d(${x}, ${y}, ${z}, ${leaveA});
+			opacity: 0;
+		}
+		50% {
+			transform: translate3d(${leaveXm}, ${leaveYm}, ${leaveZm}) rotate3d(${x}, ${y}, ${z}, ${leaveAm});
+			opacity: 1;
+		}
+		to {
+			transform: translate3d(0, 0, 0) rotate3d(1, 0, 0, 0);
+			opacity: 1;
+		}
+	}
+	::view-transition-image-pair(*) {
+		perspective: 50cm;
+	}
+	```
+</details>
+
+#### Base
+
+The value of the `base` property is used to call the `move()` function as defined above.
+
+#### Extensions
+
+With the `extensions` property you can define all those CSS properties that can not be defined by `move()` directly. You can specify different values for `forwards` and `backwards`, `in` and `out` animations. These values are merged with the result of calling`move()` with base parameters and overwrite its properties.

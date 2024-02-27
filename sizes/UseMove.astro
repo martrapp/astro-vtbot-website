@@ -1,0 +1,15 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import { move } from 'astro-vtbot/animations/move'
+import Mini from './Mini.astro'
+---
+<html>
+	<head>
+		<ViewTransitions />
+	</head>
+	<body>
+		<h1 transition:animate={move()}>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>
