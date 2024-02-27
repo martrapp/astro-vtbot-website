@@ -5,6 +5,8 @@ overview: /animations/one/
 vtn: swing-3
 ---
 
+import Perspective from "./perspective.mdx"
+
 <h1 style="display: inline-block; view-transition-name: swing-1"><span style="display:inline-block; view-transition-name:swing-2">🎷</span>The Swing Animation</h1>
 
 The swing animation is a simple animation that rotates the content of a transition group. For live examples visit the [animation demo page](/animations/one/) and select one of the `swing` presets in the button grid at the top of the page.
@@ -21,7 +23,7 @@ Astro allows users to create their own animations for view transitions. The `ast
 
 ### Basic usage
 
-The most basic usage is to apply the 'swing()' animation without any parameters. This will use the default values for the animation.
+The most basic usage is to apply the `swing()` animation without any parameters. This will use the default values for the animation.
 
 ```astro title="MyComponent.astro"
 ---
@@ -106,9 +108,10 @@ The default values are all 0 with the exception of
 * `angle.leave = "90deg"` and
 * `angle.enter = "-90deg"`.
 
+The values are used as parameters of the keyframe definition in
 <details>
-<summary>The values are used as parameters in the following keyframe style sheet</summary>
-```css
+<summary>this style sheet template</summary>
+```css title="Swing.css.template" {"❗":53-55}
 	@keyframes ${keyframeNamePrefix}FwdSwingOut {
 		from {
 			transform: rotate3d(${x}, ${y}, ${z}, 0);
@@ -166,6 +169,8 @@ The default values are all 0 with the exception of
 	}
 ```
 </details>
+
+<Perspective />
 
 #### Base
 

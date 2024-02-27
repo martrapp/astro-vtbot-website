@@ -23,7 +23,7 @@ Astro allows users to create their own animations for view transitions. The `ast
 
 ### Basic usage
 
-The most basic usage is to apply the 'zoom()' animation without any parameters. This will use the default values for the animation.
+The most basic usage is to apply the `zoom()` animation without any parameters. This will use the default values for the animation.
 
 ```astro title="MyComponent.astro"
 ---
@@ -100,8 +100,9 @@ The `forwardOut` values say how big the old image should be zoomed when leaving 
 
 The default values are all 0 with the exception of `forwards.out.scale` and `backwrds.in.scale` which are 5.
 
+The values are used as parameters of the keyframe definition in
 <details>
-<summary>The values are used as parameters in the following keyframe style sheet</summary>
+<summary>this style sheet template</summary>
 ```css
 @keyframes ${keyframeNamePrefix}FwdZoomOut {
 		from {
