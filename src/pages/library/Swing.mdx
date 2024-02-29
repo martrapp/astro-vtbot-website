@@ -5,6 +5,8 @@ overview: /animations/one/
 vtn: swing-3
 ---
 
+import Perspective from "./perspective.mdx"
+
 <h1 style="display: inline-block; view-transition-name: swing-1"><span style="display:inline-block; view-transition-name:swing-2">🎷</span>The Swing Animation</h1>
 
 The swing animation is a simple animation that rotates the content of a transition group. For live examples visit the [animation demo page](/animations/one/) and select one of the `swing` presets in the button grid at the top of the page.
@@ -13,7 +15,7 @@ The swing animation is a simple animation that rotates the content of a transiti
 
 ## Why would I use this component?
 
-Astro allows users to create their own animations for view transitions. The `astro-vtbot` swing animation is a ready-made solution that can be easily inserted into Astro's `transition:animate` property. It also supports parameters for fine-tuning the animation to your needs. It is even possible to customize the underlying keyframes when used together with the `<AnimationStyle/>` component.  
+Astro allows users to create their own animations for view transitions. The `astro-vtbot` swing animation is a ready-made solution that can be easily inserted into Astro's `transition:animate` property. It also supports parameters for fine-tuning the animation to your needs. It is even possible to customize the underlying keyframes when used together with the `<AnimationStyle/>` component.
 
 ## Usage
 
@@ -21,7 +23,7 @@ Astro allows users to create their own animations for view transitions. The `ast
 
 ### Basic usage
 
-The most basic usage is to apply the 'swing()' animation without any parameters. This will use the default values for the animation.
+The most basic usage is to apply the `swing()` animation without any parameters. This will use the default values for the animation.
 
 ```astro title="MyComponent.astro"
 ---
@@ -68,6 +70,7 @@ The function returns a scope identifier to be used with the `data-astro-transiti
 ```astro title="MyComponent.astro"
 ---
 import { customSwing } from "astro-vtbot/animations/swing";
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
 
 const swingScope = customSwing('mySwing', {
 	keyframes: { axis: { y: 1 }, angle: { leave: '90deg', shrink: '-90deg' } },
@@ -100,15 +103,16 @@ type SwingKeyframeParameter = {
 	opacity?: { mid?: number; to?: number; };
 };
 ```
-The default values are all 0 with the exception of 
-* `opacity.mid = 1`, 
-* `angle.leave = "90deg"` and 
-* `angle.enter = "-90deg"`. 
+The default values are all 0 with the exception of
+* `opacity.mid = 1`,
+* `angle.leave = "90deg"` and
+* `angle.enter = "-90deg"`.
 
+The values are used as parameters of the keyframe definition in
 <details>
-<summary>The values are used as parameters in the following keyframe style sheet</summary>
-```
-		@keyframes ${keyframeNamePrefix}FwdSwingOut {
+<summary>this style sheet template</summary>
+```css title="Swing.css.template" {"❗":53-55}
+	@keyframes ${keyframeNamePrefix}FwdSwingOut {
 		from {
 			transform: rotate3d(${x}, ${y}, ${z}, 0);
 			opacity: 1;
@@ -160,8 +164,13 @@ The default values are all 0 with the exception of
 			opacity: 1;
 		}
 	}
+	::view-transition-image-pair(*) {
+		perspective: 50cm;
+	}
 ```
 </details>
+
+<Perspective />
 
 #### Base
 
@@ -169,4 +178,4 @@ The value of the `base` property is used to call the `swing()` function as defin
 
 #### Extensions
 
-With the `extensions` property you can define all those CSS properties that can not be defined by `swing()` directly. You can specify different values for `forwards` and `backwards`, `in` and `out` animations. These values are merged with the result of calling`swing()` with base parameters and overwrite its properties. 
+With the `extensions` property you can define all those CSS properties that can not be defined by `swing()` directly. You can specify different values for `forwards` and `backwards`, `in` and `out` animations. These values are merged with the result of calling`swing()` with base parameters and overwrite its properties.

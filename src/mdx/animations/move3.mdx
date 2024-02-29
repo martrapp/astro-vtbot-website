@@ -1,0 +1,20 @@
+```astro title="Move3.astro"
+---
+import { customMove } from "astro-vtbot/animations/move";
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
+
+const move3Scope = customZoom('move3', {
+	keyframes: {
+		enter: { y: '-50cm', z: '-50cm' },
+		enterMid: { y: '10cm', z: '-25cm', angel: '10deg' },
+		leaveMid: { y: '-10cm', z: '-25cm', angel: '-10deg' },
+		leave: { y: '50cm', z: '50cm' },
+		axis: { x: 1, y: 1, z: 1 }
+	}
+});
+---
+<AnimationStyle name="move3">
+<div data-astro-transition-scope={move3Scope}>
+  ...
+</div>
+```

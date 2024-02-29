@@ -1,0 +1,16 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import { customMove } from 'astro-vtbot/animations/move'
+import Mini from './Mini.astro'
+const scope = customMove("swing",{})
+---
+<html>
+	<head>
+		<ViewTransitions />
+	</head>
+	<body>
+		<h1 data-astro-scope={scope}>Heading</h1>
+		<a href="/">Link</a>
+		<Mini />
+	</body>
+</html>

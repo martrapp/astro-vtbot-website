@@ -1,0 +1,21 @@
+##### ❗ Perspective
+
+Please note that 3D-effects require the CSS `perspective` property to be set on a parent of the transformed element.
+
+For browsers that natively support view transition a good choice for that parent is the `::view-transition-image-pair` pseudo element, which is the parent of the `::view-transition-old` and `::view-transition-new` pseudo elements.
+
+For browsers that do not natively support view transitions, there are no such pseudo elements. For Astro's fallback mode for view transitions to work properly with 3D animations, you have to set the `perspective` on a regular HTML element that is a parent of the animated element in the DOM.
+
+Here is how this is done in the animation demo:
+
+```astro title="AnimationMdxLayout.astro" {2} "perspective"
+  ...
+	<div style="perspective: 50cm">
+		<div id="demo">
+		  <a href="./#">Flip</a>
+			<slot />
+			<br style="clear:both" />
+		</div>
+	</div>
+	...
+```

@@ -2,9 +2,11 @@
 import MdxLayout from './MdxLayout.astro';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
+import { Code } from 'astro-expressive-code/components'
 import { createAnimationScope, fade, slide } from 'astro:transitions';
 import { swing, customSwing } from 'astro-vtbot/animations/swing';
 import { zoom, customZoom } from 'astro-vtbot/animations/zoom';
+import { move, customMove } from 'astro-vtbot/animations/move';
 import { extend, styleSheet } from 'astro-vtbot/animations/animation-style';
 import Swing1 from '../mdx/animations/swing1.mdx';
 import Swing2 from '../mdx/animations/swing2.mdx';
@@ -12,11 +14,14 @@ import Swing3 from '../mdx/animations/swing3.mdx';
 import Zoom1 from '../mdx/animations/zoom1.mdx';
 import Zoom2 from '../mdx/animations/zoom2.mdx';
 import Zoom3 from '../mdx/animations/zoom3.mdx';
+import Move1 from '../mdx/animations/move1.mdx';
+import Move2 from '../mdx/animations/move2.mdx';
+import Move3 from '../mdx/animations/move3.mdx';
 
 const { scope: zoom1Scope, styles: zoom1Styles } = styleSheet({
 	transitionName: 'zoom1',
 	animations: extend(zoom({ duration: '0.3s' })),
-	scope: undefined
+	scope: undefined,
 });
 
 const zoom2Scope = customZoom('zoom2', {
@@ -74,15 +79,41 @@ const swing3Scope = customSwing('swing3', {
 	},
 });
 
+const { scope: move1Scope, styles: move1Styles } = styleSheet({
+	transitionName: 'move1',
+	animations: extend(move({ duration: '0.3s' })),
+	scope: undefined,
+});
+
+const move2Scope = customMove('move2', {
+	keyframes: {
+		enter: { x: '100vw'},
+		leave: { x: '-100vw'},
+	},
+	base: { duration: '0.5s', easing: 'linear' },
+});
+
+const move3Scope = customMove('move3', {
+	keyframes: {
+		enter: { y: '-50cm', z: '-50cm' },
+		enterMid: { y: '10cm', z: '-25cm', angel: '10deg' },
+		leaveMid: { y: '-10cm', z: '-25cm', angel: '-10deg' },
+		leave: { y: '50cm', z: '50cm' },
+		axis: { x: 1, y: 1, z: 1 },
+	},
+	base: { duration: '0.5s', easing: 'ease-in-out' },
+});
+
+
 const { scope: _noneScope, styles: noneStyles } = styleSheet({
 	transitionName: 'none',
 	animations: {},
-	scope: undefined
+	scope: undefined,
 });
 const { scope: _fadeScope, styles: fadeStyles } = styleSheet({
 	transitionName: 'fade',
 	animations: extend(fade({ duration: 300 })),
-	scope: undefined
+	scope: undefined,
 });
 const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide', { ...slide() });
 ---
@@ -92,14 +123,16 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 <AnimationStyle name="swing3" />
 <AnimationStyle name="zoom2" />
 <AnimationStyle name="zoom3" />
+<AnimationStyle name="move2" />
+<AnimationStyle name="move3" />
 
-<style set:text={noneStyles + fadeStyles + slideStyles + zoom1Styles}></style>
+<style set:text={noneStyles + fadeStyles + slideStyles + zoom1Styles + move1Styles}></style>
 
 <MdxLayout {...Astro.props}>
 	<NoScroll slot="head" />
 	<meta
 		name="vtbot-linter-ignore"
-		content="none fade slide zoom1 zoom2 zoom3 swing1 swing2 swing3"
+		content="none fade slide zoom1 zoom2 zoom3 swing1 swing2 swing3 move1 move2 move3"
 		slot="head"
 	/>
 	<span id="saver" data-animation="zoom1" transition:persist="saver"></span>
@@ -110,6 +143,9 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 		<button data-scope={swing1Scope}>swing1</button>
 		<button data-scope={swing2Scope}>swing2</button>
 		<button data-scope={swing3Scope}>swing3</button>
+		<button data-scope={move1Scope}>move1</button>
+		<button data-scope={move2Scope}>move2</button>
+		<button data-scope={move3Scope}>move3</button>
 		{
 			/*	<button data-scope={noneScope}>none</button>
 		<button data-scope={fadeScope}>fade</button>
@@ -126,30 +162,38 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 	</div>
 	<hr id="done" />
 	<h2>How were these animations crafted?</h2><p>
-		All animations are made with <a data-astro-reload href="../../library/Zoom/">Zoom</a> and <a
+		All animations are made with <a data-astro-reload href="../../library/Zoom/">Zoom</a>, <a
 			data-astro-reload
 			href="../../library/Swing/">Swing</a
-		> from the <a data-astro-reload href="/"><code>astro-vtbot</code></a> package. In the code examples
-		below you can see how they are parametrized.
+		> and
+		<a data-astro-reload href="../../library/Move/">Move</a> from the <a data-astro-reload href="/"
+			><code>astro-vtbot</code></a
+		> package. In the code examples below you can see how they are parametrized.
 	</p><p>
 		By the way: The animation of the button grid at the top of this page was created by simply
 		adding <code>swing()</code> to <code>transition:animate</code>.
 	</p>
-	<code>
-		<pre>
+	<Code lang="astro" code=`
 ---
-import &lcub; swing &rcub; from "astro-vtbot/animations/swing";
+import { swing } from "astro-vtbot/animations/swing";
 ---
-&lt;div transition:animate=&lcub;swing()&rcub;&gt;...
-</pre>
-	</code>
-	<hr />
+<div transition:animate={swing()}>...
+`/>
+<hr />
+<p>Here are the codes for the other examples:</p>
+
+	<h3>Zoom</h3>
 	<Zoom1 /><hr />
 	<Zoom2 /><hr />
 	<Zoom3 /><hr />
+	<h3>Swing</h3>
 	<Swing1 /><hr />
 	<Swing2 /><hr />
 	<Swing3 /><hr />
+	<h3>Move</h3>
+	<Move1 /><hr />
+	<Move2 /><hr />
+	<Move3 /><hr />
 </MdxLayout>
 
 <script>
@@ -225,8 +269,5 @@ import &lcub; swing &rcub; from "astro-vtbot/animations/swing";
 	}
 	::view-transition-group(*) {
 		animation: none;
-	}
-	::view-transition-image-pair(*) {
-		perspective: 50cm;
 	}
 </style>

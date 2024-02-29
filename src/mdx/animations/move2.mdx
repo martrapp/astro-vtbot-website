@@ -1,0 +1,18 @@
+```astro title="Move2.astro"
+---
+import { customMove } from "astro-vtbot/animations/move";
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
+
+const move2Scope = customZoom('move2', {
+	keyframes: {
+		enter: { x: '100vw'},
+		leave: { x: '-100vw'},
+	},
+	base: { duration: '0.5s', easing: 'linear' },
+});
+---
+<AnimationStyle name="move2">
+<div data-astro-transition-scope={move2Scope}>
+  ...
+</div>
+```
