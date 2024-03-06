@@ -2,7 +2,7 @@
 import MdxLayout from './MdxLayout.astro';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
-import { Code } from 'astro-expressive-code/components'
+import { Code } from 'astro-expressive-code/components';
 import { createAnimationScope, fade, slide } from 'astro:transitions';
 import { swing, customSwing } from 'astro-vtbot/animations/swing';
 import { zoom, customZoom } from 'astro-vtbot/animations/zoom';
@@ -87,8 +87,8 @@ const { scope: move1Scope, styles: move1Styles } = styleSheet({
 
 const move2Scope = customMove('move2', {
 	keyframes: {
-		enter: { x: '100vw'},
-		leave: { x: '-100vw'},
+		enter: { x: '100vw' },
+		leave: { x: '-100vw' },
 	},
 	base: { duration: '0.5s', easing: 'linear' },
 });
@@ -103,7 +103,6 @@ const move3Scope = customMove('move3', {
 	},
 	base: { duration: '0.5s', easing: 'ease-in-out' },
 });
-
 
 const { scope: _noneScope, styles: noneStyles } = styleSheet({
 	transitionName: 'none',
@@ -152,12 +151,15 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 		<button data-scope={slideScope}>slide</button>
 	*/
 		}
+		<span transition:persist="clip" style="padding:1ex"
+			><input id="clip" type="checkbox" /><label for="clip"> Clip animation</label></span
+		>
 	</div>
 	<p style="font-size:1.4rem; color: var(--vtbot-accent)">
 		Use the buttons above to select an animation style. Then press the link in the demo web site
-		below to see that animation in action. <a href="#done">How do you do that?</a>
+		below to see that animation in action. Use check checkbox to see how the clipped animation looks like. <a href="#done">How do you do that?</a>
 	</p>
-	<div style="perspective: 50cm">
+	<div id="frame" style="perspective: 50cm">
 		<div id="demo"><a href="./#">Flip</a><slot /><br style="clear:both" /></div>
 	</div>
 	<hr id="done" />
@@ -173,14 +175,17 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 		By the way: The animation of the button grid at the top of this page was created by simply
 		adding <code>swing()</code> to <code>transition:animate</code>.
 	</p>
-	<Code lang="astro" code=`
+	<Code
+		lang="astro"
+		code=`
 ---
 import { swing } from "astro-vtbot/animations/swing";
 ---
 <div transition:animate={swing()}>...
-`/>
-<hr />
-<p>Here are the codes for the other examples:</p>
+`
+	/>
+	<hr />
+	<p>Here are the codes for the other examples:</p>
 
 	<h3>Zoom</h3>
 	<Zoom1 /><hr />
@@ -197,6 +202,19 @@ import { swing } from "astro-vtbot/animations/swing";
 </MdxLayout>
 
 <script>
+	const clip = document.querySelector('#clip')! as HTMLInputElement;
+	clip.addEventListener('change', toggle);
+	document.addEventListener('astro:page-load', toggle);
+	function toggle() {
+		const frame = document.querySelector('#frame')! as HTMLDivElement;
+		const clipper =
+			(document.querySelector('style[data-vtbot-id="clipper"]') as HTMLStyleElement) ||
+			document.createElement('style');
+		clipper.setAttribute('data-vtbot-id', 'clipper');
+		frame.style.overflow = clip.checked ? 'clip' : 'visible';
+		document.head.appendChild(clipper);
+		clipper.textContent = clip.checked ? '::view-transition-image-pair(*) {overflow:clip}' : '';
+	}
 	document.addEventListener('astro:after-swap', afterSwap);
 	function afterSwap() {
 		const saver = document.getElementById('saver');
@@ -238,6 +256,7 @@ import { swing } from "astro-vtbot/animations/swing";
 		grid-template-columns: repeat(3, 1fr);
 		gap: 10px;
 		background: var(--vtbot-gradbg);
+		padding:3ex;
 	}
 
 	.button-grid button {

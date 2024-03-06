@@ -35,6 +35,9 @@ import { zoom } from "astro-vtbot/animations/zoom";
 ```
 The effect will zoom the old image to 500% while fading it out and it lets the new image grow from a point to 100% of its size while fading in. Reverse for the *backwards* direction. The animation will take 0.3 seconds and use the `ease-in-out` easing function.
 
+#### Clipping
+The zoom animation is not clipped, i.e. when zooming the image bigger it might cover the whole viewport. If you want to restrict the effect to the current animation group, [see the description](/library/Swing/#clipping) for the Swing animation.
+
 ### Parametrized usage
 
 The default values for the animation can be overwritten by passing an object with the desired values to the `zoom()` function. The following example shows how to change the duration and easing of the animation.

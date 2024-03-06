@@ -35,6 +35,8 @@ import { swing } from "astro-vtbot/animations/swing";
 ```
 The effect will rotate the *old*-image 90° around the y axis. When it complete vanished, the animation for the *new*-image kicks in and again rotates 90° back to the full view. The animation will take 0.15 seconds and use the `ease-in-out` easing function.
 
+<Perspective />
+
 ### Parametrized usage
 
 The default values for the animation can be overwritten by passing an object with the desired values to the `swing()` function. The following example shows how to change the duration and easing of the animation.
@@ -170,7 +172,6 @@ The values are used as parameters of the keyframe definition in
 ```
 </details>
 
-<Perspective />
 
 #### Base
 

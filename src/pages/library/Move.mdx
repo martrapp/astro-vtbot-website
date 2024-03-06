@@ -35,6 +35,8 @@ import { move } from "astro-vtbot/animations/move";
 ```
 The effect will in a first step move the *old*-image away from the viewer into the background and than with the second step move it to the left. The *new*-image uses the first step to move in from the right. That happens in the background. In the second step the image is moved to the front.
 
+<Perspective/>
+
 ### Parametrized usage
 
 The default values for the animation can be overwritten by passing an object with the desired values to the `move()` function. The following example shows how to change the duration and easing of the animation.
@@ -176,7 +178,6 @@ The values are used as parameters of the keyframe definition in
 	```
 </details>
 
-<Perspective/>
 
 
 #### Base

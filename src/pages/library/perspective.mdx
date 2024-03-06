@@ -1,21 +1,23 @@
-##### ❗ Perspective
+#### ❗ Perspective
 
 Please note that 3D-effects require the CSS `perspective` property to be set on a parent of the transformed element.
 
 For browsers that natively support view transition good choices for that parent are the `::view-transition-group` or `::view-transition-image-pair` pseudo element, which is the parent of the `::view-transition-old` and `::view-transition-new` pseudo elements.
 
-```css title="animation.css" {2} "perspective"
+```css title="animation.css" {2} "perspective: 50cm"
 	::view-transition-image-pair(*) {
 		perspective: 50cm;
 	}
 ```
-The animations offered by the Bag of Tricks generate this for you, so you are save on browsers that natively support view transitions.
+
+The animations offered by the Bag of Tricks generate this for you, so you are already save on browsers that natively support view transitions.
 
 For browsers that do not natively support view transitions, there are no such pseudo elements. For Astro's fallback mode for view transitions to work properly with 3D animations, ***you have to set the `perspective` on a regular HTML element*** that is a parent of the animated element in the DOM.
 
+
 Here is how this is done in the animation demo:
 
-```astro title="AnimationMdxLayout.astro" {2} "perspective"
+```astro title="AnimationMdxLayout.astro" {2} "perspective: 50cm"
   ...
 	<div style="perspective: 50cm">
 		<div id="demo">
@@ -25,4 +27,20 @@ Here is how this is done in the animation demo:
 		</div>
 	</div>
 	...
+```
+#### Clipping
+The same applies to clipping: To support browsers that do not implement native view transitions, set `overflow` to `clip` on a parent element in the DOM. For browsers that support native view transitions, set it to the `::view-transition-group` or `::view-transition-image-pair` pseudo-elements. Unlike `perspective`, `overflow` is not set by default as it is not clear whether you want `clip` or `visible`. In future versions you may be able to set this with a parameter.
+
+```astro title="AnimationMdxLayout.astro" {2, 9} "overflow: clip"
+  ...
+	<div style="perspective: 50cm; overflow: clip">
+		<div id="demo">
+		  ...
+		</div>
+	</div>
+	<style>
+  	::view-transition-image-pair(*) {
+	  	overflow: clip;
+	  }
+	<style>
 ```
