@@ -7,7 +7,7 @@ import CircleLayout from 'src/layouts/CircleLayout.astro';
 	document.addEventListener('click', (e) => {
 		const pathname = location.pathname;
 		if (e.target instanceof HTMLElement && e.target.closest('a')) return;
-		if (pathname.endsWith('/circular/one/' || pathname.endsWith('/circular/two/'))) {
+		if (pathname.endsWith('/circular/one/') || pathname.endsWith('/circular/two/')) {
 			navigate(
 				location.pathname.endsWith('/circular/one/') ? '../../circular/two/' : '../../circular/one/'
 			);
