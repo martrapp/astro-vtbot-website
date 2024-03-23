@@ -94,18 +94,18 @@ The only way to run asynchronous code during transitions and wait for it to comp
 
 When you navigate to a new page in a typical multi-page application, the state of the previous page is completely erased. You start the new page with a clean module loader, all scripts are gone, as are all event listeners.
 
-This is different for view transitions. Since you keep the same document and just swap in new content, your scripts and handlers will slowly accumulate. Astro has taken some precautions to make your life easier: If you switch to a page that defines a script that has already been executed, it will not be executed again. This way you don't add the same event listener twice. 
+This is different for view transitions. Since you keep the same document and just swap in new content, your scripts and handlers will slowly accumulate. Astro has taken some precautions to make your life easier: If you switch to a page that defines a script that has already been executed, it will not be executed again. This way you don't add the same event listener twice.
 
 But if you have a good idea for an event listener that helps you transition from page A to page B and another one for the transition from B to C, you have two listeners. If you do not explicitly remove it, the A-B listener is still active when you switch from B to C.
 
-Only when you explicitly reload a page without view transitions does the browser forget the listeners.  
+Only when you explicitly reload a page without view transitions does the browser forget the listeners.
 
 Removing and reinstalling event listeners is tedious, and even if your website uses several, their number will be small. There is a simple pattern that has worked well for websites with multiple listeners:
 
 1. define your handler as an `.astro` component, which should be used in the `<head>` in the same way as the `ViewTransition/>` element.
 3. insert a `<meta/>` element with your marker (this is the reason why our component should be used in the `<head>`)
 4. define a function `enabled()` in the script part that checks if the `<meta/>` with your marker string is present.
-5. call the `enabled()` function in your event listener to ensure that it is only executed on the pages you intended. 
+5. call the `enabled()` function in your event listener to ensure that it is only executed on the pages you intended.
 
 ```astro
 <meta name="your-marker" content="true" /> <!-- mark this page -->
@@ -122,7 +122,7 @@ Removing and reinstalling event listeners is tedious, and even if your website u
 
 Alternatively, you can also check the `event.from` and `event.to` values at the beginning of the listener to see whether you want to apply your listener for this transition.
 
-``` js
+```js
   function listener(event) {
     if (event.from.endswith("/good-from/") || event.to.endsWith("/good-to/")) {
       ...
@@ -134,10 +134,10 @@ Alternatively, you can also check the `event.from` and `event.to` values at the 
 
 All event listeners have a single parameter of type `Event`. This type does not know the special properties that a `TransitionBeforePreparationEvent` or a `TransitionBeforeSwapEvent` has. For type-safe access to these properties, you can use the provided functions `isTransitionBeforePreparationEvent` and `isTransitionBeforeSwapEvent`:
 
-``` ts
+```astro
 <script>
   import { isTransitionBeforeSwapEvent} from 'astro:transitions/client';
-  
+
   function listener(event: Event) {
     if (enabled() && isTransitionBeforeSwapEvent(event)) {
       event.direction = ...
@@ -152,7 +152,7 @@ This is how the default swap method works. As parameter it gets the new DOM and 
 
 1. The scripts of the new DOM are scanned. Scripts that are already present on the current page  are marked to prevent re-execution after `astro:after-swap`.
 2. The attributes of the `<html>` element are changed to mirror those of the new DOM.
-3. Direct children of the `<head>` are removed and those present in the new DOM are moved in.  Some children of the current DOM are skipped and remain untouched, i.e. they are not deleted and their matching counterpart is not moved into the current DOM: 
+3. Direct children of the `<head>` are removed and those present in the new DOM are moved in.  Some children of the current DOM are skipped and remain untouched, i.e. they are not deleted and their matching counterpart is not moved into the current DOM:
    - Stylesheet links with same href that are already present in both DOMs
    - Elements with same `data-astro-transition-persist` name in both DOMS
 4. Focus and selection are saved
@@ -160,12 +160,12 @@ This is how the default swap method works. As parameter it gets the new DOM and 
 6. Focus and selection are restored
 
 Body swapping is done in two steps:
-* The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM. 
+* The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM.
 * Elemets that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
 
 If you use `astro-vtbot`'s [&lt;ReplacementSwap/> component](/library/ReplacementSwap/), the body is only altered for elements that are marked with `data-vtbot-replace`, the others are left untouched. `data-astro-transition-persist` attributes are ignored.
 
-For attributes of the `<html>` element and child elements of the `<head>` element, their order might change  during swap. But if they are part of the current and the new DOM they are not moved/added/removed but just left unchanged. The `<html>` and `<head>` elements themselves are never removed or added.  
+For attributes of the `<html>` element and child elements of the `<head>` element, their order might change  during swap. But if they are part of the current and the new DOM they are not moved/added/removed but just left unchanged. The `<html>` and `<head>` elements themselves are never removed or added.
 
 Event listeners on `window` and `window.document` are retained. References to elements of the old DOM that didn't make it to the current DOM are invalid after swap. Event listeners for elements that are no longer part of the current DOM after the swap are never called and newly added elements have no listeners unless they have been explicitly set in the `astro:after-swap` or `astro:page-load` handlers.
 

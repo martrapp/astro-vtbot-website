@@ -97,7 +97,7 @@ export interface Props {
 ```
 The `src` attribute is a href, the position strings are values for the corresponding CSS attributes, e.g.
 ```astro
-<LoadingIndicator bottom="3vh" left="3vh" imageURL="/some/other.png"/>
+<LoadingIndicator bottom="3vh" left="3vh" src="/some/other.png"/>
 ```
 As long as you include the `<LoadingIndicator />` component behind the `<ViewTransitions />` in the `<head>` its attributes will override the defaults of the `<LoadingIndicator />` component that is installed by the Astro integration. So it is ok to have the default via integration on most pages and override it on some pages with an explicit `<LoadingIndicator>` element.
 
