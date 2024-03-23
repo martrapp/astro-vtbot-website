@@ -11,7 +11,7 @@ export default defineConfig({
 	markdown: {
 		remarkPlugins: [remarkToc],
 		shikiConfig: {
-			experimentalThemes: {
+			themes: {
 				light: 'github-light',
 				dark: 'github-dark',
 			},
