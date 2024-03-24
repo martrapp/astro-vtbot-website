@@ -30,7 +30,7 @@ In good Astro tradition this component works out of the box without any configur
 
 ### Alternative 1: Use it as an Astro integration
 
-The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all  pages that use the `<ViewTransitons/>` component.
+The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all  pages that use the `<ViewTransitions/>` component.
 
 If you want to keep the integration, e.g. for the automatic linter support, but want to (temporarily) disable the loading indicator, set loadingIndicator to false in the configuration:
 
@@ -61,7 +61,7 @@ or
 
 ### Alternative 2: Use the &lt;LoadingIndicator /> component
 
-If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component shoud be put inside the `<head>` element **behind the `<ViewTransitions/>` component**.
+If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component should be put inside the `<head>` element **behind the `<ViewTransitions/>` component**.
 
 
 ```astro title="YourComponent.astro" {3,8}
@@ -136,7 +136,7 @@ The default CSS covers positioning, sizing, and pulsing of the indicator.
 ```
 You can override it with your own styling. Best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
 
-> **Trick:** The animation defined above runs a one second cycle over and over. It keeps the loading indicator invisible for the first 30% of the cycle. I.e. for the first 300 ms your indicator does not show. Or in other words: Even though the `.loading` class is added  immediatelly after the user clicks the link, the indicator will not appear for the first 300 ms. This is a good thing, as it only shows the indicator for slow loading pages and not for a page that is already in the browser cache.
+> **Trick:** The animation defined above runs a one second cycle over and over. It keeps the loading indicator invisible for the first 30% of the cycle. I.e. for the first 300 ms your indicator does not show. Or in other words: Even though the `.loading` class is added  immediately after the user clicks the link, the indicator will not appear for the first 300 ms. This is a good thing, as it only shows the indicator for slow loading pages and not for a page that is already in the browser cache.
 
 ### Use your own #vtbot-loading-indicator
 
@@ -247,7 +247,7 @@ import MyCustomLoadingIndicator from './MyCustomLoadingIndicator.astro'
 
 ### &lt;BrakePad/&gt;: Slowing things down during development 🦥
 
-Testing loading indicators is hard with your slick local server. Transitions happen in no time and you can not even get a climpse of your flashy indicator? You can use your browser's developer tools to simulate a slow network connection!
+Testing loading indicators is hard with your slick local server. Transitions happen in no time and you can not even get a glimpse of your flashy indicator? You can use your browser's developer tools to simulate a slow network connection!
 
 But you can also put the brakes on, with the [&lt;BrakePad/&gt;](/library/BrakePad/) from the Bag of Tricks.
 

@@ -15,14 +15,19 @@ vtn: replswap-3
 
 ## Why would I use this component?
 
-If you use **`transition:persist`** for **iframes or elements with CSS animations**, you may have noticed that they do not retain their state during astro view transitions:
+The `<ReplacementSwap/>` component is intended for situations in which you do not want to replace the entire `<body>` of your current page with a new version, but want to leave some parts of the old page untouched.
+
+A typical use case is a page layout with a changing `<main>` area surrounded by fixed `<header>`, `<footer>`, ... elements. The `<ReplacementSwap />` component allows you to  change only the DOM of the `<main>` area during navigation and leave the rest in the original DOM, including the event listeners and other JavaScript dependencies you have set up.
+
+Another important use case is the handling of persistent `<iframe>` elements and CSS animations:
+If you use **`transition:persist`** for **iframes or elements with CSS animations**, you may have noticed that they do not retain all their state during astro view transitions:
 
 * Iframes are reloaded on transitions and lose their content
 * CSS animations are interrupted during transitions and start from the beginning.
 
 This is because the standard `swap()` action of `<ViewTransitions/>` replaces the entire `<body>` of your page with the body of the new page. Even if they are only copied: for the current DOM, it looks as if frames and elements with CSS animations have just been recreated.
 
-The `<ReplacementSwap/>` component is intended for situations in which you do not want to replace the entire `<body>` of your current page with a new version, but want to leave some parts of the old page untouched.
+
 
 ## Usage
 
@@ -71,7 +76,7 @@ If the old page and the new page have no replacement identifiers in common, `<Re
 ### Properties
 
 The `<ReplacementSwap />` component can be told to preserve attributes of the `<html>` root element.
-The default swap removes the current attributes of the root element and replaces them with the attributes of the new page. If you want to keep some of the current attributes, you can specify them in the `rootAttributesToPreserve` property of the `<ReplacementSwap />` component. The arttribute accepts a comma-separated list of attribute names. The default value is the empty string. The `rootAttributesToPreserve` property is optional.
+The default swap removes the current attributes of the root element and replaces them with the attributes of the new page. If you want to keep some of the current attributes, you can specify them in the `rootAttributesToPreserve` property of the `<ReplacementSwap />` component. The attribute accepts a comma-separated list of attribute names. The default value is the empty string. The `rootAttributesToPreserve` property is optional.
 
 ```astro title="Layout.astro" {4}
 <html>
@@ -80,7 +85,7 @@ The default swap removes the current attributes of the root element and replaces
 		<ReplacementSwap rootAttributesToPreserve="data-theme, lang"/>
 		...
 ```
-This feature is mainly ment to be used with dynamically added attributes, e.g. for theming.
+This feature is mainly meant to be used with dynamically added attributes, e.g. for theming.
 
 ***Caution:*** If you use this property, values set in the new page will be ignored for the specified attributes. For example if you have a `lang` attribute on each page and set `rootAttributesToPreserve="lang"`, the value of the `lang` attribute of the current page is retained, even if the new page has a different value for the `lang` attribute.
 

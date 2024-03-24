@@ -99,9 +99,9 @@ type ZoomKeyframeParameter = {
 	opacity?: { forwardOut?: number; forwardIn?: number; backwardOut?: number; backwardIn?: number; };
 };
 ```
-The `forwardOut` values say how big the old image should be zoomed when leaving the page (starting from it's original size). The `forwardIn` value is the start value for the new image when entering the new page (before it is zoomd to its natural size). Values `< 1` shrink the image, values `> 1` enlarge it. The `backwards` values are for history back navigation. Opacity values follow the same logic.
+The `forwardOut` values say how big the old image should be zoomed when leaving the page (starting from it's original size). The `forwardIn` value is the start value for the new image when entering the new page (before it is zoomed to its natural size). Values `< 1` shrink the image, values `> 1` enlarge it. The `backwards` values are for history back navigation. Opacity values follow the same logic.
 
-The default values are all 0 with the exception of `forwards.out.scale` and `backwrds.in.scale` which are 5.
+The default values are all 0 with the exception of `forwards.out.scale` and `backwards.in.scale` which are 5.
 
 The values are used as parameters of the keyframe definition in
 <details>

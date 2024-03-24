@@ -9,7 +9,7 @@ vtn: animstyle-3
 
 
 
-`<AnimationStyle/>` gives the user more direct control over the style sheets for Astro's view transitions. It is accompanioed by a set of functions in `animation-style.ts` that generate the CSS for native view transitions as well as Astro's simulation of view transitions.
+`<AnimationStyle/>` gives the user more direct control over the style sheets for Astro's view transitions. It is accompanied by a set of functions in `animation-style.ts` that generate the CSS for native view transitions as well as Astro's simulation of view transitions.
 
 > **Note:** While you will probably use the `<AnimationStyle/>` component in your own project. But most functions from `animation-style.ts` are rather building blocks for other components that provide view transition animations and are typically not used by end users. See [`Zoom`](../Zoom/) and [`Swing`](../Swing/) for animations aimed at end users. A notable exception is the `adapter()` function, [see description below](#adapter).
 
@@ -17,7 +17,7 @@ vtn: animstyle-3
 
 ## Why would I use this component?
 
-For the basic animation use case, [Move](../Move/), [Swing](../Swing/) and [Zoom](../Zoom/) animations can simply be plugged into Astro's `transition:animate={}` property. But for the more elaborated use cases with extended parametrisation, the style sheets for animations during view transitions must be placed manually. The `<AnimationStyle/>` component gives you full control over where to place style sheets for view transitions on your pages. It generates CSS for native view transition as well as Astro's simulation of view transitions. The contents of the style sheets are specified using functions from <code>animation-style.ts</code>.
+For the basic animation use case, [Move](../Move/), [Swing](../Swing/) and [Zoom](../Zoom/) animations can simply be plugged into Astro's `transition:animate={}` property. But for the more elaborated use cases with extended parametrization, the style sheets for animations during view transitions must be placed manually. The `<AnimationStyle/>` component gives you full control over where to place style sheets for view transitions on your pages. It generates CSS for native view transition as well as Astro's simulation of view transitions. The contents of the style sheets are specified using functions from <code>animation-style.ts</code>.
 
 ## Usage
 
@@ -96,7 +96,7 @@ const myFade = {
   backwards: anim,
 };
 ```
-You might recognize this example from the [Astro Docs about View Transitions](https://docs.astro.build/en/guides/view-transitions/#customizing-animations). The main difference between the input of `styleSheet()` and the Astro custom animation example is that `vtbot` uses kebab-case CSS property keys, while Astro uses a small set of convinient names. See [below](#namedanimationpairs-vs-transitiondirectionalanimations) for details.
+You might recognize this example from the [Astro Docs about View Transitions](https://docs.astro.build/en/guides/view-transitions/#customizing-animations). The main difference between the input of `styleSheet()` and the Astro custom animation example is that `vtbot` uses kebab-case CSS property keys, while Astro uses a small set of convenient names. See [below](#namedanimationpairs-vs-transitiondirectionalanimations) for details.
 
 Here `myFade` defines `forwards` and `backwards` animations. "Forwards" is what will normally happen when you click a link.  "Backwards" is what is used when you hit the browser back button. Each branch defines the *out animation* for leaving the *`old` page*  and the *in animation* for entering the *`new` page*. The animation for each branch is defined by an object with CSS properties.
 
@@ -137,7 +137,7 @@ setStyles('fade', styles);
 <a id="adapter"/>
 ### Using custom direction names with transition:animate=\{}
 
-One use case supported by `animation-style.ts` is independent of the `<AnimationStyle/>` component. It is about supporting custom animations with `transition:animate={}`. Astro recognizes two direction names for view transitions: `forwards` and `backwards`. If you want to use other or additional names, you will get typing errors. It is possible to cast objects of type `Record<string, TransitionAnimationPair>` to Astro's `TransitionDirectionalAnimations`. The more elegant and typesave way is to use the `adapter()` function from `animation-style.ts`.
+One use case supported by `animation-style.ts` is independent of the `<AnimationStyle/>` component. It is about supporting custom animations with `transition:animate={}`. Astro recognizes two direction names for view transitions: `forwards` and `backwards`. If you want to use other or additional names, you will get typing errors. It is possible to cast objects of type `Record<string, TransitionAnimationPair>` to Astro's `TransitionDirectionalAnimations`. The more elegant and type safe way is to use the `adapter()` function from `animation-style.ts`.
 
 Use your custom animation object or function with `transition:animate` by sending it through the adapter.
 ```astro title="MyComponent.astro" {2,6}

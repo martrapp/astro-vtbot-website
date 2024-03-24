@@ -1,6 +1,6 @@
 ---
 layout: src/layouts/LibraryMdxLayout.astro
-title: Reusables
+title: Vtbot Debug
 overview: /components/
 vtn: vtbotdebug-3
 ---
@@ -57,7 +57,7 @@ Output for properties and transitions is collapsed by default. Now see what happ
 
 ### Event properties
 
-The detailled view of the properties shows one line for each property of the event. When the value of a property changed since it was last reported, the old and the new value are shown.
+The detailed view of the properties shows one line for each property of the event. When the value of a property changed since it was last reported, the old and the new value are shown.
 
 ```console title="console.log" {1, 12,18}
 ⯆ 18:09:18.025 [vtbot-debug] Properties of the astro:before-preparation event
@@ -107,7 +107,7 @@ The `<VtBotDebug>` component logs the transition groups that participate in the 
 <Picture class="light" src={vtd2_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
 
 ### Scripts
-Scripts of the new page are executed between `astro:after-swap` and `astro:page-load` if they had not been on the old page. Module scripts are executed the first time they are found after a full page reload. Later occurences on other pages will not result in re-execution as module scrips can only be refreshed in the browser by full page loads.
+Scripts of the new page are executed between `astro:after-swap` and `astro:page-load` if they had not been on the old page. Module scripts are executed the first time they are found after a full page reload. Later occurrences on other pages will not result in re-execution as module scrips can only be refreshed in the browser by full page loads.
 
 
 ```console title="console.log" {1,3}
@@ -123,7 +123,7 @@ Scripts of the new page are executed between `astro:after-swap` and `astro:page-
 
 ### View Transition promises
 
-After the view transition got startet, the API provides three promises that can be used to wait for different stages of the transition. The `<VtBotDebug>` component logs when these promises are resolved or rejected. If rejected, the reason is also shown.
+After the view transition got started, the API provides three promises that can be used to wait for different stages of the transition. The `<VtBotDebug>` component logs when these promises are resolved or rejected. If rejected, the reason is also shown.
 
 
 ```console title="console.log" {1,2,4}
@@ -157,7 +157,7 @@ Sometimes it can be quite difficult to keep track of the individual animations o
    15:36:40.626 astroSlideFromRight from 0.10 to 224.50
 ```
 
-Animations where the name beginns with `-ua ` are browser defined. Those might be static like `-ua-view-transition-fade-in` or even denamically generated depending on your page like `-ua-view-transition-group-anim-astro-izu6424p-1` in the example above.
+Animations where the name begins with `-ua ` are browser defined. Those might be static like `-ua-view-transition-fade-in` or even dynamically generated depending on your page like `-ua-view-transition-group-anim-astro-izu6424p-1` in the example above.
 
 The three kinds of animations generated for each transition are:
 1. The group or morph animation (`view-transition-group`) that matches elements with same transition name on the old and new page and morphs one into the other. This is done be transitioning the old images size and position to the new images size and position.
@@ -188,7 +188,7 @@ import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 ```
 ### Properties
 
-The `<VtBotDebug>` component offers a boolean property to control its behaviour:
+The `<VtBotDebug>` component offers a boolean property to control its behavior:
 
 |   Property | Effect |
 |------------|---------|

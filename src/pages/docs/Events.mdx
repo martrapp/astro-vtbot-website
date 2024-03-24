@@ -83,14 +83,14 @@ Most of the properties of the `astro:before-swap` event are identical to those o
 
 - `direction` is `readonly` in `astro:before-swap`
 - `loader` is not defined in `astro:before-swap`
-  The `astro:before-swap`event offeres two additional properties:
+  The `astro:before-swap`event offers two additional properties:
 
 ```typescript
 swap: () => void // Initially, Astro's built-in implementation of the swap() operation. The task of the swap operation is to update the current DOM, typically to reflect the contents of event.newDocument.
 readonly viewTransition: ViewTransition // The object returned by startViewTransition().
 ```
 
-For documentation on `startViewTransition` visit [mdn](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition). The `swap()` method of the `astro:before-swap` event is used in a very similar way as `loader()` of `astro:before-preparation` event. It is possible to override the built-in implementation by assigning to the `swap` property and it is possible to build chains with several wrappers. Other tan `loader` swap does _not_ support asynchronous actions. Browser implementations of view transition put a rather rigid timout on the code that can run during swap. Long running code should be moved to the loader callback.
+For documentation on `startViewTransition` visit [mdn](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition). The `swap()` method of the `astro:before-swap` event is used in a very similar way as `loader()` of `astro:before-preparation` event. It is possible to override the built-in implementation by assigning to the `swap` property and it is possible to build chains with several wrappers. Other tan `loader` swap does _not_ support asynchronous actions. Browser implementations of view transition put a rather rigid timeout on the code that can run during swap. Long running code should be moved to the loader callback.
 
 |                 |                             |
 | --------------- | --------------------------- |

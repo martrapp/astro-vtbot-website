@@ -47,7 +47,7 @@ Unique view transitions names are a requirement of the view transition API. Chro
 
 ### Where do view transition names come from?
 When looking for view transition names, the linter considers these sources:
-* Astro's `transition:name` directive with or without an explicite identifier
+* Astro's `transition:name` directive with or without an explicit identifier
 * The implicite definition of a `view-transition-name` via Astro's `transition:animate` directive
 * CSS rules that define `view-transition-name: identifier` in style attributes of HTML elements or style sheets inlined or linked on the page
 
@@ -72,9 +72,9 @@ You can make the linter keep its mouth shut for false positives by adding a meta
 ```
 
 ### Valid identifiers for view-transition-names
-When you use `transition:name` or `transition:persist`, Astro normalizes the specified identifier to ensure that it is a valid CSS `<custom-ident>` value. But it is also possible to define `view-transition-names`directly in style attributes or stylsheets. In this case, the `<Linter>` component will issue a warning if the identifier is not valid.
+When you use `transition:name` or `transition:persist`, Astro normalizes the specified identifier to ensure that it is a valid CSS `<custom-ident>` value. But it is also possible to define `view-transition-names`directly in style attributes or style sheets. In this case, the `<Linter>` component will issue a warning if the identifier is not valid.
 
-Valid custom identifiers must not start with a number, i.e. a digit, or a "`-`" sign followed by a digit. Characters beside letters, digits, underscoe and the minus-sign must be properly escaped. The reserved names `unset`, `initial`, `inherit` and `none` are also invalid identifiers for `view-transition-names`.
+Valid custom identifiers must not start with a number, i.e. a digit, or a "`-`" sign followed by a digit. Characters beside letters, digits, underscore and the minus-sign must be properly escaped. The reserved names `unset`, `initial`, `inherit` and `none` are also invalid identifiers for `view-transition-names`.
 
 ### Script types not handled by the router
 `<script>` elements might have a `type` attribute. The most common value for this attribute is `"module"` to indicate that the script is an ESM. Other valid values are `""` and `text/javascript`. Both indicate that this script is JavaScript. As this is the default anyways, authors are encouraged to not use these values.
@@ -106,14 +106,14 @@ import Linter from 'astro-vtbot/components/Linter.astro';
 
 ### Properties
 
-The `<Linter/>` component offers two properties to control its behaviour:
+The `<Linter/>` component offers two properties to control its behavior:
 
 |   Property | Type | Effect |
 |------------|------|--------|
 | production | boolean | Activate brake pad in production mode. Typically, the brake pad is active in DEV mode, only. Set this property if you want to feature a delay effect in production, too.|
 | expanded | boolean | In the log that is written to the browsers console, the top level groups are collapsed by default. With `expand` you can force them open from the start.|
 
-```astro title="YourDevelopentPage.astro" {8}
+```astro title="YourDevelopmentPage.astro" {8}
 ---
 import { ViewTransitions } from 'astro:transitions'
 import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'

@@ -36,7 +36,7 @@ An alternative approach for opaque images is to replace the default cross-over a
 
 ### I want to optimize the number of objects taking part in a transition
 
-In the listener for the `astro:after-preparation` event you have access to the current and the future page content. At that point you could remove animation paires that would otherwise lead to ugly fly throughs when part of them are outside the current view port and others are not. You could also introduce new pairs right before the view transition to get some last minute optimization on the `::view-transition-group` effect. (no demo yet)
+In the listener for the `astro:after-preparation` event you have access to the current and the future page content. At that point you could remove animation pairs that would otherwise lead to ugly fly through when part of them are outside the current view port and others are not. You could also introduce new pairs right before the view transition to get some last minute optimization on the `::view-transition-group` effect. (no demo yet)
 
 ### I want to use a loader that can output percentage events during loading
 
@@ -46,7 +46,7 @@ Yes, you can do that by overriding the `loader` property of the `astro:before-pr
 
 Define your own swap algorithm: overwrite the `swap` property in the `astro:before-swap` event. Instead of throwing the `newDocument` on the old one, do a diff of the two structures and only change the bare minimum of the existing DOM to finally reflect the desired outcome. See [demo](/no-reset/one/).
 
-## Syncronous vs. asynchronous code
+## Synchronous vs. asynchronous code
 
 ### Do all event listeners and callbacks have to be synchronous?
 
@@ -66,7 +66,7 @@ The only way to run asynchronous code during transitions and wait for it to comp
 <dt>My event listener is not called</dt>
 
 <dd><p>Make sure that you have added the event listener to the <code>document</code> object and not to the <code>window</code> object.</p><p>Check the spelling of the event name. You might also use predefined constants (e.g. `import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';`)</p>
-<p>Make sure that the handler is installed before the event is triggered: For example, if you install a handler for `astro:after-swap` in an inline script, this script will only be executed after the event has been fired. Listeners for `astro:page-load` can also be installed too late, e.g. if they are contained in a `type="text/partytown"` script, as partytown deferes the execution of scripts to web workers.</p></dd>
+<p>Make sure that the handler is installed before the event is triggered: For example, if you install a handler for `astro:after-swap` in an inline script, this script will only be executed after the event has been fired. Listeners for `astro:page-load` can also be installed too late, e.g. if they are contained in a `type="text/partytown"` script, as partytown defers the execution of scripts to web workers.</p></dd>
 
 <dt>My event listener is called too often</dt>
 
@@ -84,7 +84,7 @@ The only way to run asynchronous code during transitions and wait for it to comp
 
 <dt>`transition:name` only works in `.astro` files?</dt>
 
-<dd><p>Yes. Alternatively, you can define the `view-transition-name` CSS property in a styleshhet or style attribute.</p></dd>
+<dd><p>Yes. Alternatively, you can define the `view-transition-name` CSS property in a style sheet or style attribute.</p></dd>
 
 <dt>`transition:persist` only works in `.astro` files?</dt>
 
@@ -124,7 +124,7 @@ Alternatively, you can also check the `event.from` and `event.to` values at the 
 
 ```js
   function listener(event) {
-    if (event.from.endswith("/good-from/") || event.to.endsWith("/good-to/")) {
+    if (event.from.endsWith("/good-from/") || event.to.endsWith("/good-to/")) {
       ...
     }
   }
@@ -144,9 +144,9 @@ All event listeners have a single parameter of type `Event`. This type does not 
     }
   }
 ```
-### How exectly is the DOM changed when I navigate to the next page?
+### How exactly is the DOM changed when I navigate to the next page?
 
-These are implementation details, not part of the API and might change without prio notice, but if you are interested in the details:
+These are implementation details, not part of the API and might change without prior notice, but if you are interested in the details:
 
 This is how the default swap method works. As parameter it gets the new DOM and it alters the current DOM in place.
 
@@ -161,7 +161,7 @@ This is how the default swap method works. As parameter it gets the new DOM and 
 
 Body swapping is done in two steps:
 * The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM.
-* Elemets that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
+* Elements that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
 
 If you use `astro-vtbot`'s [&lt;ReplacementSwap/> component](/library/ReplacementSwap/), the body is only altered for elements that are marked with `data-vtbot-replace`, the others are left untouched. `data-astro-transition-persist` attributes are ignored.
 

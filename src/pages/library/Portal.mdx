@@ -21,13 +21,13 @@ You can use this to quickly display a skeleton page, perhaps copying parts of th
 
 ## How does it work?
 
-When the user clicks a link, submits a form or uses the browser's back and forward buttons, the Portal component will intercept the navigation. Instead of navigating from A to B there will be two view transitions: One from A to the portal page followed by a view transition from the portal page to B.			
+When the user clicks a link, submits a form or uses the browser's back and forward buttons, the Portal component will intercept the navigation. Instead of navigating from A to B there will be two view transitions: One from A to the portal page followed by a view transition from the portal page to B.
 
 ## Usage
 
 [Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
 
-The `<Portal>` component can be put in the `<head>` of those pages that have a `<ViewTransition />` component. If you want a transition from A to B got through the portal page, you must place the `<Portal>`component on A. The portal page is not automaticall used in the reverse direction. If you also want to see the portal page on links from B to A - or when navigating back through the browser history - you must also insert the `<Portal>` component on page B.
+The `<Portal>` component can be put in the `<head>` of those pages that have a `<ViewTransition />` component. If you want a transition from A to B got through the portal page, you must place the `<Portal>`component on A. The portal page is not automatically used in the reverse direction. If you also want to see the portal page on links from B to A - or when navigating back through the browser history - you must also insert the `<Portal>` component on page B.
 
 ```astro title="MyLayout.astro"
 ---

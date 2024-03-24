@@ -109,8 +109,8 @@ type MoveKeyframeParameter = {
 };
 ```
 
-The two edges for moving the new image onto the page are `enter` to `enterMid` and `enterMid` to `final`. The two edges for moving the old image out are `original` to `leaveMid` and `leaveMid` to `leave`. Here `original` and `final` are the natural positions of the image. There coordinates are implicite. For the other endpoints `enter`, `enterMid`, `leaveMid` and `leave` give relative positions on all three axis.
-In addition to these moves, the image can also be rotated at the endpoints (with values of 0deg for `original` and `final`). For the other endpoints the rotation is around the same axis which is defined by `axis`. The default values for all keyframe paramaters are all 0 with the exception of `axis.z = 1`.
+The two edges for moving the new image onto the page are `enter` to `enterMid` and `enterMid` to `final`. The two edges for moving the old image out are `original` to `leaveMid` and `leaveMid` to `leave`. Here `original` and `final` are the natural positions of the image. There coordinates are implicit. For the other endpoints `enter`, `enterMid`, `leaveMid` and `leave` give relative positions on all three axis.
+In addition to these moves, the image can also be rotated at the endpoints (with values of 0deg for `original` and `final`). For the other endpoints the rotation is around the same axis which is defined by `axis`. The default values for all keyframe parameters are all 0 with the exception of `axis.z = 1`.
 
 The values are used as parameters of the keyframe definition in
 <details>
