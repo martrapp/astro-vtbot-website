@@ -55,16 +55,15 @@ If you have long pages, view transitions cause a lot of ["scrolling"](/jotter/ap
 #### ReloadFence
 The next thing I added was a fence that detects when I leave the Starlight realm and navigate to the demo and component pages of the site (and vice versa).  On those navigation events I replace view transitions with full page loads to reinitialize state, e.g. the search.
 
-#### Disable the Linter
-Starlight uses the `where` scoped styles strategy. The Bag's [Linter](/library/Linter/) is not prepared for this and complains about styles being defined but not used. Because I added the linter as part of the integration to all pages, I did get a lot of those warnings. Until I get a chance to make the Linter smarter, I switched it of:
-
-```ts title=astro.config.ts
-integrations: [... vtbot({autoLint: false}), ... ],
-```
 
 ### Minors
 
 The world will keep turning without those:
+
+#### Ignore Linter Warnings
+The Bag's [Linter](/library/Linter/) warns when it finds identifiers for scoped styles that are defined but not used. This might point to persisted elements that lost their styling during copying. But there can be other reasons, too. For Starlight sites, the Linter regularly reports false positives for optional components like Banners and Fallbacks.
+
+As the Linter component generates its warnings only in DEV mode, this is not a problem for production.
 
 #### SilentCatch
 
