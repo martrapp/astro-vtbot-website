@@ -42,7 +42,7 @@ export default defineConfig({
 		},
 	},
 	trailingSlash: 'always',
-	integrations: [d2(), expressiveCode(), vtbot({ autoLint: false }),
+	integrations: [d2({skipGeneration: process.env.GITHUB_ACTIONS}), expressiveCode(), vtbot({ autoLint: false }),
 	starlight({
 		title: "Bag of Tricks",
 		customCss: ["./src/styles/custom.css"],
