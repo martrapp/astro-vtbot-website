@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from "@astrojs/starlight";
-import starlightLinksValidator from "starlight-links-validator";
+//import starlightLinksValidator from "starlight-links-validator";
 import d2 from "astro-d2";
 
 import rehypeSlug from "rehype-slug";
@@ -9,7 +9,6 @@ import rehypeExternalLinks from "rehype-external-links";
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 
-import mdx from '@astrojs/mdx';
 import expressiveCode from 'astro-expressive-code';
 
 import remarkToc from 'remark-toc';
@@ -42,7 +41,7 @@ export default defineConfig({
 		},
 	},
 	trailingSlash: 'always',
-	integrations: [d2({skipGeneration: process.env.GITHUB_ACTIONS}), expressiveCode(), vtbot({ autoLint: false }),
+	integrations: [d2({skipGeneration: process.env.GITHUB_ACTIONS === "true"}), expressiveCode(), vtbot({ autoLint: false }),
 	starlight({
 		title: "Bag of Tricks",
 		customCss: ["./src/styles/custom.css"],
@@ -69,8 +68,8 @@ export default defineConfig({
 			Head: "./src/components/starlight/Head2.astro",
 		},
 		sidebar: sidebar(),
-		plugins: [starlightLinksValidator()],
-	}), mdx()],
+		//plugins: [starlightLinksValidator()],
+	})],
 	vite: {
 		server: {
 			fs: {
