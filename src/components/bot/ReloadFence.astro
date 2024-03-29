@@ -1,0 +1,25 @@
+---
+
+---
+
+<script>
+	import {
+		isTransitionBeforePreparationEvent,
+		TRANSITION_BEFORE_PREPARATION,
+	} from 'astro:transitions/client';
+
+	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
+		if (isTransitionBeforePreparationEvent(e)) {
+			if (e.from.pathname.startsWith('/jotter/') !== e.to.pathname.startsWith('/jotter/')) {
+				addEventListener(
+					'unload',
+					() => {
+						console.log('prevented from bfcache');
+					},
+					{ once: true }
+				);
+				location.href = e.to.href;
+			}
+		}
+	});
+</script>

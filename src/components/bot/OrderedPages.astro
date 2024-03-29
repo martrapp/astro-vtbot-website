@@ -1,0 +1,22 @@
+---
+
+---
+
+<script>
+	import {
+		isTransitionBeforePreparationEvent,
+		TRANSITION_BEFORE_PREPARATION,
+	} from 'astro:transitions/client';
+
+	const pages = [...document.querySelectorAll('.top-level a')].map(
+		(a) => new URL((a as HTMLAnchorElement).href).pathname
+	);
+	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
+		if (isTransitionBeforePreparationEvent(e)) {
+			const fromIdx = pages.indexOf(e.from.pathname);
+			const toIdx = pages.indexOf(e.to.pathname);
+
+			e.direction = fromIdx === toIdx ? 'stay' : fromIdx < toIdx ? 'forward' : 'back';
+		}
+	});
+</script>

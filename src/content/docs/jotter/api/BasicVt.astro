@@ -1,0 +1,67 @@
+<div id="bvt">
+	<div>This is the document before the view transition</div>
+	<div>And this is the document after the view transition</div>
+</div>
+
+<style is:global>
+	#bvt {
+		color: black;
+		width: 320px;
+		height: 160px;
+		margin: auto;
+		position: relative;
+		isolation: isolate;
+		border: 1px solid #888;
+	}
+
+	#bvt div {
+		mix-blend-mode: plus-lighter;
+		position: absolute;
+		top: 0;
+		height: 160px;
+		width: 320px;
+		background-color: #aaa;
+		margin: 0rem;
+		padding: 1rem;
+		animation: bvt1 6s linear infinite;
+	}
+	#bvt div:nth-child(2) {
+		background-color: #333;
+		animation-name: bvt2;
+		color: white;
+	}
+	@keyframes bvt1 {
+		0% {
+			opacity: 1;
+		}
+		47% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
+		97% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	@keyframes bvt2 {
+		0% {
+			opacity: 0;
+		}
+		47% {
+			opacity: 0;
+		}
+		50% {
+			opacity: 1;
+		}
+		97% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+</style>

@@ -1,0 +1,65 @@
+---
+title: The @Fryuni Load Trick
+draft: true
+---
+
+
+First seen on https://stackblitz.com/edit/github-etjsut?file=src%2Fpages%2Findex.astro
+```astro {5}
+<script>
+  // Make this component compatible with view transitions even when not used
+  import "astro:transitions/client";
+  document.addEventListener("astro:page-load", () => {
+    ... // your_code_here
+  });
+</script>
+```
+This incantation is interesting on many levels!
+
+It solves the problem that **you want to run some code on each page load**.
+
+It works **with** Astro's `<ViewTransitions />` if you use them.\
+And it works **without** `<ViewTransitions />` if you don't use them.
+
+This looks quite innocent or incomprehensible.\
+Let me explain it briefly so you can see and enjoy how ingenious Fryuni's approach is.
+
+### Events on normal script load
+To execute code when a page is first loaded, you can use events like `DOMContentLoaded` or `load`. If you want to execute code after navigating to another page using view transitions with Astro, use the `astro:after-swap` or `astro:page-load` events. But what if you want to program a script that runs with and without view transitions? Which events should then be used?
+
+### Events when using view transitions
+The first thing the above code takes advantage of is the fact that when using view transitions, the `astro:page-load` event is triggered not only on transitions, but also when the page is first loaded. So if you're using view transitions, the answer is: execute your code with the `astro:page-load` event and you're good to go.
+
+### But what if I don't want to use view transitions?
+Even if you do not want to use view transitions, you can still import the module as shown above. What is this for? The [docs say](https://docs.astro.build/en/guides/view-transitions/#trigger-navigation) it is typically imported as
+```js
+  import { navigate } from 'astro:transitions/client';
+```
+to get access to the `navigate()` function. But a) we don't need this function if we don't use view transitions and b) the above import imports &hellip; *nothing*?
+
+Correct, nothing is imported, but code is still executed:
+The script that is loaded here is [essentially this](https://github.com/withastro/astro/blob/dfdf6b3a0b50e14754abdbcc62fd714f80bf0666/packages/astro/src/transitions/router.ts)
+And in this code are these three lines.
+```
+const triggerEvent = (name: Events) => document.dispatchEvent(new Event(name));
+const onPageLoad = () => triggerEvent("astro:page-load");
+addEventListener("load", onPageLoad);
+```
+This ensure that each `load` event will also trigger an `astro:page-load` event.
+
+Now not only pages with a `<ViewTransitions />` component trigger `astro:page-load`, but also our current page, even if we do not use `<ViewTransitions />` at all.
+
+### Can the first event be lost?
+
+Are you perhaps worried that there is a race condition here and the browser has already triggered the "load" event while we are performing the large import and have not set up the event handler for loading in time? After all, our own script is a module script that is loaded asynchronously and deferred?
+
+That reasoning is important. It would be a valid point e.g. for the `DOMContentLoaded` event. But the `load` event won't be raised before the page is loaded **and** the contained scripts ran. So this is save.
+
+### Did this import cause view transitions to be enabled?
+No. Astro only performs view transitions between pages that both have the `<ViewTransitions>` component (or a `<meta name="astro-view-transitions-enabled" content="true">`) in their `<head>`. If you do not have this, all navigation will be normal full page loads.
+
+But it is worth noting that in case you do not use view transitions, loading the module has also some minor disadvantages: Besides unnecessarily loading 3k-10k that can't be tree shaken, it also establishes additional event listeners that the view transition module uses to observe history navigation and scrolling.
+
+## And now?
+
+I'll take this as a motivation to build better support for script loading and (re-)execution that works seamlessly w/ and w/o view transitions. ;-)

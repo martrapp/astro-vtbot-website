@@ -1,0 +1,42 @@
+---
+export interface Props {
+	path: string;
+}
+const { path } = Astro.props;
+---
+
+<div data-vtbot-iframe-path={path} style="height: 320px;">
+	<!--iframe src={`/iframes/${path}/`} style="color-scheme: dark; border: none; margin: auto; height: 20rem; width: 20rem"></iframe-->
+</div>
+
+<script>
+	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
+
+	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
+		document.querySelectorAll(`[data-vtbot-iframe-path]`).forEach((el) => {
+			const path = el.getAttribute('data-vtbot-iframe-path');
+			const theme = document.documentElement.getAttribute('data-theme');
+			const iframeSrc = `/iframes/${path}-${theme}/`;
+			setTimeout(
+				() =>
+					(el.innerHTML = `<iframe src="${iframeSrc}" style="border: none; margin: auto; height: 20rem; width: 20rem"></iframe>`),
+				1500
+			);
+		});
+	});
+</script>
+<style is:global>
+	@keyframes fin {
+		from {
+			opacity: 0;
+			transform: scale(0);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	iframe {
+		animation: fin 0.2s linear;
+	}
+</style>

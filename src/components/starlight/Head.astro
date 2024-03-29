@@ -1,0 +1,60 @@
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import type { Props } from '@astrojs/starlight/props';
+import { ViewTransitions } from 'astro:transitions';
+
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+
+import PagefindToTextFragments from './PagefindToTextFragments.astro';
+import CloseMenu from './CloseMenu.astro';
+import './vt.css';
+import MarkHeadings from '../bot/MarkHeadings.astro';
+import OrderedPages from '../bot/OrderedPages.astro';
+import ScrollY from '../bot/ScrollY.astro';
+---
+
+<ViewTransitions />
+<LoadingIndicator top="9vh" right="3vw" src="/favicon.svg" />
+<MarkHeadings />
+<OrderedPages />
+<ScrollY />
+<PagefindToTextFragments />
+<CloseMenu />
+<StarlightHead {...Astro.props} />
+
+<script>
+	// set the picker selection
+
+	import {
+		type TransitionBeforeSwapEvent,
+		TRANSITION_BEFORE_SWAP,
+		TRANSITION_PAGE_LOAD,
+	} from 'astro:transitions/client';
+
+	import '../navigate';
+	import '../iframe-theme';
+
+	declare global {
+		var StarlightThemeProvider: {
+			updatePickers(theme?: string): void;
+		};
+	}
+
+	document.addEventListener(TRANSITION_PAGE_LOAD, () =>
+		StarlightThemeProvider.updatePickers(
+			localStorage.hasOwnProperty('starlight-theme')
+				? localStorage.getItem('starlight-theme')!
+				: 'auto'
+		)
+	);
+
+	const persistHeader = (doc: Document) => {
+		const header = doc.querySelector('header')!;
+		header.setAttribute('data-astro-transition-persist', 'header');
+	};
+
+	persistHeader(document);
+	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+		persistHeader((e as TransitionBeforeSwapEvent).newDocument);
+	});
+</script>

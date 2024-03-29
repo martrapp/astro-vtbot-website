@@ -1,0 +1,84 @@
+---
+
+---
+
+<div id="fvt">
+	<div>This is the document before the view transition</div>
+	<div>And his is the document after the view transition</div>
+</div>
+
+<style is:global>
+	#fvt {
+		color: black;
+		margin: auto;
+		height: 160px;
+		width: 320px;
+		position: relative;
+		isolation: isolate;
+		border: 1px solid #888;
+	}
+	:root[theme='dark'] #fvt {
+		color: white;
+	}
+	#fvt div {
+		mix-blend-mode: plus-lighter;
+		position: absolute;
+		border: 1px solid #888;
+		top: 0;
+		height: 160px;
+		width: 320px;
+		background-color: #aaa;
+		margin: 0;
+		padding: 1rem;
+		animation: 8s infinite fvt1;
+	}
+	#fvt div:nth-child(2) {
+		background-color: #333;
+		animation-name: fvt2;
+		color: white;
+	}
+	@keyframes fvt1 {
+		0% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		45% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 0;
+			transform: scale(0);
+		}
+		95% {
+			opacity: 0;
+			transform: scale(0);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	@keyframes fvt2 {
+		0% {
+			opacity: 0;
+			transform: scale(0);
+		}
+		45% {
+			opacity: 0;
+			transform: scale(0);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		95% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(0);
+		}
+	}
+</style>

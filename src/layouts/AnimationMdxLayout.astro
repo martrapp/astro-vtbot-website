@@ -157,7 +157,8 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 	</div>
 	<p style="font-size:1.4rem; color: var(--vtbot-accent)">
 		Use the buttons above to select an animation style. Then press the link in the demo web site
-		below to see that animation in action. Use check checkbox to see how the clipped animation looks like. <a href="#done">How do you do that?</a>
+		below to see that animation in action. Use check checkbox to see how the clipped animation looks
+		like. <a href="#done">How do you do that?</a>
 	</p>
 	<div id="frame" style="perspective: 50cm">
 		<div id="demo"><a href="./#">Flip</a><slot /><br style="clear:both" /></div>
@@ -256,7 +257,7 @@ import { swing } from "astro-vtbot/animations/swing";
 		grid-template-columns: repeat(3, 1fr);
 		gap: 10px;
 		background: var(--vtbot-gradbg);
-		padding:3ex;
+		padding: 3ex;
 	}
 
 	.button-grid button {

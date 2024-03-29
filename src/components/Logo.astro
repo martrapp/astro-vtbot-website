@@ -1,0 +1,8 @@
+---
+export interface Props {
+	height: string;
+}
+const { height = '100px' } = Astro.props;
+---
+
+<img style=`height:${height}` src="/public/favicon.svg" alt="bot" />

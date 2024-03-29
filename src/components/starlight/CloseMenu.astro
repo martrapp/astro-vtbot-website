@@ -1,0 +1,27 @@
+---
+
+---
+
+<script>
+	import { TRANSITION_BEFORE_PREPARATION } from 'astro:transitions/client';
+
+	document.addEventListener(TRANSITION_BEFORE_PREPARATION, () => {
+		if (document.body.hasAttribute('data-mobile-menu-expanded')) {
+			document.body
+				.querySelector('starlight-menu-button')!
+				.closest('nav')!
+				.dispatchEvent(
+					new KeyboardEvent('keyup', {
+						key: 'Escape',
+						code: 'Escape',
+						charCode: 27,
+						keyCode: 27,
+						shiftKey: false,
+						ctrlKey: false,
+						altKey: false,
+						metaKey: false,
+					})
+				);
+		}
+	});
+</script>

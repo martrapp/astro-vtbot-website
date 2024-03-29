@@ -39,9 +39,9 @@ import { Content } from 'src/mdx/components.mdx';
 			This component checks for <mark>typical problems</mark> during development of view transitions
 			and gives
 			<mark>detailed error messages</mark>. The main checks are <ul>
-				<li>Whether identifiers are used correctly with transition:persist and data-vtbot-replace</li><li>
-					Whether view-transition-names and script types have correct values
-				</li>
+				<li>
+					Whether identifiers are used correctly with transition:persist and data-vtbot-replace
+				</li><li>Whether view-transition-names and script types have correct values</li>
 			</ul>
 			<h3>Status</h3><p>Ready to use</p>
 			<h3>Future direction</h3><ul>
@@ -61,7 +61,8 @@ import { Content } from 'src/mdx/components.mdx';
 				Or have you ever been annoyed and clicked on a link several times because nothing seemed to
 				happen?
 			</p><p>
-				Then you need an indicator that gives you <mark>visual feedback that the app has responded</mark
+				Then you need an indicator that gives you <mark
+					>visual feedback that the app has responded</mark
 				>: The loading indicator!
 			</p>
 			<h3>Status</h3><p>Base functionality and default behavior released.</p>
@@ -106,11 +107,13 @@ import { Content } from 'src/mdx/components.mdx';
 			name="zoom"
 		>
 			<p>
-				<code>Zoom</code> offers <mark>animation effects</mark> for view transitions. It can be used as a replacement
-				for the standard Astro animations <code>fade()</code> and <code>slide()</code>.
+				<code>Zoom</code> offers <mark>animation effects</mark> for view transitions. It can be used
+				as a replacement for the standard Astro animations <code>fade()</code> and <code
+					>slide()</code
+				>.
 			</p><p>
-				Zoom animations can <mark>enlarge</mark> the current transition group <mark>or shrink</mark> it to a point. And the
-				zooming can be combined with a fade effect.
+				Zoom animations can <mark>enlarge</mark> the current transition group <mark>or shrink</mark>
+				it to a point. And the zooming can be combined with a fade effect.
 			</p>
 			<h3>Status</h3><p>Ready to use, see demos.</p>
 			<h3>Future direction</h3><ul>
@@ -126,7 +129,8 @@ import { Content } from 'src/mdx/components.mdx';
 			name="swing"
 		>
 			<p>
-				<code>Swing</code> offers <mark>animation effects</mark> similar to <code>Zoom</code>. The effects allow
+				<code>Swing</code> offers <mark>animation effects</mark> similar to <code>Zoom</code>. The
+				effects allow
 				<mark>rotations around all axis</mark> in 3D space.
 			</p>
 			<p>
@@ -152,8 +156,9 @@ import { Content } from 'src/mdx/components.mdx';
 			name="move"
 		>
 			<p>
-				<code>Move</code> is the newest addition to the <mark>animation effects</mark>. It offers a wide range of
-				effects. The basic idea is to have two connected edges along which the old image is <mark>moved out</mark>
+				<code>Move</code> is the newest addition to the <mark>animation effects</mark>. It offers a
+				wide range of effects. The basic idea is to have two connected edges along which the old
+				image is <mark>moved out</mark>
 				and another two connected edges along which the new image is <mark>moved in</mark>.
 			</p>
 			<p>
@@ -179,9 +184,9 @@ import { Content } from 'src/mdx/components.mdx';
 			name="animstyle"
 		>
 			<p>
-				This is a component that can <mark>generate style sheets</mark> for view transition animations. This
-				works for <mark>native</mark> view transitions <mark>and</mark> for Astro's view transition <mark>simulation</mark> for browsers
-				that do not support them natively.
+				This is a component that can <mark>generate style sheets</mark> for view transition animations.
+				This works for <mark>native</mark> view transitions <mark>and</mark> for Astro's view transition
+				<mark>simulation</mark> for browsers that do not support them natively.
 			</p><p>
 				This component is used together with the functions offered by <code>animation-style.ts</code
 				>
@@ -200,9 +205,10 @@ import { Content } from 'src/mdx/components.mdx';
 			name="portal"
 		>
 			<p>
-				The <code>Portal</code> <mark>forces all navigation through a single intermediate page</mark>. This page
-				can be used to show some loading animation. The transition automatically resumes to the target
-				page of the transition once that page is loaded.
+				The <code>Portal</code>
+				<mark>forces all navigation through a single intermediate page</mark>. This page can be used
+				to show some loading animation. The transition automatically resumes to the target page of
+				the transition once that page is loaded.
 			</p><p>
 				The benefit of a portal page is that the animation effect can be confined on that very page.
 				A limitation compared to *pure* view transitions is that persisted elements and transition
@@ -223,8 +229,9 @@ import { Content } from 'src/mdx/components.mdx';
 			name="noscroll"
 		>
 			<p>Sometimes you want to opt out of the default scroll behavior of navigation.</p><p></p> Putting
-			the <code>&lt;NoScroll&gt;</code> component in the <code>&lt;head&gt;</code> of your page <mark>prevents
-			scrolling on transitions</mark>. The vertical and horizontal scroll <mark>positions just stay where the are</mark>
+			the <code>&lt;NoScroll&gt;</code> component in the <code>&lt;head&gt;</code> of your page <mark
+				>prevents scrolling on transitions</mark
+			>. The vertical and horizontal scroll <mark>positions just stay where the are</mark>
 			before you clicked a link.
 
 			<h3>Status</h3><p>Brand new.</p>
@@ -242,8 +249,9 @@ import { Content } from 'src/mdx/components.mdx';
 		>
 			<p>
 				As a developer, you want to define and control how your website behaves on slow connections.
-				The <code>&lt;BrakePad&gt;</code> component gives you control over when and how to <mark>simulate slow
-				loading</mark>. By default, the brake pad is a <mark>DEV mode only</mark> feature.
+				The <code>&lt;BrakePad&gt;</code> component gives you control over when and how to <mark
+					>simulate slow loading</mark
+				>. By default, the brake pad is a <mark>DEV mode only</mark> feature.
 			</p><p>
 				But you can also switch it active for production if you want to force some delay during view
 				transitions. Admittedly, you typically want transitions to be slick and snappy. So this is a

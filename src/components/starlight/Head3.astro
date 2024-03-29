@@ -1,0 +1,35 @@
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import type { Props } from '@astrojs/starlight/props';
+import ReplacementSwap from 'astro-vtbot/components/ReplacementSwap.astro';
+import { ViewTransitions } from 'astro:transitions';
+import SidebarSelect from './SidebarSelect.astro';
+import CloseMenu from './CloseMenu.astro';
+---
+
+<StarlightHead {...Astro.props} />
+<ViewTransitions fallback="swap" />
+<ReplacementSwap rootAttributesToPreserve="data-theme" />
+<SidebarSelect />
+<CloseMenu />
+
+<script>
+	import {
+		TRANSITION_BEFORE_PREPARATION,
+		isTransitionBeforePreparationEvent,
+	} from 'astro:transitions/client';
+
+	function markMainFrameForReplacement(doc: Document) {
+		doc.body.querySelector('.main-frame')!.setAttribute('data-vtbot-replace', 'main');
+	}
+	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
+		if (isTransitionBeforePreparationEvent(e)) {
+			const originalLoader = e.loader;
+			e.loader = async () => {
+				await originalLoader();
+				markMainFrameForReplacement(e.newDocument);
+			};
+		}
+	});
+	markMainFrameForReplacement(document);
+</script>
