@@ -4,3 +4,4 @@ sed -i 's/showSubResults: true,/showSubResults:true,excerptLength:30,/' node_mod
 astro check && astro build
 LOGO=$(ls dist/_astro/favicon*.svg)
 echo ${LOGO} $(echo ${LOGO}|sed 's|\(dist/_astro/.*\)_.*\.svg|\1.svg|') | xargs cp
+./bin/check_links.sh
