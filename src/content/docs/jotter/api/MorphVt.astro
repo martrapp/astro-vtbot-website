@@ -1,0 +1,88 @@
+---
+
+---
+
+<div id="mvt">
+	<div>This is the document before the view transition</div>
+	<div>And this is the document after the view transition</div>
+	<div id="mo1">view-transition-name: x</div>
+</div>
+
+<style is:global>
+	#mvt {
+		color: #888;
+		height: 160px;
+		width: 320px;
+		margin: auto;
+		position: relative;
+		isolation: isolate;
+		border: 1px solid #888;
+	}
+	#mvt div {
+		mix-blend-mode: plus-lighter;
+		position: absolute;
+		border: 1px solid #888;
+		background-color: #aaa;
+		color: black;
+		top: 0;
+		left: 0;
+		height: 160px;
+		width: 320px;
+		margin: 0rem;
+		padding: 1rem;
+		animation: bvt1 6s linear infinite;
+	}
+	#mvt div:nth-child(2) {
+		background-color: black;
+		animation-name: bvt2;
+		color: white;
+	}
+	#mvt div:nth-child(3) {
+		mix-blend-mode: normal;
+		background-color: darkred;
+		color: white;
+		animation-name: m1;
+	}
+	@keyframes m1 {
+		0% {
+			top: 90px;
+			left: 20px;
+			height: 50px;
+			width: 100px;
+			font-size: 0.5rem;
+			transform: rotateZ(0deg);
+		}
+		47% {
+			top: 90px;
+			left: 20px;
+			height: 50px;
+			width: 100px;
+			font-size: 0.5rem;
+			transform: rotateZ(0deg);
+		}
+		50% {
+			top: 35px;
+			left: 190px;
+			height: 120px;
+			width: 100px;
+			font-size: 1rem;
+			transform: rotateZ(-90deg);
+		}
+		97% {
+			top: 35px;
+			left: 190px;
+			height: 120px;
+			width: 100px;
+			font-size: 1rem;
+			transform: rotateZ(-90deg);
+		}
+		100% {
+			top: 90px;
+			left: 20px;
+			height: 50px;
+			width: 100px;
+			font-size: 0.5rem;
+			transform: rotateZ(0deg);
+		}
+	}
+</style>

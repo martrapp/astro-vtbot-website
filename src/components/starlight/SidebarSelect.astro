@@ -1,0 +1,58 @@
+---
+export interface Props {};
+---
+
+<script>
+	import { isTransitionBeforeSwapEvent, TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
+
+	let clone: HTMLAnchorElement | null = null;
+
+	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+		if (isTransitionBeforeSwapEvent(e)) {
+			e.viewTransition.ready.then(() => {
+				if (clone) {
+					clone.remove();
+					clone = null;
+				}
+				const current = document.querySelector(
+					`.sidebar-pane a[href="${e.from.pathname}"]`
+				) as HTMLAnchorElement;
+				if (!current || getComputedStyle(current).visibility === 'hidden') return;
+
+				let next = document.querySelector(
+					`.sidebar-pane a[href="${e.to.pathname}"]`
+				) as HTMLAnchorElement|null;
+
+				if (!next) return;
+				const nextRect = next.getBoundingClientRect();
+				clone = current.cloneNode() as HTMLAnchorElement;
+				const currentRect = current.getBoundingClientRect();
+				clone.style.position = 'fixed';
+				clone.style.zIndex = '1000';
+				clone.innerText = '';
+				clone.style.width = `${currentRect.width}px`;
+				clone.style.height = `${currentRect.height}px`;
+				clone.style.backgroundColor = 'var(--sl-color-text-accent)';
+				clone.style.opacity = '0.5';
+				document.querySelectorAll('[aria-current="page"]').forEach((el) => {
+					el.removeAttribute('aria-current');
+				});
+				document.body.appendChild(clone);
+
+				clone
+					.animate(
+						{
+							top: [`${currentRect.top}px`, `${nextRect.top}px`],
+							easing: ['ease-in-out'],
+						},
+						500
+					)
+					.finished.then(() => {
+						clone?.remove();
+						next?.setAttribute('aria-current', 'page');
+						next = clone = null;
+					});
+			});
+		}
+	});
+</script>

@@ -1,0 +1,40 @@
+---
+title: CSS Tricks & Pitfalls
+---
+
+## Testing for View Transition Support in CSS
+
+You can test whether the user's browser has native support for view transition like this:
+
+```css
+/* has native support for view transitions */
+@supports(view-transition-name: a) {
+  ...
+}
+/* does not natively support view transitions */
+@supports not(view-transition-name: a) {
+  ...
+}
+```
+
+## Ignored Style Rules
+
+Browsers that do not support view transitions may cough and choke when fed CSS for view transitions.
+
+While it is apparent that they do not support the `::view-transition-*` pseudo-elements, some other consequences are not so obvious.
+
+* Setting the `view-transition-name` CSS property is not harmful in browsers without support for view transitions. But the property is simply ignored, and you cannot access it in the DOM.
+
+* In JavaScript, you should not access `element.style.viewTransitionName` or similar accessors to view transition CSS properties if the browser does not support view transitions natively. This will likely throw errors.
+
+
+* Do not combine selectors with view transition properties with normal selectors in CSS rules. The browser will likely ignore the entire rule, including the part that does not contain a view transition. Here is an example:
+
+```css title="pitfall.css" {2}
+::view-transition-group(main),
+body main {
+  ...
+}
+```
+Although the highlighted section is correct, browsers may completely ignore the entire rule due to the unknown pseudo element selector.
+

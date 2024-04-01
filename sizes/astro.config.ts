@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import remarkToc from 'remark-toc';
 import expressiveCode from 'astro-expressive-code';
+import starlight from "@astrojs/starlight";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +11,7 @@ export default defineConfig({
 	markdown: {
 		remarkPlugins: [remarkToc],
 		shikiConfig: {
-			experimentalThemes: {
+			themes: {
 				light: 'github-light',
 				dark: 'github-dark',
 			},

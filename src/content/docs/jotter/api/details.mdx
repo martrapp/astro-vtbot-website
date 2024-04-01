@@ -1,0 +1,108 @@
+---
+title: View Transition API Details
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+The View Transition API consists of a single function and a single CSS property:
+These are the types that are introduced by the View Transition API:
+
+```ts title="dom-view-transition.d.ts"
+
+// The view-transition-name CSS property
+interface CSSStyleDeclaration {
+  viewTransitionName: string;
+}
+
+// The startViewTransition() function provided by window.document
+interface Document {
+  startViewTransition(updateCallback: () => Promise<void> | void): ViewTransition;
+}
+
+// The result type of calling window.document.startViewTransition()
+interface ViewTransition {
+  finished: Promise<void>;
+  ready: Promise<void>;
+  updateCallbackDone: Promise<void>;
+  skipTransition(): void;
+}
+```
+
+## View from the Outside
+
+The `startViewTransition()` function returns immediately yielding an object with three promises, `updateCallbackDone`, `ready`, and `finished`, and a function called `skipTransition()`. The returned promises can be used to trigger actions that depend on the progress of the view transition process. The `skipTransition()` function lets you skip the visual animations.
+
+Here is a **high-level description** of what is going on and how that can be observed from the out side using the promises:
+
+<span>**Pending-capture:**</span> First, `startViewTransition()` saves **old-images** of all HTML elements that have a `view-transition-name` CSS property. By default this is only the `<html>` root element of your document, which is automatically named `root`.
+
+The function then runs the _update callback_ to transform the current document into a new version.
+
+<span>**Update-callback-called:**</span> You can react to the end of the update with
+the `updateCallbackDone` promise. The *update callback* even runs when errors occurred
+in the capture phase. The basic idea here is that the update of the document is a
+mandatory part of view transition, while the visual animation is a nice add-on.
+
+After that, **new-images** are drawn above the old images and a tree of `::view-transition` pseudo elements is created. When all is set up, the `ready` promise fulfills.
+
+<a id=""/>
+<span>**Animating:**</span> Insertion of the pseudo elements into the DOM triggers
+animations that fade out the old-images and fade in the new-images. For each pair
+of elements with the same view transition name in the old and in the new version
+of the DOM, there is an additional animation that moves the image pair from the old
+position and size to the new position and size.[^1] All animations happen at the
+same time in parallel.
+
+<span>**Done:**</span> When all those animations completed, the `finished` promise
+fulfills.
+
+If you call `viewTransition.skipTransition()` this aborts the animation part, but not the document update.
+
+[^1]: The CSS properties saved together with the image data include, width, height, transform, backdrop-filter and others. For details see https://drafts.csswg.org/css-view-transitions/#style-transition-pseudo-elements-algorithm
+
+## Detailed Interior View
+
+This is a more elaborated description of what the `startViewTransitions()`function does. I tried to keep the abstraction somewhere between the high-level view and the very detailed view given in the spec.
+
+<Steps>
+
+1. In the capture phase, the browser saves a bitmap of the current state for each HTML element that has a `view-transition-name` CSS property. This can later be addressed using the `::view-transition-old(<name>)` pseudo element. Together with the image data, further CSS properties are recorded[^1]. \
+   \
+   All `view-transition-name` values used in the document must be unique. Otherwise the view transition is aborted (after calling the _update callback_, see next step).
+
+2. If an _update callback_ is provided, the browser updates the document by starting and awaiting that callback. The `viewTransition.updateCallbackDone` promise reflects the execution of the callback. If no callback was provided, the `updateCallbackDone` promise fulfils immediately.\
+   \
+    Even though _update callback_ can be an asynchronous function, browsers typically time-out after a few seconds if the promise does not settle in time. Chrome for example throws a `TimeoutError` after 4 seconds. For this reason all time consuming preparations, like loading a new DOM over the network, should be executed before calling `startViewTransition()`.\
+    \
+    The promise might resolve or reject. If it rejects, the `ready` and the `finished` promises also reject and the whole view transition is aborted.\
+    \
+    Before the _update callback_ runs, rendering is blocked in the browser until `ready` settles. The view is frozen. Another good reason to hurry up during the execution of the _update callback_.
+
+3. View transition processing then generates a new stacking context called the view transition layer that sits above all HTML content on the new page.\
+   \
+   The bitmaps from step 1 are placed in that new layer. Position and saved CSS properties, most notably size and transformations, are those of the original elements from which they were screen-shotted.
+
+4. The next step now identifies elements with view transition names in the now updated document and places images for those elements in the view transition layer that was generated in the previous step. If the elements have view transition names that already appeared on the previous page, they are positioned and transformed to exactly cover the corresponding images added in the previous step. Otherwise position, size and CSS properties are those of the elements from the new document. The new images can be addressed by the `::view-transition-new(<name>)` pseudo element.\
+   \
+   It might be worth noting, that not the new elements are placed in the view transition layer but only their images as replaced elements.
+
+5. For each view transition name (other than `none`) found in the previous or updated state of the document, the browser generates a `::view-transition-image-pair(<name>)` pseudo element that becomes the direct parent of `::view-transition-old(<name>)` and `::view-transition-new(<name>)`. As not necessarily bot images might exist for a given view transition name, the `::view-transition-image-pair(<name>)` has one or two children.\
+   \
+   For each `::view-transition-image-pair(<name>)` a `::view-transition-group(<name>)` pseudo element is created as the direct parent. All `::view-transition-group(<name>)` are children of a global `::view-transition` pseudo element.\
+   \
+   Groups that only have an old image form exit animations, groups that only have a new image form an entry animation. The CSS pseudo classes `:only-child` / `:not(:only-child)` can be used to detect that situation and alter animations accordingly.\
+   \
+   By default, the browser uses a fade-out animation for each old image and a fade-in animation for each new image. For each `::view-transition-group(<name>)` with _two_ images, the browser dynamically generates an animation that transitions both images from the old position and saved CSS properties to the new position and current properties. These animations are sometimes called _morph_ or _group animations_.
+
+6. <a id="tree"/>Now the `::view-transition` pseudo element is inserted at the documents `<html>` element, rendering is unblocked again, and the `viewTransition.ready` promise fulfills. The occurrence of the `::view-transition` pseudo element with all its children triggers the view transition animations, which now all run in parallel. The hierarchy of pseudo elements only exists during the animation phase of the view transition.\
+   \
+   The `ready` promise may be used to start custom JavaScript animations, e.g. using the Animation API, GSAP, Anime.js and the like.\
+    \
+    Render order is back to front. For pairs with two children, the new image is drawn in front of the old image. Entry animations are drawn in front of the other animations.\
+    \
+    With their corresponding new images in the view transition layer, elements with view transition names will be exempt from drawing when the current DOM is rendered, leaving holes there as if the elements were styled with `visibility: hidden`. During the animation, the new images will transition to the holes and close the gaps.
+
+7. When all view transition animations come to an end, the `::view-transition` pseudo element with all its children is removed again, the `viewTransition.finished` promise fulfills, and the view transition ends.
+
+</Steps>
+

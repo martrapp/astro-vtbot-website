@@ -1,0 +1,20 @@
+---
+title: Astro View Transitions
+---
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+Astro makes it easy to add view transitions to your website. You start with a website that loads individual pages when you click on a link. Then add Astro's support for view transitions and the site looks like a single-page application with smooth transitions between views.
+
+## Adding View Transitions
+Adding support for view transitions can be as simple as adding `<ViewTransitions/>` to the `<head>` of your base layout. But typically it also involves using Astro's lifecycle events to run scripts after transitioning to a new page. You can choose from different animations or define your own. You can even persist elements from one page to the next, such as a running video player.
+
+Best of all, this also works on browsers that do not have native support for view transitions as Astro emulates important features of the API for those browsers.
+
+This is all explained, documented and covered with tutorials in the official [Astro Docs](https://docs.astro.build/guides/view-transitions/). If you just want to have smooth transitions between pages and use the feature as advertised, life is simple and good.
+
+## Off the Beaten Path
+While Astro's core implementation is aimed at super simple, high quality results for a wide range of basic use cases, it also offers a lot of flexibility for those who want to [customize things](./directives/). There are even community solutions like this <BoT/> that you can use to extend the core behavior. And if you have a specific design in mind, you can customize all the settings to your liking. You can [even change the way Astro handles view transitions](./flow-events/).
+
+If you want to go down this path, you may be better off if you perceive whatever holds the view transition world together in its inmost folds. This Jotter tries to help you with astro specific questions but also in general when it comes to the [View Transition API](/jotter/api/). I would be happy if it can help you get to the desired result faster, or at least avoid some of the less obvious pitfalls along the way.

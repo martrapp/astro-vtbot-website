@@ -16,10 +16,10 @@ const { title, background = '' } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, viewport-fit=cover" />
 		<link rel="icon" href="/favicon.svg" />
-		<title>{title + ' | vtbot'}</title>
+		<title>{title + ' | Bag of Tricks'}</title>
 		<slot name="head2" />
 	</head>
-	<body style={background ? `background: ${background}` : ''}>
+	<body data-pagefind-body style={background ? `background: ${background}` : ''}>
 		<slot />
 	</body>
 </html>

@@ -1,0 +1,25 @@
+.container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.item {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+@media screen and (orientation: portrait) {
+	.item {
+		border-top: 1pt dashed #888;
+		flex-direction: column;
+	}
+}
+@keyframes slide {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+}

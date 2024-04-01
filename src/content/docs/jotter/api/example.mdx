@@ -1,0 +1,180 @@
+---
+title: A View Transition Example
+---
+
+import VtDemo from "/src/components/VtDemo.astro";
+
+View transition animations are often used to guide the user's eyes and show context. Follow the movement of the red square to the right and then down to read the message:
+
+<VtDemo path="vtdemo" />
+
+Let's walk through this demo and see some examples of the processing described above.
+
+## The Original Document
+
+The document just defines three `<div>` elements and one `<button>`.
+
+```html title="demo.html"
+<html style="view-transition-name: none">
+  <body>
+    <div style="view-transition-name: a" id="red">This demo shows</div>
+    <div style="view-transition-name: b" id="blue">a basic example</div>
+    <div style="view-transition-name: c" id="green"><br/><br/>of view transitions</div>
+		<button />
+  </body>
+</html>
+```
+It also defines three transition groups with the names `a`, `b` and `c`. Normally, the browser would also define a fourth transition group called `root` for the `<html>` document  element. But since we give the `<html>` element an explicit `view-transition-name`, this overrides the default. Choosing the special name `none` tells the browser that we don't need a group here at all.
+
+And here is the styling:
+
+```css title="demo.css" showLineNumbers collapse={6-15, 38-48, 55-58}
+::view-transition-group(*) {
+  animation-duration: 1s;
+}
+
+div {
+  color: white;
+  display: grid;
+  place-items: center;
+  padding: 1ex;
+  width: 30%;
+  height: 30%;
+  position: absolute;
+  border: 1pt solid #888;
+  border-radius: 10%;
+  box-shadow: 2px 2px 2px 2px #8888;
+}
+#red {
+  background-color: #800;
+  top: 15%;
+  left: 10%;
+  width: 25%;
+  height: 25%;
+}
+#blue {
+  background-color: #008;
+  top: 10%;
+  right: 10%;
+  transform: rotateZ(90deg);
+}
+#green {
+  background-color: #080;
+  bottom: 10%;
+  left: 35%;
+  width: 35%;
+  height: 35%;
+}
+button {
+  view-transition-name: d;
+  background-color: blanchedalmond;
+  color: black;
+  padding: 1ex;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 35%;
+  left: 35%;
+  width: 30%;
+  height: 30%;
+  box-shadow: 2px 2px 2px 2px #8888;
+}
+button::before {
+  content: "Press Me!";
+}
+@supports not (view-transition-name: a) {
+  button {
+    width: 70%;
+    height: 70%;
+    top: 15%;
+    left: 15%;
+  }
+  button::before {
+    content: "Sorry, your browser does not have native support for view transitions.";
+  }
+}
+```
+
+## The _Update Callback_
+
+When the button is pressed, the following code performs a triple swap of the view transition names of the divs.
+
+```js title="demo.js" collapse={1-5,18}
+  const button = document.querySelector("button") as HTMLButtonElement;
+  const red = document.querySelector("#red") as HTMLDivElement;
+  const blue = document.querySelector("#blue") as HTMLDivElement;
+  const green = document.querySelector("#green") as HTMLDivElement;
+  button.addEventListener("click", () => {
+    const save = red.style.viewTransitionName;
+    document.startViewTransition(() => {
+      [
+        red.style.viewTransitionName,
+        green.style.viewTransitionName,
+        blue.style.viewTransitionName,
+      ] = [
+        green.style.viewTransitionName,
+        blue.style.viewTransitionName,
+        red.style.viewTransitionName,
+      ];
+    });
+  });
+```
+
+Rotating the names of the view transitions means that the positions of the old and new images differ for each view transition name!
+
+## The Morph Animations
+
+
+In each transition group, both the old and the new image are placed at the position of the old image. The new image is drawn over the old image. At the start of the transition, however, it is still invisible (opacity 0) and only the old image is visible.
+
+Now the red div has to go where the blue one was, the blue one goes to the position of the green one and the green one goes to the former position of the red one.
+
+
+On this way, the old image is gradually faded out and the new image is gradually faded in. In the middle of the transition, both images are blended 50/50. At the end of the transition, the old image has completely disappeared and the new image has reached its target position with full opacity.
+
+Blue also differs from red by an additional rotation transformation. The animation therefore also includes the interpolation of this transformation.
+
+If we switch off the fade animations of the new elements for a moment &hellip;
+
+
+```css title="switch-fade-off.css" highlight="animation: none"
+::view-transition-new(*) {
+  animation: none;
+}
+```
+
+&hellip; you can better see what happens:
+
+At the start of the animation, the new blue image appears in place of the old red image. As it is drawn over the old image, only the blue image is visible. Both images now move to the target position. Without any fade-out effect on the new image, you can not see the old image underneath.
+
+<VtDemo path="vtdemo2" />
+
+## The \*-new and \*-old Image Animation
+
+For the next example, we call `document.startViewTransition()` without an _update
+callback_. Yes, this is also possible. What can we see without updating the DOM?
+We won't see morph animations, as these require a change in position, size or other CSS properties between the old and new state to be recognizable. But we might see the default fade-in animations. To make them visible, we change the CSS a little again:
+
+
+```css title="show-fades.css"
+::view-transition-new(a) {
+  visibility: hidden;
+}
+::view-transition-old(b) {
+  visibility: hidden;
+}
+```
+
+So during the animations, we completely hide the new red image and the old blue image.
+
+When you press the button, you see that the old red image fades out, the new blue image fades in. And the green image? Here the new image fades in while the old image fades out. If you want to know why this double fade does not yield any flicker or color shifts, search the [view transition CSS spec](https://drafts.csswg.org/css-view-transitions-1/) for `mix-blend-mode` and `plus-lighter`.
+
+<VtDemo path="vtdemo3" />
+
+Fading is only the default animation for the `::view-transition-new(*)` and `::view-transition-old(*)` animations. You can define whatever your creativity comes up with. You can play with shifting effects or other transformations such as rotating or scaling. You can combine multiple animations and use @keyframe definitions with multiple steps.
+
+## Did you notice &hellip;
+
+&hellip; that in all demos on this page, the button stayed above the animated elements?
+Wasn't it true that all `::view-transition-old` and `::view-transition-new` images are placed in a extra stacking context, the view transition layer, that sits above all page content? How is it that the button is not obscured by the `<div>` elements during animation?
+
+Have a look at line 38 in the CSS in [this section.](#the-original-document). The button defines its own transition group. The stacking of the replaced elements in the view transition layer is the same as that of the original elements in the document. The old and new images of the button are never moved. They just fade out and in in place like the green box in the last example. The over all visual effect is that the button isn't animated at all and sits above all other elements.

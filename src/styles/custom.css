@@ -1,0 +1,106 @@
+@property --vtbot-bg-color {
+  syntax: "<color>";
+  inherits: true;
+  initialValue: "rgba(0,0,0,0)"
+}
+@property --sl-color-text {
+  syntax: "<color>";
+  inherits: true;
+  initialValue: "rgba(0,0,0,0)"
+}
+
+
+body {
+	text-align: left;
+	hyphens: auto;
+	--sl-line-height: 1.25;
+}
+
+/* Dark mode colors. */
+:root {
+	--sl-color-accent-low: #3b1a00;
+	--sl-color-accent: #af6810;
+	--sl-color-accent-high: #f7b990;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #eceef2;
+	--sl-color-gray-2: #c0c2c7;
+	--sl-color-gray-3: #888b96;
+	--sl-color-gray-4: #545861;
+	--sl-color-gray-5: #353851;
+	--sl-color-gray-6: #04172f;
+	--sl-color-black: #001020;
+	--vtbot-bg-color: #102030;
+	--vtbot-glow: radial-gradient(circle, #103050 50%, #081828 100%);
+	--vtbot-glow-shadow: 0 0 10px #08f, 0 0 20px #08f, 0 0 30px #08f, 0 0 40px #08f;
+}
+
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #fbccad;
+	--sl-color-accent: #604000;
+	--sl-color-accent-high: #502500;
+	--sl-color-white: #17181c;
+	--sl-color-gray-1: #24272f;
+	--sl-color-gray-2: #353841;
+	--sl-color-gray-3: #545861;
+	--sl-color-gray-4: #888b96;
+	--sl-color-gray-5: #c0c2c7;
+	--sl-color-gray-6: #e0f0ff;
+	--sl-color-gray-7: #f5f6f8;
+	--sl-color-black: #ffffff;
+	--vtbot-bg-color: #e8f0f8;
+	--vtbot-glow: radial-gradient(circle, #c0d0e0 50%, #d8e8f8 100%);
+	--vtbot-glow-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
+}
+
+header,
+main,
+.sidebar-pane,
+.right-sidebar {
+	background-color: var(--vtbot-bg-color);
+}
+
+section.footnotes:before {
+	content: 'Footnotes:';
+	margin-top: 0.5em;
+	display: block;
+}
+sup {
+	font-size: 0.6em;
+	vertical-align: super;
+	line-height: 0;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+}
+section.footnotes {
+	border-top: 1px solid var(--sl-color-gray-4);
+}
+
+h2 a,
+h3 a,
+h4 a {
+	text-decoration: none;
+}
+
+:root[data-theme='light'] main ::target-text {
+	background-color: yellow;
+	color: #000;
+}
+
+:root[data-theme='dark'] main ::target-text {
+	background-color: darkslateblue;
+	color: #fff;
+}
+
+.sl-markdown-content code:not(:where(.not-content *)) {
+	background-color: var(--sl-color-bg-inline-code);
+	padding: 0 0;
+	font-size: 11pt;
+}
+
+code div.ec-line {
+	margin-top: 0;
+}
+figure pre {
+	margin-top: 0pt !important;
+}

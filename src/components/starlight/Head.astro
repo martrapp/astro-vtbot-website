@@ -1,0 +1,35 @@
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
+import ReloadFence from '../bot/ReloadFence.astro';
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+
+import MarkHeadings from '../bot/MarkHeadings.astro';
+import OrderedPages from '../bot/OrderedPages.astro';
+import ScrollY from '../bot/ScrollY.astro';
+import SilentCatch from '../bot/SilentCatch.astro';
+import SwapSound from '../bot/SwapSound.astro';
+import PagefindToTextFragments from './PagefindToTextFragments.astro';
+import SidebarSelect from './SidebarSelect.astro';
+
+import '../../styles/vt.css';
+---
+
+<VtbotStarlight {...Astro.props}>
+	<StarlightHead {...Astro.props} />
+</VtbotStarlight>
+<ReloadFence prefix="/jotter/" />
+
+<LoadingIndicator top="9vh" right="3vw" src="/favicon.svg" />
+<MarkHeadings />
+<OrderedPages />
+<ScrollY />
+<PagefindToTextFragments />
+<SwapSound src="/swoosh-6428.mp3" />
+<SilentCatch />
+<SidebarSelect />
+
+<script>
+	import '../navigate';
+	import '../iframe-theme';
+</script>

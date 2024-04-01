@@ -1,11 +1,8 @@
 ---
-layout: src/layouts/NavBarMdxLayout.astro
 title: Practitioners' Guide
 ---
+ A guide for practitioners on View Transitions
 
-# A guide for practitioners on View Transitions
-
-## Contents
 
 ## There are 5 events now? How do I choose the right one?
 
@@ -36,7 +33,7 @@ An alternative approach for opaque images is to replace the default cross-over a
 
 ### I want to optimize the number of objects taking part in a transition
 
-In the listener for the `astro:after-preparation` event you have access to the current and the future page content. At that point you could remove animation pairs that would otherwise lead to ugly fly through when part of them are outside the current view port and others are not. You could also introduce new pairs right before the view transition to get some last minute optimization on the `::view-transition-group` effect. (no demo yet)
+In the listener for the `astro:after-preparation` event you have access to the current and the future page content. At that point you could remove animation pairs that would otherwise lead to an ugly fly through when part of them are outside the current view port and others are not. You could also introduce new pairs right before the view transition to get some last minute optimization on the `::view-transition-group` effect. (no demo yet)
 
 ### I want to use a loader that can output percentage events during loading
 
@@ -66,7 +63,7 @@ The only way to run asynchronous code during transitions and wait for it to comp
 <dt>My event listener is not called</dt>
 
 <dd><p>Make sure that you have added the event listener to the <code>document</code> object and not to the <code>window</code> object.</p><p>Check the spelling of the event name. You might also use predefined constants (e.g. `import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';`)</p>
-<p>Make sure that the handler is installed before the event is triggered: For example, if you install a handler for `astro:after-swap` in an inline script, this script will only be executed after the event has been fired. Listeners for `astro:page-load` can also be installed too late, e.g. if they are contained in a `type="text/partytown"` script, as partytown defers the execution of scripts to web workers.</p></dd>
+<p>Make sure that the handler is installed before the event is triggered: For example, if you install a handler for `astro:after-swap` in an inline script, this script will only be executed after the event has been fired. Listeners for `astro:page-load` can also be installed too late, e.g. if they are contained in a `type="text/partytown"` script, as partytown deferes the execution of scripts to web workers.</p></dd>
 
 <dt>My event listener is called too often</dt>
 
@@ -84,11 +81,11 @@ The only way to run asynchronous code during transitions and wait for it to comp
 
 <dt>`transition:name` only works in `.astro` files?</dt>
 
-<dd><p>Yes. Alternatively, you can define the `view-transition-name` CSS property in a style sheet or style attribute.</p></dd>
+<dd><p>Yes. Alternatively, you can define the `view-transition-name` CSS property in a style sheet or style attribute.</p><p>But be aware that this only works for browsers with native support for the view transition API.</p></dd>
 
 <dt>`transition:persist` only works in `.astro` files?</dt>
 
-<dd><p>Yes. Alternatively, you can define a custom data property. Always specify an identifier as in `data-astro-transition-persist="identifier"`.</p></dd>
+<dd><p>Yes. Alternatively, you can define a custom data property. Always specify an identifier as in `data-astro-transition-persist="identifier"`. This works for all browsers.</p></dd>
 
 ### Page Marker & Guard
 
@@ -144,29 +141,3 @@ All event listeners have a single parameter of type `Event`. This type does not 
     }
   }
 ```
-### How exactly is the DOM changed when I navigate to the next page?
-
-These are implementation details, not part of the API and might change without prior notice, but if you are interested in the details:
-
-This is how the default swap method works. As parameter it gets the new DOM and it alters the current DOM in place.
-
-1. The scripts of the new DOM are scanned. Scripts that are already present on the current page  are marked to prevent re-execution after `astro:after-swap`.
-2. The attributes of the `<html>` element are changed to mirror those of the new DOM.
-3. Direct children of the `<head>` are removed and those present in the new DOM are moved in.  Some children of the current DOM are skipped and remain untouched, i.e. they are not deleted and their matching counterpart is not moved into the current DOM:
-   - Stylesheet links with same href that are already present in both DOMs
-   - Elements with same `data-astro-transition-persist` name in both DOMS
-4. Focus and selection are saved
-5. The body is swapped
-6. Focus and selection are restored
-
-Body swapping is done in two steps:
-* The `<body>` element of the current DOM is replaced with the `<body>` element of the new DOM.
-* Elements that are marked with the same `data-astro-transition-persist` name in both DOMs' bodies are replaced in the now current body with the corresponding elements from the old body. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
-
-If you use `astro-vtbot`'s [&lt;ReplacementSwap/> component](/library/ReplacementSwap/), the body is only altered for elements that are marked with `data-vtbot-replace`, the others are left untouched. `data-astro-transition-persist` attributes are ignored.
-
-For attributes of the `<html>` element and child elements of the `<head>` element, their order might change  during swap. But if they are part of the current and the new DOM they are not moved/added/removed but just left unchanged. The `<html>` and `<head>` elements themselves are never removed or added.
-
-Event listeners on `window` and `window.document` are retained. References to elements of the old DOM that didn't make it to the current DOM are invalid after swap. Event listeners for elements that are no longer part of the current DOM after the swap are never called and newly added elements have no listeners unless they have been explicitly set in the `astro:after-swap` or `astro:page-load` handlers.
-
-Scripts found in the new DOM will be executed between `astro:after-swap` and `astro:page-load` but only if they hadn't been marked as "known and already ran" in step 1 above.

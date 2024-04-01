@@ -1,0 +1,30 @@
+---
+
+---
+
+<script>
+	import {
+		isTransitionBeforeSwapEvent,
+		TRANSITION_AFTER_SWAP,
+		TRANSITION_BEFORE_SWAP,
+	} from 'astro:transitions/client';
+
+	let scrollY: number;
+
+	const setScroll = (scrollY: number) => {
+		document.documentElement.style.setProperty('--vtbot-scrollY', scrollY + 'px');
+	};
+	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+		if (isTransitionBeforeSwapEvent(e)) {
+			setScroll(scrollY);
+			e.viewTransition.finished.then(() => {
+				scrollTo({ top: scrollY, left: scrollX, behavior: 'smooth' });
+			});
+		}
+	});
+	document.addEventListener(TRANSITION_AFTER_SWAP, async () => {
+		await new Promise<void>((r) => setTimeout(r, 0));
+		scrollY = window.scrollY;
+		scrollTo(0, 0);
+	});
+</script>

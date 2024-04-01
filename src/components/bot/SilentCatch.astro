@@ -1,0 +1,16 @@
+---
+
+---
+
+<script>
+	import { isTransitionBeforeSwapEvent, TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
+
+	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+		const ignoreError = () => {};
+		if (isTransitionBeforeSwapEvent(e)) {
+			e.viewTransition.updateCallbackDone.catch(ignoreError);
+			e.viewTransition.ready.catch(ignoreError);
+			e.viewTransition.finished.catch(ignoreError);
+		}
+	});
+</script>

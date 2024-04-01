@@ -135,7 +135,7 @@ setStyles('fade', styles);
 </div>
 ```
 <a id="adapter"/>
-### Using custom direction names with transition:animate=\{}
+### Using custom direction names with transition\:animate=\{}
 
 One use case supported by `animation-style.ts` is independent of the `<AnimationStyle/>` component. It is about supporting custom animations with `transition:animate={}`. Astro recognizes two direction names for view transitions: `forwards` and `backwards`. If you want to use other or additional names, you will get typing errors. It is possible to cast objects of type `Record<string, TransitionAnimationPair>` to Astro's `TransitionDirectionalAnimations`. The more elegant and type safe way is to use the `adapter()` function from `animation-style.ts`.
 

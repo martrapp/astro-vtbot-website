@@ -1,0 +1,25 @@
+---
+
+---
+
+<script>
+	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
+	let observer: IntersectionObserver;
+
+	document.addEventListener(TRANSITION_AFTER_SWAP, observe);
+	function observe() {
+		observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				entry.target.classList[entry.isIntersecting ? 'add' : 'remove']('start');
+				entry.isIntersecting && observer.unobserve(entry.target);
+			});
+		});
+		[...document.querySelectorAll('main img')].forEach((e) => observer.observe(e));
+	}
+	observe();
+</script>
+<style is:global>
+	main img.start {
+		animation: slide 0.5s ease-in-out 1s both;
+	}
+</style>

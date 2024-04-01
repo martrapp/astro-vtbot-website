@@ -1,0 +1,166 @@
+---
+title: View Transition API Overview
+---
+
+import BasicVt from "./BasicVt.astro";
+import ZoomVt from "./ZoomVt.astro";
+import MorphVt from "./MorphVt.astro";
+
+The View Transition API provides a smooth visual transition from the current state of the browser's document to a next state.
+
+The API introduces a new CSS property called `view-transition-name` that can be used to mark DOM elements to be animated. It also provides a single function called `startViewTransition()`, which can be found in the `window.document` object. You call this function when you want to start the visual transition and you provide an _update callback_ that can convert the current document to its future version.
+
+This is how you call `window.document.startViewTransition()`. The result contains some promises and a function to cancel the visual transition. For [details see the API description](/jotter/api/details/).
+
+```js title="call-startViewTransition.js"
+const viewTransition = document.startViewTransition(async () => {
+  ... update window.document here ...
+});
+```
+
+The visual effects that are shown during the transition are normal CSS animation (or JavaScript animations). These animations do not directly show and transform the content of the document, but _old images_ and _new images_ that are taken before or after the _update callback_ is called.
+
+The browser provides a set of default animations, but you are free to override these with any animation you like. The `startViewTransition()` function makes it very easy to add animations as visual transitions to the state transition triggered by the _update callback_.
+
+## Types of Animation
+
+There are three types of animation that play in parallel during a view transition:
+
+- *Exit animations* of old images.
+- *Entry animations* of new images.
+- *Morph animations* that transform old images into new images.
+
+The typical exit and entry animations change opacity from 1 to 0 and vice versa. The morph animation moves the old and new image from the old's position and size to the new's position and size[^1].
+
+### Default Fade Animation
+
+Without further configuration, the default visual effect is a fade from the document as it looked before `startViewTransition()` was called to the document as it looks after the _update callback_ was applied to it.
+
+<BasicVt />
+
+This animation has the view transition name `root`. That name is automatically assigned by the browser to the `<html>` document element. During the animation phase, the browser inserts a tree of pseudo elements rooted at the `<html>` element. If the only defined view transition name is `root` the tree looks like this:
+
+```html title="DOM view in browser dev-tools" {5-6}
+<html>
+  ⏷::view-transition
+    ⏷::view-transition-group(root)
+      ⏷::view-transition-image-pair(root)
+          ::view-transition-old(root)
+          ::view-transition-new(root)
+```
+The styles for the fade animation are automatically defined by the browser.[^2]
+[^2]: For full details, especially the conditional use of `-ua-mix-blend-mode-plus-lighter`, see [the spec](https://drafts.csswg.org/css-view-transitions-1/#setup-transition-pseudo-elements)
+```css
+:view-transition-old(root) {
+  animation-name: -ua-view-transition-fade-out;
+}
+:view-transition-new(root) {
+  animation-name: -ua-view-transition-fade-in;
+}
+@keyframes -ua-view-transition-fade-out {
+  to { opacity: 0; }
+}
+@keyframes -ua-view-transition-fade-in {
+  from { opacity: 0; }
+}
+```
+<a id="custom-animation" />
+### Customize the Root Animation
+
+You can replace the default animation with something else, e.g. a zoom effect:
+
+For this to work, you define two CSS animations: One that lets the previous content disappear and one that lets the new content appear. Think of both as screenshots. These images are represented by the `::view-transition-old(root)` and `::view-transition-new(root)` pseudo elements marked above. Both are children of the `::view-transition-image-pair(root)`.
+
+For a zoom effect, you override the default animations for the two images of the image pair with a scaling transition.
+
+```css title="zoom.css"
+::view-transition-old {
+  animation: 1s normal both zoom;
+}
+::view-transition-new {
+  animation: 1s reverse both zoom;
+}
+@keyframes zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
+```
+
+The result looks like this:
+
+<ZoomVt />
+
+### Additional Image-Pairs
+
+You can define additional image pairs by giving DOM elements a view transition name.
+The declaration of a view transition with the name `myName` defines a new image pair called `::view-transition-image-pair(myName)`.
+
+You can set the `view-transition-name` CSS property &hellip;
+
+- &hellip; by using the style attribute on an element\
+   `<div style="view-transition-name: myName">...`,
+- &hellip; via a CSS rule `selector { view-transition-name: myName; }`
+- &hellip; or by setting the style attribute using javascript: `el.style.viewTransitionName = "myName"`
+
+View transition names can contain unicode characters but
+ [some characters need to be encoded](https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident).
+ Backslash-encoding of ASCII characters besides `A-Za-z0-9_-` does not work well for all browsers. I.e. encoding `?` as `\?` might not work reliably, but `\3f` will most likely.
+
+The special name `none` is used to not set a view transition name or to remove it.
+
+View transition names must be unique per document state.
+
+Typically, the same name is used once in the original document and once in the _updated_ document. It is not necessary that the elements with the same name are also the same or even similar. The same name may mark a heading in the original document and an image in the _updated_ document.
+
+- If you have added the name of the view transition `myName` to the _original document state_, this adds a `::view-transition-old(myName)` image to the image pair.
+
+- If the _updated document state_ has a view transition named `myName`, a `::view-transition-new(myName)` image is added to the image pair.
+
+Despite the name, the image pair can therefore have one or two images.
+
+If a image pair is missing the new image, the animation on the old image is also called an exit animation.
+If a image pair is missing the old image, the animation on the new image is also called an entry animation.
+
+Like `::view-transition-old(root)` or `::view-transition-new(root)`, the children of the new image pair also have the standard animation, which fades out the old image and fades in the new image. If both images exist, the combined effect of this animations is a cross-fade. These animations [can be redefined](./#custom-animation) in the same way as the images for `root`. You can use this to have different effects, timing and velocity for parts of the view.
+
+
+
+### Morph Animations
+
+For each view transition name `myName` the `::view-transition-image-pair(myName)` pseudo element is the single child of a `::view-transition-group(myName)`
+
+For each image pair with _two_ images, the browser automatically defines an additional _morph_ animation for `::view-transition-group(myName)`. This animation transitions both images from the position, size and transformation[^1] of the old image to the position, size and transformation of the new image. As the fade-in and fade-out animations are also played in parallel, the combined effect is that of morphing parts on your screen. And you can control this animation with CSS just as you do for the fade-out and fade-in animations.
+
+[^1]: plus some other CSS properties, see https://drafts.csswg.org/css-view-transitions/#style-transition-pseudo-elements-algorithm
+
+<MorphVt />
+
+Please note that the original elements of the new images are hidden during rendering. This leaves empty spaces in the rendered view, which are filled by the new images. In the animation above, for example, the red block on the right-hand side in the after state is not displayed while the animation is running.
+
+
+
+:::caution
+<a id="scroll"/>
+Defining morph animations for elements that are larger than the browser's viewport can lead to strange visual effects that resemble scrolling. That is typically the case for `<body>` or `<main>` on lengthy pages.
+
+The `<html>` root element of the document is an exception to this rule, as it gets special treatment by the View Transition API: here the position is always (0,0) and the size is set to that of the viewport, which makes morph transitions for `:root` effectively a no-op.
+
+:::
+
+## Summary
+
+The view transition API offers a single function that use a callback to update the state of the document, and a `view-transition-name` CSS property to mark elements of the before and/or after state of the document for animations.
+
+Each view transition name `x` adds a `::view-transition-group(x)` and a `::view-transition-image-pair(x)`. It will also add `::view-transition-old(x)`, if the name is declared in the original document, and/or `::view-transition-new(x)`, if the name is declared in the updated document.
+
+- `::view-transition-old(x)` has a fade-out animation by default.
+- `::view-transition-new(x)` has a fade-in animation by default.
+- `::view-transition-group(x)` has a morph animation by default.
+- `::view-transition-image-pair(x)` does not define an animation. It is merely used as a container to add CSS, e.g. the corresponding "blend mode".
+- all pseudo elements are part of a `::view-transition` tree rooted at the `<html>` document element.
+
+All animations can be controlled by CSS and redefined to your liking.

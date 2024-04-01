@@ -1,0 +1,128 @@
+---
+export interface Props {
+	none?: boolean;
+}
+const { none = undefined } = Astro.props;
+
+export async function getStaticPaths() {
+	return [{ params: { theme: 'light' } }, { params: { theme: 'dark' } }];
+}
+
+const { theme } = Astro.params;
+---
+
+<html style="view-transition-name: none;">
+	<body>
+		<div style="view-transition-name: a" id="red">This demo shows</div>
+		<div style="view-transition-name: b" id="blue">a basic example</div>
+		<div style="view-transition-name: c" id="green">
+			<br /><br />of view transitions
+		</div>
+		<button></button>
+	</body><script is:inline define:vars={{ none }}>
+		const button = document.querySelector('button');
+		const red = document.querySelector('#red');
+		const blue = document.querySelector('#blue');
+		const green = document.querySelector('#green');
+		button.addEventListener('click', () => {
+			if (none) {
+				document.startViewTransition();
+			} else {
+				document.startViewTransition(() => {
+					[
+						red.style.viewTransitionName,
+						green.style.viewTransitionName,
+						blue.style.viewTransitionName,
+					] = [
+						green.style.viewTransitionName,
+						blue.style.viewTransitionName,
+						red.style.viewTransitionName,
+					];
+				});
+			}
+		});
+	</script>
+
+	<style is:global define:vars={{ theme }}>
+		:root {
+			color-scheme: var(--theme);
+		}
+		body {
+			width: 20rem;
+			height: 20rem;
+			position: relative;
+			margin: auto;
+		}
+		body,
+		button {
+			font-family: sans-serif;
+			font-size: 1.5rem;
+		}
+	</style>
+
+	<style is:global>
+		::view-transition-group(*) {
+			animation-duration: 1s;
+		}
+
+		div {
+			color: white;
+			display: grid;
+			place-items: center;
+			padding: 1ex;
+			width: 30%;
+			height: 30%;
+			position: absolute;
+			border: 1pt solid #888;
+			border-radius: 10%;
+			box-shadow: 2px 2px 2px 2px #8888;
+		}
+		#red {
+			background-color: #800;
+			top: 15%;
+			left: 10%;
+			width: 25%;
+			height: 25%;
+		}
+		#blue {
+			background-color: #008;
+			top: 10%;
+			right: 10%;
+			transform: rotateZ(90deg);
+		}
+		#green {
+			background-color: #080;
+			bottom: 10%;
+			width: 35%;
+			height: 35%;
+			left: 35%;
+		}
+		button {
+			view-transition-name: d;
+			background-color: blanchedalmond;
+			color: black;
+			padding: 1ex;
+			border-radius: 50%;
+			position: absolute;
+			bottom: 35%;
+			left: 35%;
+			width: 30%;
+			height: 30%;
+			box-shadow: 2px 2px 2px 2px #8888;
+		}
+		button::before {
+			content: 'Press Me!';
+		}
+		@supports not (view-transition-name: a) {
+			button {
+				width: 70%;
+				height: 70%;
+				top: 15%;
+				left: 15%;
+			}
+			button::before {
+				content: 'Sorry, your browser does not have native support for view transitions.';
+			}
+		}
+	</style>
+</html>

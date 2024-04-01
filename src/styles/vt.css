@@ -1,0 +1,230 @@
+main {
+	view-transition-name: main;
+}
+
+::view-transition-group(root) {
+	animation-duration: 0.5s;
+}
+
+::view-transition-group(main) {
+	background: var(--vtbot-glow);
+	overflow: clip;
+	animation: none;
+}
+
+::view-transition-image-pair(main) {
+	transform-origin: center top;
+	transform-style: preserve-3d;
+	perspective: 50cm;
+}
+::view-transition-old(main),
+::view-transition-new(main) {
+	border: 1pt dashed #888;
+	box-shadow: var(--vtbot-glow-shadow);
+}
+
+::view-transition-old(main) {
+	animation: swingOut 1.5s ease-in;
+	top: var(--vtbot-scrollY);
+}
+::view-transition-new(main) {
+	animation: swingIn 1.5s ease-in;
+}
+[data-astro-transition='back']::view-transition-old(main) {
+	animation: swingBackOut 1.5s ease-in;
+}
+[data-astro-transition='back']::view-transition-new(main) {
+	animation: swingBackIn 1.5s ease-in;
+}
+[data-astro-transition='stay']::view-transition-old(main) {
+	animation: swingStayOutP 1.5s ease-in both;
+}
+[data-astro-transition='stay']::view-transition-new(main) {
+	animation: swingStayInP 1.5s ease-in;
+}
+
+.main-pane {
+	transform-style: preserve-3d;
+	perspective: 50cm;
+}
+
+main {
+	transform-origin: center top;
+	backface-visibility: hidden;
+}
+
+[data-astro-transition] body {
+	scrollbar-gutter: stable;
+}
+
+[data-astro-transition-fallback] main {
+	box-shadow: var(--vtbot-glow-shadow);
+	position: fixed;
+}
+
+[data-astro-transition-fallback='old'] main {
+	animation: swingOut 0.8s ease-in;
+	top: calc(var(--sl-nav-height) + var(--vtbot-scrollY));
+}
+[data-astro-transition-fallback='new'] main {
+	animation: swingIn 0.8s ease-in;
+}
+[data-astro-transition-fallback='old'][data-astro-transition='back'] main {
+	animation: swingBackOut 0.8s ease-in;
+}
+[data-astro-transition-fallback='new'][data-astro-transition='back'] main {
+	animation: swingBackIn 0.8s ease-in;
+}
+[data-astro-transition-fallback='old'][data-astro-transition='stay'] main {
+	animation: swingStayOut 0.8s ease-in;
+}
+[data-astro-transition-fallback='new'][data-astro-transition='stay'] main {
+	animation: swingStayIn 0.8s ease-in;
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes swingIn {
+	from {
+		transform: scale(0.9) translateX(200%);
+		opacity: 0.5;
+	}
+	75% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	to {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes swingBackIn {
+	from {
+		transform: scale(0.9) translateX(-200%);
+		opacity: 0.5;
+	}
+	75% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes swingStayIn {
+	from {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	75% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes swingStayInP {
+	from {
+		transform: scale(0.9) translateX(0);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0;
+	}
+	51% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	66% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes swingOut {
+	from {
+		transform: scale(1) translate(0);
+		opacity: 1;
+	}
+	25% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(0.9) translateX(-200%);
+		opacity: 0.5;
+	}
+}
+
+@keyframes swingBackOut {
+	from {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+	25% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(0.9) translateX(200%);
+	}
+}
+@keyframes swingStayOut {
+	from {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+	25% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+}
+@keyframes swingStayOutP {
+	from {
+		transform: scale(1) translateX(0);
+		opacity: 1;
+	}
+	33% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	50% {
+		transform: scale(0.9) translateX(0);
+		opacity: 0.5;
+	}
+	51% {
+		opacity: 0;
+	}
+	to {
+		opacity: 0;
+	}
+}

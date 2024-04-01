@@ -1,0 +1,26 @@
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
+// import one of Astro's predefined animation functions, see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
+import { slide } from 'astro:transitions';
+
+// "animate" is also the default setting if this line is omitted, other values are "swap" or "none", see https://docs.astro.build/en/guides/view-transitions/#fallback-control
+Astro.props.viewTransitionsFallback = 'animate';
+---
+
+{/* Define a view transition animation for `<main>` */}
+<VtbotStarlight {...Astro.props} transition:animate={slide({ duration: 300 })}>
+	<StarlightHead {...Astro.props} />
+</VtbotStarlight>
+
+<style is:global>
+	/* Slow down Chrome's default animation */
+	::view-transition-group(root) {
+		animation-duration: 400ms;
+	}
+
+	/* Do not slide over the sidebars */
+	::view-transition-group(*) {
+		overflow: hidden;
+	}
+</style>
