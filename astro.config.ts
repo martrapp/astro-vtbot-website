@@ -89,7 +89,7 @@ function sidebar() {
 			],
 		},
 		{
-			label: "Browser View Transitions API",
+			label: "Browser View Transition API",
 			items: [
 				{ label: "API Overview", link: "/jotter/api/" },
 				{ label: "API Details", link: "/jotter/api/details/" },
