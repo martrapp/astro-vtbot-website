@@ -134,13 +134,13 @@ The default CSS covers positioning, sizing, and pulsing of the indicator.
 	}
 </style>
 ```
-You can override it with your own styling. Best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
+You can override it with your own styling. Best way to do this is to [define your own custom loading indicator](#publish-or-contribute-your-custom-loading-indicator--pocycli).
 
 > **Trick:** The animation defined above runs a one second cycle over and over. It keeps the loading indicator invisible for the first 30% of the cycle. I.e. for the first 300 ms your indicator does not show. Or in other words: Even though the `.loading` class is added  immediately after the user clicks the link, the indicator will not appear for the first 300 ms. This is a good thing, as it only shows the indicator for slow loading pages and not for a page that is already in the browser cache.
 
 ### Use your own #vtbot-loading-indicator
 
-If you want to use your own loading indicator element, you can do so by adding an HTML element with the ID `vtbot-loading-indicator` to your page. In this case the `<LoadingIndicator/>` component does not insert its own loading indicator. Again, best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#define-your-own-custom-loading-indicator).
+If you want to use your own loading indicator element, you can do so by adding an HTML element with the ID `vtbot-loading-indicator` to your page. In this case the `<LoadingIndicator/>` component does not insert its own loading indicator. Again, best way to do this is to [define your own custom loading indicator](/library/LoadingIndicator/#publish-or-contribute-your-custom-loading-indicator--pocycli).
 
 ### Using CSS to define your custom loading indicator
 
@@ -174,7 +174,7 @@ import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
 	}
 </style>
 ```
-If you are happy with the default loading indicator html you can keep it. Otherwise you define your own, see line 10 above and [the section on alternative elements](#alternative-vtbot-loading-indicator).
+If you are happy with the default loading indicator html you can keep it. Otherwise you define your own, see line 10 above and [the section on alternative elements](#alternative-2-use-the-loadingindicator--component).
 
 ### Using JavaScript to define your custom loading indicator
 

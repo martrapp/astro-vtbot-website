@@ -1,0 +1,109 @@
+---
+title: How to Add View Transitions to a Starlight Site
+---
+
+import BoT from "/src/components/BoT.astro"
+
+This guide describes what has to be done to add view transitions to an existing starlight site using the initial support of the <BoT/>.
+
+:::caution
+At the moment, the bag's support of view transition for Starlight is rather experimental. It has not yet been extensively tested in the wild. Enjoy being on the cutting edge of technology with your Starlight site, but also be prepared that things might break. Or that not everything you expect will work from the start. I'm happy to expand the initial support over time!
+:::
+
+## Install astro-vtbot
+
+The <BoT/> can be installed as a package or as an Astro integration. See here for [details an differences](/library/Installation/). Let's assume you just add it as a package:
+
+```sh
+cd /to/my/starlight/project
+npm i -D astro-vtbot
+```
+Make sure you installed at lease version 1.7.0.
+
+## Enable View Transitions
+
+To enable view transitions, we extend Starlight's  **`Head`** component. We create a replacement component and instruct Starlight to use it as a substitute for its Head.
+
+The substitute covers all aspects classified as [mandatory actions](/jotter/starlight/#mandatory-actions) in the overview.
+
+### Create the New Head Component
+Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
+
+```astro title="./src/components/starlight/Head.astro"
+---
+import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
+---
+<VtbotStarlight {...Astro.props} />
+```
+
+### Use the New Head Component
+
+Now we tell starlight to replace its `Head` component with ours. Open the file "astro.config.mjs" of your project. Make sure that there is an entry named `components` in the options of your Starlight integration. It must specify a `Head` entry with the path of the file you have just created.
+
+```js title="astro.config.mjs" {8-9}
+import { defineConfig } from 'astro/config';
+import starlight from "@astrojs/starlight";
+
+export default defineConfig({
+	...
+	integrations: [starlight({
+		...
+		components: {
+			Head: "./src/components/starlight/Head.astro",
+			...
+		},
+		...
+	})]
+})
+```
+Start your project. No matter what browser you use, you should not see full page loads when navigating.
+
+In Chrome, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport.
+
+Browsers without native support for view transition will not yet show animations.
+
+## Configuring View Transitions
+
+You can configure several aspects of the view transition effect in your new Head component.
+
+### Fallback Control
+What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from "none", "swap" or "animate" and assign that value to `Astro.props.viewTransitionsFallback` in the frontmatter of the `Head` component. Without such an assignment, the default is "animate".
+
+### Animating the  `<Main>` Element
+
+You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight />` component. The bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.
+
+### Additional Styling
+
+You can also add a `<style is:global>` section to the file to style the `::view-transition-*` pseudo elements for browsers with native view transition support.
+
+### Example with Configuration
+
+Let's revisit our `Head` component see how it looks with the extensions described above:
+
+```astro title="./src/components/starlight/Head.astro"
+---
+import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
+// import one of Astro's predefined animation functions, see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
+import { slide } from 'astro:transitions';
+
+// "animate" is also the default setting if this line is omitted, other values are "swap" or "none", see https://docs.astro.build/en/guides/view-transitions/#fallback-control
+Astro.props.viewTransitionsFallback = 'animate';
+---
+
+{/* Define a view transition animation for `<main>` */}
+<VtbotStarlight {...Astro.props} transition:animate={slide({ duration: 300 })} />
+
+<style is:global>
+	/* Slow down Chrome's default animation */
+	::view-transition-group(root) {
+		animation-duration: 400ms;
+	}
+
+	/* Do not slide over the sidebars */
+	::view-transition-group(*) {
+		overflow: hidden;
+	}
+</style>
+```
+

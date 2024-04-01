@@ -25,12 +25,13 @@ anchors() {
 }
 files=$(find dist -type f -name "*.html" | sed 's/^dist//')
 for file in $files; do
-	links="$links $(links $file)"
+	links="$links $(links $file)\n"
 	links="$links $(anchors $file)"
 done
 css=$(find dist/_astro -type f -name "*.css" | sed 's/^dist//')
 css=$(echo "$css" | awk '{print $0"/", $0"/"}')
-echo "$css $links" | tee x | awk '{def[$1]=$2; use[$2]=$1} END {\
-  for (from in def) if (!(def[from] in def)) print "broken link from", from, "to", def[from];\
+echo "$css $links" | grep -v "/404.html " | awk '{target=clean($2); def[$1]=target; use[target]=$1} END {\
+  for (target in use) if (!(target in def)) print "broken link from", use[target], "to", target;\
 	for (from in def) if (!(from in use)) print "unused page", from;\
-}' | sort
+} function clean(x) { while (gsub(/\/[^/]*\/\.\./, "", x)); return x }' | sort
+

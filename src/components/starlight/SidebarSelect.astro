@@ -1,11 +1,10 @@
 ---
-
+export interface Props {};
 ---
 
 <script>
 	import { isTransitionBeforeSwapEvent, TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
 
-	let next: HTMLAnchorElement | null = null;
 	let clone: HTMLAnchorElement | null = null;
 
 	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
@@ -15,16 +14,17 @@
 					clone.remove();
 					clone = null;
 				}
-				if (next) {
-					next.setAttribute('aria-current', 'page');
-					next = null;
-				}
-				const current = document.body.querySelector('[aria-current="page"]');
-				if (!current || getComputedStyle(current).visibility === 'hidden') return;
-				next = document.querySelector(
-					`.sidebar-pane a[href="${e.to.pathname}"]`
+				const current = document.querySelector(
+					`.sidebar-pane a[href="${e.from.pathname}"]`
 				) as HTMLAnchorElement;
+				if (!current || getComputedStyle(current).visibility === 'hidden') return;
+
+				let next = document.querySelector(
+					`.sidebar-pane a[href="${e.to.pathname}"]`
+				) as HTMLAnchorElement|null;
+
 				if (!next) return;
+				const nextRect = next.getBoundingClientRect();
 				clone = current.cloneNode() as HTMLAnchorElement;
 				const currentRect = current.getBoundingClientRect();
 				clone.style.position = 'fixed';
@@ -34,9 +34,10 @@
 				clone.style.height = `${currentRect.height}px`;
 				clone.style.backgroundColor = 'var(--sl-color-text-accent)';
 				clone.style.opacity = '0.5';
+				document.querySelectorAll('[aria-current="page"]').forEach((el) => {
+					el.removeAttribute('aria-current');
+				});
 				document.body.appendChild(clone);
-				current.removeAttribute('aria-current');
-				const nextRect = next.getBoundingClientRect();
 
 				clone
 					.animate(

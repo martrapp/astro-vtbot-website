@@ -1,3 +1,15 @@
+@property --vtbot-bg-color {
+  syntax: "<color>";
+  inherits: true;
+  initialValue: "rgba(0,0,0,0)"
+}
+@property --sl-color-text {
+  syntax: "<color>";
+  inherits: true;
+  initialValue: "rgba(0,0,0,0)"
+}
+
+
 body {
 	text-align: left;
 	hyphens: auto;
@@ -88,4 +100,7 @@ h4 a {
 
 code div.ec-line {
 	margin-top: 0;
+}
+figure pre {
+	margin-top: 0pt !important;
 }

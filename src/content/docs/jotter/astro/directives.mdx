@@ -36,7 +36,7 @@ The main reason for setting the CSS property with a data attribute is that this 
 
 Normally you should not set the  `view-transition-name` CSS property directly in Astro. This will not work with the fallback simulation of view transitions and you will have to take care of the name encoding yourself. There may be cases where this makes sense, e.g. if you are only interested in morph animations, which are not supported by the simulation anyway, and you use them in places where Astro's transition directives are not supported, e.g. in `*.mdx` files or framework components.
 
-Setting the `view-transition-name` **works only for browsers with native support for view transitions**. Other browsers ignore the attribute and you cannot use it in CSS rules for styling. If used carelessly, it can [also lead to unexpected loss of styling](/jotter/snippets/css-tricks-pitfalls/#ignored-rules).
+Setting the `view-transition-name` **works only for browsers with native support for view transitions**. Other browsers ignore the attribute and you cannot use it in CSS rules for styling. If used carelessly, it can [also lead to unexpected loss of styling](/jotter/snippets/css-tricks-pitfalls/#ignored-style-rules).
 
 
 ## `transition:animate`

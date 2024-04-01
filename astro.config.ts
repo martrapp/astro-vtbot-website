@@ -1,21 +1,17 @@
 import { defineConfig } from 'astro/config';
 import starlight from "@astrojs/starlight";
-//import starlightLinksValidator from "starlight-links-validator";
 import d2 from "astro-d2";
+import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
-import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
-
-import expressiveCode from 'astro-expressive-code';
 
 import remarkToc from 'remark-toc';
 
 import vtbot from 'astro-vtbot';
 
-// https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	prefetch: true,
@@ -32,17 +28,13 @@ export default defineConfig({
 			],
 		],
 		remarkPlugins: [remarkToc],
-		shikiConfig: {
-			themes: {
-				light: 'github-light',
-				dark: 'github-dark',
-			},
-			wrap: false,
-		},
 	},
 	trailingSlash: 'always',
-	integrations: [d2({skipGeneration: process.env.GITHUB_ACTIONS === "true"}), expressiveCode(), vtbot({ autoLint: false }),
+	integrations: [d2({ skipGeneration: process.env.GITHUB_ACTIONS === "true" }), vtbot({ autoLint: false }),
 	starlight({
+		components: {
+			Head: "./src/components/starlight/Head.astro",
+		},
 		title: "Bag of Tricks",
 		customCss: ["./src/styles/custom.css"],
 		description:
@@ -53,6 +45,7 @@ export default defineConfig({
 			src: "/public/favicon.svg",
 		},
 		expressiveCode: {
+			themes: ['github-dark', 'github-light'],
 			styleOverrides: {
 				borderRadius: "0.5rem",
 			},
@@ -64,11 +57,7 @@ export default defineConfig({
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-starlight/edit/main/",
 		},
-		components: {
-			Head: "./src/components/starlight/Head2.astro",
-		},
 		sidebar: sidebar(),
-		//plugins: [starlightLinksValidator()],
 	})],
 	vite: {
 		server: {
@@ -107,7 +96,13 @@ function sidebar() {
 				{ label: "References", link: "/jotter/api/references/" },
 			],
 		},
-		{ label: "The Jotter on Starlight", link: "/jotter/on-starlight/" },
+		{
+			label: "The Jotter on Starlight",
+			items: [
+				{ label: "Overview", link: "/jotter/starlight/" },
+				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide" },
+			],
+		},
 		{
 			label: "Lost & Found / to be Curated",
 			autogenerate: {

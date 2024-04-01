@@ -54,7 +54,7 @@ When looking for view transition names, the linter considers these sources:
 ### Nested elements
 Nested elements that define `transition:persist` or `data-vtbot-replace` can lead to strange results and non-deterministic behavior. It is best to avoid them.
 
-### Identifiers for transition:persist
+### Identifiers for transition\:persist
 In Astro, `transition:persist` can be used without an explicit identifier. Then the name of the view transition element is used, which is fine if it was set by `transition:name=...`. If neither `transition:name` nor an identifier for `transition:persist` is specified, Astro implicitly uses the identifier of the transition area, which looks like this: `astro-ya3eq23s-4`. Often this matches the desired element on the target page, but it is also quite fragile. It is best practice to use explicit names. So if you use `transition:persist` with an implicit, generated identifier, the `<Linter>` component will issue a warning.
 
 ### Loss of transition names and scoped styles

@@ -2,12 +2,12 @@
 import MdxLayout from './MdxLayout.astro';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
-import { Code } from 'astro-expressive-code/components';
 import { createAnimationScope, fade, slide } from 'astro:transitions';
 import { swing, customSwing } from 'astro-vtbot/animations/swing';
 import { zoom, customZoom } from 'astro-vtbot/animations/zoom';
 import { move, customMove } from 'astro-vtbot/animations/move';
 import { extend, styleSheet } from 'astro-vtbot/animations/animation-style';
+import Swing0 from '../mdx/animations/swing0.mdx';
 import Swing1 from '../mdx/animations/swing1.mdx';
 import Swing2 from '../mdx/animations/swing2.mdx';
 import Swing3 from '../mdx/animations/swing3.mdx';
@@ -176,15 +176,7 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 		By the way: The animation of the button grid at the top of this page was created by simply
 		adding <code>swing()</code> to <code>transition:animate</code>.
 	</p>
-	<Code
-		lang="astro"
-		code=`
----
-import { swing } from "astro-vtbot/animations/swing";
----
-<div transition:animate={swing()}>...
-`
-	/>
+<Swing0/>
 	<hr />
 	<p>Here are the codes for the other examples:</p>
 

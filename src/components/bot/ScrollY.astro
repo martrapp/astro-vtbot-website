@@ -18,7 +18,7 @@
 		if (isTransitionBeforeSwapEvent(e)) {
 			setScroll(scrollY);
 			e.viewTransition.finished.then(() => {
-				scrollTo({ top: scrollY, left: scrollX, behavior: 'instant' });
+				scrollTo({ top: scrollY, left: scrollX, behavior: 'smooth' });
 			});
 		}
 	});
