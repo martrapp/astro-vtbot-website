@@ -15,9 +15,9 @@ Supporting view transitions for Starlight is not just about cross-fade navigatio
 
 ## Will the Bag offer Support for Starlight?
 
-Yes, it has already started. The <BoT/> provides initial basic support for the transition from views to Starlight! In the future, in the best of all worlds, the bag can provide small, independent gadgets that developers can combine as they wish. Keep your fingers crossed ;-) and stay tuned.
+Yes, it has already started. The <BoT/> provides initial basic support for the transition from views to Starlight! In the future, in the best of all worlds, The Bag can provide small, independent gadgets that developers can combine as they wish. Keep your fingers crossed ;-) and stay tuned.
 
-There are a few things that need to be changed to enable view transitions in Starlight. Others are more optional. The mandatory changes are covered by the initial support of view transitions for Starlight through the bag. Other features will follow.
+There are a few things that need to be changed to enable view transitions in Starlight. Others are more optional. The mandatory changes are covered by the initial support of view transitions for Starlight through The Bag. Other features will follow.
 
 Read on if you want to know what encounters I had on my journey to a Starlight website with view transitions. **If you're here because you too want to add view transitions to your Starlight site**, then visit the [step-by-step guide](/jotter/starlight/guide/)
 
@@ -29,7 +29,7 @@ Some changes are non-negotiable:
 The minimum change a starlight site needs is the insertion of Astro's   `<ViewTransitions />` component for all pages. Next, we need a solution for all the stuff that needs to re-run on soft navigation. Typically you would use Astro's lifecycle events to reinitialize dark mode, search, etc.
 
 #### Reinitialize or Keep State: ReplacementSwap
-The Bags Starlight support takes a different approach. Instead of re-initializing things, we simply keep the same instances on all pages. You could do this with `transition:persist`. But the bag wouldn't be the bag if it didn't use the bag's [`ReplacementSwap`](/library/ReplacementSwap/) component. It simply replaces the `.main-frame` `<div>` (and `<head>` elements) on each navigation and keeps the rest of the page.
+The Bags Starlight support takes a different approach. Instead of re-initializing things, we simply keep the same instances on all pages. You could do this with `transition:persist`. But The Bag wouldn't be The Bag if it didn't use The Bag's [`ReplacementSwap`](/library/ReplacementSwap/) component. It simply replaces the `.main-frame` `<div>` (and `<head>` elements) on each navigation and keeps the rest of the page.
 
 #### Sidebar Navigation
 Since we keep the sidebar navigation instance across navigation, we need support to dynamically update the current page marker on navigation.
