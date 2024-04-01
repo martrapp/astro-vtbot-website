@@ -36,7 +36,7 @@ export default defineConfig({
 			Head: "./src/components/starlight/Head.astro",
 		},
 		title: "Bag of Tricks",
-		head: [{ tag: "meta", attr: { property: "og:image", content: "https://events-3bg.pages.dev/social.png" } }],
+		head: [{ tag: "meta", attrs: { property: "og:image", content: "https://events-3bg.pages.dev/social.png" } }],
 		customCss: ["./src/styles/custom.css"],
 		description:
 			"The Jotter of the Bag of Tricks for Astro's View Transitions",
