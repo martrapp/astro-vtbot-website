@@ -38,7 +38,7 @@ import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/st
 ---
 
 <VtbotStarlight {...Astro.props}>
-	<StarlightHead {...Astro.props} />
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 ```
 
@@ -122,7 +122,7 @@ Astro.props.viewTransitionsFallback = 'animate';
 
 {/* Define a view transition animation for `<main>` */}
 <VtbotStarlight {...Astro.props} transition:animate={slide({ duration: 300 })}>
-	<StarlightHead {...Astro.props} />
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 
 <style is:global>

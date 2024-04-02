@@ -4,5 +4,5 @@ import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/st
 ---
 
 <VtbotStarlight {...Astro.props}>
-	<StarlightHead {...Astro.props} />
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
