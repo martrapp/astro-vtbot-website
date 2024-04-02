@@ -10,10 +10,6 @@ This guide describes what has to be done to add view transitions to an existing 
 At the moment, The Bag's support of view transition for Starlight is rather experimental. It has not yet been extensively tested in the wild. Enjoy being on the cutting edge of technology with your Starlight site, but also be prepared that things might break. Or that not everything you expect will work from the start. I'm happy to expand the initial support over time!
 :::
 
-:::caution
-Currently, view transitions work for the `doc` template, but the sidebar is not displayed correctly  when navigating from or to pages with `template: splash`. This is a known issue and will be fixed soon.
-:::
-
 ## Install astro-vtbot
 
 The <BoT/> can be installed as a package or as an Astro integration. See here for [details an differences](/library/Installation/). Let's assume you just add it as a package:
@@ -22,7 +18,7 @@ The <BoT/> can be installed as a package or as an Astro integration. See here fo
 cd /to/my/starlight/project
 npm i -D astro-vtbot
 ```
-Make sure that you have at least version 1.7.0 installed.
+Make sure that you have at least version 1.7.1 installed.
 
 ## Enable View Transitions
 
@@ -85,9 +81,13 @@ import StarlightHead from '/src/components/SpecialHead.astro';
 ### Try it out for yourself!
 Start your project. No matter what browser you use, you should not see full page loads when navigating.
 
-In Chrome, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport.
+In Chrome, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations.
 
-Browsers without native support for view transition will not yet show animations. We will extend the view transition effect by adding an animation to the main content area in the next section.
+:::note
+If you were just looking for a SPA-like navigation, you are all set.
+:::
+
+In the next section, we will extend the view transition effect by adding an animation to the main content area and optimizing the styling.
 
 ## Configuring View Transitions
 

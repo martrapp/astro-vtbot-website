@@ -56,7 +56,7 @@ export default defineConfig({
 			github: "https://github.com/martrapp/astro-vtbot",
 		},
 		editLink: {
-			baseUrl: "https://github.com/martrapp/astro-vtbot-starlight/edit/main/",
+			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/",
 		},
 		sidebar: sidebar(),
 	})],
