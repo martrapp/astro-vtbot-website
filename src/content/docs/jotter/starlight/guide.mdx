@@ -138,6 +138,16 @@ Astro.props.viewTransitionsFallback = 'animate';
 </style>
 ```
 
+## Known Issues
+
+### Navigation to Pages Outside the Starlight Site
+
+If you are linking to a page outside of your Starlight site, you should not use view transitions, but do a full page load instead. This way, your Starlight site will be properly re-initialized when users later navigate back from the foreign page using history back navigation. This is also important if you  create a link between two Starlight sites.
+
+The website of The Bag automatically intercepts all links that leave the `/jotter/`.
+The Bag will soon offer a reusable component to facilitate that.
+
+
 ## As always, feedback is very welcome!
 
 I look forward to your feedback! Did it work for you? What were the biggest hurdles? What are you looking for?
