@@ -2,7 +2,7 @@
 export interface Props {
 	height: string;
 }
-const { height = '100px' } = Astro.props;
+const { height = '1.5rem' } = Astro.props;
 ---
 
-<img style=`height:${height}` src="/public/favicon.svg" alt="bot" />
+<img style=`height:${height}; display:inline; transform: translateY(.4rem)` src="/favicon.svg" alt="bot" />

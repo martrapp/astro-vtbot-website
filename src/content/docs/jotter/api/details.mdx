@@ -4,10 +4,14 @@ title: View Transition API Details
 
 import { Steps } from '@astrojs/starlight/components';
 
-The View Transition API consists of a single function and a single CSS property:
+The View Transition API comes in two levels: Level 1 specifies same-document transitions and level 2 defines cross-document transitions.
+
+## Two Leveled Spec
+### Level 1 / Same Document Transitions
+The View Transition API (Level 1) consists of a single function and a single CSS property:
 These are the types that are introduced by the View Transition API:
 
-```ts title="dom-view-transition.d.ts"
+```ts title="dom-view-transition.d.ts (Level 1)"
 
 // The view-transition-name CSS property
 interface CSSStyleDeclaration {
@@ -15,8 +19,9 @@ interface CSSStyleDeclaration {
 }
 
 // The startViewTransition() function provided by window.document
+type UpdateCallback = () => Promise<void> | void
 interface Document {
-  startViewTransition(updateCallback: () => Promise<void> | void): ViewTransition;
+  startViewTransition(updateCallback: UpdateCallback): ViewTransition;
 }
 
 // The result type of calling window.document.startViewTransition()
@@ -27,10 +32,78 @@ interface ViewTransition {
   skipTransition(): void;
 }
 ```
+In CSS you can use the following pseudo elements to address the animations.
+```css title="CSS Pseudo Elements (Level 1)"
+::view-transition,
+::view-transition-group,
+::view-transition-image-pair,
+::view-transition-old,
+::view-transition-new
+```
+All but `::view-transition` are parametrized with a view transition name (or `*` for all).
+
+### Level 2 / Cross Document Transitions
+
+The level 2 spec adds a new property and extends the signature of the `startViewTransition()` function
+
+```ts title="dom-view-transition.d.ts (Level 2)" {5,11,21} "As of level 1 plus the following" "StartViewTransitionOptions"
+// As of level 1 plus the following
+
+// The view-transition-class CSS property
+interface CSSStyleDeclaration {
+  viewTransitionClass: string;
+}
+
+// Extended signature for startViewTransition()
+type StartViewTransitionOptions = {
+	update?: UpdateCallback,
+	types?: sting[]
+}
+interface Document {
+  startViewTransition(param: UpdateCallback | StartViewTransitionOptions): ViewTransition;
+}
+// The result type of calling startViewTransition() also got types added
+interface ViewTransition {
+  finished: Promise<void>;
+  ready: Promise<void>;
+  updateCallbackDone: Promise<void>;
+	types: string[];
+  skipTransition(): void;
+}
+// there are also two new events that are raised during cross-document navigation:
+"pageswap"   // An event that is raised while the old document is still present.
+             // This happens right before the screenshot and the swap
+"pagereveal" // An event that happens after the swap right before the new page is
+             // shown for the first time
+```
+
+On the CSS side, the pseudo-elements are unchanged, but now you can also use view transition classes to select animations in addition to `*` and view transition names.
+```css title="use view-transition-class"
+
+::view-transition-new(k3.slow), /* view-transition-name "k3" if class is ".slow" */
+::view-transition-old(.slow .headers) { /* all classes must match */
+	animation-duration: 2s;
+}
+```
+Level 2 also defines two CSS pseudo-classes on the document that can be used to select based on the existence and type of the active view transition
+```css
+:root:active-view-transition
+:root:active-view-transition-type(backward, slide-out) /* at least one must match */
+```
+
+And level 2 defines a new at-rule that can be used to specify whether a page should participate in automatic cross-document view transitions and in what form.
+```css
+@view-transition {
+	navigation: auto; /* can be 'auto' or 'none' */
+	types: backward; /* can be one or several custom-ident values or 'none' */
+}
+```
 
 ## View from the Outside
 
 The `startViewTransition()` function returns immediately yielding an object with three promises, `updateCallbackDone`, `ready`, and `finished`, and a function called `skipTransition()`. The returned promises can be used to trigger actions that depend on the progress of the view transition process. The `skipTransition()` function lets you skip the visual animations.
+
+In case of a cross-document transition, `startViewTransition()` is implicitly called by the browser with an _update callback_ that swaps in the DOM for the new page. The types property of the `option` Object is initialized with the types of the `@view-transition` at-rule, if specified. The resulting ViewTransition object can be accessed via the `viewTransition` property of the new  `pageswap` and `pagereveal` events.
 
 Here is a **high-level description** of what is going on and how that can be observed from the out side using the promises:
 

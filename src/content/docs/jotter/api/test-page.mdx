@@ -1,0 +1,51 @@
+---
+title: "Test Your Browser's View Transition Capabilities"
+---
+
+import VT from "/src/components/CanIUseVT.astro";
+
+This page show whether your current browser has native support for view transitions.
+
+|Feature|Support?|
+|-------|---------|
+|View transitions Level 1|<span id="level1"/>|
+|View transitions Level 2|<span id="level2"/>|
+
+Level 1 is the basic view transition API for transitions within th same document.\
+Level 2 covers cross-document view transitions.
+
+[Pointers to the specs](/jotter/api/references/#w3c-drafts) (W3C Drafts)
+
+:::tip
+If you use Chrome and it doesn't support level 2, you might want to try the [Canary Version]( https://www.google.com/chrome/canary/)
+:::
+
+
+<style>{`
+	#level1::before {
+			content: 'Not supported';
+		}
+	#level2::before {
+			content: 'Not supported';
+		}
+
+	@supports (view-transition-name: a) {
+		#level1::before {
+			content: 'Supported';
+			background-color: lightgreen;
+			color: black;
+			display: inline-block;
+			margin: auto;
+			padding: 0.5ex 1ex;
+			width: 100%;
+		}
+	}
+	@supports (view-transition-class: b) {
+		#level2::before {
+			content: 'Supported';
+			background-color: lightgreen;
+			color: black;
+			padding: 0.5ex 1ex;
+		}
+	}
+`}</style>

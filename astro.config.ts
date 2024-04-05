@@ -71,26 +71,40 @@ export default defineConfig({
 function sidebar() {
 	return [
 		{
-			label: "The Jotter",
-			link: "/jotter/",
-		},
-		{
-			label: "A Brief History of The Bag",
-			link: "/jotter/history/",
-		},
-		{
-			label: "Astro View Transition Support",
+			label: "Bag of Tricks",
 			items: [
-				{ label: "Overview", link: "/jotter/astro/" },
+				{
+					label: "A Brief History of The Bag",
+					link: "/jotter/history/"
+				}, {
+					label: "Reusable Components",
+					link: "/jotter/components/"
+				}, {
+					label: "Tech-Demos",
+					link: "/jotter/demos/"
+				},
+				{ label: "The Jotter", link: "/jotter/" },
+				{
+					label: "Recent Changes",
+					link: "/jotter/history-of-changes/",
+					badge: "start here when re-visiting"
+				},
+			],
+		},
+		{
+			label: "Astro View Transitions",
+			items: [
+				{ label: "<View Transitions>", link: "/jotter/astro/" },
 				{ label: "Transition Directives", link: "/jotter/astro/directives/" },
 				{ label: "Global Flow & Events", link: "/jotter/astro/flow-events/" },
 				{ label: "Loading and Swapping", link: "/jotter/astro/loader-swap/" },
-				{ label: "Limitations of the Simulation", link: "/jotter/astro/limitations/" }
+				{ label: "How Simulation and API differ", link: "/jotter/astro/differences/" }
 			],
 		},
 		{
 			label: "Browser View Transition API",
 			items: [
+				{ label: "Browser Support", link: "/jotter/api/test-page/"},
 				{ label: "API Overview", link: "/jotter/api/" },
 				{ label: "API Details", link: "/jotter/api/details/" },
 				{ label: "In Depth Example", link: "/jotter/api/example/" },
@@ -101,7 +115,8 @@ function sidebar() {
 			label: "The Jotter on Starlight",
 			items: [
 				{ label: "Overview", link: "/jotter/starlight/" },
-				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide" },
+				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide",
+				badge: "updated" },
 			],
 		},
 		{

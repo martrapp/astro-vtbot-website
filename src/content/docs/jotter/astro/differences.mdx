@@ -1,0 +1,41 @@
+---
+title: How Simulation and API are Different
+---
+
+Astro simulates important aspects of view transitions for browsers that do not support them natively. But it can not mimic all aspects of a native implementation.
+
+## Beyond JavaScript and CSS
+The [detailed description](/jotter/api/details/) of the View Transition API reveals that some functions cannot be polyfilled without native browser support.
+- Efficient saving a bitmap of an element from the current DOM as rendered in the current view[^1],
+- Defining replaced elements that show a life view of the elements after swap
+- Adding `::view-transition-*` pseudo elements to the `<html>` element
+- Supporting the CSS extensions:
+  - `view-transition-name` and `view-transition-class` CSS properties
+  - `:active-view-transition` and `:active-view-transition-type` pseudo-classes
+  - `@view-transition` at-rule
+
+[^1]: html2canvas might be a candidate for some limited ability to capture images.
+
+Everything else could be achieved with JavaScript and CSS.
+
+## Consequences for the Simulation
+
+
+1. Without the ability to grab bitmaps, Astro cannot support parallel exit and entry animation. It must show the exit animation while the old DOM is still present, and cannot start the entry animations until the new DOM is loaded. As a result, **exit and entry animations run sequentially** and in total take longer  than the parallel execution with built-in view transitions.
+
+2. For the same reasons, Astro **cannot support morph animations**, as these require the simultaneous use of old and new images.
+
+3. Without control over the browsers module loader, Astro **can not unload and reload scripts** the same way as the browser does on full page loads. This regularly leads to reworking being necessary when navigating. Astro offers special events for this. However, Astro makes it possible to continue using arbitrary state across a navigation, just as with an SPA. The View Transition API can't do this.
+
+The lack of `::view-transition-*` pseudo-elements and the CSS extensions can be remedied by additional data attributes on the HTML elements.
+
+* See [here](/jotter/astro/directives/#transitionname) how Astro simulates `view-transition-name` properties with the  `data-astro-transition-scope` attribute. View transition classes have no direct equivalent and must be replaced by duplicating CSS rules for transition names belonging to the same class.
+* See [here](/jotter/astro/directives/#transitionanimate) how Astro simulates `::view-transition-old` and `::view-transition-new` with the `data-astro-transition-fallback` attribute.
+* The [same section](/jotter/astro/directives/#transitionanimate) also shows how view transition types and the pseudo-classes are represented by directions and the `data-astro-transition` attribute.
+* Last, the role of the at-rule is realized by Astro's `<ViewTransitions/>` component that serves as a marker for opt in to cross-document view transition on the old and the new page.
+
+
+Astro offers specific events to interact with view transitions as a developer. The possibilities  are comparable of those you get from `pageswap` and `pagereveal` in combination with the Navigation API.
+
+As a result, the CSS styling and integration into view transition processing is different for Astro's view transition support and the View Transition API. On the positive side, Astro has support for browsers that do not natively offer view transitions.
+

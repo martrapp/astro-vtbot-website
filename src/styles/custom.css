@@ -1,14 +1,13 @@
 @property --vtbot-bg-color {
-  syntax: "<color>";
-  inherits: true;
-  initialValue: "rgba(0,0,0,0)"
+	syntax: '<color>';
+	inherits: true;
+	initialvalue: 'rgba(0,0,0,0)';
 }
 @property --sl-color-text {
-  syntax: "<color>";
-  inherits: true;
-  initialValue: "rgba(0,0,0,0)"
+	syntax: '<color>';
+	inherits: true;
+	initialvalue: 'rgba(0,0,0,0)';
 }
-
 
 body {
 	text-align: left;
@@ -98,9 +97,16 @@ h4 a {
 	font-size: 11pt;
 }
 
-code div.ec-line {
-	margin-top: 0;
+
+nav ::-webkit-scrollbar {
+	width: 0;
 }
-figure pre {
-	margin-top: 0pt !important;
+::-webkit-scrollbar {
+	background-color: var(--sl-color-gray-6);
+}
+::-webkit-scrollbar-thumb {
+	background-color: var(--sl-color-gray-5);
+}
+nav:hover ::-webkit-scrollbar {
+	width: 10px;
 }

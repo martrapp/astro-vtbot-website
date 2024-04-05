@@ -3,6 +3,7 @@ title: The Jotter on Starlight
 ---
 
 import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
 
 At some point I realized that I needed to structure my bits & pieces better and make them searchable to make them useful.
 
@@ -42,22 +43,32 @@ Starlight has a button to open the page navigation on small devices. Because we 
 Some other things are truly optional.
 
 #### Styling
-You might want to add some animations to make the main content change look more interesting.
-
-#### Additional Image Pairs
-I gave the headings on the pages view-transition-names to make the change of pages more entertaining.
+You might want to add some animations to make the main content change look more interesting. As you might have noticed, I added a rather fancy animation with blue lights! In dark mode at least. I also made the sidebar have a sliding current page indicator, which is not a CSS animation, but uses the Animation API.
 
 #### Loading Indicator
 Next, you need a [loading indicator](/library/LoadingIndicator/) to show that the website has recognized the click and is doing something.
 
+#### Reload Fence
+The next step is only necessary if your website also contains pages that are not provided by Starlight. I've added a fence that recognizes when I leave the Starlight section and navigate to the demo or component pages of the site (and vice versa).  For these navigation events, I replace view transitions with full page loads  to reinitialize state, such as search.
+
+#### Scroll Image Pairs
+If you have long pages, view transitions cause a lot of ["scrolling"](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages instantly to the top before the morphing starts.
+
+But surprise! Browsers are allowed to restrict the area that they copy when creating "screenshots" for the old image. The result can be that the old image shows nothing when you look at areas that were originally outside the view port. You will be relieved to hear that the specification states that such areas must be filled with the background color. Life is good ;-)
+
+And similar effects can happen when you scroll the new image further down without waiting for the renderer to catch up.
+
+I am very happy with the solution I have now found:
+I put the old page next to the new page so that the previously visible area is exactly at the same height as the target area of the new page. To do this, I have to move the image of the old page. I'm going to offer a reusable component for this because I think it's really helpful also for others. Take a look at it in action: Scroll one page down to the center, navigate to the next page, scroll to the center again and then switch back and forth with the browser history!
+
+At least I think that's great!  <Logo/>
+
 #### Ordered Pages
 Starlight pages can be configured to display links to the previous and next page at the bottom of each page. Here "previous" and "next" mean: In the order in which they appear in the page navigation. Wouldn't it be cool if the page transition animation also used these directions? I was thinking the same thing!
 
-#### Scroll Pseudo Images
-If you have long pages, view transitions cause a lot of ["scrolling"](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages to the top before the morphing starts.
+#### Additional Image Pairs
+I gave the headings on the pages view-transition-names to make the change of pages more entertaining.
 
-#### Reload Fence
-The next step is only necessary if your website also contains pages that are not provided by Starlight. I've added a fence that recognizes when I leave the Starlight section and navigate to the demo or component pages of the site (and vice versa).  For these navigation events, I replace view transitions with full page loads  to reinitialize state, such as search.
 
 
 ### Minors
