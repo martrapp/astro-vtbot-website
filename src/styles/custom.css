@@ -49,7 +49,7 @@ body {
 	--sl-color-black: #ffffff;
 	--vtbot-bg-color: #e8f0f8;
 	--vtbot-glow: radial-gradient(circle, #c0d0e0 50%, #d8e8f8 100%);
-	--vtbot-glow-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
+	--vtbot-glow-shadow: 0 0 10px #fff, 0 0 20px #fca, 0 0 30px #fa5, 0 0 40px #f80;
 }
 
 header,
@@ -97,7 +97,6 @@ h4 a {
 	font-size: 11pt;
 }
 
-
 nav ::-webkit-scrollbar {
 	width: 0;
 }
@@ -109,4 +108,10 @@ nav ::-webkit-scrollbar {
 }
 nav:hover ::-webkit-scrollbar {
 	width: 10px;
+}
+
+li a[aria-current='page']:hover,
+li a[aria-current='page'] {
+	background-color: var(--sl-color-gray-5);
+	color: var(--sl-color-gray-2);
 }
