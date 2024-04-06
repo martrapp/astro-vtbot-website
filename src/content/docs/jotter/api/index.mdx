@@ -8,9 +8,9 @@ import MorphVt from "./MorphVt.astro";
 
 The View Transition API provides a smooth visual transition from the current state of the browser's document to a next state.
 
-The API introduces a new CSS property called `view-transition-name` that can be used to mark DOM elements to be animated. It also provides a single function called `startViewTransition()`, which can be found in the `window.document` object. You call this function when you want to start the visual transition and you provide an _update callback_ that can convert the current document to its future version.
+The API introduces a CSS property called `view-transition-name` that can be used to mark DOM elements to be animated. It also provides a single function called `startViewTransition()`, which can be found in the `window.document` object. You call this function when you want to start the visual transition and you provide an _update callback_ that can convert the current document to its future version. In cross-document navigation, the browser calls it automatically with an _update callback_ that swaps in the next page.
 
-This is how you call `window.document.startViewTransition()`. The result contains some promises and a function to cancel the visual transition. For [details see the API description](/jotter/api/details/).
+This is how `window.document.startViewTransition()` is called. The result contains some promises and a function to cancel the visual transition. Level 2 implementations also support the provision of navigation types. For [details see the API description](/jotter/api/details/).
 
 ```js title="call-startViewTransition.js"
 const viewTransition = document.startViewTransition(async () => {

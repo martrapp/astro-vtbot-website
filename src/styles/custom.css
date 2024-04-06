@@ -1,14 +1,17 @@
 @property --vtbot-bg-color {
 	syntax: '<color>';
 	inherits: true;
-	initialvalue: 'rgba(0,0,0,0)';
+	initial-value: #102030;
 }
 @property --sl-color-text {
 	syntax: '<color>';
 	inherits: true;
-	initialvalue: 'rgba(0,0,0,0)';
+	initial-value: #102030;
 }
 
+:root {
+	transition: --vtbot-bg-color .5s;
+}
 body {
 	text-align: left;
 	hyphens: auto;
@@ -108,6 +111,10 @@ nav ::-webkit-scrollbar {
 }
 nav:hover ::-webkit-scrollbar {
 	width: 10px;
+}
+
+starlight-menu-button button {
+	background-color: var(--sl-color-gray-3)
 }
 
 li a[aria-current='page']:hover,

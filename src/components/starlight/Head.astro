@@ -1,10 +1,12 @@
 ---
+import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
-import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import ReloadFence from '../bot/ReloadFence.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 
 import MarkHeadings from '../bot/MarkHeadings.astro';
+import MarkTitle from '../bot/MarkTitle.astro';
 import OrderedPages from '../bot/OrderedPages.astro';
 import PageOffset from '../bot/PageOffset.astro';
 import SilentCatch from '../bot/SilentCatch.astro';
@@ -13,22 +15,25 @@ import PagefindToTextFragments from './PagefindToTextFragments.astro';
 import SidebarSelect from './SidebarSelect.astro';
 
 import '../../styles/vt.css';
-import '../../styles/ec.s8bdm.css'
+import '../../styles/ec.s8bdm.css';
+import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 ---
 
 <VtbotStarlight {...Astro.props}>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
+<VtBotDebug />
 <ReloadFence prefix="/jotter/" />
 
 <LoadingIndicator top="9vh" right="3vw" src="/favicon.svg" />
-<MarkHeadings />
-<OrderedPages />
-<PageOffset name="main"/>
+<SidebarSelect />
+<MarkHeadings prefix="/jotter/" />
+<MarkTitle prefix="/jotter/" />
+<OrderedPages prefix="/jotter/" />
+<PageOffset name="main" />
 <PagefindToTextFragments />
 <SwapSound src="/swoosh-6428.mp3" />
 <SilentCatch />
-<SidebarSelect />
 
 <script>
 	import '../navigate';

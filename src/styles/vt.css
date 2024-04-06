@@ -227,3 +227,72 @@ main {
 		opacity: 0;
 	}
 }
+
+/* ------------------------- */
+
+::view-transition-image-pair(bot) {
+	transform-style: preserve-3d;
+	perspective: 50cm;
+}
+::view-transition-old(bot) {
+	transform-origin: center center;
+	animation-name: turnOut;
+	animation-duration: 0.75s;
+	animation-fill-mode: both;
+	animation-timing-function: ease-in;
+}
+::view-transition-new(bot) {
+	transform-origin: center center;
+	animation-delay: 0.75s;
+	animation-name: turnIn;
+	animation-duration: 0.75s;
+	animation-fill-mode: both;
+	animation-timing-function: ease-out;
+}
+
+::view-transition-new(bot):only-child {
+	transform-origin: center left;
+	animation-name: flyIn;
+	animation-delay: 0s;
+	animation-duration: 1.5s;
+	animation-timing-function: ease-in;
+}
+::view-transition-old(bot):only-child {
+	transform-origin: bottom right;
+	animation-name: flyOut;
+	animation-duration: 1s;
+	animation-timing-function: ease-out;
+}
+
+@keyframes turnOut {
+	0% {
+		transform: rotateY(0deg);
+	}
+	100% {
+		transform: translateZ(5cm) rotateY(-90deg);
+	}
+}
+@keyframes turnIn {
+	0% {
+		transform: translateZ(5cm) rotateY(90deg);
+	}
+	100% {
+		transform: rotateY(0deg);
+	}
+}
+@keyframes flyOut {
+	0% {
+		transform: rotateZ(0deg) translateX(0) translateY(0);
+	}
+	100% {
+		transform: rotateZ(-90deg) translateX(100vw) translateY(-100vh) translateZ(25cm);
+	}
+}
+@keyframes flyIn {
+	0% {
+		transform: rotateZ(90deg) translateX(-100vw) translateY(100vh) translateZ(25cm);
+	}
+	100% {
+		transform: rotateY(0deg) translate3d(0, 0, 0);
+	}
+}

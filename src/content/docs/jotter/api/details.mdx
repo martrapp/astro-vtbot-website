@@ -35,10 +35,10 @@ interface ViewTransition {
 In CSS you can use the following pseudo elements to address the animations.
 ```css title="CSS Pseudo Elements (Level 1)"
 ::view-transition,
-::view-transition-group,
-::view-transition-image-pair,
-::view-transition-old,
-::view-transition-new
+::view-transition-group(*),
+::view-transition-image-pair(*),
+::view-transition-old(*),
+::view-transition-new(*)
 ```
 All but `::view-transition` are parametrized with a view transition name (or `*` for all).
 
@@ -46,7 +46,7 @@ All but `::view-transition` are parametrized with a view transition name (or `*`
 
 The level 2 spec adds a new property and extends the signature of the `startViewTransition()` function
 
-```ts title="dom-view-transition.d.ts (Level 2)" {5,11,21} "As of level 1 plus the following" "StartViewTransitionOptions"
+```ts title="Extensions added by the level 2 API" {5,11,21} "As of level 1 plus the following" "StartViewTransitionOptions"
 // As of level 1 plus the following
 
 // The view-transition-class CSS property
@@ -70,15 +70,17 @@ interface ViewTransition {
 	types: string[];
   skipTransition(): void;
 }
-// there are also two new events that are raised during cross-document navigation:
+// Not really part of the View Transition API, but closely related:
+// There are also two events that are raised during cross-document navigation:
 "pageswap"   // An event that is raised while the old document is still present.
              // This happens right before the screenshot and the swap
 "pagereveal" // An event that happens after the swap right before the new page is
              // shown for the first time
+// The browser also triggers these events independently of view transitions. However, if they are triggered during a cross-document view transition, the `viewTransition` property of the event contain the current view transition object. In addition, the `pageswap` event also has an `activation` property that describes the type of navigation including source and target URLs.
 ```
 
 On the CSS side, the pseudo-elements are unchanged, but now you can also use view transition classes to select animations in addition to `*` and view transition names.
-```css title="use view-transition-class"
+```css title="use view transition classes (Level 2)"
 
 ::view-transition-new(k3.slow), /* view-transition-name "k3" if class is ".slow" */
 ::view-transition-old(.slow .headers) { /* all classes must match */
@@ -86,13 +88,15 @@ On the CSS side, the pseudo-elements are unchanged, but now you can also use vie
 }
 ```
 Level 2 also defines two CSS pseudo-classes on the document that can be used to select based on the existence and type of the active view transition
-```css
-:root:active-view-transition
-:root:active-view-transition-type(backward, slide-out) /* at least one must match */
+```css title="use transition types (Level2)"
+:root:active-view-transition,
+:root:active-view-transition-type(backward, slide-out) { /* at least one must match */
+
+}
 ```
 
 And level 2 defines a new at-rule that can be used to specify whether a page should participate in automatic cross-document view transitions and in what form.
-```css
+```css title="Opt in to cross-document transitions (Level2)"
 @view-transition {
 	navigation: auto; /* can be 'auto' or 'none' */
 	types: backward; /* can be one or several custom-ident values or 'none' */

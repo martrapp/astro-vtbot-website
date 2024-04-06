@@ -1,0 +1,8 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import StarlightPageTitle from '@astrojs/starlight/components/PageTitle.astro';
+import LastUpdated from '@astrojs/starlight/components/LastUpdated.astro';
+---
+
+<StarlightPageTitle {...Astro.props}><slot /></StarlightPageTitle>
+<LastUpdated {...Astro.props} />

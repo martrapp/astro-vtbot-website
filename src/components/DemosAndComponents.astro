@@ -1,0 +1,11 @@
+---
+export interface Props {
+	title: string;
+}
+const { title } = Astro.props;
+---
+<script define:vars={{title}} data-astro-rerun is:inline >
+const heading = document.querySelector("main h1");
+	heading && (heading.style.viewTransitionName = title);
+</script>
+

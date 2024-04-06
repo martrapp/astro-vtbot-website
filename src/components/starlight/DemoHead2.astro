@@ -1,15 +1,17 @@
 ---
+import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
-import { default as VtbotStarlight, type Props } from 'astro-vtbot/components/starlight/Base.astro';
-// import one of Astro's predefined animation functions, see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+// import one of Astro's predefined animation functions,
+// see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
 import { slide } from 'astro:transitions';
-
-// "animate" is also the default setting if this line is omitted, other values are "swap" or "none", see https://docs.astro.build/en/guides/view-transitions/#fallback-control
-Astro.props.viewTransitionsFallback = 'animate';
 ---
-
-{/* Define a view transition animation for `<main>` */}
-<VtbotStarlight {...Astro.props} transition:animate={slide({ duration: 300 })}>
+{/* Define a view transition animation for `<main>`*/}
+<VtbotStarlight
+	{...Astro.props}
+	transition:name="main"
+	transition:animate={slide({ duration: 300 })}
+>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 
@@ -20,7 +22,7 @@ Astro.props.viewTransitionsFallback = 'animate';
 	}
 
 	/* Do not slide over the sidebars */
-	::view-transition-group(*) {
+	::view-transition-group(main) {
 		overflow: hidden;
 	}
 </style>

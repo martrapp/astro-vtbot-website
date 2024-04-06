@@ -130,6 +130,11 @@ import Content from 'src/mdx/demos.mdx';
 </MdxLayout>
 
 <style is:global>
+
+
+::view-transition-old(demos) {
+	opacity: 0;
+}
 	::view-transition-group(root) {
 		animation-duration: 1s;
 	}

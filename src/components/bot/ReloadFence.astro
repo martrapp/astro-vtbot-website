@@ -1,32 +1,27 @@
 ---
 export interface Props {
-	prefix: string;
+	prefix?: string;
 }
 const { prefix } = Astro.props;
 ---
 
-<meta name="vtbot-reload-fence-prefix" content={prefix || '/'} />
+{prefix && <meta name="vtbot-reload-fence-prefix" content={prefix} />}
 <script>
 	import {
 		isTransitionBeforePreparationEvent,
 		TRANSITION_BEFORE_PREPARATION,
 	} from 'astro:transitions/client';
 
-	const prefix = (
-		document.querySelector('meta[name="vtbot-reload-fence-prefix"]') as HTMLMetaElement
-	)?.content;
+	const prefix =
+		(document.querySelector('meta[name="vtbot-reload-fence-prefix"]') as HTMLMetaElement)
+			?.content ?? '/';
 	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
-		if (isTransitionBeforePreparationEvent(e)) {
-			if (e.from.pathname.startsWith(prefix) !== e.to.pathname.startsWith(prefix)) {
-				addEventListener(
-					'unload',
-					() => {
-						/* prevent BF caching */
-					},
-					{ once: true }
-				);
-				location.href = e.to.href;
-			}
+		if (
+			isTransitionBeforePreparationEvent(e) &&
+			!e.from.pathname.startsWith(prefix) &&
+			e.to.pathname.startsWith(prefix)
+		) {
+			location.href = e.to.href;
 		}
 	});
 </script>

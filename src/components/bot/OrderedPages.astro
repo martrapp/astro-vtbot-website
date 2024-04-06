@@ -8,15 +8,22 @@
 		TRANSITION_BEFORE_PREPARATION,
 	} from 'astro:transitions/client';
 
-	const pages = [...document.querySelectorAll('.top-level a')].map(
-		(a) => new URL((a as HTMLAnchorElement).href).pathname
-	);
 	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
+		const pages = [...document.querySelectorAll('.top-level a')].map(
+			(a) => new URL((a as HTMLAnchorElement).href).pathname
+		);
 		if (isTransitionBeforePreparationEvent(e)) {
 			const fromIdx = pages.indexOf(e.from.pathname);
 			const toIdx = pages.indexOf(e.to.pathname);
 
-			e.direction = fromIdx === toIdx ? 'stay' : fromIdx < toIdx ? 'forward' : 'back';
+			e.direction =
+				fromIdx === -1 || toIdx === -1
+					? 'forward'
+					: fromIdx === toIdx
+						? 'stay'
+						: fromIdx < toIdx
+							? 'forward'
+							: 'back';
 		}
 	});
 </script>

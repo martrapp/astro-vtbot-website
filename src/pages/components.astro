@@ -266,6 +266,12 @@ import { Content } from 'src/mdx/components.mdx';
 </MdxLayout>
 
 <style is:global>
+
+
+::view-transition-old(reuse) {
+	opacity: 0;
+}
+
 	:root {
 		--accent: 135, 206, 235;
 		--accent-gradient: linear-gradient(330deg, #000, rgb(135, 206, 235));

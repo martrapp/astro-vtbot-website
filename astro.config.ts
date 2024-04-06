@@ -11,6 +11,7 @@ import rehypeExternalLinks from "rehype-external-links";
 import remarkToc from 'remark-toc';
 
 import vtbot from 'astro-vtbot';
+import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
@@ -34,6 +35,7 @@ export default defineConfig({
 	starlight({
 		components: {
 			Head: "./src/components/starlight/Head.astro",
+			PageTitle: "./src/components/starlight/PageTitle.astro",
 		},
 		title: "Bag of Tricks",
 		head: [{ tag: "meta", attrs: { property: "og:image", content: "https://events-3bg.pages.dev/social.png" } }],
@@ -68,7 +70,9 @@ export default defineConfig({
 		},
 	},
 });
+
 function sidebar() {
+
 	return [
 		{
 			label: "Bag of Tricks",
@@ -77,17 +81,17 @@ function sidebar() {
 					label: "A Brief History of The Bag",
 					link: "/jotter/history/"
 				}, {
-					label: "Reusable Components",
-					link: "/jotter/components/"
-				}, {
 					label: "Tech-Demos",
 					link: "/jotter/demos/"
+				}, {
+					label: "Reusable Components",
+					link: "/jotter/components/"
 				},
 				{ label: "The Jotter", link: "/jotter/" },
 				{
 					label: "Recent Changes",
 					link: "/jotter/history-of-changes/",
-					badge: { text: "start here when re-visiting", variant: "success"}
+					badge: { text: "start here when re-visiting", variant: "success" }
 				},
 			],
 		},
@@ -98,15 +102,15 @@ function sidebar() {
 				{ label: "Transition Directives", link: "/jotter/astro/directives/" },
 				{ label: "Global Flow & Events", link: "/jotter/astro/flow-events/" },
 				{ label: "Loading and Swapping", link: "/jotter/astro/loader-swap/" },
-				{ label: "How Simulation and API differ", link: "/jotter/astro/differences/" ,badge: { text: "updated", variant: "note" }}
+				{ label: "How Simulation and API differ", link: "/jotter/astro/differences/", badge: { text: "updated", variant: "note" } }
 			],
 		},
 		{
 			label: "Browser View Transition API",
 			items: [
-				{ label: "Browser Support", link: "/jotter/api/test-page/", badge:{text:"new", variant:"note"}},
+				{ label: "Browser Support", link: "/jotter/api/test-page/", badge: { text: "new", variant: "note" } },
 				{ label: "API Overview", link: "/jotter/api/" },
-				{ label: "API Details", link: "/jotter/api/details/" ,badge: { text: "updated", variant: "note" }},
+				{ label: "API Details", link: "/jotter/api/details/", badge: { text: "updated", variant: "note" } },
 				{ label: "In Depth Example", link: "/jotter/api/example/" },
 				{ label: "References", link: "/jotter/api/references/" },
 			],
@@ -115,8 +119,10 @@ function sidebar() {
 			label: "The Jotter on Starlight",
 			items: [
 				{ label: "Overview", link: "/jotter/starlight/" },
-				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide",
-				badge: { text: "updated", variant: "note" }},
+				{
+					label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide",
+					badge: { text: "updated", variant: "note" }
+				},
 			],
 		},
 		{
@@ -125,5 +131,5 @@ function sidebar() {
 				directory: "jotter/snippets",
 			},
 		},
-	];
+	] as SidebarItem[];
 }

@@ -16,7 +16,7 @@ const {name} = Astro.props;
 			e.viewTransition.ready.then(() => {
 				document.documentElement.style.setProperty(
 					'--vtbot-offset',
-					(history.state?.scrollY ?? window.scrollY) - oldScrollPosition + 'px'
+					 window.scrollY - oldScrollPosition + 'px'
 				);
 			});
 		}
