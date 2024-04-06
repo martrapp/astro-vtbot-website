@@ -20,7 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+        with:
+          fetch-depth: 0
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -40,7 +42,7 @@ jobs:
 
       - name: Build with Astro
         run: npm run build
-      
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
