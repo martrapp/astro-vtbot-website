@@ -65,7 +65,7 @@ The solution that is implemented in The Bag's Starlight support is to add the `d
 		doc.body.querySelector(STARLIGHT_MAIN_FRAME)?.setAttribute('data-vtbot-replace', 'main');
 	}
 ```
-🔓 This reveals what [Lines 12 & 13](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector do.
+**Revealed:** This reveals what [Lines 12 & 13](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector do.
 
 There is one caveat in this solution: it does not work for view transitions from outside your Starlight site. This is even true for navigation between two Starlight sites.   The reason is that `<ReplacementSwap/>` does not find an initialized app frame on the ingoing edge and falls back to Astro's built-in `swap()`. The solution would be to do a full reload on transitions to your sit from the outside. Component support coming soon.
 

@@ -124,11 +124,18 @@ What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-co
 ```
 This only serves as an example. It is not necessary to set `viewTransitionsFallback` to `animate` as this is the default setting anyway.
 
+### Sidebar Behavior
+By the default, the sidebar content will not change on navigation. Only the current page marker will change. But you can switch this behavior and have the content replaced on each navigation. To do this, add the `replaceSidebarContent` attribute the `VtbotStarlight` tag in your new `Head` component.
+```ts title="/src/components/starlight/Head.astro"
+<VtbotStarlight {...Astro.props} replaceSidebarContent>
+```
+
 ### Additional Styling
 
 You can also add a `<style is:global>` section to the file to style the `::view-transition-*` pseudo elements for browsers with native view transition support.
 
-### Example with Configuration
+
+### Example Configuration
 
 Let's revisit our `Head` component and see how it looks with the extensions described above:
 
@@ -137,35 +144,54 @@ Let's revisit our `Head` component and see how it looks with the extensions desc
 import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 // import one of Astro's predefined animation functions,
 // see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
 import { slide } from 'astro:transitions';
 ---
+
 {/* Define a view transition animation for `<main>`*/}
 <VtbotStarlight
 	{...Astro.props}
 	transition:name="main"
-	transition:animate={slide({ duration: 300 })}
+	transition:animate={slide({ duration: 150 })}
 >
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
+{/* update this one to whatever image you want to show as a loading indicator */}
+<LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
 
 <style is:global>
 	/* Slow down Chrome's default animation */
 	::view-transition-group(root) {
-		animation-duration: 400ms;
+		animation-duration: 300ms;
 	}
 
 	/* Do not slide over the sidebars */
 	::view-transition-group(main) {
 		overflow: hidden;
 	}
-  /* For non-native-view-transition browsers */
-  .main-pane {
-    overflow: hidden;
-  }
+	/* For non-native-view-transition browsers */
+	.main-pane {
+		overflow: hidden;
+	}
+
+	/* let title headings morph into each other */
+	main h1 {
+		view-transition-name: title-heading;
+	}
+	::view-transition-group(title-heading) {
+		animation-duration: 0.3s;
+	}
 </style>
 ```
+
+## Optional Features
+
+This section shows you how you to add the features from the [optional feature list](/jotter/starlight/#optional-part).
+
+### Loading indicator
+Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#example-configuration) already contains the indicator that makes your favicon flash happily in the top right corner during loading.
 
 ## Known Issues
 
@@ -178,7 +204,9 @@ If you link to a page of your Starlight site from the outside, you should not us
 The website of The Bag automatically intercepts all links that return to the `/jotter/` and does a full page load. The Bag will soon offer a reusable component to facilitate that.
 
 ### Not tested with arbitrary config options
-Starlight supports a lot of different config options. The Bags view transition support is so far only tested with a few typical combinations. A first observation with multi-language site is that selecting another language forces a full page reload instead of a view transition.
+Starlight supports a lot of different config options. The Bags view transition support is so far only tested with a few typical combinations.
+
+Multilingual Starlight sites force a complete reload of the page if you select a different language. This is a good thing, as the app frame changes completely and has to be reloaded anyway.
 
 ### Don't use `transition:persist`
 We all love `transition:persist`, but just do not use it here. The Starlight integration of <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which has no use for `transition:persist`. If you want to persist components when using the Bag's Starlight support, just put them somewhere outside the `<main>` area. Done.

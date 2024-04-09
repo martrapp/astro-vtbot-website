@@ -59,7 +59,7 @@ The above declaration and code look for the value of the transition scope and em
 
 And that is exactly what happens. The value is added as an `data-astro-transition-scope` attribute to the `<main>` element in the current document and in the `e.newDocument` that was just fetched by the loader.
 
-🔓 So let's reveal what's behind  [Line 15](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+**Revealed:** So let's reveal what's behind  [Line 16](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
 
 ```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
 	function setMainTransitionScope(e: TransitionBeforePreparationEvent) {
@@ -79,12 +79,12 @@ And that is exactly what happens. The value is added as an `data-astro-transitio
 Currently, the `<main>` element is the only teleport destination. If you want to add more transitions without hacking Starlight, you can add `view-transition-name` values to elements using pure CSS.
 
 ### Example
-Want to morph the old content title slowly into the new one (on browsers with native view transition support)? Then add this to [your `custom.css` file](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles).
-```css
+Want to morph the old content title into the new one (on browsers with native view transition support)? Then add this to the **`<style>` section** of you new `<Head>` component.
+```css title="/src/components/starlight/Head.astro
 main h1 {
   view-transition-name: title-heading
 }
 ::view-transition-group(title-heading) {
-	animation-duration: 1s;
+	animation-duration: 0.3s;
 }
 ```

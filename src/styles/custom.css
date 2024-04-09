@@ -118,6 +118,7 @@ starlight-menu-button button {
 }
 
 li a[aria-current='page']:hover,
+li a[aria-current='page']:focus,
 li a[aria-current='page'] {
 	background-color: var(--sl-color-gray-5);
 	color: var(--sl-color-gray-2);

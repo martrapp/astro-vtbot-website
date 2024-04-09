@@ -4,29 +4,36 @@ export interface Props {
 }
 const { prefix } = Astro.props;
 ---
-{ prefix && <meta name="vtbot-mark-title-prefix" content={prefix} />}
+
+{prefix && <meta name="vtbot-mark-title-prefix" content={prefix} />}
 <script>
 	import {
+		isTransitionBeforeSwapEvent,
+		TRANSITION_BEFORE_SWAP,
 		isTransitionBeforePreparationEvent,
 		TRANSITION_BEFORE_PREPARATION,
 		type TransitionBeforePreparationEvent,
 	} from 'astro:transitions/client';
 
 	const prefix =
-		(document.querySelector('meta[name="vtbot-mark-title-prefix"]') as HTMLMetaElement)
-			?.content ?? '/';
+		(document.querySelector('meta[name="vtbot-mark-title-prefix"]') as HTMLMetaElement)?.content ??
+		'/';
 
 	function markTitleHeading(e: TransitionBeforePreparationEvent) {
 		const h1 = e.newDocument.querySelector('main h1') as HTMLHeadingElement;
 		h1 && (h1.style.viewTransitionName = 'vtbot-hx');
 	}
 
-	function markTitleInSidebar(e: TransitionBeforePreparationEvent) {
-		if (!e.to.pathname.startsWith(prefix)) return;
+	function clearTitleInSidebar() {
 		document.querySelectorAll('.sidebar-pane a, main h1').forEach((e) => {
 			const style = (e as HTMLAnchorElement).style;
 			if (style.viewTransitionName === 'vtbot-hx') style.viewTransitionName = '';
 		});
+	}
+
+	function markTitleInSidebar(e: TransitionBeforePreparationEvent) {
+		if (!e.to.pathname.startsWith(prefix)) return;
+		clearTitleInSidebar();
 		const next = document.querySelector(
 			`.sidebar-pane a[href="${e.to.pathname}"]`
 		) as HTMLAnchorElement;
@@ -43,6 +50,12 @@ const { prefix } = Astro.props;
 			};
 		}
 	});
+	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+		if (isTransitionBeforeSwapEvent(e)) {
+			if (!e.to.pathname.startsWith(prefix)) return;
+			clearTitleInSidebar();
+		}
+	});
 </script>
 <style is:global>
 	::view-transition-group(vtbot-hx) {
@@ -51,7 +64,7 @@ const { prefix } = Astro.props;
 	::view-transition-old(vtbot-hx) {
 		opacity: 0;
 	}
-	::view-transition-image-pair(root){
+	::view-transition-image-pair(root) {
 		animation-duration: 0s;
 	}
 </style>

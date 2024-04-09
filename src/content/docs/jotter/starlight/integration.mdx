@@ -101,6 +101,7 @@ This in turn ensures that the event listeners are called in the intended order a
 	function afterLoader(e: TransitionBeforePreparationEvent) {
 		markMainFrameForReplacementSwap(document);
 		markMainFrameForReplacementSwap(e.newDocument);
+		updateCurrentPageMarker(e);
 		closeMobileMenu();
 		setMainTransitionScope(e);
 	}
@@ -119,6 +120,6 @@ I've tried to keep that in check, make the assumptions explicit in the code, and
 2. You find here calls for all the features mentioned in the [mandatory actions](/jotter/starlight/#mandatory-actions) section.
 
 3. If you do not only want to know _what_ happens but also _how_, I refer you to the corresponding sections:
-- 🔒 [Managing the App State](/jotter/starlight/app-state/) for `markMainFrameForReplacementSwap`
-- 🔒 [Updating the Sidebar](/jotter/starlight/sidebar/) for `updateSidebar` and `closeMobileMenu`
-- 🔒 [Defining Transitions](/jotter/starlight/transitions/) for `setMainTransitionScope`
+- [Managing the App State](/jotter/starlight/app-state/) for `markMainFrameForReplacementSwap`
+- [Updating the Sidebar](/jotter/starlight/sidebar/) for `updateSidebar` and `closeMobileMenu`
+- [Defining Transitions](/jotter/starlight/transitions/) for `setMainTransitionScope`
