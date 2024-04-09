@@ -126,7 +126,7 @@ This only serves as an example. It is not necessary to set `viewTransitionsFallb
 
 ### Sidebar Behavior
 By the default, the sidebar content will not change on navigation. Only the current page marker will change. But you can switch this behavior and have the content replaced on each navigation. To do this, add the `replaceSidebarContent` attribute the `VtbotStarlight` tag in your new `Head` component.
-```ts title="/src/components/starlight/Head.astro"
+```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} replaceSidebarContent>
 ```
 
@@ -153,11 +153,10 @@ import { slide } from 'astro:transitions';
 {/* Define a view transition animation for `<main>`*/}
 <VtbotStarlight
 	{...Astro.props}
-	transition:name="main"
-	transition:animate={slide({ duration: 150 })}
->
+	transition:name="main" transition:animate={slide({ duration: 150 })}>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
+
 {/* update this one to whatever image you want to show as a loading indicator */}
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
 
