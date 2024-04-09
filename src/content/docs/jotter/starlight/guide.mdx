@@ -4,7 +4,7 @@ title: How to Add View Transitions to a Starlight Site
 
 import BoT from "/src/components/BoT.astro"
 
-This guide describes what has to be done to add view transitions to an existing starlight site using the Starlight support of the <BoT/>.
+This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
 Don't be afraid that this will turn your beautiful website into a blinking jukebox. The Jotter is just an exaggerated example to show what is possible. If you follow the instructions below, you will be rewarded with a very _subtle_, SPA-like transition effect. And yes, if you want, you can of course later turn the whole thing into a ... blinking jukebox.
 
@@ -12,7 +12,7 @@ Don't be afraid that this will turn your beautiful website into a blinking jukeb
 At the moment, The Bag's support of view transition for Starlight is still a bit experimental. It has not yet been extensively tested in the wild. Enjoy being on the bleeding edge of technology with your Starlight site, but also be prepared that things might break. Or that not everything you expect will work from the start. I'm happy to improve and expand the initial support over time!
 :::
 
-## Install astro-vtbot
+## Step 1: Install astro-vtbot
 
 The <BoT/> can be installed as a package or as an Astro integration. See here for [details an differences](/library/Installation/). Let's assume you just add it as a package:
 
@@ -30,7 +30,7 @@ The substitute covers all aspects classified as [mandatory actions](/jotter/star
 
 Components to cover the more optional things are in the works!
 
-### Create the New Head Component
+### Step 2: Create the New Head Component
 Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
 
 ```astro title="./src/components/starlight/Head.astro"
@@ -45,9 +45,11 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 </VtbotStarlight>
 ```
 
-### Use the New Head Component
+### Step 3: Use the New Head Component
 
-Now we tell starlight to replace its `Head` component with ours. Open the `astro.config.mjs` file from your project directory. Make it look like shown below: Make sure that there is an entry named `components` in the options of your Starlight integration. It must specify a `Head` entry with the path of the file you have just created.
+Now we tell Starlight to replace its `Head` component with ours. Open the `astro.config.mjs`[^1] file from your project directory. Make it look like shown below: Make sure that there is an entry named `components` in the options of your Starlight integration. It must specify a `Head` entry with the path of the file you have just created.
+
+[^1]:Assuming `.mjs` as the extension here but `.ts` would also be fine. of course!
 
 ```js title="astro.config.mjs" {8-9}
 import { defineConfig } from 'astro/config';
@@ -86,7 +88,9 @@ import StarlightHead from '/src/components/MySpecialHead.astro';
 ### Try it out for yourself!
 Start your project. No matter what browser you use, you should see that there are no full page loads when navigating.
 
-In Chromium browsers, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations, but just seamlessly swap pages.
+In Chromium browsers, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations, but just seamlessly swap pages.[^2]
+
+[^2]: Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. See [here](#animating-the-main-section) on how to animate the main section.
 
 :::tip
 If you were just looking for a SPA-like navigation, you are all set!
@@ -99,7 +103,7 @@ In the next section, we will extend the view transition effect by adding an anim
 You can configure several aspects of the view transition effect in your new Head component.
 
 
-### Animating the `<Main>` Element
+### Animating the Main Section
 
 You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight>` component. The Bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.
 
@@ -156,6 +160,10 @@ import { slide } from 'astro:transitions';
 	::view-transition-group(main) {
 		overflow: hidden;
 	}
+  /* For non-native-view-transition browsers */
+  .main-pane {
+    overflow: hidden;
+  }
 </style>
 ```
 
@@ -163,12 +171,14 @@ import { slide } from 'astro:transitions';
 
 There are some facts that you should be aware of. None of them is a real obstacle on using The Bag's Starlight support.
 
-### Navigation to Pages Outside the Starlight Site
+### View Transitions into Your Starlight Site from the Outside
 
-If you are linking to a page outside of your Starlight site, you should not use view transitions, but do a full page load instead. This way, your Starlight site will be properly re-initialized when users later navigate back from the foreign page using history back navigation. This is also important if you  create a link between two Starlight sites.
+If you link to a page of your Starlight site from the outside, you should not use view transitions, but do a full page load instead. This way, your Starlight site will be properly initialized  This is also important if you  create a link between two Starlight sites.
 
-The website of The Bag automatically intercepts all links that return to the `/jotter/`.
-The Bag will soon offer a reusable component to facilitate that.
+The website of The Bag automatically intercepts all links that return to the `/jotter/` and does a full page load. The Bag will soon offer a reusable component to facilitate that.
+
+### Not tested with arbitrary config options
+Starlight supports a lot of different config options. The Bags view transition support is so far only tested with a few typical combinations. A first observation with multi-language site is that selecting another language forces a full page reload instead of a view transition.
 
 ### Don't use `transition:persist`
 We all love `transition:persist`, but just do not use it here. The Starlight integration of <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which has no use for `transition:persist`. If you want to persist components when using the Bag's Starlight support, just put them somewhere outside the `<main>` area. Done.

@@ -1,0 +1,90 @@
+---
+title: Defining Transitions
+---
+
+This page gives a first overview on how to add transitions to a view transition enabled Starlight site.
+
+Visit the [corresponding section in the introduction](/jotter/starlight/#add-transition-directives) to see where we are in  the big picture of The Bag's Starlight support.
+
+When you follow the initial three steps of [the guide](/jotter/starlight/guide/), you enabled the default fade animations on the `<html>` root element for browsers with native view transition support and no animations on other browsers.
+
+## Adding directives
+
+To add transitions, you want to use [Astro's `transition:*´ directives](/jotter/astro/directives/).
+
+There are some problems now:
+- The directives must be added to some HTML elements.  You do not write HTML. You write Markdown.
+- Ok, you can add HTML elements to `*.mdx` files. Sadly, the directives only work in `*.astro` files, not with `*.mdx` files. But you can use Astro components in `*.mdx` files, and they can use the directives.
+- You could override more of Starlight's built-in components.
+
+I would advise against the last point unless you find yourself in a situation where it is really necessary. I think in most cases the element you would choose for a transition group is the main area of the Starlight page anyway, right?
+
+## Teleport Magic
+
+Since we don't want to dig into the guts of Starlight, The Bag provides a special teleport functionality. Simply place your `transition:*` directives on the `<VtbotStarlight>` component in your new `<Head>` component and The Bag will beam them to the `<main>` element of Starlight's main content area.
+
+```astro title="src/components/starlight/Head.astro" showLineNumbers=false {4,5}
+{/* Define a view transition animation for `<main>`*/}
+<VtbotStarlight
+	{...Astro.props}
+	transition:name="main"
+	transition:animate={slide({ duration: 300 })}
+>
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+</VtbotStarlight>
+```
+
+
+## Scott me up, Beamy!
+If you are interested, this is how that teleporting thing works. You have [seen these fragments before](/jotter/starlight/integration/#structure-of-the-base-component):
+```ts title="astro-vtbot/components/starlight/Base.astro" showLineNumbers=false
+...
+export interface Props extends StarlightProps {
+	...
+	'data-astro-transition-scope'?: string;
+	...
+}
+const { ... 'data-astro-transition-scope': mainTransitionScope ... } = Astro.props;
+---
+
+...
+{mainTransitionScope && <meta name="vtbot-main-transition-scope" content={mainTransitionScope} />}
+...
+```
+With one or more `transition:*` directives on an HTML element, Astro creates a new transition scope and links it to this element using the `data-astro-transition-scope` attribute.
+
+The creation of the scope also works if the directives are _not_ used on an HTML element, but with an Astro component tag. In this case, the `data-astro-transition-scope` is created as an entry in the `Astro.props` object. It is lost if it is not handled explicitly.
+
+The above declaration and code look for the value of the transition scope and embed it into the HTML using a `<meta>` element, if present. Now we have made the value available to client-side scripts, but it is not yet associated with an HTML element. We can now select any element, especially the `<main>` element of the content area.
+
+And that is exactly what happens. The value is added as an `data-astro-transition-scope` attribute to the `<main>` element in the current document and in the `e.newDocument` that was just fetched by the loader.
+
+🔓 So let's reveal what's behind  [Line 15](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+
+```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
+	function setMainTransitionScope(e: TransitionBeforePreparationEvent) {
+		const meta = document.querySelector('meta[name="vtbot-main-transition-scope"]');
+		if (!meta) return;
+		const mainTransitionScope = (meta as HTMLMetaElement).content || 'none';
+		setMainTransitionScope(document, mainTransitionScope);
+		setMainTransitionScope(e.newDocument, mainTransitionScope);
+
+		function setMainTransitionScope(doc: Document, value: string) {
+			const main = doc.querySelector(STARLIGHT_MAIN_SECTION) as HTMLElement;
+			main && (main.dataset.astroTransitionScope = value);
+		}
+	}
+```
+## Adding more Transitions
+Currently, the `<main>` element is the only teleport destination. If you want to add more transitions without hacking Starlight, you can add `view-transition-name` values to elements using pure CSS.
+
+### Example
+Want to morph the old content title slowly into the new one (on browsers with native view transition support)? Then add this to [your `custom.css` file](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles).
+```css
+main h1 {
+  view-transition-name: title-heading
+}
+::view-transition-group(title-heading) {
+	animation-duration: 1s;
+}
+```

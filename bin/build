@@ -9,3 +9,8 @@ fi
 LOGO=$(ls dist/_astro/favicon*.svg)
 echo ${LOGO} $(echo ${LOGO}|sed 's|\(dist/_astro/.*\)_.*\.svg|\1.svg|') | xargs cp
 ./bin/check_links.sh
+if [ ! -f ./dist/_astro/ec.s8bdm.css ]
+then
+		echo "Missing EC-CSS file"
+		exit 1
+fi

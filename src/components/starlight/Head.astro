@@ -16,13 +16,11 @@ import SidebarSelect from './SidebarSelect.astro';
 
 import '../../styles/vt.css';
 import '../../styles/ec.s8bdm.css';
-import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 ---
 
 <VtbotStarlight {...Astro.props}>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
-<VtBotDebug />
 <ReloadFence prefix="/jotter/" />
 
 <LoadingIndicator top="9vh" right="3vw" src="/favicon.svg" />

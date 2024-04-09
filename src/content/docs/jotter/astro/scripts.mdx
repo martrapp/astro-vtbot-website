@@ -1,0 +1,74 @@
+---
+title: Updating Script State after Transitions
+---
+
+
+As with any existing Astro application, adding view transitions has two parts:
+1. Add `<ViewTransitions/>` to the `<head>`.
+2. Trying to get the scripts working again.
+
+Why is that? View transitions are a no-brainer for what Astro is famous for: statically generated pages without JavaScript. Do step 1 and you are done. It just works.
+
+## Updating the DOM
+Unlike cross-document navigation, Astro's view transitions perform a soft load. There is the client-side router that implements central parts of Astro's view transitions.
+
+It [updates the current document](/jotter/astro/loader-swap/#swap-1) in the browser to look like the new document, and then updates the browser history so that it basically looks like a navigation with full page load to the next page.
+
+For the DOM this even works better than normal browsing as Astro has the [additional ability to copy elements](/jotter/astro/directives/#transitionpersist) from the old page to the new page while keeping their state using `transition:persist="name"`.
+
+
+## Script handling
+
+Scripts are a different story: \
+With cross-document navigation, the browser un-loads all old scripts including their data. It also initializes a new, clean window object and resets the global lexical scope. When it reads the new document, it executes all scripts inlined in or referenced from that document.
+
+The net effect is that the scripts are initialized on the new DOM and can link to the current HTML elements. If we keep the old scripts without re-executing them, their state will still reference HTML elements of the previous DOM. And the scripts do not know about the elements on the new page. So we have to do something.
+
+### Between a rock and a hard place
+So we just un-load and re-load scripts during view transition navigation like the browser does on full page loads? No, that won't work and here are some reasons why we can not do this in general:
+- We can not unload and reload all scripts as this would also remove Astro's  client-side router and all its state in the middle of the navigation. Resuming processing and state from on the next page may be doable, but won't be efficient. And hey, we are talking about view transitions: the goal is a modern, snappy look when navigating a website, not something that takes forever to change pages.
+- We can neither unload nor reload scripts if the have both attributes `type="module"` and `src="..."`. Those scripts are called external module scripts. The browser caches them and does not offer an API to interact with its own module loader. External module scripts are kept by the browser until the next full page reload and can't be updated or restarted after the initial load.
+- We can not reset the windows object and can not clean out the state of the global lexical context where values are stored that are declared by top level `const` and `let`.
+
+### Re-Execution of scripts
+We can re-execute JavaScript scripts if they are given _inline_ in the HTML page (i.e. do not have a `src` attribute) and/or have a type other than module.
+Astro does that in the [completion phase](/jotter/astro/flow-events/#processing-flow) between `astro:after-swap` and `astro:load`.
+
+Now, did I mention that we can not reset the global lexical scope? As a consequence, scripts that use top level `const` and `let` declarations can not be re-executed. This will immediately produce errors:
+
+```astro
+<script is:inline>
+	const a = 5;
+</script>
+<!-- first execution works just fine -->
+
+<script is:inline>
+	const a = 5;
+</script>
+<!-- second execution causes an error in the browser console -->
+```
+```console del={1}
+Uncaught SyntaxError: Identifier 'a' has already been declared
+```
+
+When writing your own scripts, you can use _immediately invoked function expressions_ to define your own top-level scope within a function and program defensively when testing and assigning values in the global "window" scope. Or you can write _inline_ module scripts that have their own top-level scope per script.
+
+However, if you need to use external or third party scripts, chances are it won't work right away: There are many scripts that are not prepared to be executed again in the same execution context. Therefore, Astro ignores scripts that it has already seen on the previous page. If you want to run them anyway, add the attribute `data-astro-rerun` to the script tag. If scripts don't work as expected when you rerun them, you need to analyze them to find a workable solution.
+
+So if reloading scripts is not the best way to reinitialize the script state after navigation, what is?
+
+### The best way to go about it &hellip;
+On transition, data structures of scripts have to forget about the old DOM and reference elements of the new DOM. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update state appropriately.
+
+This works perfect in combination with external module scripts: The browser only loads them once and keeps them until the next full page load. I.e. they do not get removed or updated  while you navigate using view transitions. The document object itself stays the same during view transitions and only the DOM gets updated. Therefore event listener on the document will survive view transitions and their code will regularly be called to allow for state updates.
+
+### &hellip; but!
+
+Sadly, this is only easy if you write new code and know about the events and the limitations of scripts. When you have to use third party scripts, there are cases where you can not avoid to rewrite at least some re-initialization code.
+
+An alternative might be to only renew parts of the DOM on navigation and hope that all dynamic stuff happens outside that area. That is for example how [The Bag's Starlight support](/jotter/starlight/) works.
+
+
+
+
+

@@ -22,36 +22,39 @@ There are a few things that need to be configured to enable view transitions in 
 
 Read on if you want to know what encounters I had on my journey to a Starlight website with view transitions. **If you're here because you too want to add view transitions to your Starlight site**, then visit the [step-by-step guide](/jotter/starlight/guide/).
 
-### Mandatory actions
+## Mandatory actions
 
-Some changes are non-negotiable:
+Some changes are non-negotiable. Read here what needs to be done to turn on view transitions on a Starlight site and what support is needed to make it work properly.
 
-#### ViewTransitions
-The minimum change a starlight site needs is the insertion of Astro's   `<ViewTransitions />` component for all pages. Next, we need a solution for all the stuff that needs to re-run on soft navigation. Typically you would use Astro's lifecycle events to reinitialize dark mode, search, etc.
+### Hook into Starlight
+The minimum change a Starlight site needs in order to feature view transitions is the insertion of Astro's   `<ViewTransitions />` component on all pages. We do this by [overriding Starlight's `<Head>` component](/jotter/starlight/integration/).
 
-#### Reinitialize or Keep State: ReplacementSwap
-The Bags Starlight support takes a different approach. Instead of re-initializing things, we simply keep the same instances on all pages. You could do this with `transition:persist`. But The Bag wouldn't be The Bag if it didn't use The Bag's [`ReplacementSwap`](/library/ReplacementSwap/) component. It simply replaces the `.main-frame` `<div>` (and `<head>` elements) on each navigation and keeps the rest of the page.
+### Keep App State Up to Date
+Next, we need a plan how to keep the app state up to date across navigation. Typically you would use Astro's lifecycle events to re-initialize dark mode, search, etc. after the swap.
 
-#### Sidebar Navigation
-Since we keep the sidebar navigation instance across navigation, we need support to dynamically update the current page marker on navigation.
+The Bag's Starlight support takes a different approach. Instead of re-initializing things, we [avoid outdated state](/jotter/starlight/app-state/) by letting elements survive from page to page. You could do this using `transition:persist`. But The Bag wouldn't be The Bag if it didn't [use The Bag's `ReplacementSwap`](/library/ReplacementSwap/) component for this.
 
-#### Auto-close Mobile Sidebar
-Starlight has a button to open the page navigation on small devices. Because we do not refresh the whole page, we also need a way to automatically close that menu on navigation.
+### Handle the Sidebar
+Since we keep the sidebar navigation instance across navigation, we need support to dynamically update the current page marker on navigation. Starlight has a button to open the page navigation on small devices. Because we do not refresh the whole page, we also need a way to automatically close that menu on navigation. Read more about [sidebar handling](/jotter/starlight/sidebar/).
 
-### Optional Part
+### Add `transition:*` Directives
 
-Some other things are truly optional.
+View transitions without interesting animations are only half of the battle. All you would need to do now is to add Astro's `transition:*` directives. The Bag [provides support to simplify the common cases](/jotter/starlight/transitions/).
 
-#### Styling
+## Optional Part
+
+Some other features are really optional. Add them to your Starlight site as you wish.
+
+### Styling
 You might want to add some animations to make the main content change look more interesting. As you might have noticed, I added a rather fancy animation with blue lights! In dark mode at least. I also made the sidebar have a sliding current page indicator, which is not a CSS animation, but uses the Animation API.
 
-#### Loading Indicator
+### Loading Indicator
 Next, you need a [loading indicator](/library/LoadingIndicator/) to show that the website has recognized the click and is doing something.
 
-#### Reload Fence
+### Reload Fence
 The next step is only necessary if your website also contains pages that are not provided by Starlight. I've added a fence that recognizes when I leave the Starlight section and navigate to the demo or component pages of the site (and vice versa).  For these navigation events, I replace view transitions with full page loads  to reinitialize state, such as search.
 
-#### No more Annoying "Scrolling" on Transitions
+### No more Annoying "Scrolling"
 If you have long pages, view transitions cause a lot of ["scrolling"](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages instantly to the top before the morphing starts.
 
 But surprise! Browsers are allowed to restrict the area that they copy when creating "screenshots" for the old image. The result can be that the old image shows nothing when you look at areas that were originally outside the view port. You will be relieved to hear that the specification states that such areas must be filled with the background color. Life is good ;-)
@@ -63,22 +66,22 @@ I slide the old page next to the new page so that the previously visible area is
 
 At least I think that's great!  <Logo/>
 
-#### Ordered Pages
+### Ordered Pages
 Starlight pages can be configured to display links to the previous and next page at the bottom of each page. Here "previous" and "next" mean: In the order in which they appear in the page navigation. Wouldn't it be cool if the page transition animation also used these directions? I was thinking the same thing!
 
-#### Additional Image Pairs
+### Additional Image Pairs
 I gave the headings on the pages view-transition-names to make the change of pages more entertaining.
 
 
 
-### Minors
+## Minors
 
 The world will keep turning without or without what comes next.
 
-#### Silent Catch
+### Silent Catch
 If you click rapidly or use the arrow keys to navigate quickly through the browser history, you will interrupt ongoing transitions. This will result in error messages in the browser console because you usually haven't been paying attention to promises that could be rejected. Better catch.
 
-#### Swap Sound
+### Swap Sound
 Just can't do without an annoying sound when the view transition is running? This is the audio equivalent of a page animation. Choose from different swoops! Or how about a loud clockwork sound as the internal gears of the site turn and click?
 
 

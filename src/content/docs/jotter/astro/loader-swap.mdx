@@ -15,7 +15,7 @@ Both functions can be extended or replaced with custom code, see below.
 
 ## Semantics
 
-Together, the `loader()` and the `swap()` function provide the main functionality of [Astro's view transition processing](../flow-events/#process-flow). The view transition API provides an _update callback_ to switch the current browser document to its new state. While this callback is executing, rendering is stopped and the browser's view is frozen. Therefore it is important that updating the DOM happens really fast. But how can you load the next page over the network and be fast anyhow?
+Together, the `loader()` and the `swap()` function provide the main functionality of [Astro's view transition processing](../flow-events/#processing-flow). The view transition API provides an _update callback_ to switch the current browser document to its new state. While this callback is executing, rendering is stopped and the browser's view is frozen. Therefore it is important that updating the DOM happens really fast. But how can you load the next page over the network and be fast anyhow?
 
 This is the main reason for the separation into a _preparation_ phase with the `loader()` function and a _swap_ phase with the `swap()` function. The `loader()` function does the heavy lifting. All the time consuming actions like fetching and parsing the target document will happen inside the `loader()` function. During the preparation phase, the user can still fully interact with the current page. Once the preparation is done, the `swap()` function can directly access the future DOM in memory and quickly swap in the future DOM for the current DOM.
 

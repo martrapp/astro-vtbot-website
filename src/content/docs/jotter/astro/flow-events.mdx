@@ -8,7 +8,7 @@ import { Steps } from '@astrojs/starlight/components';
 
 Astro's view transition support is described in the [Astro Docs](https://docs.astro.build/en/guides/view-transitions/#lifecycle-events). The following sections give additional details on process and events.
 
-## Process Flow
+## Triggers
 
 There are  four types of actions that trigger Astro's View Transitions:
 
@@ -19,9 +19,25 @@ There are  four types of actions that trigger Astro's View Transitions:
 
 Customization of the view transition is supported by [Astro's transition events](./#events) and a view transition object with three promises that resolve or reject at different points during the transition. For details see the [View Transition documentation](https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition) on MDN. Users can use the events and the promises to trigger custom code.
 
-The overall flow is as follows:
+## Processing Flow
 
-<Steps>
+Processing begins with a preparation phase that by default loads the DOM of the target page.
+Then the actual view transition begins, which takes a screenshot of the current view (green line), swaps the current DOM with the contents of the loaded DOM and then starts the animations that remove the old image and in parallel bring in the new image  (red line).
+
+<Image src={router} alt="Structure of the View Transition Router" />
+
+This is the behavior for browsers that have native view transition support. The `startViewTransition(../flow-events/)` function and the view transition promises are part of the View Transition API.
+
+For browsers that have no native support for view transitions, things happen slightly different. The exit animation to remove the old page happens on the green arrow, the enter animation to bring in the new image happens on the red arrow. The core functionality of the `startViewTransition()` function and the view transition promises are provided by Astro.
+
+
+In the completion phase, the newly added scripts are executed, the page title of the new route is announced for users of assistive technologies and some clean-up work is carried out at the end.
+
+### Step by Step
+
+The single steps of the processing are as follows:
+
+<Steps id="foo">
 1. Fallback to a full page load for a cross origin navigation (no CORS)
 2. Detection and handling of a same-page navigation, which does not trigger view transitions
 3. Trigger `astro:before-preparation` event `e`
@@ -30,10 +46,10 @@ The overall flow is as follows:
 6. Trigger `astro:after-preparation` event
 7. Simulation only: start and wait for end of exit animations
 8. Native API: Call `startViewTransition()` with steps  9. - 12. as the update callback. Starts exit and enter animations in parallel once update is done.
-9. Trigger `astro:before-swap` event `e`
-10. Run `e.swap()`
-11. Update browser history and scroll position
-12. Trigger `astro:after-swap` event
+9. > Trigger `astro:before-swap` event `e`
+10. > Run `e.swap()`
+11. > Update browser history and scroll position
+12. > Trigger `astro:after-swap` event
 13. Simulation only: start entry animations
 14. Run and await new scripts
 15. Trigger `astro:page-load` event
@@ -41,20 +57,13 @@ The overall flow is as follows:
 17. Wait for all animations to finish and clean up
 </Steps>
 
+<style is:global>{`
+.sl-steps blockquote {
+	margin-bottom: 0 !important;
+}
+`}</style>
+
 For details about the customizable `loader()` and `swap()` functions see below and [here](../loader-swap/)
-
-
-<Image src={router} alt="Structure of the View Transition Router" />
-
-Processing begins with a preparation phase that by default loads the DOM of the target page.
-Then the actual view transition begins, which takes a screenshot of the current view (green line), swaps the current DOM with the contents of the loaded DOM and then starts the animations that remove the old image and in parallel bring in the new image  (red line).
-
-This is the behavior for browsers that have native view transition support. The `startViewTransition(../flow-events/)` function and the view transition promises are part of the View Transition API.
-
-For browsers that have no native support for view transitions, things happen slightly different. The exit animation to remove the old page happens on the green arrow, the enter animation to bring in the new image happens on the red arrow. The core functionality of the `startViewTransition()` function and the view transition promises are provided by Astro.
-
-
-In the completion phase, the newly added scripts are executed, the page title of the new route is announced for users of assistive technologies and some clean-up work is carried out at the end.
 
 
 ## Events

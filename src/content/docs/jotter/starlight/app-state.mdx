@@ -1,0 +1,77 @@
+---
+title: Managing App State with <ReplacementSwap/>
+---
+
+import BoT from "/src/components/BoT.astro"
+
+This page gives some details on how The Bag keeps Starlight's app state up to date during view transitions.
+
+Visit the [corresponding section in the introduction](/jotter/starlight/#keep-app-state-up-to-date) to see where we are in  the big picture of The Bag's Starlight support.
+
+## The Tightly Coupled approach
+
+As you know from the section on [updating script state](/jotter/astro/scripts/) adding the `<ViewTransition/>` component is the simpler part. Ensuring that script state is  up to date might be more of a challenge. From what you saw there, it is best practice to use the lifecycle events to update the state of your scripts.
+
+
+Using lifecycle events assumes that you add them to your own code. Or at least code you can control.  I have no idea about the details of the scripts running inside Starlight. And I definitively do not want to change them. It would be possible to deeply integrate support for view transitions into Starlight, but that would be a pretty tight coupling. This could be a burden for both projects, especially since the <BoT/> is still young and not very stable yet.
+
+## The Loosely Coupled Solution
+So let's turn the tables and look for a solution that is more loosely coupled:
+The core problem with script states and DOM updates is that the scripts don't recognize when the DOM is replaced with a new  version. They still point to the old elements and have no idea about the new ones. What if we could avoid this situation altogether?
+
+The key assumption here is that the only thing that changes when you navigate a Starlight site is the main content area and the page's table of contents to the right.
+
+
+<div class="light:sl-hidden">
+![astro.build docs](../../../../assets/starlight.astro.build_getting-started_dark.png)
+</div><div class="dark:sl-hidden">
+![astro.build docs](../../../../assets/starlight.astro.build_getting-started_light.png)
+</div>
+
+The other assumption is that all scrips reference elements in the application frame but not in the main content area or table of content.
+
+## The Assumptions
+If these two assumptions are true, we have no problems with the script state and do not need script updates.
+
+1. Only the main content area and page table of contents changes during navigation.
+2. Script state does not depend on elements in those areas.
+
+## Keeping the Frame Part of the DOM ...
+
+ [During `swap()`](/jotter/astro/loader-swap/#swap) we would simply copy the application frame to the next page. Doing this with `transition:persist` requires a deep knowledge of the structure of a Starlight page and is vulnerable to changes in that structure.
+
+### ... with `<ReplacementSwap>`
+The much better way is not to copy the frame but to leave it as is and just swap the main content area and the table of contents. For Starlight this is even more simple: There is a single `<div>` with class `.main-frame` which holds both.
+
+So the solution is to use The Bag's [`<ReplacementSwap>` component](/library/ReplacementSwap/) and just swap `div.main-frame` on view transitions.
+
+This automatically also adds some positive effects to Starlight as the app state now survives navigation.
+* If you have a long side bar thescroll position in that sidebar does not get lost on navigation
+* When you revisit the search bar, it remembered your last search!
+
+```ts showLineNumbers=false
+<ReplacementSwap rootAttributesToPreserve="data-theme" />
+```
+See this [line in its context](/jotter/starlight/integration/#structure-of-the-base-component) in `astro-vtbot/components/starlight/Base.astro.
+
+The `rootAttributesToPreserve` attribute prevents Starlight's current theme flag on the `<html>` element from being overridden on transitions.
+
+### Setting `data-vtbot-replace="main"`
+The `<ReplacementSwap>` component needs to be told what part of the DOM to replace. And with what. We could add the required `data-vtbot-replace` attribute to Starlight's built-in `PageFrame` component or override that component with out patched custom version. This all would make a lot of work when updating to the next Starlight version.
+
+The solution that is implemented in The Bag's Starlight support is to add the `data-vtbot-replace="main"` attribute dynamically [after the loader](/jotter/astro/loader-swap/#loader) has fetched the new DOM. Here is the function that does that:
+```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
+	function markMainFrameForReplacementSwap(doc: Document) {
+		doc.body.querySelector(STARLIGHT_MAIN_FRAME)?.setAttribute('data-vtbot-replace', 'main');
+	}
+```
+🔓 This reveals what [Lines 12 & 13](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector do.
+
+There is one caveat in this solution: it does not work for view transitions from outside your Starlight site. This is even true for navigation between two Starlight sites.   The reason is that `<ReplacementSwap/>` does not find an initialized app frame on the ingoing edge and falls back to Astro's built-in `swap()`. The solution would be to do a full reload on transitions to your sit from the outside. Component support coming soon.
+
+## Conclusion
+So now we have a solution to keep the app state of a Starlight site up to date across navigation, where we do not need to change any of Starlight's scripts, and we do not even need to know what they are and what they do.
+
+This is very important for robustness and maintainability of the solution.
+
+> **Spoiler**: *The first assumptions does not hold* when we navigate to pages with a different layout, especially the `splash` layout. Read more about the consequences [on the next page](/jotter/starlight/sidebar/)!

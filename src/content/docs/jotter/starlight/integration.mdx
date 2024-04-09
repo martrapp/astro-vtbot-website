@@ -1,0 +1,124 @@
+---
+title: Hooking into Starlight
+---
+
+
+import BoT from "/src/components/BoT.astro"
+
+This section describes how The Bag's Starlight support hooks into the Starlight app.
+
+Visit the [corresponding section in the introduction](/jotter/starlight/#hook-into-starlight) to see where we are in  the big picture of The Bag's Starlight support.
+
+The way to enable view transitions on an Astro site is to add Astro's `<ViewTransition/>` component into the `<head>` of every page. Starlight has a dedicated mechanism to insert elements into the `<head>`. But that works for HTML elements, only. It can't be used to insert an Astro component.
+
+So we need to get access to an Astro component that can render the `<ViewTransitions/>` component into the `<head>`. A good entry pont for that search is Starlight's `<Page>` component. Looking at the relevant part of that component  see that the `<head>` tag is inserted by the `<Page>` component itself, but the children of the `<head>` are rendered by a special `<Head>` component provided by Starlight.
+
+```astro title="Page.astro" showLineNumbers=false
+  ...
+	<head>
+		<Head {...Astro.props} />
+	...
+```
+
+## Overriding the `<Head>` Component
+
+We could copy Starlight's original `<Head>` component, insert the `<ViewTransition>` component and then [add our view transition enabled version to the components mapping](/jotter/starlight/guide/#step-3-use-the-new-head-component) in our `astro.config.*` file. As our copy would be disconnected from future `<Head>` improvements in Starlight, this is at best the second-best solution. It would make it necessary to repeat out change after every update to Starlight's `<Head>` component.
+
+It is better to [reuse the built-in component](https://starlight.astro.build/guides/overriding-components/#reuse-a-built-in-component) as it is and just extend a bit around it.
+
+
+```astro title="./src/components/starlight/Head.astro"
+---
+import type { Props } from '@astrojs/starlight/props';
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+---
+
+<VtbotStarlight {...Astro.props}>
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+</VtbotStarlight>
+```
+So re-using and extending the `<Head>` component is  textbook.[^1] However, the `vtbot` component wraps around the Starlight component, which enables the `vtbot` component to insert stuff before and after the original header elements.
+[^1]: "Override the `<Head>` component as a last resort", [they said](https://starlight.astro.build/reference/overrides/#head-1). Well, we are trained professionals, aren't we?
+
+Once the <BoT/> provides more components for Starlight, this file is also a good place to add them to enable more functionality for the Starlight website.
+
+## Structure of the Base Component
+
+You might already have guessed, what `astro-vtbot/components/starlight/Base.astro` might look like. It has to use `<ViewTransitions/>` and it must render its `<slot/>` to insert the contents of the original `Head` component.
+
+```astro title="astro-vtbot/components/starlight/Base.astro" {15,19} collapse={1-12}
+---
+import type { Props as StarlightProps } from '@astrojs/starlight/props';
+import { ViewTransitions } from 'astro:transitions';
+
+import ReplacementSwap from '../ReplacementSwap.astro';
+import StarlightConnector from './StarlightConnector.astro';
+
+export interface Props extends StarlightProps {
+	viewTransitionsFallback?: Parameters<typeof ViewTransitions>[0]['fallback'];
+	'data-astro-transition-scope'?: string;
+}
+const { viewTransitionsFallback, 'data-astro-transition-scope': mainTransitionScope } = Astro.props;
+---
+
+<ViewTransitions fallback={viewTransitionsFallback} />
+<ReplacementSwap rootAttributesToPreserve="data-theme" />
+{mainTransitionScope && <meta name="vtbot-main-transition-scope" content={mainTransitionScope} />}
+<StarlightConnector />
+<slot />
+```
+The other parts you can see here are
+- It includes `<ReplacementSwap>` to [preserve Starlight's app state](/jotter/starlight/app-state/)
+- If an transition scope was defined for the main section, it inserts its name to the page for later reference, see [Defining Animations](/jotter/starlight/transitions/)
+- It utilizes the `<StarlightConnector/>` component to sets up the connection to the Starlight app. This is described in more detail in the next section.
+
+## Connecting to Starlight
+
+The `<StarlightConnector>` is a component that only contains a single script.
+
+<details>
+<summary>Before we look deeper into what it does, you might ask: \
+?&nbsp;&nbsp;"Why is this an extra component?"\
+?&nbsp;&nbsp;"Why isn't that script simply at the end of the Base component?"</summary>
+
+> Important question, you asked there! Scripts in the `Base` component would be executed before the scripts in the embedded components. Thus embedding the script into its own StarlightConnector component and putting that at the end of the component list ensures that the connector code only runs after the `<ViewTransitions/>` and `<ReplacementSwap/>` scripts are loaded. \
+\
+This in turn ensures that the event listeners are called in the intended order and that in turn determines the execution order of the callbacks ;-)
+</details>
+
+```astro title="astro-vtbot/components/starlight/StarlightConnector.astro"
+---
+---
+<script>
+	const STARLIGHT_MAIN_FRAME = 'div.main-frame';
+	const STARLIGHT_MAIN_SECTION = `${STARLIGHT_MAIN_FRAME} main`;
+	const STARLIGHT_MOBILE_MENU_EXPANDED = 'data-mobile-menu-expanded';
+	const STARLIGHT_SIDEBAR = 'nav.sidebar';
+	const STARLIGHT_MENU_BUTTON = 'starlight-menu-button';
+	const STARLIGHT_SIDEBAR_CONTENT = `${STARLIGHT_SIDEBAR} .sidebar-content`;
+
+	function afterLoader(e: TransitionBeforePreparationEvent) {
+		markMainFrameForReplacementSwap(document);
+		markMainFrameForReplacementSwap(e.newDocument);
+		closeMobileMenu();
+		setMainTransitionScope(e);
+	}
+
+	function afterSwap(e: TransitionBeforeSwapEvent) {
+		updateSidebar(e);
+	}
+...
+</script>
+```
+Three things might be interesting about the excerpt you see here:
+1. There are some dependencies on the structure of Starlight's page layout, the elements and classes used there, and how they are nested.\
+\
+I've tried to keep that in check, make the assumptions explicit in the code, and find the right balance between purposefulness and flexibility. If the assumptions turn out to be wrong in future versions of Starlight, this is where I need to add support for multiple versions.
+
+2. You find here calls for all the features mentioned in the [mandatory actions](/jotter/starlight/#mandatory-actions) section.
+
+3. If you do not only want to know _what_ happens but also _how_, I refer you to the corresponding sections:
+- 🔒 [Managing the App State](/jotter/starlight/app-state/) for `markMainFrameForReplacementSwap`
+- 🔒 [Updating the Sidebar](/jotter/starlight/sidebar/) for `updateSidebar` and `closeMobileMenu`
+- 🔒 [Defining Transitions](/jotter/starlight/transitions/) for `setMainTransitionScope`
