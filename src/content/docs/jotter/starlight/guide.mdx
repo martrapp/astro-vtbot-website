@@ -100,11 +100,11 @@ import StarlightHead from '/src/components/MySpecialHead.astro';
 </details>
 
 ### Try it out for yourself!
-Start your project. No matter what browser you use, you should see that there are no full page loads when navigating.
+Start your project. No matter what browser you use, you should see that there are no full page loads when navigating. The scroll bar and category toggles do not reset when you go to the next page. The search bar remembers your last entry.
 
 In Chromium browsers, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations, but just seamlessly swap pages.[^2]
 
-[^2]: Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. See [here](#animating-the-main-section) on how to animate the main section.
+[^2]: Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. But see [here](#animating-the-main-section) on how to add a cool animation the main section.
 
 :::note[Congratulations!]
 If you were just looking for a SPA-like navigation, you are all set!
