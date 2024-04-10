@@ -36,7 +36,7 @@ export default defineConfig({
 		components: {
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
-			Pagination: "./src/components/starlight/FeelBack.astro",
+//			Pagination: "./src/components/starlight/FeelBack.astro",
 		},
 		title: "Bag of Tricks",
 		head: [{ tag: "meta", attrs: { property: "og:image", content: "https://events-3bg.pages.dev/social.png" } }],
