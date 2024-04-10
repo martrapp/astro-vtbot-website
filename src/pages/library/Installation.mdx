@@ -5,6 +5,8 @@ title: vtbot integration
 
 # Installing astro-vtbot
 
+<a href="https://www.npmjs.com/package/astro-vtbot" target="_blank"><img style="margin:1ex 0" src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5))"/></a>
+
 `astro-vtbot` can be installed as a full [Astro integration](#installing-as-an-astro-integration) or as a [node package](#installing-as-a-node-module). Both ways install the package as a dependency in your project and allow you to import its components and scripts in your own pages. Installing the package **as an Astro integration** in addition sets up your project with an **automatic loading indicator** and  **automatic linter warnings** in the browser console.
 
 ## Contents
@@ -25,7 +27,7 @@ npx astro add astro-vtbot
 ⚠ astro-vtbot is not an official Astro package. Use at your own risk!
 ✔ Continue? … yes
 ✔ Resolving with third party packages...
-10:26:47 
+10:26:47
   Astro will run the following command:
   If you skip this step, you can always run it yourself later
 
@@ -35,7 +37,7 @@ npx astro add astro-vtbot
 
 ✔ Continue? … yes
 ✔ Installing dependencies...
-10:26:52   
+10:26:52
    success  Configuration up-to-date.
 ```
 
@@ -57,7 +59,7 @@ When you start Astro in DEV mode, e.g. `npm run dev`, this will automatically ad
 You can temporarily disable these functions without having to remove the integration by setting the `loadingIndicator` option and/or the `autoLint` option of `vtbot` in your `astro.config` file to `false` (the default is `true`):
 
 
-```js title="astro.config.mjs" {5} 
+```js title="astro.config.mjs" {5}
 import { defineConfig } from "astro/config";
 import vtbot from "astro-vtbot";
 export default defineConfig({

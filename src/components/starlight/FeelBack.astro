@@ -1,0 +1,68 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import BuiltInPagination from '@astrojs/starlight/components/Pagination.astro';
+import FeelbackTaggedMessage from 'astro-feelback/components/FeelbackTaggedMessage.astro';
+import 'astro-feelback/styles/feelback.css';
+
+const CONTENT_SET_ID = 'ac9ba19e-0c5d-48a6-9764-6a02f6cfd902';
+---
+
+<FeelbackTaggedMessage
+	contentSetId={CONTENT_SET_ID}
+	preset="feedback"
+	title="Please share your thoughts!"
+	layout="reveal-message"
+	style={['bordered', 'align-center']}
+	withEmail
+/>
+<BuiltInPagination {...Astro.props}><slot /></BuiltInPagination>
+
+<style is:global>
+	.feelback-container {
+		margin: 0 auto 3rem;
+		--max-width: 400px !important;
+	}
+	.feelback-container .feelback-form .content {
+		border-radius: 9px	;
+		border: 1px solid var(--sl-color-gray-5);
+	}
+	.feelback-container .feelback-form .content:hover {
+		border: 1px solid var(--sl-color-gray-2);
+	}
+
+	.feelback-container .feelback-icon {
+		filter: grayscale(100%);
+	}
+	.feelback-container [data-feelback-type='button-group'] .feelback-btn {
+		border-radius: 9px;
+	}
+
+	.feelback-container [data-feelback-type='button-group'] .feelback-btn.active {
+		color: var(--sl-color-text-invert);
+		background-color: var(--sl-color-text-accent);
+	}
+
+	.feelback-container textarea,
+	.feelback-container input[type='text'],
+	.feelback-container input[type='email'] {
+		border-radius: 9px;
+		border: 1px solid var(--sl-color-gray-5);
+	}
+
+	.feelback-container textarea:hover,
+	.feelback-container input[type='text']:hover,
+	.feelback-container input[type='email']:hover {
+		border: 1px solid var(--sl-color-gray-2);
+	}
+
+	.feelback-container .feelback-btn[type='submit'] {
+		border-radius: 0.5rem;
+		padding: 1.25rem 2rem;
+		color: var(--sl-color-text-invert);
+		background-color: var(--sl-color-gray-2);
+		font-weight: bold;
+	}
+	.feelback-container .feelback-btn[type='submit']:hover {
+		background-color: var(--sl-color-text-accent);
+	}
+</style>

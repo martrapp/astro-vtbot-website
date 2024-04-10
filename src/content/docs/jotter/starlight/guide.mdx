@@ -1,20 +1,34 @@
 ---
-title: How to Add View Transitions to a Starlight Site
+title: How to Add Astro's View Transitions to Starlight for a SPA like Look & Feel
 ---
 
 import BoT from "/src/components/BoT.astro"
 
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
-Don't be afraid that this will turn your beautiful website into a blinking jukebox. The Jotter is just an exaggerated example to show what is possible. If you follow the instructions below, you will be rewarded with a very _subtle_, SPA-like transition effect. And yes, if you want, you can of course later turn the whole thing into a ... blinking jukebox.
+<div style="background-color:#9872; border-radius: 9px; padding: 2ex; box-shadow: #00000028 1.6px 1.6px 3.2px 0px">
+The benefits of doing this include:
+* Looks like a SPA: No full page reloads anymore
+* Behaves like a SPA: Search terms, sidebar scroll position and collapsed category states are retained across navigation
+* Gives you the ability to add visual transition effects to navigation
+* Has fallback support for browser that do not yet implement the View Transition API.
+</div>
 
-:::caution
-At the moment, The Bag's support of view transition for Starlight is still a bit experimental. It has not yet been extensively tested in the wild. Enjoy being on the bleeding edge of technology with your Starlight site, but also be prepared that things might break. Or that not everything you expect will work from the start. I'm happy to improve and expand the initial support over time!
-:::
+Don't be afraid that this will turn your beautiful website into a blinking jukebox. This Jotter is just an exaggerated example to show what is possible. If you follow the instructions below, you will be rewarded with a very _subtle_, SPA-like transition effect. And yes, if you want, you can of course later turn the whole thing into a ... blinking jukebox.
+
+The [introduction page on The Bag's view transition support for Starlight](/jotter/starlight/#will-the-bag-offer-support-for-starlight) defines three categories of features for The Bag's view transition support. This guide currently covers level 1, the mandatory features.
+
+I'm currently working on making the optional features available as reusable components as well and will then extend this guide.
+
+<div style="background-color:#9872; border-radius: 9px; padding: 2ex; box-shadow: #00000028 1.6px 1.6px 3.2px 0px">
+The Bag's support of view transition for Starlight is still young and has not yet been extensively tested in the wild. Enjoy being on the bleeding edge of technology with your Starlight site, but also be prepared that things might break when updating to a newer version or The Bag. Or that not everything you expect will be possible right from the start. I'm happy to improve and expand the initial support over time!
+</div>
 
 ## Step 1: Install astro-vtbot
 
-The <BoT/> can be installed as a package or as an Astro integration. See here for [details an differences](/library/Installation/). Let's assume you just add it as a package:
+<a href="https://www.npmjs.com/package/astro-vtbot" target="_blank"><img style="margin:2ex 0" src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5))"/></a>
+The <BoT/> is available on npm. The package is named `astro-vtbot`.
+It can be installed as a package or as an Astro integration. See the [installation page](/library/Installation/) for details and differences. Let's assume you just want to add it as a package:
 
 ```sh
 cd /to/my/starlight/project
@@ -26,7 +40,7 @@ Make sure that you have the latest version installed.
 
 To enable view transitions, we extend Starlight's  **`Head`** component. We create a replacement component and instruct Starlight to use it as a substitute for its Head. Here is [a pointer](https://starlight.astro.build/guides/overriding-components/) to background information on how overriding components works.
 
-The substitute covers all aspects classified as [mandatory actions](/jotter/starlight/#mandatory-actions) on the overview page	.
+The replacement component covers all aspects classified as [mandatory actions](/jotter/starlight/#mandatory-actions).
 
 Components to cover the more optional things are in the works!
 
@@ -92,7 +106,7 @@ In Chromium browsers, you will see the browser's standard animations for few tra
 
 [^2]: Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. See [here](#animating-the-main-section) on how to animate the main section.
 
-:::tip
+:::note[Congratulations!]
 If you were just looking for a SPA-like navigation, you are all set!
 :::
 
@@ -187,7 +201,7 @@ import { slide } from 'astro:transitions';
 
 ## Optional Features
 
-This section shows you how you to add the features from the [optional feature list](/jotter/starlight/#optional-part).
+This section shows how to add features from the [optional feature list](/jotter/starlight/#optional-part). This just has a single entry right now but will soon grow further.
 
 ### Loading indicator
 Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#example-configuration) already contains the indicator that makes your favicon flash happily in the top right corner during loading.
@@ -214,4 +228,4 @@ We all love `transition:persist`, but just do not use it here. The Starlight int
 
 I look forward to your feedback! Did it work for you? What were the biggest hurdles? What are you looking for?
 
-Get in touch on Discord or discuss on [<BoT/>'s Github pages](https://github.com/martrapp/astro-vtbot) or [its website](https://github.com/martrapp/astro-vtbot-website).
+Get in touch on Discord or discuss on the <BoT/>'s [github page](https://github.com/martrapp/astro-vtbot). And of course I would be more than happy if you would like to [sponsor my projects](https://github.com/sponsors/martrapp)! Made with 💖👜✨!

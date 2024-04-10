@@ -1,17 +1,17 @@
-Visit [The Web Site for the Bag of Tricks for Astro's View Transitions](https://events-3bg.pages.dev)
+# Welcome!
 
-... for anything else related to the Bag ...
+This is [the website](https://events-3bg.pages.dev) of 👜 The Bag ✨
 
-# PLEASE SEE [the lib repository](https://github.com/martrapp/astro-vtbot#readme)
+By full name "The Bag of Tricks for Astro's View Transitions".
 
-You think you see everything 👀👀 twice? No need to worry!
+The library itself can be found here: [astro-vtbot](https://github.com/martrapp/astro-vtbot#readme)
 
-What started as a small tech demo 🐟 has grown faster and has become bigger than originally thought.
+## Troubleshooting &  Contributing
 
-After version 1.3.1, tech demos 🦘and docs 📚 were separated from the reusable components. 🧹
+This package is maintained by [martrapp](https://github.com/martrapp) independently from Astro. You are welcome to contact me on Discord or to contribute by submitting an issue or opening a PR!
 
-Therefore the `astro-vt-bot`repository was renamed `astro-vtbot-website`.
+## Changelog
 
-The reusable components, which are also published on 🅽🅿🅼, got their own `astro-vtbot` repository.
+See [CHANGELOG.md](https://github.com/martrapp/astro-vtbot/blob/main/CHANGELOG.md) for a history of changes of the `astro-vtbot` package.
 
-# You can find all the news about the 👜 bag of tricks ✨ on the `astro-vtbot` [page](https://github.com/martrapp/astro-vtbot/#readme)!
+Made with 💖👜✨!
