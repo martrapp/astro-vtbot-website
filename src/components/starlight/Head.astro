@@ -34,6 +34,9 @@ import '../../styles/ec.s8bdm.css';
 <SilentCatch />
 
 <script>
+	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '../navigate';
 	import '../iframe-theme';
+	import '@feelback/js/auto';
+	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
 </script>

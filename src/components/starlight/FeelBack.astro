@@ -10,27 +10,41 @@ const CONTENT_SET_ID = 'ac9ba19e-0c5d-48a6-9764-6a02f6cfd902';
 <FeelbackTaggedMessage
 	contentSetId={CONTENT_SET_ID}
 	preset="feedback"
-	title="Please share your thoughts!"
-	layout="reveal-message"
+	label="Please share your thoughts about this page!"
+	preselect="idea"
+	placeholder=`
+Hey! Got some thoughts swirling around about the current page? We're all ears! Share your thoughts before you go. And hey, don't forget to save your ideas before you move to the next page – we'd hate to see them slip away! Thanks a bunch!`
+	layout="button-dialog"
 	style={['bordered', 'align-center']}
 	withEmail
 />
 <BuiltInPagination {...Astro.props}><slot /></BuiltInPagination>
 
 <style is:global>
+
+	.feelback-container .feelback-btn.btn-action {
+		text-transform: none;
+		border-radius: 9px;
+		border: 1px solid var(--sl-color-gray-5);
+		padding: 3ex;
+	}
+	.feelback-container .feelback-btn.btn-action:hover {
+		background-color: transparent;
+		border-color: var(--sl-color-gray-2);
+	}
 	.feelback-container {
-		margin: 0 auto 3rem;
+		margin: 0 auto 1rem;
 		--max-width: 400px !important;
 	}
 	.feelback-container .feelback-form .content {
-		border-radius: 9px	;
+		border-radius: 9px;
 		border: 1px solid var(--sl-color-gray-5);
 	}
 	.feelback-container .feelback-form .content:hover {
 		border: 1px solid var(--sl-color-gray-2);
 	}
 
-	.feelback-container .feelback-icon {
+	.feelback-icon {
 		filter: grayscale(100%);
 	}
 	.feelback-container [data-feelback-type='button-group'] .feelback-btn {
@@ -55,13 +69,16 @@ const CONTENT_SET_ID = 'ac9ba19e-0c5d-48a6-9764-6a02f6cfd902';
 		border: 1px solid var(--sl-color-gray-2);
 	}
 
+	.feelback-style .feelback-btn[type='submit'],
 	.feelback-container .feelback-btn[type='submit'] {
 		border-radius: 0.5rem;
-		padding: 1.25rem 2rem;
+		padding: 1.25rem 1 rem;
 		color: var(--sl-color-text-invert);
 		background-color: var(--sl-color-gray-2);
 		font-weight: bold;
+		text-transform: none;
 	}
+	.feelback-style .feelback-btn[type='submit']:hover,
 	.feelback-container .feelback-btn[type='submit']:hover {
 		background-color: var(--sl-color-text-accent);
 	}
