@@ -99,7 +99,7 @@ function sidebar() {
 		{
 			label: "Astro View Transitions",
 			items: [
-				{ label: "<View Transitions>", link: "/jotter/astro/" },
+				{ label: "<View Transitions />", link: "/jotter/astro/" },
 				{ label: "Transition Directives", link: "/jotter/astro/directives/" },
 				{ label: "Global Flow & Events", link: "/jotter/astro/flow-events/" },
 				{ label: "Loading and Swapping", link: "/jotter/astro/loader-swap/" },

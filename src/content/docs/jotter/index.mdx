@@ -16,7 +16,9 @@ So this is all about view transitions: A kind of animation in the browser, where
 
 If a website consists of several pages, you often get annoying effects when the next page is loaded. You will typically see short flashes, half-loaded pages and jumping elements. The main advantage of view transitions is that they replace these loading artifacts with a smooth visual transition. While transitions between pages is the main use case for view transitions, it is worth noting that at their core, they are used to transition between different versions of the same document.
 
-At the time of writing, the world is split in two: Chromium-based browsers (Chrome, Edge, Opera, ...) have native support for view transitions, all others do not. Check out the capabilities of your current browser on the test page!
+At the time of writing, the world is split in two: Chromium-based browsers (Chrome, Edge, Opera, ...) have native support for view transitions, all others do not. Safari added support for view transitions with the Technology Preview 192. Check out the capabilities of your current browser [on the test page](/jotter/api/test-page/)!
+
+
 
  In the Astro framework, you can use native view transitions on browsers that natively support them, and you get an emulation of the main effects on browsers that don't support them.
 
