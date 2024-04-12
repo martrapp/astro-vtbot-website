@@ -4,7 +4,7 @@ title: Defining Transitions
 
 This page gives a first overview on how to add transitions to a view transition enabled Starlight site.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/#add-transition-directives) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#add-transition-directives) to see where we are in  the big picture of The Bag's Starlight support.
 
 When you follow the initial three steps of [the guide](/jotter/starlight/guide/), you enabled the default fade animations on the `<html>` root element for browsers with native view transition support and no animations on other browsers.
 
@@ -36,7 +36,7 @@ Since we don't want to dig into the guts of Starlight, The Bag provides a specia
 
 
 ## Scott me up, Beamy!
-If you are interested, this is how that teleporting thing works. You have [seen these fragments before](/jotter/starlight/integration/#structure-of-the-base-component):
+If you are interested, this is how that teleporting thing works. You have [seen these fragments before](/jotter/starlight/inner-workings/integration/#structure-of-the-base-component):
 ```ts title="astro-vtbot/components/starlight/Base.astro" showLineNumbers=false
 ...
 export interface Props extends StarlightProps {
@@ -59,7 +59,7 @@ The above declaration and code look for the value of the transition scope and em
 
 And that is exactly what happens. The value is added as an `data-astro-transition-scope` attribute to the `<main>` element in the current document and in the `e.newDocument` that was just fetched by the loader.
 
-**Revealed:** So let's reveal what's behind  [Line 16](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+**Revealed:** So let's reveal what's behind  [Line 16](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector.
 
 ```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
 	function setMainTransitionScope(e: TransitionBeforePreparationEvent) {

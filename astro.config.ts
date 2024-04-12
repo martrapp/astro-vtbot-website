@@ -122,10 +122,11 @@ function sidebar() {
 			items: [
 				{ label: "Introduction", link: "/jotter/starlight/" },
 				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide/" },
-				{ label: "Hooking into Starlight", link: "/jotter/starlight/integration/" },
-				{ label: "Managing the App State", link: "/jotter/starlight/app-state/" },
-				{ label: "Updating the Sidebar", link: "/jotter/starlight/sidebar/" },
-				{ label: "Defining Transitions", link: "/jotter/starlight/transitions/" },
+				{label: "The Inner Workings", link:"/jotter/starlight/inner-workings/"},
+				{ label: "Hooking into Starlight", link: "/jotter/starlight/inner-workings/integration/" },
+				{ label: "Managing the App State", link: "/jotter/starlight/inner-workings/app-state/" },
+				{ label: "Updating the Sidebar", link: "/jotter/starlight/inner-workings/sidebar/" },
+				{ label: "Defining Transitions", link: "/jotter/starlight/inner-workings/transitions/" },
 			],
 		},
 		{

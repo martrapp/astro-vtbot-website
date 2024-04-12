@@ -6,7 +6,7 @@ import BoT from "/src/components/BoT.astro"
 
 This page gives some details on how The Bag keeps Starlight's app state up to date during view transitions.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/#keep-app-state-up-to-date) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#keep-app-state-up-to-date) to see where we are in  the big picture of The Bag's Starlight support.
 
 ## The Tightly Coupled approach
 
@@ -23,9 +23,9 @@ The key assumption here is that the only thing that changes when you navigate a 
 
 
 <div class="light:sl-hidden">
-![astro.build docs](../../../../assets/starlight.astro.build_getting-started_dark.png)
+![astro.build docs](/src/assets/starlight.astro.build_getting-started_dark.png)
 </div><div class="dark:sl-hidden">
-![astro.build docs](../../../../assets/starlight.astro.build_getting-started_light.png)
+![astro.build docs](/src/assets/starlight.astro.build_getting-started_light.png)
 </div>
 
 The other assumption is that all scrips reference elements in the application frame but not in the main content area or table of content.
@@ -52,7 +52,7 @@ This automatically also adds some positive effects to Starlight as the app state
 ```ts showLineNumbers=false
 <ReplacementSwap rootAttributesToPreserve="data-theme" />
 ```
-See this [line in its context](/jotter/starlight/integration/#structure-of-the-base-component) in `astro-vtbot/components/starlight/Base.astro.
+See this [line in its context](/jotter/starlight/inner-workings/integration/#structure-of-the-base-component) in `astro-vtbot/components/starlight/Base.astro.
 
 The `rootAttributesToPreserve` attribute prevents Starlight's current theme flag on the `<html>` element from being overridden on transitions.
 
@@ -65,7 +65,7 @@ The solution that is implemented in The Bag's Starlight support is to add the `d
 		doc.body.querySelector(STARLIGHT_MAIN_FRAME)?.setAttribute('data-vtbot-replace', 'main');
 	}
 ```
-**Revealed:** This reveals what [Lines 12 & 13](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector do.
+**Revealed:** This reveals what [Lines 12 & 13](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector do.
 
 There is one caveat in this solution: it does not work for view transitions from outside your Starlight site. This is even true for navigation between two Starlight sites.   The reason is that `<ReplacementSwap/>` does not find an initialized app frame on the ingoing edge and falls back to Astro's built-in `swap()`. The solution would be to do a full reload on transitions to your sit from the outside. Component support coming soon.
 
@@ -74,4 +74,4 @@ So now we have a solution to keep the app state of a Starlight site up to date a
 
 This is very important for robustness and maintainability of the solution.
 
-> **Spoiler**: *The first assumptions does not hold* when we navigate to pages with a different layout, especially the `splash` layout. Read more about the consequences [on the next page](/jotter/starlight/sidebar/)!
+> **Spoiler**: *The first assumptions does not hold* when we navigate to pages with a different layout, especially the `splash` layout. Read more about the consequences [on the next page](/jotter/starlight/inner-workings/sidebar/)!

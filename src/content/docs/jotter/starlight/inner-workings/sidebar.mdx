@@ -4,9 +4,9 @@ title: Updating the Sidebar
 
 The story to be told about the sidebar is a bit convoluted.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/#handle-the-sidebar) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#handle-the-sidebar) to see where we are in  the big picture of The Bag's Starlight support.
 
-The Bag's view transition support keeps the app frame of the Starlight site unchanged  and  [only swaps the main-frame](/jotter/starlight/app-state/) inside it on transitions. While you could  use the sidebar for navigation this way, it would look a bit odd if the current page marker wouldn't change. So we need some script to update the current page marker in the sidebar ourselves. And that's it.
+The Bag's view transition support keeps the app frame of the Starlight site unchanged  and  [only swaps the main-frame](/jotter/starlight/inner-workings/app-state/) inside it on transitions. While you could  use the sidebar for navigation this way, it would look a bit odd if the current page marker wouldn't change. So we need some script to update the current page marker in the sidebar ourselves. And that's it.
 
 At least that's what I thought.
 
@@ -26,13 +26,13 @@ You may have notice that the Jotter is linked from The Bag's homepage. It doesn'
 
 Starting with a splash screen creates an app frame without a sidebar. If you jump to a page with a `doc` template, we keep this app frame and never show a sidebar (until we force the browser to do a full page load). Equally irritating, if you navigate from a `doc` page to a `splash` page, we retain the app frame, which bravely continues to display the sidebar on the splash screen.
 
-So this is the point at which [the first assumption](/jotter/starlight/app-state/#the-assumptions) proved to be wrong.
+So this is the point at which [the first assumption](/jotter/starlight/inner-workings/app-state/#the-assumptions) proved to be wrong.
 
 ### Swapping the Sidebar
 
 We can't just add `data-vtbot-replace` to the sidebar and trust the `<ReplacementSwap/>` component to do it right. It would work to throw away the sidebar when navigating to a splash page, but it might not add a missing sidebar.  But the special handling we need for the sidebar is very similar to what `ReplacementSwap` does internally.
 
-**Revealed:** This now reveals what is behind [Line 20](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+**Revealed:** This now reveals what is behind [Line 20](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector.
 
 ```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
 function updateSidebar(e: TransitionBeforeSwapEvent) {
@@ -98,7 +98,7 @@ Luckily, I still had that code I sketched at the beginning of this page.
 		currentPage?.setAttribute('aria-current', 'page');
 	}
 ```
-**Revealed:** This listing reveals what's behind [Line 14](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+**Revealed:** This listing reveals what's behind [Line 14](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector.
 
 It now again runs by default. You can switch it off in favor of the "replace existing sidebar content on navigation" semantics. Maybe this might be necessary when Starlight comes with its own sidebar state handling. Here is how:
 
@@ -116,7 +116,7 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 
 ## And the Mobile Menu Button?
 
-**Revealed:** How do we close the mobile menu on navigation? This reveals what is hidden behind [Line 15](/jotter/starlight/integration/#connecting-to-starlight) of the StarlightConnector.
+**Revealed:** How do we close the mobile menu on navigation? This reveals what is hidden behind [Line 15](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector.
 
 ```ts title="astro-vtbot/components/starlight/StarlightConnector.astro" showLineNumbers=false
 	function closeMobileMenu() {

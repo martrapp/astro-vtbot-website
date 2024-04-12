@@ -7,7 +7,7 @@ import BoT from "/src/components/BoT.astro"
 
 This section describes how The Bag's Starlight support hooks into the Starlight app.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/#hook-into-starlight) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#hook-into-starlight) to see where we are in  the big picture of The Bag's Starlight support.
 
 The way to enable view transitions on an Astro site is to add Astro's `<ViewTransition/>` component into the `<head>` of every page. Starlight has a dedicated mechanism to insert elements into the `<head>`. But that works for HTML elements, only. It can't be used to insert an Astro component.
 
@@ -69,8 +69,8 @@ const { viewTransitionsFallback, 'data-astro-transition-scope': mainTransitionSc
 <slot />
 ```
 The other parts you can see here are
-- It includes `<ReplacementSwap>` to [preserve Starlight's app state](/jotter/starlight/app-state/)
-- If an transition scope was defined for the main section, it inserts its name to the page for later reference, see [Defining Animations](/jotter/starlight/transitions/)
+- It includes `<ReplacementSwap>` to [preserve Starlight's app state](/jotter/starlight/inner-workings/app-state/)
+- If an transition scope was defined for the main section, it inserts its name to the page for later reference, see [Defining Animations](/jotter/starlight/inner-workings/transitions/)
 - It utilizes the `<StarlightConnector/>` component to sets up the connection to the Starlight app. This is described in more detail in the next section.
 
 ## Connecting to Starlight
@@ -117,9 +117,9 @@ Three things might be interesting about the excerpt you see here:
 \
 I've tried to keep that in check, make the assumptions explicit in the code, and find the right balance between purposefulness and flexibility. If the assumptions turn out to be wrong in future versions of Starlight, this is where I need to add support for multiple versions.
 
-2. You find here calls for all the features mentioned in the [mandatory actions](/jotter/starlight/#mandatory-actions) section.
+2. You find here calls for all the features mentioned in the [mandatory actions](/jotter/starlight/inner-workings/#mandatory-actions) section.
 
 3. If you do not only want to know _what_ happens but also _how_, I refer you to the corresponding sections:
-- [Managing the App State](/jotter/starlight/app-state/) for `markMainFrameForReplacementSwap`
-- [Updating the Sidebar](/jotter/starlight/sidebar/) for `updateSidebar` and `closeMobileMenu`
-- [Defining Transitions](/jotter/starlight/transitions/) for `setMainTransitionScope`
+- [Managing the App State](/jotter/starlight/inner-workings/app-state/) for `markMainFrameForReplacementSwap`
+- [Updating the Sidebar](/jotter/starlight/inner-workings/sidebar/) for `updateSidebar` and `closeMobileMenu`
+- [Defining Transitions](/jotter/starlight/inner-workings/transitions/) for `setMainTransitionScope`
