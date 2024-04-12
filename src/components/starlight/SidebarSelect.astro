@@ -1,58 +1,66 @@
 ---
-export interface Props {};
+export interface Props {}
 ---
 
 <script>
-	import { isTransitionBeforeSwapEvent, TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
+	import {
+		type TransitionBeforeSwapEvent,
+		isTransitionBeforeSwapEvent,
+		TRANSITION_BEFORE_SWAP,
+	} from 'astro:transitions/client';
+	import { sidebarEntry } from 'astro-vtbot/components/starlight/utils';
 
-	let clone: HTMLAnchorElement | null = null;
+	const marker = init();
 
-	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
-		if (isTransitionBeforeSwapEvent(e)) {
-			e.viewTransition.ready.then(() => {
-				if (clone) {
-					clone.remove();
-					clone = null;
-				}
-				const current = document.querySelector(
-					`.sidebar-pane a[href="${e.from.pathname}"]`
-				) as HTMLAnchorElement;
-				if (!current || getComputedStyle(current).visibility === 'hidden') return;
+	function moveMarker(e: TransitionBeforeSwapEvent) {
+		const current = sidebarEntry(e.from);
+		if (!current || getComputedStyle(current).visibility === 'hidden') return;
+		let next = sidebarEntry(e.to);
+		if (!next) return;
 
-				let next = document.querySelector(
-					`.sidebar-pane a[href="${e.to.pathname}"]`
-				) as HTMLAnchorElement|null;
+		const nextRect = next.getBoundingClientRect();
+		const currentRect = (current as HTMLElement).parentElement!.getBoundingClientRect();
+		marker.style.left = currentRect.left - 8 + 'px';
+		marker.style.top = currentRect.top + 'px';
+		document.body.appendChild(marker);
 
-				if (!next) return;
-				const nextRect = next.getBoundingClientRect();
-				clone = current.cloneNode() as HTMLAnchorElement;
-				const currentRect = current.getBoundingClientRect();
-				clone.style.position = 'fixed';
-				clone.style.zIndex = '1000';
-				clone.innerText = '';
-				clone.style.width = `${currentRect.width}px`;
-				clone.style.height = `${currentRect.height}px`;
-				clone.style.backgroundColor = 'var(--sl-color-text-accent)';
-				clone.style.opacity = '0.5';
-				document.querySelectorAll('[aria-current="page"]').forEach((el) => {
-					el.removeAttribute('aria-current');
-				});
-				document.body.appendChild(clone);
-
-				clone
-					.animate(
-						{
-							top: [`${currentRect.top}px`, `${nextRect.top}px`],
-							easing: ['ease-in-out'],
-						},
-						500
-					)
-					.finished.then(() => {
-						clone?.remove();
-						next?.setAttribute('aria-current', 'page');
-						next = clone = null;
-					});
+		marker
+			.animate(
+				{
+					top: [`${currentRect.top}px`, `${currentRect.top}px`, `${nextRect.top}px`,`${nextRect.top}px`],
+					opacity: [0, 1, 1, 0],
+					easing: ['ease-in-out'],
+				},
+				1500
+			)
+			.finished.then(() => {
+				marker.style.top = nextRect.top + 'px';
 			});
-		}
-	});
+	}
+
+	function init() {
+		const marker = document.createElement('span');
+		const current = document.querySelector(`.sidebar-pane [aria-current="page"]`);
+		const currentRect = (current as HTMLElement).parentElement!.getBoundingClientRect();
+		marker.style.position = 'fixed';
+		marker.style.zIndex = '10';
+		marker.style.left = currentRect.left - 8 + 'px';
+		marker.style.top = currentRect.top + 'px';
+		marker.style.height = currentRect.height + 'px';
+		marker.style.width = '8px';
+		marker.style.backgroundColor = 'var(--sl-color-text-accent)';
+		marker.style.opacity = '0';
+		document.body.appendChild(marker);
+
+		document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
+			if (isTransitionBeforeSwapEvent(e)) {
+				const originalSwap = e.swap;
+				e.swap = () => {
+					originalSwap();
+					moveMarker(e);
+				};
+			}
+		});
+		return marker;
+	}
 </script>

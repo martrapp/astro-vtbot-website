@@ -30,7 +30,7 @@ export default defineConfig({
 		],
 		remarkPlugins: [remarkToc],
 	},
-	trailingSlash: 'always',
+	trailingSlash: 'ignore',
 	integrations: [d2({ skipGeneration: process.env.GITHUB_ACTIONS === "true" }), vtbot({ autoLint: false }),
 	starlight({
 		components: {
@@ -104,7 +104,7 @@ function sidebar() {
 				{ label: "Global Flow & Events", link: "/jotter/astro/flow-events/" },
 				{ label: "Loading and Swapping", link: "/jotter/astro/loader-swap/" },
 				{ label: "How Simulation and API differ", link: "/jotter/astro/differences/"},
-				{ label: "Script State Update after Transition", link: "/jotter/astro/scripts" },
+				{ label: "Script State Update after Transition", link: "/jotter/astro/scripts/" },
 			],
 		},
 		{
@@ -122,11 +122,12 @@ function sidebar() {
 			items: [
 				{ label: "Introduction", link: "/jotter/starlight/" },
 				{ label: "Guide: Adding View Transitions", link: "/jotter/starlight/guide/" },
-				{label: "The Inner Workings", link:"/jotter/starlight/inner-workings/"},
+				{label: "The Inner Workings", items:[
+				{label: "Overview", link:"/jotter/starlight/inner-workings/"},
 				{ label: "Hooking into Starlight", link: "/jotter/starlight/inner-workings/integration/" },
 				{ label: "Managing the App State", link: "/jotter/starlight/inner-workings/app-state/" },
 				{ label: "Updating the Sidebar", link: "/jotter/starlight/inner-workings/sidebar/" },
-				{ label: "Defining Transitions", link: "/jotter/starlight/inner-workings/transitions/" },
+				{ label: "Defining Transitions", link: "/jotter/starlight/inner-workings/transitions/" }]},
 			],
 		},
 		{

@@ -10,7 +10,7 @@ This guide describes what has to be done to add view transitions to an existing 
 The benefits of doing this include:
 * Looks like a Single Page Application: No full page reloads anymore
 * Behaves like a Single Page Application: Search terms, sidebar scroll position and collapsed category states are retained across navigation
-* Gives you the ability to add visual transition effects to navigation
+* Enables you to easily add visual transition effects to your site
 * Has fallback support for browser that do not yet implement the View Transition API
 </div>
 
@@ -221,8 +221,10 @@ Starlight supports a lot of different config options. The Bags view transition s
 
 Multilingual Starlight sites force a complete reload of the page if you select a different language. This is a good thing, as the app frame changes completely and has to be reloaded anyway.
 
-### Don't use `transition:persist`
-We all love `transition:persist`, but just do not use it here. The Starlight integration of <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which has no use for `transition:persist`. If you want to persist components when using the Bag's Starlight support, just put them somewhere outside the `<main>` area. Done.
+### How to use `transition:persist`
+The Starlight integration of the <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which automatically persists everything outside the `div.main-frame` area. If you are flexible where to place things, just put them somewhere outside the `div.main-frame`  to persist them and you are done.
+
+As of v1.7.8 `<ReplacementSwap />` also handles `data-transition-persist` attributes in the document trees that are swapped in from the new page. You can use this to persist an element inside the `div.main-frame` area to keep its state on all Starlight pages.
 
 ## As always, feedback is very welcome!
 

@@ -7,21 +7,21 @@ const { prefix } = Astro.props;
 
 {prefix && <meta name="vtbot-reload-fence-prefix" content={prefix} />}
 <script>
-	import {
+import {
 		isTransitionBeforePreparationEvent,
 		TRANSITION_BEFORE_PREPARATION,
 	} from 'astro:transitions/client';
 
-	const prefix =
-		(document.querySelector('meta[name="vtbot-reload-fence-prefix"]') as HTMLMetaElement)
-			?.content ?? '/';
+	const prefix = '/jotter/';
+	/* 		(document.querySelector('meta[name="vtbot-reload-fence-prefix"]') as HTMLMetaElement)
+			?.content ?? '';*/
 	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
 		if (
 			isTransitionBeforePreparationEvent(e) &&
 			!e.from.pathname.startsWith(prefix) &&
 			e.to.pathname.startsWith(prefix)
 		) {
-			location.href = e.to.href;
+			e.navigationType === "traverse" ? location.reload() : e.preventDefault();
 		}
 	});
 </script>

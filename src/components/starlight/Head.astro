@@ -16,6 +16,7 @@ import SidebarSelect from './SidebarSelect.astro';
 
 import '../../styles/vt.css';
 import '../../styles/ec.s8bdm.css';
+import AutoCollapse from '../bot/AutoCollapse.astro';
 ---
 
 <VtbotStarlight {...Astro.props}>
@@ -32,6 +33,7 @@ import '../../styles/ec.s8bdm.css';
 <PagefindToTextFragments />
 <SwapSound src="/swoosh-6428.mp3" />
 <SilentCatch />
+<AutoCollapse />
 
 <script>
 	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';

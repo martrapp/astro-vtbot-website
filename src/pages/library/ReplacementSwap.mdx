@@ -61,7 +61,7 @@ import ReplacementSwap from 'astro-vtbot/components/ReplacementSwap.astro';
 
 Elements with CSS animations or iframes located outside the `<main>` element, e.g. in the `<header>` or `<footer>`,  are not affected by the replacement. They are not reloaded or interrupted during navigation.
 
-Setting `transition:persist` has no effect for `<ReplacementSwap>`.
+Setting `transition:persist` has no effect for `<ReplacementSwap />` when used outside the trees that are swapped in. Starting with v1.7.8 of `astro-vtbot`, `data-astro-transition-persist` and `data-astro-transition-persist-props` are handled inside the trees that are replaced. Semantics are the same as with Astro's default `swap()`. You can also use `transition:persist` and `transition:persist-props` directives. But be aware that Astro also creates an additional transition scope with a new transition group and image pair.
 
 ## Multiple Replacements
 The elements with the same identifier do not have to be the same type of HTML element. Furthermore, the use of the `data-vtbot-replace` attribute is not limited to the main area of your page. You can define several areas of your page to be replaced by content from the next page. Use different names for the `data-vtbot-replace` attribute to control which old parts are to be replaced by which new content. The names you choose must be unique on each page.

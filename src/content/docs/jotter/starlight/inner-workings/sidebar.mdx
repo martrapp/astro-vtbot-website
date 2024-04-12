@@ -4,7 +4,7 @@ title: Updating the Sidebar
 
 The story to be told about the sidebar is a bit convoluted.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#handle-the-sidebar) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the overview](/jotter/starlight/inner-workings/#handle-the-sidebar) to see where we are in  the big picture of The Bag's Starlight support.
 
 The Bag's view transition support keeps the app frame of the Starlight site unchanged  and  [only swaps the main-frame](/jotter/starlight/inner-workings/app-state/) inside it on transitions. While you could  use the sidebar for navigation this way, it would look a bit odd if the current page marker wouldn't change. So we need some script to update the current page marker in the sidebar ourselves. And that's it.
 

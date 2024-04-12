@@ -6,7 +6,7 @@ import BoT from "/src/components/BoT.astro"
 
 This page gives some details on how The Bag keeps Starlight's app state up to date during view transitions.
 
-Visit the [corresponding section in the introduction](/jotter/starlight/inner-workings/#keep-app-state-up-to-date) to see where we are in  the big picture of The Bag's Starlight support.
+Visit the [corresponding section in the overview](/jotter/starlight/inner-workings/#keep-app-state-up-to-date) to see where we are in  the big picture of The Bag's Starlight support.
 
 ## The Tightly Coupled approach
 
@@ -38,7 +38,7 @@ If these two assumptions are true, we have no problems with the script state and
 
 ## Keeping the Frame Part of the DOM ...
 
- [During `swap()`](/jotter/astro/loader-swap/#swap) we would simply copy the application frame to the next page. Doing this with `transition:persist` requires a deep knowledge of the structure of a Starlight page and is vulnerable to changes in that structure.
+ [During `swap()`](/jotter/astro/loader-swap/#swap) we would simply copy the application frame to the next page. Doing this with `transition:persist` requires a deep knowledge of the structure of a Starlight page and is more vulnerable to changes in that structure.
 
 ### ... with `<ReplacementSwap>`
 The much better way is not to copy the frame but to leave it as is and just swap the main content area and the table of contents. For Starlight this is even more simple: There is a single `<div>` with class `.main-frame` which holds both.
