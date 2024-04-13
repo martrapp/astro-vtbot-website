@@ -19,16 +19,47 @@ export interface Props {}
 		if (!next) return;
 
 		const nextRect = next.getBoundingClientRect();
-		const currentRect = (current as HTMLElement).parentElement!.getBoundingClientRect();
-		marker.style.left = currentRect.left - 8 + 'px';
+		const currentRect = current.getBoundingClientRect();
+		marker.style.left = nextRect.left + 'px';
 		marker.style.top = currentRect.top + 'px';
 		document.body.appendChild(marker);
 
 		marker
 			.animate(
 				{
-					top: [`${currentRect.top}px`, `${currentRect.top}px`, `${nextRect.top}px`,`${nextRect.top}px`],
-					opacity: [0, 1, 1, 0],
+					width: [
+						`${currentRect.width}px`,
+						`${currentRect.width}px`,
+						'16px',
+						'16px',
+						`${nextRect.width}px`,
+						`${nextRect.width}px`,
+					],
+					height: [
+						`${currentRect.height}px`,
+						`${currentRect.height}px`,
+						`${currentRect.height}px`,
+						`${nextRect.height}px`,
+						`${nextRect.height}px`,
+						`${nextRect.height}px`,
+					],
+					left: [
+						`${currentRect.left}px`,
+						`${currentRect.left}px`,
+						`0px`,
+						`0px`,
+						`${nextRect.left}px`,
+						`${nextRect.left}px`,
+					],
+					top: [
+						`${currentRect.top}px`,
+						`${currentRect.top}px`,
+						`${currentRect.top}px`,
+						`${nextRect.top}px`,
+						`${nextRect.top}px`,
+						`${nextRect.top}px`,
+					],
+					opacity: [0, 0.5, 0.5, 0.5, 0.5, 0],
 					easing: ['ease-in-out'],
 				},
 				1500
@@ -44,11 +75,11 @@ export interface Props {}
 		const currentRect = (current as HTMLElement).parentElement!.getBoundingClientRect();
 		marker.style.position = 'fixed';
 		marker.style.zIndex = '10';
-		marker.style.left = currentRect.left - 8 + 'px';
 		marker.style.top = currentRect.top + 'px';
-		marker.style.height = currentRect.height + 'px';
-		marker.style.width = '8px';
-		marker.style.backgroundColor = 'var(--sl-color-text-accent)';
+		marker.style.height = '28px';
+		marker.style.width = '16px';
+		marker.style.borderRadius = '9px';
+		marker.style.backgroundColor = 'var(--sl-color-accent)';
 		marker.style.opacity = '0';
 		document.body.appendChild(marker);
 
