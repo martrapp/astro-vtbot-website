@@ -14,7 +14,7 @@ export interface Props {}
 
 	function moveMarker(e: TransitionBeforeSwapEvent) {
 		const current = sidebarEntry(e.from);
-		if (!current || getComputedStyle(current).visibility === 'hidden') return;
+		if (!current) return;
 		let next = sidebarEntry(e.to);
 		if (!next) return;
 
@@ -71,11 +71,8 @@ export interface Props {}
 
 	function init() {
 		const marker = document.createElement('span');
-		const current = document.querySelector(`.sidebar-pane [aria-current="page"]`);
-		const currentRect = (current as HTMLElement).parentElement!.getBoundingClientRect();
 		marker.style.position = 'fixed';
 		marker.style.zIndex = '10';
-		marker.style.top = currentRect.top + 'px';
 		marker.style.borderRadius = '9px';
 		marker.style.backgroundColor = 'var(--sl-color-accent)';
 		marker.style.opacity = '0';
