@@ -19,12 +19,12 @@ Run all that directly after [the loader](/jotter/astro/loader-swap/#loader) has 
 ## Splash! Sidebar Changes on Navigation
 
 To be honest, I did the exercise above for v1.7.0 of The Bag and thought it was good as it was. But then [I learned it wasn't](https://github.com/martrapp/astro-vtbot/issues/55).
-I had another dependency on Starlight's page structure that I wasn't aware of before: If you use the `splash` layout, the sidebar is not created at all.
+I had another dependency on Starlight's page structure that I wasn't aware of before: If you use the `splash` template, the sidebar is not created at all.
 
 You may have notice that the Jotter is linked from The Bag's homepage. It doesn't use a splash screen as entry. But almost all others Starlight sites do.
 
 
-Starting with a splash screen creates an app frame without a sidebar. If you jump to a page with a `doc` template, we keep this app frame and never show a sidebar (until we force the browser to do a full page load). Equally irritating, if you navigate from a `doc` page to a `splash` page, we retain the app frame, which bravely continues to display the sidebar on the splash screen.
+Starting with a [splash screen](/jotter/starlight/inner-workings/splash1/) creates an app frame without a sidebar. If you jump to a page with a `doc` template, we keep this app frame and never show a sidebar (until we force the browser to do a full page load). Equally irritating, if you navigate from a `doc` page to a `splash` page, we retain the app frame, which bravely continues to display the sidebar on the splash screen.
 
 So this is the point at which [the first assumption](/jotter/starlight/inner-workings/app-state/#the-assumptions) proved to be wrong.
 
