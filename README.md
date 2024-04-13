@@ -2,7 +2,8 @@
 
 This is [the website](https://events-3bg.pages.dev) of 👜 The Bag ✨
 
-By full name "The Bag of Tricks for Astro's View Transitions".
+By full name "The Bag of Tricks for Astro's View Transitions".\
+"If it doesn't move, it's probably unmoved."
 
 The library itself can be found here: [astro-vtbot](https://github.com/martrapp/astro-vtbot#readme)
 
