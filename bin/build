@@ -9,8 +9,6 @@ astro check && astro build
 if [ "$?" -ne "0" ]; then
 	exit 1
 fi
-LOGO=$(ls dist/_astro/favicon*.svg)
-echo ${LOGO} $(echo ${LOGO}|sed 's|\(dist/_astro/.*\)_.*\.svg|\1.svg|') | xargs cp
 ./bin/check_links.sh
 if [ ! -f ./dist/_astro/ec.s8bdm.css ]
 then

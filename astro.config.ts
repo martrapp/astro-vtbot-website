@@ -46,7 +46,7 @@ export default defineConfig({
 		lastUpdated: true,
 		pagination: true,
 		logo: {
-			src: "/public/favicon.svg",
+			src: "/node_modules/astro-vtbot/assets/bag-of-tricks.svg",
 		},
 		expressiveCode: {
 			themes: ['github-dark', 'github-light'],
