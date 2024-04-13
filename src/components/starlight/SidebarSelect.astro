@@ -83,11 +83,9 @@ export interface Props {}
 
 		document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
 			if (isTransitionBeforeSwapEvent(e)) {
-				const originalSwap = e.swap;
-				e.swap = () => {
-					originalSwap();
+				e.viewTransition.ready.then(() => {
 					moveMarker(e);
-				};
+				});
 			}
 		});
 		return marker;
