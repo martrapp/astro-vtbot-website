@@ -139,10 +139,50 @@ What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-co
 This only serves as an example. It is not necessary to set `viewTransitionsFallback` to `animate` as this is the default setting anyway.
 
 ### Sidebar Behavior
-By the default, the sidebar content will not change on navigation. Only the current page marker will change. But you can switch this behavior and have the content replaced on each navigation. To do this, add the `replaceSidebarContent` attribute the `VtbotStarlight` tag in your new `Head` component.
+By the default, the sidebar content will not change on navigation. Only the current page marker will be changed, opened, and scrolled into view. There are several ways how you can change this behavior.
+
+#### Replace the Sidebar Content
+You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component).
 ```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} replaceSidebarContent>
 ```
+This will swap in the sidebar content from the next page when you navigate. This allows you to have different sidebar content on your pages. It also allows you to control the state of the categories, i.e. whether they are shown open or collapsed, with your static page content. Auto-opening and auto-scrolling to the current page marker is not disabled by this switch.
+
+#### Retain the Current Page Marker
+
+If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
+
+```astro title="/src/components/starlight/Head.astro"
+<VtbotStarlight {...Astro.props} retainCurrentPageMarker>
+```
+On navigation, this leaves the current page marker as is. If you already set the `replaceSidebarContent` attribute, you do not need `retainCurrentPageMarker`. To assist you in updating the page marker yourself, The Bag offers these utility functions:
+
+```ts title="astro-vtbot/components/starlight/utils.ts"
+// Return the <a> element inside the sidebar that best fits the URL parameter
+export function sidebarEntry(url: URL): HTMLAnchorElement | null {...}
+
+// Clears the current page marker in the sidebar without setting a new one
+export function clearCurrentPageMarker(): void {...}
+
+// Clears the current page marker and then sets it to the entry that best fits the URL
+export function updateCurrentPageMarker(url: URL): void {...}
+
+// Opens all nested categories of a sidebar entry. Without parameter, opens the entry of the current page marker. With url parameter opens the corresponding sidebarEntry(url).
+export function openCategory(url?: URL): void {...}
+
+```
+Here _best fit_ in general means _exact match_, but if there is none, it also looks for the longest common prefix.
+
+To use the utility functions, import one ore more from `astro-vtbot/components/starlight/utils`:
+```astro title="MySidebarAnimations.astro"
+---
+---
+<script>
+  import { clearCurrentPageMarker, updateCurrentPageMarker, sidebarEntry } from 'astro-vtbot/components/starlight/utils';
+  ...
+</script>
+```
+
 
 ### Additional Styling
 

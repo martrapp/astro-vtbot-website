@@ -21,7 +21,7 @@ import '../../styles/ec.s8bdm.css';
 import AutoCollapse from '../bot/AutoCollapse.astro';
 ---
 
-<VtbotStarlight {...Astro.props}>
+<VtbotStarlight {...Astro.props} retainCurrentPageMarker>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 <ReloadFence prefix="/jotter/" />

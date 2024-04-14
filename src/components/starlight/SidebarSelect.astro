@@ -8,14 +8,21 @@ export interface Props {}
 		isTransitionBeforeSwapEvent,
 		TRANSITION_BEFORE_SWAP,
 	} from 'astro:transitions/client';
-	import { sidebarEntry } from 'astro-vtbot/components/starlight/utils';
+	import {
+		sidebarEntry,
+		clearCurrentPageMarker,
+		openCategory,
+		updateCurrentPageMarker,
+	} from 'astro-vtbot/components/starlight/utils';
 
 	const marker = init();
 
-	function moveMarker(e: TransitionBeforeSwapEvent) {
+	async function moveMarker(e: TransitionBeforeSwapEvent) {
+		openCategory(e.to);
+
 		const current = sidebarEntry(e.from);
 		if (!current) return;
-		let next = sidebarEntry(e.to);
+		const next = sidebarEntry(e.to);
 		if (!next) return;
 
 		const nextRect = next.getBoundingClientRect();
@@ -24,49 +31,57 @@ export interface Props {}
 		marker.style.top = currentRect.top + 'px';
 		document.body.appendChild(marker);
 
-		marker
-			.animate(
-				{
-					width: [
-						`${currentRect.width}px`,
-						`${currentRect.width}px`,
-						'16px',
-						'16px',
-						`${nextRect.width}px`,
-						`${nextRect.width}px`,
-					],
-					height: [
-						`${currentRect.height}px`,
-						`${currentRect.height}px`,
-						`${currentRect.height}px`,
-						`${nextRect.height}px`,
-						`${nextRect.height}px`,
-						`${nextRect.height}px`,
-					],
-					left: [
-						`${currentRect.left}px`,
-						`${currentRect.left}px`,
-						`0px`,
-						`0px`,
-						`${nextRect.left}px`,
-						`${nextRect.left}px`,
-					],
-					top: [
-						`${currentRect.top}px`,
-						`${currentRect.top}px`,
-						`${currentRect.top}px`,
-						`${nextRect.top}px`,
-						`${nextRect.top}px`,
-						`${nextRect.top}px`,
-					],
-					opacity: [0, 0.5, 0.5, 0.5, 0.5, 0],
-					easing: ['ease-in-out'],
-				},
-				1500
-			)
-			.finished.then(() => {
-				marker.style.top = nextRect.top + 'px';
-			});
+		// todo: make this customizable and add support for prefers-reduced-motion setting
+		const duration = 750;
+		const to1 = setTimeout(clearCurrentPageMarker, duration / 3);
+		const to2 = setTimeout(() => next.setAttribute('aria-current', 'page'), (duration * 2) / 3);
+		const animation = marker.animate(
+			{
+				width: [
+					`${currentRect.width}px`,
+					`${currentRect.width}px`,
+					'16px',
+					'16px',
+					`${nextRect.width}px`,
+					`${nextRect.width}px`,
+				],
+				height: [
+					`${currentRect.height}px`,
+					`${currentRect.height}px`,
+					`${currentRect.height}px`,
+					`${nextRect.height}px`,
+					`${nextRect.height}px`,
+					`${nextRect.height}px`,
+				],
+				left: [
+					`${currentRect.left}px`,
+					`${currentRect.left}px`,
+					`0px`,
+					`0px`,
+					`${nextRect.left}px`,
+					`${nextRect.left}px`,
+				],
+				top: [
+					`${currentRect.top}px`,
+					`${currentRect.top}px`,
+					`${currentRect.top}px`,
+					`${nextRect.top}px`,
+					`${nextRect.top}px`,
+					`${nextRect.top}px`,
+				],
+				opacity: [0, 0.5, 0.5, 0.5, 0.5, 0],
+				easing: ['ease-in-out'],
+			},
+			duration
+		);
+		e.viewTransition.finished.finally(() => {
+			animation.cancel();
+			clearTimeout(to1);
+			clearTimeout(to2);
+			clearCurrentPageMarker();
+			updateCurrentPageMarker(e.to);
+			openCategory(e.to);
+		});
 	}
 
 	function init() {

@@ -95,7 +95,7 @@ h4 a {
 }
 
 .sl-markdown-content code:not(:where(.not-content *)) {
-	background-color: var(--sl-color-bg-inline-code);
+	background-color: var(--sl-color-gray-6);
 	padding: 0 0;
 	font-size: 11pt;
 }
