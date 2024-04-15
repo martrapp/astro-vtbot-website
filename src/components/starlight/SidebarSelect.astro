@@ -16,13 +16,22 @@ export interface Props {}
 	} from 'astro-vtbot/components/starlight/utils';
 
 	const marker = init();
+	const defaultBehavior = (e: TransitionBeforeSwapEvent) => {
+		clearCurrentPageMarker();
+		updateCurrentPageMarker(e.to);
+		openCategory(e.to);
+	};
 
 	async function moveMarker(e: TransitionBeforeSwapEvent) {
 		openCategory(e.to);
 
 		const current = sidebarEntry(e.from);
-		if (!current) return;
 		const next = sidebarEntry(e.to);
+		/* don't animate on mobile */
+		if (!current || !next || window.getComputedStyle(current).visibility !== 'visible') {
+			defaultBehavior(e);
+			return;
+		}
 		if (!next) return;
 
 		const nextRect = next.getBoundingClientRect();
@@ -32,7 +41,7 @@ export interface Props {}
 		document.body.appendChild(marker);
 
 		// todo: make this customizable and add support for prefers-reduced-motion setting
-		const duration = 750;
+		const duration = 1500;
 		const to1 = setTimeout(clearCurrentPageMarker, duration / 3);
 		const to2 = setTimeout(() => next.setAttribute('aria-current', 'page'), (duration * 2) / 3);
 		const animation = marker.animate(
@@ -78,9 +87,7 @@ export interface Props {}
 			animation.cancel();
 			clearTimeout(to1);
 			clearTimeout(to2);
-			clearCurrentPageMarker();
-			updateCurrentPageMarker(e.to);
-			openCategory(e.to);
+			defaultBehavior(e);
 		});
 	}
 

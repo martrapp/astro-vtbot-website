@@ -22,18 +22,18 @@
 		}
 		document
 			.querySelectorAll<HTMLDetailsElement>(`${STARLIGHT_SIDEBAR_CONTENT} details`)
-			.forEach((d) => {
-				if (!keepOpen.has(d) && d.open) {
-					d.querySelectorAll('ul a').forEach((a) =>
+			.forEach((detail) => {
+				if (!keepOpen.has(detail) && detail.open) {
+					detail.querySelectorAll('ul a').forEach((a) =>
 						a
 							.animate(
 								{
-									opacity: [1, 0],
-									fontSize: ['16px','0px'],
+									opacity: [0],
+									fontSize: ['0px'],
 								},
 								200
 							)
-							.finished.then(() => (d.open = false))
+							.finished.then(() => (detail.open = false))
 					);
 				}
 			});
