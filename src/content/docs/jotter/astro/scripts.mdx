@@ -1,37 +1,41 @@
 ---
-title: Updating Script State after Transitions
+title: Updating State after Transitions
 ---
 
 
 As with any existing Astro application, adding view transitions has two parts:
-1. Add `<ViewTransitions/>` to the `<head>`.
+1. Add `<ViewTransitions />` to the `<head>`.
 2. Trying to get the scripts working again.
 
 Why is that? View transitions are a no-brainer for what Astro is famous for: statically generated pages without JavaScript. Do step 1 and you are done. It just works.
 
 ## Updating the DOM
-Unlike cross-document navigation, Astro's view transitions perform a soft load. There is the client-side router that implements central parts of Astro's view transitions.
+
+Unlike full page loads / cross-document navigation, Astro's view transitions perform a soft load. There is the client-side router that implements central parts of Astro's view transitions.
 
 It [updates the current document](/jotter/astro/loader-swap/#swap-1) in the browser to look like the new document, and then updates the browser history so that it basically looks like a navigation with full page load to the next page.
 
 For the DOM this even works better than normal browsing as Astro has the [additional ability to copy elements](/jotter/astro/directives/#transitionpersist) from the old page to the new page while keeping their state using `transition:persist="name"`.
 
 
-## Script handling
+## Script Handling on Full Page Loads
 
-Scripts are a different story: \
-With cross-document navigation, the browser un-loads all old scripts including their data. It also initializes a new, clean window object and resets the global lexical scope. When it reads the new document, it executes all scripts inlined in or referenced from that document.
+Scripts are a different story: On full page loads, the browser un-loads all old scripts including their data. It also initializes a new, clean window object and resets the global lexical scope. When it reads the new document, it executes all scripts inlined in or referenced from that document.
 
-The net effect is that the scripts are initialized on the new DOM and can link to the current HTML elements. If we keep the old scripts without re-executing them, their state will still reference HTML elements of the previous DOM. And the scripts do not know about the elements on the new page. So we have to do something.
+The net effect is that the scripts are initialized on the new DOM and can link to the current HTML elements.
 
-### Between a rock and a hard place
-So we just un-load and re-load scripts during view transition navigation like the browser does on full page loads? No, that won't work and here are some reasons why we can not do this in general:
-- We can not unload and reload all scripts as this would also remove Astro's  client-side router and all its state in the middle of the navigation. Resuming processing and state from on the next page may be doable, but won't be efficient. And hey, we are talking about view transitions: the goal is a modern, snappy look when navigating a website, not something that takes forever to change pages.
-- We can neither unload nor reload scripts if the have both attributes `type="module"` and `src="..."`. Those scripts are called external module scripts. The browser caches them and does not offer an API to interact with its own module loader. External module scripts are kept by the browser until the next full page reload and can't be updated or restarted after the initial load.
+If we keep the old scripts without re-executing them, their state will still reference HTML elements of the previous DOM. And the scripts do not know about the elements on the new page. So we have to do something.
+
+## Between a rock and a hard place
+So for soft loads we just un-load and re-load scripts during view transition navigation like the browser does on full page loads? No, that won't work and here are some reasons why we can not do this in general:
+- We can not unload and reload all scripts as this would also remove Astro's  client-side router and all its state in the middle of the navigation. Resuming processing and state on the next page may be doable, but won't be efficient. And hey, we are talking about view transitions: the goal is a modern, snappy look when navigating a website, not something that takes forever to change pages.
+- We can neither unload nor reload scripts if they have both attributes `type="module"` and `src="..."` (after Astro's script processing that is). Those scripts are called _**external module scripts**_. All scripts declared in an `.astro` file with no attributes on the `<script>` tag or only a src attribute, are automatically converted to _external module scripts_ by Astro.
+\
+The browser caches _external module scripts_ and does not offer an API to interact with its own module loader. External module scripts are kept by the browser until the next full page load and can't be updated or restarted after the initial load.
 - We can not reset the windows object and can not clean out the state of the global lexical context where values are stored that are declared by top level `const` and `let`.
 
-### Re-Execution of scripts
-We can re-execute JavaScript scripts if they are given _inline_ in the HTML page (i.e. do not have a `src` attribute) and/or have a type other than module.
+## Inline and Non-Module Scripts
+We can re-execute all JavaScript scripts that are _no_ external module scripts.
 Astro does that in the [completion phase](/jotter/astro/flow-events/#processing-flow) between `astro:after-swap` and `astro:load`.
 
 Now, did I mention that we can not reset the global lexical scope? As a consequence, scripts that use top level `const` and `let` declarations can not be re-executed. This will immediately produce errors:
@@ -57,14 +61,150 @@ However, if you need to use external or third party scripts, chances are it won'
 
 So if reloading scripts is not the best way to reinitialize the script state after navigation, what is?
 
-### The best way to go about it &hellip;
-On transition, data structures of scripts have to forget about the old DOM and reference elements of the new DOM. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update state appropriately.
+## The Best Way to Execute Your Code after View Transitions
+On transition, data structures of scripts have to forget about the old DOM and reference elements of the new DOM. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update state appropriately. This works perfect in combination with external module scripts im your basic layout
 
-This works perfect in combination with external module scripts: The browser only loads them once and keeps them until the next full page load. I.e. they do not get removed or updated  while you navigate using view transitions. The document object itself stays the same during view transitions and only the DOM gets updated. Therefore event listener on the document will survive view transitions and their code will regularly be called to allow for state updates.
+### Use an `astro:page-load` Listener in Your Layout
+Sounds complicated but isn't: An _external module script_ is what you get automatically if Astro processes a script tag with no further attributes.  The browser only loads them once and keeps them until the next full page load. I.e. they do not get removed or updated  while you navigate using view transitions. The document object itself stays the same during view transitions. Only attributes and children of `document.documentElement` are updated. Therefore event listeners for `astro:page-load` on the document object will survive a view transitions navigation and their code will regularly be called after each view transition navigation to allow for state updates. Here is the basic pattern:
 
-### &hellip; but!
+```astro title="MyBasicLayout"
+---
+import { ViewTransitions } from 'astro:transitions'
+---
 
-Sadly, this is only easy if you write new code and know about the events and the limitations of scripts. When you have to use third party scripts, there are cases where you can not avoid to rewrite at least some re-initialization code.
+<html>
+  <head>
+    <ViewTransitions/>
+	</head>
+	<body>
+	  ...
+	</body>
+</html>
+<script>
+	document.addEventListener('astro:page-load', onPageLoad);
+	function onPageLoad() {
+    // Initialize dynamic menu
+    const menu = document.getElementById('menu');
+    menu.addEventListener('click', function() {
+      // Code to handle menu clicks
+    });
+	}
+<script>
+```
+The `onPageLoad` function implements the code that (re)- initializes script state for your pages.
+In this example, we have an element with `id="menu"` on each page and we register a click handler for the `#menu` element right after the new DOM was swapped in. Note, that Astro also triggers `astro:page-load` on the initial page load. Thus the  `onPageLoad()` function also runs on the initial load and after each view transition navigation.
+
+### Executing Code on Selected Pages, Only
+OK, we have code that runs after view transition navigation on all pages. But what if you want to execute different initialization stuff on different pages? Maybe you need to reinitialize handlers for a special toggle on some pages and some image galleries only on others?
+
+Than you should nevertheless keep that pattern:
+1. Run the same code on all pages.
+2. Query the elements that need treatment on the new page.
+3. Be prepared that there are none and there is nothing to do.
+4. Do the required initialization for all matching elements.
+
+This approach has some similarities with [scripts for components](https://docs.astro.build/en/guides/client-side-scripts/#handle-onclick-and-other-events), where you also define code that fits for zero, one, or multiple occurrences of the expected target elements.
+
+Here is an example:
+```astro title="MyLayout1.astro"
+...
+<script>
+  document.addEventListener('astro:page-load', onPageLoad);
+	function onPageLoad(){
+		// If only some pages have the #my-special-toggle element,
+		// the initialization code is only executed on those pages.
+		const toggle = document.getElementById('my-special-toggle');
+		if (toggle) {
+			// ...
+		}
+		// A pattern that works for pages with zero, one or more image galleries
+		document.querySelectorAll('.image-gallery').forEach(...);
+	}
+</script>
+```
+
+The real benefit of this approach compared to inline scripts is that the script element is only executed once (until the next full page load) and therefore the event listener for `astro:page-load` will not be installed several times. Having multiple instances of the same event handler might not only be a waste of resources but might also have hard to debug side effects.
+
+You do not have to merge the initialization for all elements into the same event listeners. You might as well have several listeners for different tasks.
+
+```astro title="MyLayout2.astro"
+...
+<script>
+  document.addEventListener('astro:page-load', togglePageLoad);
+	document.addEventListener('astro:page-load', imageGalleryPageLoad);
+
+	function imageGalleryPageLoad() {
+		// works for pages zero, one or more image galleries
+		document.querySelectorAll('.image-gallery').forEach(...);
+	}
+	function togglePageLoad(){
+		// if only one page has the #my-special-toggle element,
+		// the foreach part is only executed for that element on that page.
+		document.querySelectorAll('#my-special-toggle').forEach(...);
+	}
+</script>
+```
+You might have the listeners in several scripts &hellip;
+
+```astro title="MyLayout3.astro"
+...
+<script>
+  document.addEventListener('astro:page-load', imageGalleryPageLoad);
+	function imageGalleryPageLoad() {
+		// works for pages zero, one or more image galleries
+		document.querySelectorAll('.image-gallery').forEach(...);
+	}
+</script>
+<script>
+  document.addEventListener('astro:page-load', togglePageLoad);
+	function togglePageLoad() {
+		// if only one page has the #my-special-toggle element,
+		// the foreach part is only executed for that element on that page.
+		document.querySelectorAll('#my-special-toggle').forEach(...);
+	}
+</script>
+```
+&hellip; which specially makes sense if you link with the `src` attribute to some external script. Just make no assumptions about the order in which the scripts are executed.
+
+```astro title="MyLayout4.astro"
+...
+<script src="/src/scripts/image-gallery-page-load.js" />
+<script src="/src/scripts/toggle-page-load.js" />
+```
+
+You might even put the scripts on the pages that need them. Just keep in mind that this does not mean 'run `onPageLoad()` exactly on this page' but 'run `onPageLoad` from now on, on every page'.
+
+### When CSS Selectors aren't Good Enough
+
+There are times where simple CSS selectors are not powerful enough to direct your re-initialization code. You might also need to know on which page you are. You could test for the page's title, but it might be more efficient to check for URL patterns. For example, you could match URLs using `url.pathname.startsWith()` or check the current location against a regular expression.
+
+In `astro:page-load` listeners, `window.location.href` hold the actual location, no matter how you got there (click, browser back-navigation, ...). If checking the location is not enough, you could also check for the start and end point of the navigation. This information is not available in the `astro:page-load`handler but in both the `astro:before-preparation` and `astro:before-swap`
+handlers. You could evaluate your condition there and reuse the result in the `astro:page-load` handler.
+
+```astro title="MyLayout5.astro"
+...
+<script>
+	let wantToInitialize = false;
+	document.addEventListener('astro:before:swap', (e) => {
+		wantToInitialize =
+			e.from.pathname.startsWith('/docs/') && e.to.pathname.startsWith('/glossary/');
+	});
+	document.addEventListener('astro:page-load', onPageLoad);
+	function onPageLoad(){
+		if (wantToInitialize) {
+			//...
+		}
+	}
+</script>
+```
+
+### The Enabler
+
+This is a quick preview notice. When you craft reusable components for view transitions -- as The Bag does -- you might want to offer your users control over when to apply initialization without the need to alter the code. The Bag will offer support for such situations shortly.
+
+## Alternative Approach for Third Party Scripts
+
+Adapting this pattern is easy if you write new code and know about the events and the limitations of scripts. When you have to use third party scripts, there are cases where you can not avoid to rewrite at least some re-initialization code.
 
 An alternative might be to only renew parts of the DOM on navigation and hope that all dynamic stuff happens outside that area. That is for example how [The Bag's Starlight support](/jotter/starlight/) works.
 

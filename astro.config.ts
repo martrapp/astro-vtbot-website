@@ -105,7 +105,7 @@ function sidebar() {
 				{ label: "Global Flow & Events", link: "/jotter/astro/flow-events/" },
 				{ label: "Loading and Swapping", link: "/jotter/astro/loader-swap/" },
 				{ label: "How Simulation and API differ", link: "/jotter/astro/differences/" },
-				{ label: "Script State Update after Transition", link: "/jotter/astro/scripts/" },
+				{ label: "Re-initialize Scripts after Transition", link: "/jotter/astro/scripts/" },
 			],
 		},
 		{

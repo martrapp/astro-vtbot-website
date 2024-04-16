@@ -8,13 +8,13 @@
 
 	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
 		if (isTransitionBeforeSwapEvent(e)) {
-			e.viewTransition.finished.then(() => {
-				collapse();
-			});
+			e.viewTransition.finished.then(collapse);
 		}
 	});
 
 	function collapse() {
+		if (document.querySelector(`${STARLIGHT_SIDEBAR_CONTENT}.vtbot-no-auto-collapse`)) return;
+
 		let current = document.querySelector(`${STARLIGHT_SIDEBAR_CONTENT} [aria-current="page"]`);
 		const keepOpen = new Set<HTMLDetailsElement>();
 		while ((current = current?.parentElement?.closest('details') ?? null)) {
@@ -39,5 +39,5 @@
 			});
 	}
 
-	collapse();
+	//collapse();
 </script>

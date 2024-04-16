@@ -30,6 +30,7 @@ body {
 	--sl-color-gray-4: #545861;
 	--sl-color-gray-5: #353851;
 	--sl-color-gray-6: #04172f;
+	--sl-color-gray-6-rgb: 4,23,47;
 	--sl-color-black: #001020;
 	--vtbot-bg-color: #102030;
 	--vtbot-glow: radial-gradient(circle, #103050 50%, #081828 100%);
@@ -48,6 +49,7 @@ body {
 	--sl-color-gray-4: #888b96;
 	--sl-color-gray-5: #c0c2c7;
 	--sl-color-gray-6: #e0f0ff;
+	--sl-color-gray-6-rgb: 224,240,255;
 	--sl-color-gray-7: #f5f6f8;
 	--sl-color-black: #ffffff;
 	--vtbot-bg-color: #e8f0f8;
@@ -95,7 +97,7 @@ h4 a {
 }
 
 .sl-markdown-content code:not(:where(.not-content *)) {
-	background-color: var(--sl-color-gray-6);
+	background-color: rgba(var(--sl-color-gray-6-rgb), 0.5);
 	padding: 0 0;
 	font-size: 11pt;
 }

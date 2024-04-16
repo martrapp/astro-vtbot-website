@@ -1,0 +1,27 @@
+---
+
+---
+
+<script>
+	import * as STARLIGHT from 'astro-vtbot/components/starlight/utils';
+	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
+
+	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
+		const content = document.querySelector(STARLIGHT.SIDEBAR_CONTENT);
+		if (!content) return;
+		let toggle = document.querySelector('#vtbot-auto-collapse-toggle');
+		if (toggle) return;
+		toggle = document.createElement('div');
+		toggle.innerHTML =
+			'<label for="vtbot-auto-collapse-toggle">auto collapse </label><input type="checkbox" id="vtbot-auto-collapse-toggle">';
+		toggle.querySelector<HTMLInputElement>('input')!.addEventListener('change', (e) => {
+			if ((e.target as HTMLInputElement).checked) {
+				content.classList.remove('vtbot-no-auto-collapse');
+			} else {
+				content.classList.add('vtbot-no-auto-collapse');
+			}
+		});
+		content.insertAdjacentElement('afterbegin', toggle);
+		content.classList.add('vtbot-no-auto-collapse');
+	});
+</script>
