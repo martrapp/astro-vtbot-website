@@ -64,6 +64,9 @@ main,
 	background-color: var(--vtbot-bg-color);
 }
 
+* {
+	font-size: var(--sl-text-body)
+}
 section.footnotes:before {
 	content: 'Footnotes:';
 	margin-top: 0.5em;
