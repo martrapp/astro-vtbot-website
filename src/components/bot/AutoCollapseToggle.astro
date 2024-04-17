@@ -13,7 +13,7 @@
 		if (toggle) return;
 		toggle = document.createElement('div');
 		toggle.innerHTML =
-			'<label for="vtbot-auto-collapse-toggle">auto collapse </label><input type="checkbox" id="vtbot-auto-collapse-toggle">';
+			'<label for="vtbot-auto-collapse-toggle">auto collapse </label><input type="checkbox" checked id="vtbot-auto-collapse-toggle">';
 		toggle.querySelector<HTMLInputElement>('input')!.addEventListener('change', (e) => {
 			if ((e.target as HTMLInputElement).checked) {
 				content.classList.remove('vtbot-no-auto-collapse');
