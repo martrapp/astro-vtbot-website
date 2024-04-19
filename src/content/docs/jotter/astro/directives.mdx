@@ -2,7 +2,7 @@
 title: Astro Transition Directives
 ---
 Astro has several  directives that you can apply to html elements in your *.astro components[^1] to control view transitions. See [Astro Docs](https://docs.astro.build/en/guides/view-transitions/#transition-directives) for the official documentation. Below are some additional details and background information.
-[1]: Transition directives are not supported in framework components, *.md or *.mdx files.
+[^1]: Transition directives are not supported in framework components, *.md or *.mdx files.
 You use these directives to define what should be animated during view transitions and how.
 
 * `transition:name` introduces a transition group for this element. If there is not also a `transition:animate` directive for the same element, Astro automatically inserts `transition:animate="fade"` for you.
