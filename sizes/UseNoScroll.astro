@@ -1,8 +1,9 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import NoScroll from 'astro-vtbot/components/NoScroll.astro'
-import Mini from './Mini.astro'
+import NoScroll from 'astro-vtbot/components/NoScroll.astro';
+import Mini from './Mini.astro';
 ---
+
 <html>
 	<head>
 		<ViewTransitions />
@@ -10,10 +11,9 @@ import Mini from './Mini.astro'
 	</head>
 	<body>
 		<main transition:name="main">
-
-		<h1>Heading</h1>
-		<a href="/">Link</a>
-		<Mini />
+			<h1>Heading</h1>
+			<a href="/">Link</a>
+			<Mini />
 		</main>
 	</body>
 </html>

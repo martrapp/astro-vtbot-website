@@ -2,6 +2,10 @@ main {
 	view-transition-name: main;
 }
 
+body {
+	overflow: hidden;
+}
+
 ::view-transition-group(root) {
 	animation-duration: 0.5s;
 }
@@ -35,7 +39,7 @@ main {
 	animation: swingBackIn 1.5s ease-in;
 }
 [data-astro-transition='stay']::view-transition-old(main) {
-	animation: swingStayOutP 1.5s ease-in both;
+	animation: swingStayOutP 1.5s ease-in;
 }
 [data-astro-transition='stay']::view-transition-new(main) {
 	animation: swingStayInP 1.5s ease-in;
@@ -61,23 +65,23 @@ main {
 }
 
 [data-astro-transition-fallback='old'] main {
-	animation: swingOut 0.8s ease-in;
+	animation: swingOut 0.8s ease-in both;
 	top: var(--sl-nav-height);
 }
 [data-astro-transition-fallback='new'] main {
-	animation: swingIn 0.8s ease-in;
+	animation: swingIn 0.8s ease-in both;
 }
 [data-astro-transition-fallback='old'][data-astro-transition='back'] main {
-	animation: swingBackOut 0.8s ease-in;
+	animation: swingBackOut 0.8s ease-in both;
 }
 [data-astro-transition-fallback='new'][data-astro-transition='back'] main {
-	animation: swingBackIn 0.8s ease-in;
+	animation: swingBackIn 0.8s ease-in both;
 }
 [data-astro-transition-fallback='old'][data-astro-transition='stay'] main {
-	animation: swingStayOut 0.8s ease-in;
+	animation: swingStayOut 0.8s ease-in both;
 }
 [data-astro-transition-fallback='new'][data-astro-transition='stay'] main {
-	animation: swingStayIn 0.8s ease-in;
+	animation: swingStayIn 0.8s ease-in both;
 }
 
 @keyframes fadeOut {
