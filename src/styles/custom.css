@@ -54,7 +54,7 @@ body {
 	--sl-color-black: #ffffff;
 	--vtbot-bg-color: #e8f0f8;
 	--vtbot-glow: radial-gradient(circle, #c0d0e0 50%, #d8e8f8 100%);
-	--vtbot-glow-shadow: 0 0 10px #fff, 0 0 20px #fca, 0 0 30px #fa5, 0 0 40px #f80;
+	--vtbot-glow-shadow: 0 0 20px #cccc, 0 0 40px #ca88, 0 0 50px #c966, 0 0 60px #c844;
 }
 
 header,

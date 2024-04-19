@@ -2,9 +2,7 @@ main {
 	view-transition-name: main;
 }
 
-body {
-	overflow: hidden;
-}
+
 
 ::view-transition-group(root) {
 	animation-duration: 0.5s;
