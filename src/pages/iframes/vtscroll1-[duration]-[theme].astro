@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/iframes/vtscrollLayout.astro';
+
+export async function getStaticPaths() {
+	return [
+		{ params: { theme: 'light', duration: '0s' } },
+		{ params: { theme: 'dark', duration: '0s' } },
+		{ params: { theme: 'light', duration: '2s' } },
+		{ params: { theme: 'dark', duration: '2s' } },
+		{ params: { theme: 'light', duration: '0' } },
+		{ params: { theme: 'dark', duration: '0' } },
+	];
+}
+const { theme, duration } = Astro.params;
+const opt = duration === '0' ? true : undefined;
+---
+
+<Layout theme={theme === 'light' ? 'light' : 'dark'} {duration} {opt}>
+	<div style="font-family:sans-serif">Top of Page 1</div>
+	<div style="height: 300vh; margin-left:25vw">
+		&ndash;<br />
+		&mdash;&nbsp;01<br />
+		&ndash;<br />
+		&mdash;&nbsp;02<br />
+		&ndash;<br />
+		&mdash;&nbsp;03<br />
+		&ndash;<br />
+		&mdash;&nbsp;04<br />
+		&ndash;<br />
+		&mdash;&nbsp;05<br />
+		&ndash;<br />
+		&mdash;&nbsp;06<br />
+		&ndash;<br />
+		&mdash;&nbsp;07<br />
+		&ndash;<br />
+		&mdash;&nbsp;08<br />
+		&ndash;<br />
+		&mdash;&nbsp;09<br />
+		&ndash;<br />
+		&mdash;&nbsp;10<br />
+		&ndash;<br />
+		&mdash;&nbsp;11<br />
+		&ndash;<br />
+		&mdash;&nbsp;12<br />
+		&ndash;<br />
+		&mdash;&nbsp;13<br />
+	</div>
+	<a
+		href=`../vtscroll2-${duration}-${theme}/`
+		style="font-family:sans-serif; position:fixed; top:40vh; background-color:darkslategrey; color:beige; padding: 1ex"
+		>Go to Page 2</a
+	>
+	<div style="font-family:sans-serif">Bottom of Page 1</div>
+</Layout>
+
+<style is:global>
+	main {
+		background: linear-gradient(to bottom right, #996666, #999966);
+	}
+</style>

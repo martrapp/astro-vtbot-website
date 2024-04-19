@@ -9,7 +9,6 @@ main {
 ::view-transition-group(main) {
 	background: var(--vtbot-glow);
 	overflow: clip;
-	animation: none;
 }
 
 ::view-transition-image-pair(main) {

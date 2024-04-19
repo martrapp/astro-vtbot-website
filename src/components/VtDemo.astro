@@ -6,11 +6,17 @@ const { path } = Astro.props;
 ---
 
 <div data-vtbot-iframe-path={path} style="height: 320px;">
-	<!--iframe src={`/iframes/${path}/`} style="color-scheme: dark; border: none; margin: auto; height: 20rem; width: 20rem"></iframe-->
+	{
+		/*
+	Iframe is dynamically inserted after view transition as otherwise the new-image is distorted.
+
+	<!--iframe src={`/iframes/${path}/`} style="border: none; margin: auto; height: 20rem; width: 20rem"></iframe-->*/
+	}
 </div>
 
 <script>
 	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
+	import './iframe-theme';
 
 	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
 		document.querySelectorAll(`[data-vtbot-iframe-path]`).forEach((el) => {

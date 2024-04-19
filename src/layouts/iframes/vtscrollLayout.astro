@@ -1,0 +1,54 @@
+---
+import { ViewTransitions, slide } from 'astro:transitions';
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+export interface Props {
+	theme: 'light' | 'dark';
+	duration: string;
+	opt: boolean |undefined
+}
+
+const { theme, duration, opt } = Astro.props;
+const none = duration.startsWith('0');
+---
+
+<html style="view-transition-name: none" data-theme={theme}>
+	<head>
+		<meta charset="utf-8" />
+		<ViewTransitions />
+		{opt && <PageOffset name="main" />}
+	</head>
+	<body>
+		<p class="no-vt">Your browser doesn't support native view transitions. All three examples should look the same as Astro's simulation doesn't implement morph animations.</p>
+		<main transition:name="main" transition:animate={slide({duration:2000})} style="font-size:10vh">
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style is:global>
+	.no-vt {
+		display: none;
+	}
+@supports not (view-transition-name: test) {
+	.no-vt {
+		display: block;
+	}
+}
+	:root {
+		color-scheme: light;
+	}
+	:root[data-theme="dark"] {
+		color-scheme: dark;
+	}
+	main,
+	div {
+		padding: 20px;
+		color: black;
+		background-color: #fff8;
+	}
+	a {
+		visibility: visible;
+	}
+</style>
+{ none && <style is:global>::view-transition-group(main) {animation:none}</style>}
+{ !none && <style is:global>::view-transition-group(main) {animation-duration:2s}</style>}

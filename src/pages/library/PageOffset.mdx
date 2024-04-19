@@ -1,0 +1,62 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: PageOffset
+overview: /components/
+vtn: poffset-3
+---
+
+<h1 style="display: inline-block; view-transition-name: poffset-1"><span style="display:inline-block; view-transition-name:poffset-2;">📄⇞&nbsp;</span>Page Offset</h1>
+
+When you put a view transition on the `<body>` or the `<main>` element of your site, you can see a "scrolling" effect on large pages when you initiate the navigation to the next page from the bottom of the long page.
+
+Most authors and users might find this irritating and annoying.
+
+The `<PageOffset />` component completely removes those pseudo-scrolling effects and gives you smooth and neat transitions.
+
+## Contents
+
+## Why should I use this component?
+
+If you have a site with pages that are typically longer than the viewport and you are unhappy with page content sliding through the complete viewport on view transitions.
+
+## How does it work?
+
+The Jotter has a whole section [explaining the problem and the solution](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area).
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node module with `npm install astro-vtbot`.
+
+The recommended way is to place the `<PageOffset>` component in your basic layout after the `<ViewTransitions />` component.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+---
+<html>
+  <head>
+    <ViewTransitions />
+    <PageOffset name="myMain" />
+    ...
+  </head>
+  ...
+</html>
+```
+
+Be aware that the `<PageOffset />` component
+* completely disables the morph animation on the element with the specified name and
+* shifts the old image vertically to compensate for the actual change in scroll position that normally occurs when navigating to the next page.
+
+### Properties
+
+The `<PageOffset/>` component has a single mandatory parameter. You have to specify the name of the problematic element that induced the pseudo-scrolling. If you have a transition named "myName" on your `<main>` element, then use it like in the example above.
+
+Note: It is always a good idea to give transitions an explicit transition name like "myMain", as you can not guess what random name Astro assigns, if you don't. Use the `transition:name="myname"` directive on your `<main>` element if you haven't yet.
+
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| name | string | Instructs the `<PageOffset>` component to fix the pseudo scrolling morph animation on the element with the given view transition name. |
+
+Typically you have at most one such element on your layout. If you need to name multiple elements, repeat the component with different names.

@@ -7,7 +7,7 @@ const { prefix } = Astro.props;
 
 {prefix && <meta name="vtbot-reload-fence-prefix" content={prefix} />}
 <script>
-import {
+	import {
 		isTransitionBeforePreparationEvent,
 		TRANSITION_BEFORE_PREPARATION,
 	} from 'astro:transitions/client';
@@ -21,7 +21,7 @@ import {
 			!e.from.pathname.startsWith(prefix) &&
 			e.to.pathname.startsWith(prefix)
 		) {
-			e.navigationType === "traverse" ? location.reload() : e.preventDefault();
+			e.navigationType === 'traverse' ? location.reload() : e.preventDefault();
 		}
 	});
 </script>

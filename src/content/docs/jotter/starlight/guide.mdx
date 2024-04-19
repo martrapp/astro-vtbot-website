@@ -114,7 +114,7 @@ In the next section, we will extend the view transition effect by adding an anim
 
 ## Configuring View Transitions
 
-You can configure several aspects of the view transition effect in your new Head component.
+You can configure several aspects of the view transition effect in your new `Head` component.
 
 
 ### Animating the Main Section
@@ -126,7 +126,7 @@ You can add a `transition:animate=...` [directive](https://docs.astro.build/en/g
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 ```
-If you want to add further styling to the transition group, you can explicitly name it by accompanying `transition:animate` with `transition:name="main"`.
+If you want to add further styling to the transition group, you can explicitly name it by accompanying `transition:animate` with `transition:name="..."`. This way you replace the random name that Astro automatically gereted for you with a chosen name that you can use in CSS rules, see the [extended configuration example](#extended-configuration-example) below.
 
 ### Fallback Control
 What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from `none`, `swap` or `animate`. Use the `viewTransitionFallback` attribute of the `<VtbotStarlight>` component to tell The Bag what you have chosen:
@@ -249,6 +249,51 @@ To use the utility functions, import one ore more from `astro-vtbot/components/s
 </script>
 ```
 
+### Eliminate Pseudo-Scrolling
+
+The default morph animations might look irritating when applied to elements that are larger than the current viewport. This is typical the case if you add an animation to your main area.  There is a [whole section on the effect](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area) and possible solution in this Jotter.
+
+If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component):
+```astro title="/src/components/starlight/Head.astro"
+---
+...
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+---
+...
+<PageOffset name="main" />
+```
+For details on the PageOffset component see [its description](/library/PageOffset/).
+
+
+## Complete Configuration Example
+
+What follows is a yet more extended version of the [extended configuration example](#extended-configuration-example), but without the styling examples. It is not meant to be copied over into your `Head` but rather as a show case what optional components you might mix and match in your own  `Head` component. The section with the optional components is highlighted.
+
+```astro title="./src/components/starlight/Head.astro" {5-6,22-23}
+---
+import type { Props } from '@astrojs/starlight/props';
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+
+// import one of Astro's predefined animation functions,
+// see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
+import { slide } from 'astro:transitions';
+---
+
+{/* Define a view transition animation for `<main>`*/}
+<VtbotStarlight
+	{...Astro.props}
+	transition:name="main"
+	transition:animate={slide({ duration: 150 })}
+>
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+</VtbotStarlight>
+{/* update this one to whatever image you want to show as a loading indicator */}
+<LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
+<PageOffset name="main" />
+```
 
 ## Known Issues
 

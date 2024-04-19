@@ -4,16 +4,16 @@ import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import ReloadFence from '../bot/ReloadFence.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 
 import MarkHeadings from '../bot/MarkHeadings.astro';
 import MarkTitle from '../bot/MarkTitle.astro';
 import OrderedPages from '../bot/OrderedPages.astro';
-import PageOffset from '../bot/PageOffset.astro';
 import SilentCatch from '../bot/SilentCatch.astro';
 import SwapSound from '../bot/SwapSound.astro';
 import PagefindToTextFragments from './PagefindToTextFragments.astro';
-import "astro-vtbot/components/ReplacementSwap.astro"
-import "astro-vtbot/components/starlight/StarlightConnector.astro"
+import 'astro-vtbot/components/ReplacementSwap.astro';
+import 'astro-vtbot/components/starlight/StarlightConnector.astro';
 import SidebarSelect from './SidebarSelect.astro';
 
 import '../../styles/vt.css';
@@ -25,24 +25,27 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
-<ReloadFence prefix="/jotter/" />
 
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
-<SidebarSelect />
+<PageOffset name="main" />
+
+<OrderedPages prefix="/jotter/" />
 <MarkHeadings prefix="/jotter/" />
 <MarkTitle prefix="/jotter/" />
-<OrderedPages prefix="/jotter/" />
-<PageOffset name="main" />
-<PagefindToTextFragments />
+
 <SwapSound src="/camera-shutter-199580.mp3" />
 <SilentCatch />
-<AutoCollapseToggle/>
+
+<ReloadFence prefix="/jotter/" />
+
+<SidebarSelect />
+<AutoCollapseToggle />
 <AutoCollapse />
+<PagefindToTextFragments />
 
 <script>
 	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '../navigate';
-	import '../iframe-theme';
 	import '@feelback/js/auto';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
 </script>

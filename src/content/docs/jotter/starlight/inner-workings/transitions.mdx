@@ -1,6 +1,7 @@
 ---
 title: Defining Transitions
 ---
+import VtDemo from "/src/components/VtDemo.astro";
 
 This page gives a first overview on how to add transitions to a view transition enabled Starlight site.
 
@@ -10,7 +11,7 @@ When you follow the initial three steps of [the guide](/jotter/starlight/guide/)
 
 ## Adding directives
 
-To add transitions, you want to use [Astro's `transition:*´ directives](/jotter/astro/directives/).
+To add transitions, you want to use [Astro's `transition:*` directives](/jotter/astro/directives/).
 
 There are some problems now:
 - The directives must be added to some HTML elements.  You do not write HTML. You write Markdown.
@@ -19,7 +20,7 @@ There are some problems now:
 
 I would advise against the last point unless you find yourself in a situation where it is really necessary. I think in most cases the element you would choose for a transition group is the main area of the Starlight page anyway, right?
 
-## Teleport Magic
+### Teleport Magic
 
 Since we don't want to dig into the guts of Starlight, The Bag provides a special teleport functionality. Simply place your `transition:*` directives on the `<VtbotStarlight>` component in your new `<Head>` component and The Bag will beam them to the `<main>` element of Starlight's main content area.
 
@@ -35,7 +36,7 @@ Since we don't want to dig into the guts of Starlight, The Bag provides a specia
 ```
 
 
-## Scott me up, Beamy!
+### Scott me up, Beamy!
 If you are interested, this is how that teleporting thing works. You have [seen these fragments before](/jotter/starlight/inner-workings/integration/#structure-of-the-base-component):
 ```ts title="astro-vtbot/components/starlight/Base.astro" showLineNumbers=false
 ...
@@ -79,7 +80,7 @@ And that is exactly what happens. The value is added as an `data-astro-transitio
 Currently, the `<main>` element is the only teleport destination. If you want to add more transitions without hacking Starlight, you can add `view-transition-name` values to elements using pure CSS.
 
 ### Example
-Want to morph the old content title into the new one (on browsers with native view transition support)? Then add this to the **`<style>` section** of you new `<Head>` component.
+Want to morph the old content title into the new one (on browsers with native view transition support)? Then add this to the `<style>` section of you new `<Head>` component.
 ```css title="/src/components/starlight/Head.astro
 main h1 {
   view-transition-name: title-heading
@@ -88,3 +89,53 @@ main h1 {
 	animation-duration: 0.3s;
 }
 ```
+
+##  The Pseudo-Scrolling Main Area
+On browsers with native view transition support, you might see unexpected, and maybe annoying "scrolling" effects. It happens when you define view transition names for the body or large scrollable areas like the main content section of a Starlight site. It does not happen for transitions defined on the `<html>` root element, as this is [handled differently](/jotter/api/#scroll).
+
+ I wrote about this in the overview. [Jump there](/jotter/starlight/inner-workings/#no-more-annoying-scrolling) to see where we are in the big picture of The Bag’s Starlight support.
+
+I need to explain the effect, its root causes and my solution in more detail. It's best if I show you an interactive example so that you can join in.
+
+<div style="float:right; margin: 1ex"><VtDemo path="vtscroll1-2s" /></div>
+Here you see two pages, page 1 and page 2.
+Both pages have a `<main>` element with a length that is greater than the height of the viewport.
+
+The `<main>` elements have the `transition:animate="slide"` Astro directive set. The animation slides the old page out to the left and it slides the new one in from the right. For this demo, the durations are extended to 2 seconds so you can better observe the effects.
+
+Press the link to the next page.  Looks fine?
+
+Now drag the scrollbar all the way down. With the next navigation, the scrollbar jumps to its top position. No smooth scrolling. An instant jump scroll. But it definitively _looks_ like smooth scrolling. If it's not scrolling, then what is the obvious scrolling we see?
+<div style="clear: both"/>
+
+### Morphing Looks like Scrolling
+What looks like scrolling is the morph animation of the two huge (in comparison to the view port) `<main>` elements. The browser takes the old and the new image and morphs them from the old position to the new position. The old position of the top edge of the scrolled down page is several hundred pixels negative in relation to the viewport.  The position of the top edge of the new page is 0. So the morph animation moves both images down from y = -several hundred pixels to y = 0 and looking through the viewport at the new scroll position y = 0, you have the impression that the image moves down from above, or that the viewport is slowly being scrolled upwards.
+
+This now also explains why the phenomenon can only be observed in browsers with native view transition support. [Morph animations cannot be simulated](/jotter/astro/differences/#consequences-for-the-simulation).
+
+### Removing the Morph Animation
+
+Getting rid of the morph animation is easy. Add this to your _global_ style:
+```css
+::view-transition-group(main) {
+	animation: none;
+}
+```
+<div style="float:right; margin: 1ex"><VtDemo path="vtscroll1-0s" /></div>
+This removes the morph animation. When you press the link without scrolling, it looks as it did before.
+
+Now scroll just a little bit down and watch what happens to the old image when you now press the link: When the scrollbar jumps up, the old image jumps down so that the upper edges of both pages are aligned. Then the slide animation kicks in.
+
+Depending on your browser, you might notice that the old image might be incomplete. If the browser captures the old image of an element it should capture the entire element (plus some ink overflow). But it can clip it to reduce resources. Even then, the old image always contains the area that was visible inside the viewport before the view transition started. When the page was scrolled down completely, the capture holds at least the bottom part of the page.
+
+Without a morph animation, both, the new and the old image, start the slide animation at the position of the new `<main>` element, modulo the shift added by the slide animation. The upper part of the old image is at the top of the viewport. If the browser hasn't captured the upper part of the `<main>` element  into the old image, you will see empty background instead. The effect could be even clearer if you really scroll all the way down before clicking on the link.
+
+### Aligning Images
+<div style="float:right; margin: 1ex"><VtDemo path="vtscroll1-0" /></div>
+We can fix the blank background by moving the old image up so that the part of the old image that overlaps with the viewport is aligned with the scroll position of the next page.
+
+If you move the scrollbar to the middle position and then click the link, you will still see that the scrollbar jumps to the top position. But the old image does not seem to move at all. Instead of showing the possibly non-existent upper part of the old image, you will see the guaranteed current part. While the scrollbar jumped up during the navigation to the next page, we also pushed the old-image up to compensate for the scrolling.
+
+Of course, this also should work fine if you scroll all the way to the bottom before you click the link. You can observe the same effects if you scroll the pages of the Jotter and than navigate to another page.
+
+I have promised a reusable component for this use case. It is called `<PageOffset />` and is included since `astro-vtbot v1.7.10`. See the [component description](/library/PageOffset/) for how to use it.

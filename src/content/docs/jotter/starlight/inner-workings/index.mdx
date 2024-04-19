@@ -39,16 +39,15 @@ Next, you need a [loading indicator](/library/LoadingIndicator/) to show that th
 The next step is only necessary if your website also contains pages that are not provided by Starlight. I've added a fence that recognizes when I leave the Starlight section and navigate to the demo or component pages of the site (and vice versa).  For these navigation events, I replace view transitions with full page loads  to reinitialize state, such as search.
 
 ### No more Annoying "Scrolling"
-If you have long pages, view transitions cause a lot of ["scrolling"](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages instantly to the top before the morphing starts.
+If you have long pages, view transitions typically cause a lot of [pseudo-scrolling](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages instantly to the top before the morphing starts.
 
-But surprise! Browsers are allowed to restrict the area that they copy when creating "screenshots" for the old image. The result can be that the old image shows nothing when you look at areas that were originally outside the view port. You will be relieved to hear that the specification states that such areas must be filled with the background color. Life is good ;-)
+But surprise! Browsers are allowed to restrict the area that they copy when creating "screenshots" for the old image. The result can be that the old image shows nothing when you look at areas that were originally outside the viewport. You will be relieved to hear that the specification states that such areas must be filled with the background color. Life is good ;-)
 
 And similar effects can happen when you scroll the new image further down without waiting for the renderer to catch up.
 
-I am very happy with the solution I have now found:
-I slide the old page next to the new page so that the previously visible area is exactly at the same height as the target area of the new page. I'm going to provide a reusable component for this because I think it's really helpful also for others. Take a look at it in action: Scroll one page down to the center, navigate to the next page, scroll to the center again and then switch back and forth with the browser history!
+I am very happy with the solution I have now found: I slide the old page next to the new page so that the previously visible area is exactly at the same height as the target area of the new page. There is an [in-depth section](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area) on it with interactive examples.
 
-At least I think that's great!  <Logo/>
+The <BoT/> provides a [reusable component](/library/PageOffset/) for this use case. It can be used on Starlight and non-Starlight sites. If you want to use it with your Starlight site, see the [section in the guide](/jotter/starlight/guide/#eliminate-pseudo-scrolling) on how to extend your `<Head>` component.
 
 ### Ordered Pages
 Starlight pages can be configured to display links to the previous and next page at the bottom of each page. Here "previous" and "next" mean: In the order in which they appear in the page navigation. Wouldn't it be cool if the page transition animation also used these directions? I was thinking the same thing!

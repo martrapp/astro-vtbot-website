@@ -1,10 +1,11 @@
 # No Scroll Two
 
-		This demo shows how you can effectively suppress scrolling when navigating to the next page. 
-		
-		It
-		works by memorizing the scroll position in the astro:after-preparation handler and setting it in
-		the astro:after-swap handler.
+		This demo shows how you can effectively suppress scrolling when navigating to the next page.
+
+		It works by memorizing the scroll position in the `astro:after-preparation` handler and setting it in the `astro:after-swap` handler.
+
+		See below for the actual code.
+
 ## Every page has this section near the top
 
 ### This is page two
@@ -33,7 +34,7 @@ To achieve this effect, you can put the [&lt;NoScroll /&gt; component](/library/
 
 If you are interested in details, here is a sketch of how that component works:
 
-		We save the actual scroll position in the listener for the `after:preparation` event, i.e. rightbefore the swap. And we restore the scroll position right after the swap, in the `after:swap` listener. 
+		We save the actual scroll position in the listener for the `after:preparation` event, i.e. rightbefore the swap. And we restore the scroll position right after the swap, in the `after:swap` listener.
 
 ```javascript title="no-scroll.js"
   let position = { left: 0, top: 0 };

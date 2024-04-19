@@ -4,15 +4,10 @@ import VtDemo from './vtdemo-[theme].astro';
 export async function getStaticPaths() {
 	return [{ params: { theme: 'light' } }, { params: { theme: 'dark' } }];
 }
-
-const { theme } = Astro.params;
 ---
 
 <VtDemo />
-<style is:global define:vars={{ theme }}>
-	:root {
-		color-scheme: var(--theme);
-	}
+<style is:global>
 	::view-transition-new(*) {
 		animation: none;
 	}

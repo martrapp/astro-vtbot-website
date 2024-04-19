@@ -114,7 +114,7 @@ function sidebar() {
 				{ label: "Browser Support", link: "/jotter/api/test-page/" },
 				{ label: "API Overview", link: "/jotter/api/" },
 				{ label: "API Details", link: "/jotter/api/details/" },
-				{ label: "In Depth Example", link: "/jotter/api/example/" },
+				{ label: "In-Depth Example", link: "/jotter/api/example/" },
 				{ label: "References", link: "/jotter/api/references/" },
 			],
 		},

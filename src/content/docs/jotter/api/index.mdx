@@ -139,16 +139,18 @@ For each image pair with _two_ images, the browser automatically defines an addi
 
 <MorphVt />
 
-Please note that the original elements of the new images are hidden during rendering. This leaves empty spaces in the rendered view, which are filled by the new images. In the animation above, for example, the red block on the right-hand side in the after state is not displayed while the animation is running.
+Please note that the original elements of the new images are hidden during rendering. This leaves empty spaces in the rendered view, which are filled by the new images. In the animation above, for example, the red block on the right-hand side in the after state is not displayed while the animation is running.<a id="scroll"/>
+
 
 
 
 :::caution
-<a id="scroll"/>
 Defining morph animations for elements that are larger than the browser's viewport can lead to strange visual effects that resemble scrolling. That is typically the case for `<body>` or `<main>` on lengthy pages.
 
-The `<html>` root element of the document is an exception to this rule, as it gets special treatment by the View Transition API: here the position is always (0,0) and the size is set to that of the viewport, which makes morph transitions for `:root` effectively a no-op.
+The `<html>` root element of the document is an exception to this rule, as it gets special treatment by the View Transition API: here the position is always (0,0) and the size is set to that of the viewport, which makes morph animations for `:root` effectively a no-op.
 :::
+
+The the section on [pseudo-scrolling morph animations](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area) if you are interested in the details.
 
 ## Summary
 

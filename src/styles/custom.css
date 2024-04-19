@@ -10,7 +10,7 @@
 }
 
 :root {
-	transition: --vtbot-bg-color .5s;
+	transition: --vtbot-bg-color 0.5s;
 }
 body {
 	text-align: left;
@@ -30,7 +30,7 @@ body {
 	--sl-color-gray-4: #545861;
 	--sl-color-gray-5: #353851;
 	--sl-color-gray-6: #04172f;
-	--sl-color-gray-6-rgb: 4,23,47;
+	--sl-color-gray-6-rgb: 4, 23, 47;
 	--sl-color-black: #001020;
 	--vtbot-bg-color: #102030;
 	--vtbot-glow: radial-gradient(circle, #103050 50%, #081828 100%);
@@ -49,7 +49,7 @@ body {
 	--sl-color-gray-4: #888b96;
 	--sl-color-gray-5: #c0c2c7;
 	--sl-color-gray-6: #e0f0ff;
-	--sl-color-gray-6-rgb: 224,240,255;
+	--sl-color-gray-6-rgb: 224, 240, 255;
 	--sl-color-gray-7: #f5f6f8;
 	--sl-color-black: #ffffff;
 	--vtbot-bg-color: #e8f0f8;
@@ -97,7 +97,7 @@ h4 a {
 }
 
 .sl-markdown-content code:not(:where(.not-content *)) {
-	background-color: rgba(var(--sl-color-gray-6-rgb), 0.5);
+	background-color: #8883;
 	padding: 0 0;
 	font-size: 11pt;
 }
@@ -116,7 +116,7 @@ nav:hover ::-webkit-scrollbar {
 }
 
 starlight-menu-button button {
-	background-color: var(--sl-color-gray-3)
+	background-color: var(--sl-color-gray-3);
 }
 
 li a[aria-current='page']:hover,
