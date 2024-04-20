@@ -5,10 +5,10 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import ReloadFence from '../bot/ReloadFence.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
 
 import MarkHeadings from '../bot/MarkHeadings.astro';
 import MarkTitle from '../bot/MarkTitle.astro';
-import OrderedPages from '../bot/OrderedPages.astro';
 import SilentCatch from '../bot/SilentCatch.astro';
 import SwapSound from '../bot/SwapSound.astro';
 import PagefindToTextFragments from './PagefindToTextFragments.astro';
@@ -28,8 +28,8 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
 <PageOffset name="main" />
+<PageOrder />
 
-<OrderedPages prefix="/jotter/" />
 <MarkHeadings prefix="/jotter/" />
 <MarkTitle prefix="/jotter/" />
 

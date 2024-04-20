@@ -256,7 +256,7 @@ The default morph animations might look irritating when applied to elements that
 If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component):
 ```astro title="/src/components/starlight/Head.astro"
 ---
-...
+//...
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 ---
 ...
@@ -265,35 +265,73 @@ import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 For details on the PageOffset component see [its description](/library/PageOffset/).
 
 
-## Complete Configuration Example
+### Page Order Directions
 
-What follows is a yet more extended version of the [extended configuration example](#extended-configuration-example), but without the styling examples. It is not meant to be copied over into your `Head` but rather as a show case what optional components you might mix and match in your own  `Head` component. The section with the optional components is highlighted.
+[In the overview](/jotter/starlight/inner-workings/#ordered-pages), I teased that it might be nice if the direction of the view transition would depend on the page order. Normally, whenever you click on a link, Astro plays a _forward_ animation and when you hit the browser back key, you see a _backward_ animation.
+* If you have _previous_ and _next_ page links on the bottom of your page, clicking them starts _forward_ animations.
+* Clicking page 1, page 2, page 1 in the sidebar in this order gives you three _forward_ animations.
 
-```astro title="./src/components/starlight/Head.astro" {5-6,22-23}
+This would not make a difference if you use the default fade animation as it looks the same forwards and backwards. But the default slide animation for example has a direction. And maybe your special Starlight animation has one, too.
+
+The Bag has a component called `<PageOrder />` that you can add to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). It automatically changes the order of normal navigation and history traversals. If you navigate to a page that is further down in the sidebar, that will be a _forward_ navigation. If you navigate to a page further up, this is _back_. If not both, the _from_ and the _to_ page are found in the sidebar, direction retains its original value.
+
+
+```astro title="/src/components/starlight/Head.astro"
 ---
-import type { Props } from '@astrojs/starlight/props';
-import StarlightHead from '@astrojs/starlight/components/Head.astro';
-import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
-import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
-import PageOffset from 'astro-vtbot/components/PageOffset.astro';
-
-// import one of Astro's predefined animation functions,
-// see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
-import { slide } from 'astro:transitions';
+//...
+import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
 ---
-
-{/* Define a view transition animation for `<main>`*/}
-<VtbotStarlight
-	{...Astro.props}
-	transition:name="main"
-	transition:animate={slide({ duration: 150 })}
->
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
-</VtbotStarlight>
-{/* update this one to whatever image you want to show as a loading indicator */}
-<LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
-<PageOffset name="main" />
+...
+<PageOrder />
 ```
+
+All Astro animations support forward and backward out of the box. But what, if you click on a link to your current page? Then the `<PageOrder />` component sets a third direction called _stay_. The default animations interpret unknown directions as _forward_. This is usually fine and you are all set!
+
+
+ <details>
+
+ <summary>If you want to add a special animation for your the _stay_ direction, &hellip;</summary>
+
+&hellip; you can do so by adding CSS for it:
+```astro title="/src/components/starlight/Head.astro"
+...
+<style is:global>
+	@keyframes stay-refresh {
+		  0% { opacity: 1; }
+		  1% { opacity: 1; transform: translateY(0px); }
+		 99% { opacity: 1; transform: translateY(100px); }
+		100% { opacity: 0; }
+	}
+	[data-astro-transition='stay']::view-transition-old(main) {
+		animation: stay-refresh 0.2s ease-in-out both;
+	}
+	[data-astro-transition='stay']::view-transition-new(main) {
+		animation: stay-refresh 0.1s 0.2s reverse ease-in-out both;
+	}
+	[data-astro-transition-fallback='old'][data-astro-transition='stay'] main {
+		animation: stay-refresh 0.2s ease-in-out both;
+	}
+	[data-astro-transition-fallback='new'][data-astro-transition='stay'] main {
+		animation: stay-refresh 0.1s reverse ease-in-out both;
+	}
+</style>
+```
+Another page in the Jotter [explains why you need four definitions](/jotter/astro/directives/#transitionanimate) and what purpose they serve. The rules with `::view-transition-...(main)` address the transition named "main" for browsers that do have native view transition support. The last two rules address the `<main>` element for browsers that don't.
+
+Refrain from merging rules with pseudo-elements with rules without pseudo-elements. Browsers treat unknown elements or properties as errors and [discard the entire rule](/jotter/snippets/css-tricks-pitfalls/#ignored-style-rules), even if they could understand half of the selector.
+
+</details>
+
+## Custom Combo Options
+
+import { Code } from '@astrojs/starlight/components';
+import DemoHead3 from 'src/components/starlight/DemoHead3.astro?raw'
+
+What follows is a yet more extended version of the [extended configuration example](#extended-configuration-example), but without the styling examples. It is not meant to be copied over into your `Head` but rather as a showcase what optional components you might mix and match in your own `Head` component. The section with the optional components is highlighted.
+
+
+<Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,15,16,18,19,21,22]} />
+
 
 ## Known Issues
 

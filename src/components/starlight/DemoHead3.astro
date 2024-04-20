@@ -4,21 +4,19 @@ import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
-
-// import one of Astro's predefined animation functions,
-// see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
-import { slide } from 'astro:transitions';
+import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
 ---
 
 {/* Define a view transition animation for `<main>`*/}
-<VtbotStarlight
-	{...Astro.props}
-	transition:name="main"
-	transition:animate={slide({ duration: 150 })}
->
+<VtbotStarlight {...Astro.props} transition:name="main" transition:animate="slide">
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
-{/* update this one to whatever image you want to show as a loading indicator */}
+
+{/* Customize what image you want to show where */}
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
-<PageOffset name="main" /> {/* Get rid of pseudo-scrolling in the main area*/}
-</style>
+
+{/* Get rid of pseudo-scrolling in the main area */}
+<PageOffset name="main" />
+
+{/* Make animation direction based on the order of the pages in the sidebar */}
+<PageOrder />

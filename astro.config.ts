@@ -1,8 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from "@astrojs/starlight";
 import d2 from "astro-d2";
-import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -48,13 +46,6 @@ export default defineConfig({
 		pagination: true,
 		logo: {
 			src: "/node_modules/astro-vtbot/assets/bag-of-tricks.svg",
-		},
-		expressiveCode: {
-			themes: ['github-dark', 'github-light'],
-			styleOverrides: {
-				borderRadius: "0.5rem",
-			},
-			plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
 		},
 		social: {
 			github: "https://github.com/martrapp/astro-vtbot",

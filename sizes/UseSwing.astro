@@ -1,15 +1,18 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { swing } from 'astro-vtbot/animations/swing'
-import Mini from './Mini.astro'
+import { swing } from 'astro-vtbot/animations/swing';
+import Mini from './Mini.astro';
 ---
+
 <html>
 	<head>
 		<ViewTransitions />
 	</head>
 	<body>
-		<h1 transition:animate={swing()}>Heading</h1>
-		<a href="/">Link</a>
-		<Mini />
+		<main transition:name="main">
+			<h1 transition:animate={swing()}>Heading</h1>
+			<a href="/">Link</a>
+			<Mini />
+		</main>
 	</body>
 </html>
