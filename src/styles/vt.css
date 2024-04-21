@@ -100,6 +100,9 @@ main {
 }
 @keyframes swingIn {
 	from {
+		opacity: 0;
+	}
+	1% {
 		transform: scale(0.9) translateX(200%);
 		opacity: 0.5;
 	}
@@ -115,6 +118,9 @@ main {
 
 @keyframes swingBackIn {
 	from {
+		opacity: 0;
+	}
+	1% {
 		transform: scale(0.9) translateX(-200%);
 		opacity: 0.5;
 	}
@@ -130,6 +136,9 @@ main {
 
 @keyframes swingStayIn {
 	from {
+		opacity: 0;
+	}
+	1% {
 		transform: scale(0.9) translateX(0);
 		opacity: 0.5;
 	}
@@ -175,9 +184,12 @@ main {
 		transform: scale(0.9) translateX(0);
 		opacity: 0.5;
 	}
-	100% {
+	99% {
 		transform: scale(0.9) translateX(-200%);
 		opacity: 0.5;
+	}
+	to {
+		opacity: 0;
 	}
 }
 
@@ -190,8 +202,11 @@ main {
 		transform: scale(0.9) translateX(0);
 		opacity: 0.5;
 	}
-	100% {
+	99% {
 		transform: scale(0.9) translateX(200%);
+	}
+	to {
+		opacity: 0;
 	}
 }
 @keyframes swingStayOut {
@@ -203,9 +218,12 @@ main {
 		transform: scale(0.9) translateX(0);
 		opacity: 0.5;
 	}
-	100% {
+	99% {
 		transform: scale(0.9) translateX(0);
 		opacity: 0.5;
+	}
+	to {
+		opacity: 0;
 	}
 }
 @keyframes swingStayOutP {
