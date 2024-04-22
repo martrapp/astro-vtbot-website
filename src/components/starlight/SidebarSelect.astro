@@ -32,7 +32,6 @@ export interface Props {}
 			defaultBehavior(e);
 			return;
 		}
-		if (!next) return;
 
 		const nextRect = next.getBoundingClientRect();
 		const currentRect = current.getBoundingClientRect();
@@ -110,3 +109,9 @@ export interface Props {}
 		return marker;
 	}
 </script>
+<style is:global>
+	@keyframes noop {}
+:root[data-astro-transition-fallback="new"] {
+	animation: noop 0s 1.5s;
+}
+</style>

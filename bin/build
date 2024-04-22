@@ -2,6 +2,7 @@
 
 sed -i 's/showSubResults: true,/showSubResults:true,excerptLength:40,/' node_modules/@astrojs/starlight/components/Search.astro
 sed -i 's/<FeelbackLoader \/>/<!-- disabled FeelbackLoader -->/' node_modules/astro-feelback/components/parts/Component.astro
+sed -i 's/^    await new Promise/    \/\/await new Promise/' node_modules/astro/dist/transitions/router.js
 
 
 #sed -i 's/^\([\t ]*\)event.swap();$/\1await event.swap();/' node_modules/astro/dist/transitions/events.js
