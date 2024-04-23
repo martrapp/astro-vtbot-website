@@ -4,10 +4,11 @@ import StarlightPageTitle from '@astrojs/starlight/components/PageTitle.astro';
 import LastUpdated from '@astrojs/starlight/components/LastUpdated.astro';
 import { customSwing } from 'astro-vtbot/animations/swing';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
+import ReadyToFinished from "astro-vtbot/components/ReadyToFinished.astro"
 
 const swingScope = customSwing('head-last-update', {
 	keyframes: { axis: { y: 1 }, angle: { leave: '90deg', enter: '-90deg' } },
-	base: { duration: '1000ms' },
+	base: { duration: '400ms' },
 	extensions: {
 		forwards: {
 			old: { 'transform-origin': 'center left' },
@@ -19,7 +20,14 @@ const swingScope = customSwing('head-last-update', {
 		},
 	},
 });
+/* ReadyToFinish:
+Ensure a minimal interval from viewTransition.ready to viewTransition.finish
+Should be a bit more than 2/3 SidebarSelect duration
+*/
+
 ---
+
+<ReadyToFinished duration="0.333s"/>
 
 <span id="vtbot-head-last-update" data-astro-transition-scope={swingScope}><LastUpdated {...Astro.props} /></span>
 <StarlightPageTitle {...Astro.props}><slot /></StarlightPageTitle>

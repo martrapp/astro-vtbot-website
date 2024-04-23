@@ -10,7 +10,7 @@ The first is the `loader()` function, which is executed during the preparation p
 
 Both functions can be extended or replaced with custom code, see below.
 
-[Some functionalities](../flow-events/) like the triggering of events and starting of animations is not covered by `loader()` and `swap()` and can not be exchanged by redefining them.
+[Some functionalities](../flow-events/#step-by-step) like the triggering of events and starting of animations is not covered by `loader()` and `swap()` and can not be exchanged by redefining them. Other steps like updating history and scroll position can also not be replaced but their effect can be overridden, for example in a listener for  `astro:after-swap`.
 
 
 ## Semantics

@@ -26,7 +26,6 @@ The Bag's support of view transition for Starlight is still young and has not ye
 
 ## Step 1: Install astro-vtbot
 
-<a href="https://www.npmjs.com/package/astro-vtbot" target="_blank"><img style="margin:2ex 0" src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5))"/></a>
 The <BoT/> is available on npm. The package is named `astro-vtbot`.
 It can be installed as a package or as an Astro integration. See the [installation page](/library/Installation/) for details and differences. Let's assume you just want to add it as a package:
 
@@ -233,8 +232,8 @@ export function clearCurrentPageMarker(): void {...}
 // Clears the current page marker and then sets it to the entry that best fits the URL
 export function updateCurrentPageMarker(url: URL): void {...}
 
-// Opens all nested categories of a sidebar entry. Without parameter, opens the entry of the current page marker. With url parameter opens the corresponding sidebarEntry(url).
-export function openCategory(url?: URL): void {...}
+// Opens all nested categories of a sidebar entry. Without url parameter, opens the entry of the current page marker. With url parameter opens the corresponding sidebarEntry(url). You can set scrollIntoView to false to prevent the entry to be scrolled into view.
+export function openCategory(url?: URL, scrollIntoView = true): void {...}
 
 ```
 Here _best fit_ in general means _exact match_, but if there is none, it also looks for the longest common prefix.

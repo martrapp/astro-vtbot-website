@@ -1,7 +1,12 @@
 ---
-export interface Props {}
+
+export interface Props {
+	durationMilliseconds: number;
+}
+const { durationMilliseconds } = Astro.props;
 ---
 
+<meta name="vtbot-sidebar-select-animation" content={durationMilliseconds + ""} />
 <script>
 	import {
 		type TransitionBeforeSwapEvent,
@@ -15,6 +20,8 @@ export interface Props {}
 		updateCurrentPageMarker,
 	} from 'astro-vtbot/components/starlight/utils';
 
+	const DEFAULT_ANIMATION_DURATION_MS = 400;
+
 	const marker = init();
 	const defaultBehavior = (e: TransitionBeforeSwapEvent) => {
 		clearCurrentPageMarker();
@@ -22,7 +29,17 @@ export interface Props {}
 		openCategory(e.to);
 	};
 
+	const getDuration = () => {
+		const duration = parseInt(
+			document.querySelector<HTMLMetaElement>('meta[name="vtbot-sidebar-select-animation"]')
+				?.content || 'default',
+			10
+		);
+		return Number.isNaN(duration) ? DEFAULT_ANIMATION_DURATION_MS : duration;
+	};
+
 	async function moveMarker(e: TransitionBeforeSwapEvent) {
+		openCategory(e.from, false);
 		openCategory(e.to);
 
 		const current = sidebarEntry(e.from);
@@ -39,10 +56,13 @@ export interface Props {}
 		marker.style.top = currentRect.top + 'px';
 		document.body.appendChild(marker);
 
-		// todo: make this customizable and add support for prefers-reduced-motion setting
-		const duration = 1500;
-		const to1 = setTimeout(clearCurrentPageMarker, duration / 3);
-		const to2 = setTimeout(() => next.setAttribute('aria-current', 'page'), (duration * 2) / 3);
+		// todo: add support for prefers-reduced-motion setting
+		const duration = getDuration();
+		const timeout1 = setTimeout(clearCurrentPageMarker, duration / 3);
+		const timeout2 = setTimeout(
+			() => next.setAttribute('aria-current', 'page'),
+			(duration * 2) / 3
+		);
 		const animation = marker.animate(
 			{
 				width: [
@@ -84,8 +104,8 @@ export interface Props {}
 		);
 		e.viewTransition.finished.finally(() => {
 			animation.cancel();
-			clearTimeout(to1);
-			clearTimeout(to2);
+			clearTimeout(timeout1);
+			clearTimeout(timeout2);
 			defaultBehavior(e);
 		});
 	}
@@ -109,9 +129,3 @@ export interface Props {}
 		return marker;
 	}
 </script>
-<style is:global>
-	@keyframes noop {}
-:root[data-astro-transition-fallback="new"] {
-	animation: noop 0s 1.5s;
-}
-</style>

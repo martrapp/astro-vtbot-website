@@ -38,14 +38,20 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 
 <ReloadFence prefix="/jotter/" />
 
-<SidebarSelect />
+<SidebarSelect durationMilliseconds={400}/>
 <AutoCollapseToggle />
 <AutoCollapse />
 <PagefindToTextFragments />
 
 <script>
-	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '../navigate';
+	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '@feelback/js/auto';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
 </script>
+
+<style is:global>
+	:root {
+		view-transition-name: none;
+	}
+</style>

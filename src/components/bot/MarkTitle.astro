@@ -58,13 +58,16 @@ const { prefix } = Astro.props;
 	});
 </script>
 <style is:global>
+	::view-transition-new(vtbot-hx),
 	::view-transition-group(vtbot-hx) {
-		animation-duration: 1.5s;
+		animation-delay: 0.15s;
+		animation-duration: 0.45s;
+		animation-timing-function: ease-in;
 	}
+	::view-transition-new(vtbot-hx) {
+		animation-delay: 0.1s;
+}
 	::view-transition-old(vtbot-hx) {
 		opacity: 0;
-	}
-	::view-transition-image-pair(root) {
-		animation-duration: 0s;
 	}
 </style>
