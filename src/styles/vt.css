@@ -251,15 +251,15 @@ main {
 ::view-transition-old(bot) {
 	transform-origin: center center;
 	animation-name: turnOut;
-	animation-duration: 0.75s;
+	animation-duration: 0.3s;
 	animation-fill-mode: both;
 	animation-timing-function: ease-in;
 }
 ::view-transition-new(bot) {
 	transform-origin: center center;
-	animation-delay: 0.75s;
+	animation-delay: 0.3s;
 	animation-name: turnIn;
-	animation-duration: 0.75s;
+	animation-duration: 0.3s;
 	animation-fill-mode: both;
 	animation-timing-function: ease-out;
 }

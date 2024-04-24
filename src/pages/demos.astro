@@ -21,36 +21,11 @@ import Content from 'src/mdx/demos.mdx';
 			reload
 		/>
 		<Card
-			what="astro:before-preparation astro:before/after-swap"
-			href="/portal/one/"
-			title="One door closes and another one opens"
-			icon="🚪"
-			body="Make all transitions go through a portal page"
-			reload
-		/>
-		<Card
-			href="/winter/one/"
-			title="Winter Demo"
-			icon="❄"
-			iconStyle="color: skyblue;"
-			body="Multiple transition groups and a custom animation right before and after the navigation"
-			what="astro:before-preparation"
-			reload
-		/>
-		<Card
 			href="/fish-pond/center/"
 			title="The Fish Pond"
 			icon="🐟"
 			body="Follow the swarm: view transition in different directions through a fish pond."
 			what="astro:before-preparation"
-			reload
-		/>
-		<Card
-			what="astro:before-swap viewTransition.ready"
-			href="/circular/one/"
-			title="Circular Reveal"
-			icon="🔵"
-			body="The circular animation from the  page on View Transitions."
 			reload
 		/>
 		<Card
@@ -95,12 +70,12 @@ import Content from 'src/mdx/demos.mdx';
 			reload
 		/>
 		<Card
-			what="astro:after-swap"
-			href="/scroll-to-top/one/"
-			title="Scroll to Top"
-			icon="⇱"
+			what="astro:before-preparation loader()"
+			href="/hero-prefetch/overview/"
+			title="Image prefetch"
+			icon="🖼️"
+			body="Prefetch the hero image of the target page to have it ready when the view transition starts."
 			reload
-			body="Always scroll to the top of the page on history traversals."
 		/>
 		<Card
 			what="astro:after-preparation\nastro:after-swap"
@@ -111,11 +86,36 @@ import Content from 'src/mdx/demos.mdx';
 			reload
 		/>
 		<Card
-			what="astro:before-preparation loader()"
-			href="/hero-prefetch/overview/"
-			title="Image prefetch"
-			icon="🖼️"
-			body="Prefetch the hero image of the target page to have it ready when the view transition starts."
+			what="astro:after-swap"
+			href="/scroll-to-top/one/"
+			title="Scroll to Top"
+			icon="⇱"
+			reload
+			body="Always scroll to the top of the page on history traversals."
+		/>
+		<Card
+			what="astro:before-swap viewTransition.ready"
+			href="/circular/one/"
+			title="Circular Reveal"
+			icon="🔵"
+			body="The circular animation from the  page on View Transitions."
+			reload
+		/>
+		<Card
+			what="astro:before-preparation astro:before/after-swap"
+			href="/portal/one/"
+			title="One door closes and another one opens"
+			icon="🚪"
+			body="Make all transitions go through a portal page"
+			reload
+		/>
+		<Card
+			href="/winter/one/"
+			title="Winter Demo"
+			icon="❄"
+			iconStyle="color: skyblue;"
+			body="Multiple transition groups and a custom animation right before and after the navigation"
+			what="astro:before-preparation"
 			reload
 		/>
 		<Card

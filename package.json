@@ -52,5 +52,8 @@
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/martrapp"
+  },
+  "dependencies": {
+    "nanostores": "^0.10.3"
   }
 }
