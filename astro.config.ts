@@ -32,6 +32,8 @@ export default defineConfig({
 	integrations: [d2({ skipGeneration: process.env.GITHUB_ACTIONS === "true" }), vtbot({
 	}),
 	starlight({
+		plugins: [],
+
 		components: {
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
