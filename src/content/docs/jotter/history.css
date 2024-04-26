@@ -17,9 +17,4 @@
 		flex-direction: column;
 	}
 }
-@keyframes slide {
-	from {
-		transform: scale(0);
-		opacity: 0;
-	}
-}
+

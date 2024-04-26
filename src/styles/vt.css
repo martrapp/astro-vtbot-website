@@ -98,11 +98,11 @@ main {
 		opacity: 0;
 	}
 	1% {
-		transform: scale(0.9) translateX(200%);
+		transform: scale(0.95) translateX(200%);
 		opacity: 0.5;
 	}
 	75% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	to {
@@ -116,11 +116,11 @@ main {
 		opacity: 0;
 	}
 	1% {
-		transform: scale(0.9) translateX(-200%);
+		transform: scale(0.95) translateX(-200%);
 		opacity: 0.5;
 	}
 	75% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	100% {
@@ -134,11 +134,11 @@ main {
 		opacity: 0;
 	}
 	1% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	75% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	100% {
@@ -149,19 +149,19 @@ main {
 
 @keyframes swingStayInP {
 	from {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0;
 	}
 	50% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0;
 	}
 	51% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	66% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	100% {
@@ -176,11 +176,11 @@ main {
 		opacity: 1;
 	}
 	25% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	99% {
-		transform: scale(0.9) translateX(-200%);
+		transform: scale(0.95) translateX(-200%);
 		opacity: 0.5;
 	}
 	to {
@@ -194,11 +194,11 @@ main {
 		opacity: 1;
 	}
 	25% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	99% {
-		transform: scale(0.9) translateX(200%);
+		transform: scale(0.95) translateX(200%);
 	}
 	to {
 		opacity: 0;
@@ -210,11 +210,11 @@ main {
 		opacity: 1;
 	}
 	25% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	99% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	to {
@@ -227,11 +227,11 @@ main {
 		opacity: 1;
 	}
 	33% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	50% {
-		transform: scale(0.9) translateX(0);
+		transform: scale(0.95) translateX(0);
 		opacity: 0.5;
 	}
 	51% {
