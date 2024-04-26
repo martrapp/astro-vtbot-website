@@ -10,6 +10,7 @@ import remarkToc from 'remark-toc';
 
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
+import starlightImageZoom from 'starlight-image-zoom'
 
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
@@ -32,7 +33,7 @@ export default defineConfig({
 	integrations: [d2({ skipGeneration: process.env.GITHUB_ACTIONS === "true" }), vtbot({
 	}),
 	starlight({
-		plugins: [],
+		plugins: [starlightImageZoom()],
 
 		components: {
 			Head: "./src/components/starlight/Head.astro",
