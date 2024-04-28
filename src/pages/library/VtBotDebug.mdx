@@ -99,12 +99,12 @@ The `<VtBotDebug>` component logs the transition groups that participate in the 
 
 `<VtBotDebug>` now logs the `::view-transition` CSS pseudo-elements that the browser inserts to control the animations of the view transitions. Here an example with collapsed output:
 
-<Picture class="dark" src={vtd1_dark} formats={['avif', 'webp']} alt="Example ::view-transition output" />
-<Picture class="light" src={vtd1_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
+<Picture data-zoom-off class="dark" src={vtd1_dark} formats={['avif', 'webp']} alt="Example ::view-transition output" />
+<Picture data-zoom-off class="light" src={vtd1_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
 
 ... and with all items exapanded:
-<Picture class="dark" src={vtd2_dark} formats={['avif', 'webp']} alt="Example ::view-transition output" />
-<Picture class="light" src={vtd2_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
+<Picture data-zoom-off class="dark" src={vtd2_dark} formats={['avif', 'webp']} alt="Example ::view-transition output" />
+<Picture data-zoom-off class="light" src={vtd2_light} formats={['avif', 'webp']} alt="Example ::view-transition output" />
 
 ### Scripts
 Scripts of the new page are executed between `astro:after-swap` and `astro:page-load` if they had not been on the old page. Module scripts are executed the first time they are found after a full page reload. Later occurrences on other pages will not result in re-execution as module scrips can only be refreshed in the browser by full page loads.

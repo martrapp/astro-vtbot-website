@@ -123,8 +123,11 @@ Here is an example:
 </script>
 ```
 
+You might be afraid to load a script like this on a page because you know that the `astro:page-load` listener will execute on every page you visit using view transitions (up to the next full page load). But keep in mind that those tests are quick. If the selector doesn't select anything, the function returns immediately.
+
 The real benefit of this approach compared to inline scripts is that the script element is only executed once (until the next full page load) and therefore the event listener for `astro:page-load` will not be installed several times. Having multiple instances of the same event handler might not only be a waste of resources but might also have hard to debug side effects.
 
+#### Increasing Encapsulation & Modularization
 You do not have to merge the initialization for all elements into the same event listeners. You might as well have several listeners for different tasks.
 
 ```astro title="MyLayout2.astro"
@@ -144,7 +147,7 @@ You do not have to merge the initialization for all elements into the same event
 	}
 </script>
 ```
-You might have the listeners in several scripts &hellip;
+To further increase encapsulation, you might have the listeners in several scripts &hellip;
 
 ```astro title="MyLayout3.astro"
 ...
@@ -172,7 +175,42 @@ You might have the listeners in several scripts &hellip;
 <script src="/src/scripts/toggle-page-load.js" />
 ```
 
-You might even put the scripts on the pages that need them. Just keep in mind that this does not mean 'run `onPageLoad()` exactly on this page' but 'run `onPageLoad` from now on, on every page'.
+You might put all scripts into your common `Layout` component and they are ready to use on the pages that need them. Even though that might look like a lot of scripts in DEV mode, the bundler will merge them for production. But that also means that all your scripts are loaded on the first visit of a page of your site. That is not so bad, as your module scripts are deferred and load asynchronously. They do not block loading of the HTML or the execution of the renderer.
+
+Alternatively you might use the external module variant (`<script src="..." />`) and put the scripts on the pages that need them. This reduces the amount of JavaScript that has to be transferred on the first visit. Just keep in mind that this does not mean 'run `onPageLoad()` exactly on this page' but 'run `onPageLoad` from now on, on every page'.
+
+
+
+#### Special Case: Libraries that can do the querySelectorAll for you
+The approach with `document.querySelectorAll()` is especially neat if you are using a library that can do this test for you. For example if you want to animate some elements with GSAP, you can have an `astro:page-load` listener that moves all images in an image gallery with the querySelectorAll-pattern from above.
+
+```astro
+<script>
+	import { gsap } from 'gsap';
+	document.addEventListener('astro:page-load', () => {
+		const images = document.querySelectorAll('.image-gallery img');
+		// works if the current page has some images in image galleries,
+		// simply does nothing if not
+		if (images.length > 0) {
+			gsap.from(images, { opacity: 0, y: 100, duration: 0.5 });
+		}
+	});
+</script>
+```
+But you can also delegate the `querySelectorAll()` call to GSAP:
+```astro
+<script>
+	import { gsap } from 'gsap';
+	document.addEventListener('astro:page-load', () => {
+		// works if the current page has some images in image galleries,
+		// simply does nothing if not (set gsap.config({ nullTargetWarn: false }) to omit warnings)
+		gsap.from('.image-gallery img', { opacity: 0, y: 100, duration: 0.5 });
+	});
+</script>
+```
+In this simple case, you don't need to explicitly query for images on the page.
+
+Note that if you want to do more complex things like adding a click handler to all images, you'll have to fall back to the more general scheme shown above and run the `querySelectorAll()` yourself.
 
 ### When CSS Selectors aren't Good Enough
 
