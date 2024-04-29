@@ -35,7 +35,7 @@
     "@types/dom-view-transitions": "^1.0.4",
     "@types/node": "^20.11.10",
     "astro": "^4.7.0",
-    "astro-d2": "^0.1.1",
+    "astro-d2": "^0.2.0",
     "astro-expressive-code": "^0.33.2",
     "astro-feelback": "^0.3.4",
     "astro-vtbot": "latest",
