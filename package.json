@@ -36,7 +36,7 @@
     "@types/node": "^20.11.10",
     "astro": "^4.7.0",
     "astro-d2": "^0.1.1",
-    "astro-expressive-code": "^0.33.2",
+    "astro-expressive-code": "^0.35.3",
     "astro-feelback": "^0.3.4",
     "astro-vtbot": "latest",
     "gsap": "^3.12.5",
