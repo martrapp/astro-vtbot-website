@@ -1,12 +1,11 @@
 ---
-
 export interface Props {
 	durationMilliseconds: number;
 }
 const { durationMilliseconds } = Astro.props;
 ---
 
-<meta name="vtbot-sidebar-select-animation" content={durationMilliseconds + ""} />
+<meta name="vtbot-sidebar-select-animation" content={durationMilliseconds + ''} />
 <script>
 	import {
 		type TransitionBeforeSwapEvent,
@@ -121,9 +120,11 @@ const { durationMilliseconds } = Astro.props;
 
 		document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
 			if (isTransitionBeforeSwapEvent(e)) {
-				e.viewTransition.ready.then(() => {
-					moveMarker(e);
-				});
+				e.viewTransition.ready
+					.then(() => {
+						moveMarker(e);
+					})
+					.catch(() => defaultBehavior(e));
 			}
 		});
 		return marker;

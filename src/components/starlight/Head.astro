@@ -20,21 +20,23 @@ import '../../styles/vt.css';
 import '../../styles/ec.s8bdm.css';
 import AutoCollapseToggle from '../bot/AutoCollapseToggle.astro';
 import AutoCollapse from '../bot/AutoCollapse.astro';
+import EagerImageLoading from '../EagerImageLoading.astro';
 ---
 
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
-	<script type="application/ld+json" is:inline>
+	<script type="application/ld+json" data-vtbot-linter="ignore" is:inline>
 		{
-			"@context" : "https://schema.org",
-			"@type" : "WebSite",
-			"name" : "The 👜 Bag of Tricks ✨",
-			"url" : "https://events-3bg.pages.dev/"
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "The 👜 Bag of Tricks ✨",
+			"url": "https://events-3bg.pages.dev/"
 		}
 	</script>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
+
 <PageOffset name="main" />
 <PageOrder />
 
@@ -46,10 +48,11 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 
 <ReloadFence prefix="/jotter/" />
 
-<SidebarSelect durationMilliseconds={400}/>
+<SidebarSelect durationMilliseconds={400} />
 <AutoCollapseToggle />
 <AutoCollapse />
 <PagefindToTextFragments />
+<EagerImageLoading />
 
 <script>
 	import '../navigate';
@@ -63,3 +66,4 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 		view-transition-name: none;
 	}
 </style>
+

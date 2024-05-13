@@ -1,0 +1,118 @@
+---
+interface Props {
+	name: string;
+}
+const { name } = Astro.props;
+---
+
+<script is:inline>
+	console.log('right before the component is used');
+</script>
+
+<vtbot-eye {name}>
+	<template shadowrootmode="open">
+		<div id="eye">
+			<div id="eyelid" class="closed"></div>
+			<div id="eyeball"></div>
+		</div>
+		<style>
+			#eye {
+				position: relative;
+				width: 100px;
+				height: 120px;
+				background: #fff;
+				border: 2px solid #000;
+				border-radius: 50%;
+				overflow: hidden;
+				border: 1pt solid #8888;
+			}
+
+			#eyelid {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: #000;
+				transform-origin: top;
+				transform: translateY(-75px);
+				transition: transform 0.2s ease-in-out;
+			}
+
+			#eyelid.closed {
+				transform: translateY(0px);
+			}
+
+			#eyeball {
+				position: absolute;
+				top: 50px;
+				left: 40px;
+				width: 20px;
+				height: 20px;
+				background: #000;
+				border-radius: 50%;
+			}
+		</style>
+	</template>
+	<script>
+		import { attachShadowRoots } from './bot/shadow-root-utils';
+		import { $coords, type Coords } from './mouse-coords.ts';
+
+		customElements.define(
+			'vtbot-eye',
+			class extends HTMLElement {
+				readonly name: string;
+				readonly eyelid: HTMLDivElement | null;
+
+				constructor() {
+					super();
+					attachShadowRoots(this);
+					this.name = this.getAttribute('name') ?? 'unnamed';
+					console.log(`<${this.name}> was created.`);
+					this.eyelid = this.shadowRoot?.querySelector<HTMLDivElement>('#eyelid') ?? null;
+					console.log(this.eyelid);
+					document.addEventListener('click', () => this.clickListener());
+				}
+
+				clickListener() {
+					console.log(`<${this.name}> got clicked.`);
+					this.eyelid?.classList.toggle('closed');
+				}
+
+				connectedCallback() {
+					console.log(`<${this.name}> added to page.`);
+					const eyeball = this.shadowRoot?.querySelector<HTMLDivElement>('#eyeball');
+
+					$coords.listen((coords: Coords) => {
+						const rect = eyeball?.getBoundingClientRect();
+						let x = (coords.x - (rect?.x ?? 0 + 10)) / window.innerWidth;
+						let y = (coords.y - (rect?.y ?? 0 + 10)) / window.innerHeight;
+						x = x < -0.5 ? -0.5 : x > 0.5 ? 0.5 : x;
+						y = y < -0.5 ? -0.5 : y > 0.5 ? 0.5 : y;
+
+						eyeball && (eyeball.style.transform = `translate(${x * 60}px, ${y * 50 + 15}px)`);
+					});
+				}
+
+				disconnectedCallback() {
+					console.log(`<${this.name}> removed from page.`);
+				}
+
+				adoptedCallback() {
+					console.log(`<${this.name}> moved to new page.`);
+					document.removeEventListener('click', () => this.clickListener());
+				}
+
+				attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+					console.log(
+						`<${this.name}>: Attribute ${name} has changed from ${oldValue} to ${newValue}`
+					);
+				}
+			}
+		);
+	</script>
+</vtbot-eye>
+
+<script is:inline>
+	console.log('right after the component is used');
+</script>

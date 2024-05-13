@@ -34,10 +34,12 @@ const { src } = Astro.props;
 	});
 	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
 		if (isTransitionBeforeSwapEvent(e)) {
-			e.viewTransition.finished.then(() => {
-				const mySound = document.querySelector('#vtbot-swap-sound') as HTMLAudioElement;
-				mySound?.pause();
-			});
+			e.viewTransition.finished
+				.then(() => {
+					const mySound = document.querySelector('#vtbot-swap-sound') as HTMLAudioElement;
+					mySound?.pause();
+				})
+				.catch(() => {});
 		}
 	});
 </script>

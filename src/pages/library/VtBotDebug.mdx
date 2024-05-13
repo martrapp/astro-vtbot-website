@@ -133,6 +133,45 @@ After the view transition got started, the API provides three promises that can 
    18:09:18.710 [vtbot-debug] resolve viewTransition.finished
 ```
 
+### DOM Manipulations
+
+Ever asked yourself how the DOM is changed during `swap()`? Now you can see the changes, adds and deletes that the `swap()` function does to the DOM.
+
+```console title="console.log"
+⯆  15:47:39.858 [vtbot-debug] DOM Mutations
+   15:47:39.859 At html: override lang="en" (currently: "en")
+   15:47:39.859 At html: override data-astro-transition="forward" (currently: "forward")
+   15:47:39.859 At html: override lang="null" (currently: "en")
+   15:47:39.859 At html: override data-astro-transition="null" (currently: "forward")
+   15:47:39.859 At html > head: removed <meta name="vtbot-debug" content="true">
+   15:47:39.859 At html > head: removed <script data-astro-exec="">
+   15:47:39.859 At html > head: removed <link rel="stylesheet" href="https://w3schools.com/lib/topnav/main.css">
+   15:47:39.859 At html > head: removed <meta name="astro-view-transitions-enabled" content="true">
+   15:47:39.859 At html > head: removed <meta name="astro-view-transitions-fallback" content="animate">
+   15:47:39.859 At html > head: removed <meta charset="UTF-8">
+   15:47:39.859 At html > head: removed <meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover">
+   15:47:39.859 At html > head: removed <link rel="icon" href="/favicon.png">
+   15:47:39.859 At html > head: removed <title>
+   15:47:39.859 At html > head: removed <style>
+   15:47:39.859 At html > head: removed <script type="module" src="/_astro/hoisted.B56IdQDC.js" data-astro-exec="">
+   15:47:39.859 At html > head: added <meta name="astro-view-transitions-enabled" content="true">
+   15:47:39.859 At html > head: added <meta name="astro-view-transitions-fallback" content="animate">
+   15:47:39.859 At html > head: added <meta charset="UTF-8">
+   15:47:39.859 At html > head: added <meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover">
+   15:47:39.859 At html > head: added <link rel="icon" href="/favicon.png">
+   15:47:39.859 At html > head: added <title>
+   15:47:39.859 At html > head: added <style>
+   15:47:39.859 At html > head: added <script type="module" src="/_astro/hoisted.B56IdQDC.js" data-astro-exec="">
+   15:47:39.859 At html: removed <body>
+   15:47:39.859 At html: added <body>
+   15:47:39.859 At html > head > title: removed "Debug2"
+   15:47:39.859 At html > head > title: added "Debug1"
+   15:47:39.859 At html > head > title: removed "Debug1"
+   15:47:39.859 At html > head > title: added "Debug2"
+   15:47:39.859 At html > body: added <div aria-live="assertive" aria-atomic="true" class="astro-route-announcer">
+
+```
+
 ### Animations
 
 Sometimes it can be quite difficult to keep track of the individual animations of a view transitions. Each definition of a `transition:name` defines three different animations and there are also three implicit ones for the `root` element! Now, with the `<VtBotDebug>` component, there is a way to look at all these animations in order to better understand what is happening here simultaneously.

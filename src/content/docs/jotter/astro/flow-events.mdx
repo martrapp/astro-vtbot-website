@@ -8,6 +8,18 @@ import { Steps } from '@astrojs/starlight/components';
 
 Astro's view transition support is described in the [Astro Docs](https://docs.astro.build/en/guides/view-transitions/#lifecycle-events). The following sections give additional details on process and events.
 
+Astro's view transition feature provides cross document transitions. It replace the full page load of normal browser navigation with a smooth animation while changing pages. Then it updates the browser history and the window's scroll position. In the end, it works like _normal_ navigation, but it feels more like the slick transitions within a single page app.
+
+Astro's `<ViewTransitions />` use the [View Transition API](/jotter/api/) for browsers that support it natively. For other browsers, Astro provides a [simulation](/jotter/astro/differences/).
+
+## Soft Load
+When Astro introduced cross document view transitions, only Chrome supported real cross document view transitions and only after this experimental feature was explicitly enabled by the user. Support for cross document view transitions as defined in the [Level 2 View Transition API](/jotter/api/) is still in its infancy.
+
+For browsers that do not have native support of the View Transition API, or only for Level 1, it is impossible to implement cross document view transitions without replacing the typical full page load. Instead a mechanism is required that allows to continue the execution of the code and to keep the state across the page switch. For Astro, this mechanism is also sometimes referred to as _soft load_ of new contents. There are some fundamental differences between the soft load and the typical full page load.
+
+The most important difference is that a full page load completely resets the state of the window object before it loads the new page. This includes resetting all variables, the DOM at `window.document`, all scripts and the module loader. In contrast, Astro's soft load retains all state and attempts to change it so it corresponds to the target state.
+
+
 ## Triggers
 
 There are  four types of actions that trigger Astro's View Transitions:
@@ -19,9 +31,10 @@ There are  four types of actions that trigger Astro's View Transitions:
 
 Customization of the view transition is supported by [Astro's transition events](./#events) and a view transition object with three promises that resolve or reject at different points during the transition. For details see the [View Transition documentation](https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition) on MDN. Users can use the events and the promises to trigger custom code.
 
+
 ## Processing Flow
 
-Processing begins with a preparation phase that by default loads the DOM of the target page.
+Processing of the view transition flow begins with a preparation phase that by default loads the DOM of the target page.
 Then the actual view transition begins, which takes a screenshot of the current view (green line), swaps the current DOM with the contents of the loaded DOM and then starts the animations that remove the old image and in parallel bring in the new image  (red line).
 
 <Image src={router} alt="Structure of the View Transition Router" />
@@ -38,6 +51,7 @@ In the completion phase, the newly added scripts are executed, the page title of
 The single steps of the processing are as follows:
 
 <Steps id="foo">
+0. Detect and cancel a previous view transition if it is still running
 1. Fallback to a full page load for a cross origin navigation (no CORS)
 2. Detection and handling of a same-page navigation, which does not trigger view transitions
 3. Trigger `astro:before-preparation` event `e`
@@ -91,6 +105,7 @@ readonly navigationType: NavigationTypeString // 'traverse' | 'push' | 'replace'
 readonly sourceElement: Element // If triggered by a link navigation, the anchor element. If triggered by form submission, the submitter (and if submitter is null, the form element). Can also be set via the sourceElement property of the options parameter on a call to navigate()
 readonly info: any // If the transition was initiated by a call to navigate(), the value of options.info. Set to an empty object if undefined.
 newDocument: Document // The DOM to be transitioned to. This can be an empty DOM if swap() manipulates the current DOM in place.
+signal: AbortSignal // The AbortController signal of the navigation. The defaultLoader uses this to abort ongoing fetch operations. Any activity that is to be aborted if a new navigation starts before the previous one ends can attach itself to this signal.
 readonly formData: FormData // Automatically filled in if the navigation was triggered by a form. If the navigation was triggered by a call to navigate(), the value of options.formData.
 loader: () => Promise<void>  // A function that sets event.newDocument to the contents of event.to.
 ```
@@ -110,7 +125,7 @@ The `loader` property initially holds Astro's built-in implementation for loadin
 Most of the properties of the `astro:before-swap` event are identical to those of the `astro:before-preparation` event. The differences are:
 
 - `direction` is `readonly` in `astro:before-swap`
-- `loader` is not defined in `astro:before-swap`
+- `formData` and `loader` are not defined in `astro:before-swap`
 - the `astro:before-swap`event offers two additional properties:
 
 ``` ts
