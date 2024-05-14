@@ -145,6 +145,8 @@ This is a more elaborated description of what the `startViewTransitions()` funct
 <Steps>
 
 1. In the capture phase, the browser saves a bitmap of the current state for each HTML element that has a `view-transition-name` CSS property. This can later be addressed using the `::view-transition-old(<name>)` pseudo element. Together with the image data, further CSS properties are recorded[^1]. \
+	 \
+	 For the captures, elements are ordered from bottom to top starting at the lowest `z-index`. While capturing an image, other elements of "higher" images are not painted and thus the capture shows the element's background in these areas. \
    \
    All `view-transition-name` values used in the document must be unique. Otherwise the view transition is aborted (after calling the _update callback_, see next step).
 
