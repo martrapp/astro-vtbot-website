@@ -72,7 +72,7 @@ export default defineConfig({
 		},
 		server: {
 			fs: {
-				allow: ['/home/']
+				allow: [ '/Users/','/home/']
 			}
 		}
 	}
