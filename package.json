@@ -26,7 +26,7 @@
   "devDependencies": {
     "@astrojs/check": "latest",
     "@astrojs/mdx": "latest",
-    "@astrojs/starlight": "latest",
+    "@astrojs/starlight": "^0.22.4",
     "@changesets/changelog-github": "0.5.0",
     "@changesets/cli": "^2.27.1",
     "@expressive-code/plugin-collapsible-sections": "^0.35.2",
@@ -34,7 +34,7 @@
     "@pagefind/default-ui": "^1.0.4",
     "@types/dom-view-transitions": "^1.0.4",
     "@types/node": "latest",
-    "astro": "^4.8.3",
+    "astro": "^4.8.5",
     "astro-d2": "latest",
     "astro-expressive-code": "latest",
     "astro-feelback": "latest",
