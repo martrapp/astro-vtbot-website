@@ -53,7 +53,7 @@ The <BoT/> provides a [reusable component](/library/PageOffset/) for this use ca
 Starlight pages can be configured to display links to the previous and next page at the bottom of each page. Here "previous" and "next" mean: In the [order in which they appear in the page navigation](/jotter/starlight/guide/#page-order-directions). Wouldn't it be cool if the page transition animation also used these directions? I was thinking the same thing!
 
 ### Additional Image Pairs
-I gave the headings on the pages view-transition-names to make the change of pages more entertaining.
+I gave the headings on the pages view-transition-names to make the change of pages more entertaining. If you want you can add this to your site, too. See the guide on how to do so.
 
 
 
@@ -62,7 +62,18 @@ I gave the headings on the pages view-transition-names to make the change of pag
 The world will keep turning without or without what comes next.
 
 ### Silent Catch
-If you click rapidly or use the arrow keys to navigate quickly through the browser history, you will interrupt ongoing transitions. This will result in error messages in the browser console because you usually haven't been paying attention to promises that could be rejected. Better catch.
+~~If you click rapidly or use the arrow keys to navigate quickly through the browser history, you will interrupt ongoing transitions. This will result in error messages in the browser console because you usually haven't been paying attention to promises that could be rejected.~~ Better catch.
+
+Good news! [Starting from 4.7.1](https://github.com/withastro/astro/blob/main/packages/astro/CHANGELOG.md#471), Astro's view transitions will interrupt and abort ongoing transitions. So if you suffer from unhandled (in promise) errors first check whether your Astro version is current.
+
+As of now, I remove my original SilentCatch component and do not have further plans to offer a reusable component. Some things work themselves out after all.
+
+<style>{`
+	del {
+		text-decoration-style: solid wavy;
+		text-decoration-color: #888;
+	}
+`}</style>
 
 ### Swap Sound
 Just can't do without an annoying sound when the view transition is running? This is the audio equivalent of a page animation. Choose from different swoops! Or how about a loud clockwork sound as the internal gears of the site turn and click?

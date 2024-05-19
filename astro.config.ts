@@ -9,6 +9,7 @@ import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
+import starlightMultiSidebar from "@lorenzo_lewis/starlight-multi-sidebar";
 
 // https://astro.build/config
 export default defineConfig({
@@ -30,7 +31,7 @@ export default defineConfig({
 	integrations: [d2({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
 	}), vtbot({}), starlight({
-		plugins: [starlightImageZoom()],
+		plugins: [starlightImageZoom(), starlightMultiSidebar],
 		tableOfContents: {
 			minHeadingLevel: 2,
 			maxHeadingLevel: 4
@@ -39,7 +40,6 @@ export default defineConfig({
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
 			Pagination: "./src/components/starlight/FeelBack.astro",
-			//			Sidebar: "./src/components/lorenzolewis/MultipleSidebar.astro"
 		},
 		title: "Bag of Tricks",
 		head: [{
@@ -62,7 +62,7 @@ export default defineConfig({
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
 		},
-		sidebar: sidebar()
+		sidebar: [{ label: "Astro", items: sidebar1() }, { label: "All", items: sidebar2() }]
 	})],
 	vite: {
 		build: {
@@ -72,12 +72,12 @@ export default defineConfig({
 		},
 		server: {
 			fs: {
-				allow: [ '/Users/','/home/']
+				allow: ['/Users/', '/home/']
 			}
 		}
 	}
 });
-function sidebar() {
+function sidebar1() {
 	return ([{
 		label: "Bag of Tricks",
 		items: [{
@@ -122,24 +122,6 @@ function sidebar() {
 			link: "/jotter/astro/scripts/"
 		}]
 	}, {
-		label: "Browser View Transition API",
-		items: [{
-			label: "Browser Support",
-			link: "/jotter/api/test-page/"
-		}, {
-			label: "API Overview",
-			link: "/jotter/api/"
-		}, {
-			label: "API Details",
-			link: "/jotter/api/details/"
-		}, {
-			label: "In-Depth Example",
-			link: "/jotter/api/example/"
-		}, {
-			label: "References",
-			link: "/jotter/api/references/"
-		}]
-	}, {
 		label: "The Jotter on Starlight",
 		items: [{
 			label: "Introduction",
@@ -171,5 +153,27 @@ function sidebar() {
 		autogenerate: {
 			directory: "jotter/snippets"
 		}
+	}] as SidebarItem[]);
+}
+
+function sidebar2() {
+	return ([{
+		label: "Browser View Transition API",
+		items: [{
+			label: "Browser Support",
+			link: "/jotter/api/test-page/"
+		}, {
+			label: "API Overview",
+			link: "/jotter/api/"
+		}, {
+			label: "API Details",
+			link: "/jotter/api/details/"
+		}, {
+			label: "In-Depth Example",
+			link: "/jotter/api/example/"
+		}, {
+			label: "References",
+			link: "/jotter/api/references/"
+		}]
 	}] as SidebarItem[]);
 }

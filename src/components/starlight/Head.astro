@@ -7,9 +7,8 @@ import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
 
-import MarkHeadings from '../bot/MarkHeadings.astro';
+import AutoNameSelected from '../bot/MarkHeadings.astro';
 import MarkTitle from '../bot/MarkTitle.astro';
-import SilentCatch from '../bot/SilentCatch.astro';
 import SwapSound from '../bot/SwapSound.astro';
 import PagefindToTextFragments from './PagefindToTextFragments.astro';
 import SidebarSelect from './SidebarSelect.astro';
@@ -38,11 +37,11 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 <PageOffset name="main" />
 <PageOrder />
 
-<MarkHeadings prefix="/jotter/" />
-<MarkTitle prefix="/jotter/" />
+<AutoNameSelected
+/>
+<MarkTitle />
 
 <SwapSound src="/camera-shutter-199580.mp3" />
-<SilentCatch />
 
 <ReloadFence prefix="/jotter/" />
 
@@ -59,9 +58,10 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
 </script>
 
+{/*
 <style is:global>
 	:root {
 		view-transition-name: none;
 	}
 </style>
-
+ */}

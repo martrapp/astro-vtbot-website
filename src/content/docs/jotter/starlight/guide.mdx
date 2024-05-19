@@ -1,5 +1,5 @@
 ---
-title: Add Astro's View Transitions to Starlight for that SPA-like Look & Feel
+title: "SPA-like Look & Feel: Add View Transitions to Starlight"
 ---
 
 import BoT from "/src/components/BoT.astro"
@@ -56,7 +56,7 @@ Make sure that you have the latest version installed.
 
 
 
-### Step 2: Create the New Head Component
+### Step 2: Create a Head Component
 Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
 
 ```astro title="./src/components/starlight/Head.astro"
@@ -220,7 +220,7 @@ Independent of the Starlight support, The Bag provides [loading indicators](/lib
 
 The default morph animations might look irritating when applied to elements that are larger than the current viewport. This is typical the case if you add an animation to your main area.  There is a [whole section on the effect](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area) and possible solution in this Jotter.
 
-If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component):
+If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component):
 ```astro title="/src/components/starlight/Head.astro"
 ---
 //...
@@ -240,7 +240,7 @@ For details on the PageOffset component see [its description](/library/PageOffse
 
 This would not make a difference if you use the default fade animation as it looks the same forwards and backwards. But the default slide animation for example has a direction. And maybe your special Starlight animation has one, too.
 
-The Bag has a component called `<PageOrder />` that you can add to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). It automatically changes the order of normal navigation and history traversals. If you navigate to a page that is further down in the sidebar, that will be a _forward_ navigation. If you navigate to a page further up, this is _back_. If not both, the _from_ and the _to_ page are found in the sidebar, direction retains its original value.
+The Bag has a component called `<PageOrder />` that you can add to your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). It automatically changes the order of normal navigation and history traversals. If you navigate to a page that is further down in the sidebar, that will be a _forward_ navigation. If you navigate to a page further up, this is _back_. If not both, the _from_ and the _to_ page are found in the sidebar, direction retains its original value.
 
 
 ```astro title="/src/components/starlight/Head.astro"
@@ -293,7 +293,7 @@ Refrain from merging rules with pseudo-elements with rules without pseudo-elemen
 In case you want to change the [default behavior of the sidebar](#sidebar-behavior), the <BoT/> offers some switches and utility functions.
 
 #### Replace the Sidebar Content
-You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component).
+You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component).
 ```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} replaceSidebarContent>
 ```
@@ -301,7 +301,7 @@ This will swap in the sidebar content from the next page when you navigate. This
 
 #### Retain the Current Page Marker
 
-If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
+If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
 
 ```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>

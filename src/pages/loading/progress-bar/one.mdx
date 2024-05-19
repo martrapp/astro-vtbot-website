@@ -7,9 +7,9 @@ title: Progress Bar 1
 
 [Goto page two](../two/)
 
-This page shows a custom progress bar based on an idea by [@kb](https://github.com/k16e-me). It utilizes the [swup progress bar plugin](https://swup.js.org/plugins/progress-plugin/).
+This page shows a custom progress bar based on an idea by [@kb](https://github.com/k16e-me). It utilizes the [swup progress bar plugin](https://swup.js.org/plugins/progress-plugin/). Click on the **link to page two** a above this section to see it in action.
 
-Install the 👜 Bag of Tricks ✨ in your astro project with **`npm install astro-vtbot`** or [install as an Astro integration!](/library/Installation/). Then use the `ProgressBar>` like this:
+Install the 👜 Bag of Tricks ✨ in your astro project with **`npm install astro-vtbot`** or [install as an Astro integration!](/library/Installation/). Then use the `<ProgressBar>` like this:
 ```astro title="UseProgressBar.astro" {3,13,22,23,24}
 ---
 import BrakePad from 'astro-vtbot/components/BrakePad.astro';
@@ -38,3 +38,6 @@ import MdxLayout from './MdxLayout.astro';
 	}
 </style>
 ```
+The [`<BrakePad />` component](/library/BrakePad/) shown in the listing above is optional. It helps you to see the progress bar even if you have a fast server and a fast connection: It simulates long loading times for DEV mode. `<BrakePad />` does nothing when you build for production.
+
+As an alternative you could also throttle the connection speed using the browser's dev tools.
