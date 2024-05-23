@@ -7,7 +7,7 @@ import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
 
-import AutoNameSelected from '../bot/MarkHeadings.astro';
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
 import MarkTitle from '../bot/MarkTitle.astro';
 import SwapSound from '../bot/SwapSound.astro';
 import PagefindToTextFragments from './PagefindToTextFragments.astro';
@@ -38,6 +38,13 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 <PageOrder />
 
 <AutoNameSelected
+	selector='head:has(link[rel="canonical"][href*="/jotter/"]) + body main :is(h1, h2, h3, h4, h5, h6)'
+	prefix="vtbot-hds"
+/>
+<AutoNameSelected
+	selector='starlight-toc li'
+	prefix="vtbot-toc"
+	shuffle={true}
 />
 <MarkTitle />
 

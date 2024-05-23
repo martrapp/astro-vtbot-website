@@ -50,13 +50,13 @@ Be aware that the `<PageOffset />` component
 
 ### Properties
 
-The `<PageOffset/>` component has a single mandatory parameter. You have to specify the name of the problematic element that induced the pseudo-scrolling. If you have a transition named "myName" on your `<main>` element, then use it like in the example above.
+The `<PageOffset/>` component has a single mandatory parameter. You have to specify the view transition name of the problematic element that induced the pseudo-scrolling. If you have a view transition named "myName" on your `<main>` element, then use it like in the example above.
 
 Note: It is always a good idea to give transitions an explicit transition name like "myMain", as you can not guess what random name Astro assigns, if you don't. Use the `transition:name="myname"` directive on your `<main>` element if you haven't yet.
 
 
 |   Property | Type | Effect |
 |------------|------|--------|
-| name | string | Instructs the `<PageOffset>` component to fix the pseudo scrolling morph animation on the element with the given view transition name. |
+| name | string | Instructs the `<PageOffset>` component to fix the pseudo scrolling morph animation on the element with the given `view-transition-name`. |
 
 Typically you have at most one such element on your layout. If you need to name multiple elements, repeat the component with different names.

@@ -43,7 +43,7 @@ import { Content } from 'src/mdx/components.mdx';
 					Whether identifiers are used correctly with transition:persist and data-vtbot-replace
 				</li><li>Whether view-transition-names and script types have correct values</li>
 			</ul>
-			<h3>Status</h3><p>Ready to use</p>
+			<h3>Status</h3><p>Reliable and ready to use.</p>
 			<h3>Future direction</h3><ul>
 				<li>Add additional checks for typical issues.</li>
 			</ul>
@@ -93,7 +93,7 @@ import { Content } from 'src/mdx/components.mdx';
 				the main area of your page. It can also solve the problem that view transitions lose the
 				content of <i>persisted</i> iframes and the state of animations on transitions.
 			</p>
-			<h3>Status</h3><p>Just got a new property!</p>
+			<h3>Status</h3><p>Reliable and ready to use.</p>
 			<h3>Future direction</h3><ul>
 				<li>Find and resolve potential bugs.</li>
 			</ul>
@@ -110,11 +110,30 @@ import { Content } from 'src/mdx/components.mdx';
 				This component <mark>removes the pseudo-scrolling</mark> effect introduced by <mark>morph animations</mark> of elements that are larger than the viewport.</p><p>
 				Get a smooth, worry free transition that looks great even on large, scrolled down pages.
 			</p>
-			<h3>Status</h3><p>Used in the Jotter.</p>
+			<h3>Status</h3><p>Used in the Jotter to steady page changes.</p>
 			<h3>Future direction</h3><ul>
 				<li>Accepting suggestions ;-)</li>
 			</ul>
 		</Card>
+
+		<Card
+			href="/library/AutoNameSelected/"
+			title="Automatically Name Elements"
+			icon="📛"
+			what="Utility / ~0.3k Brotli bytes"
+			name="ans"
+		>
+			<p>
+				The <code>AutoNameSelected</code> component allows you to <mark>automatically assign <code>view-transition-name</code> properties</mark> in a declarative way using CSS selectors.</p><p>
+				Name all your headings or images <mark>to add automatic morph effects</mark> to your navigation.
+			</p>
+			<h3>Status</h3><p>Used in the Jotter to morph headings.</p>
+			<h3>Future direction</h3><ul>
+				<li>Additional config required?</li>
+				<li>Extend with transition classes?</li>
+			</ul>
+		</Card>
+
 		<Card
 			href="/library/Zoom/"
 			title="Zoom"
@@ -231,7 +250,7 @@ import { Content } from 'src/mdx/components.mdx';
 				groups from the current page to the target page are only possible if those are also
 				supported by the portal page.
 			</p>
-			<h3>Status</h3><p>Not bulletproof yet.</p>
+			<h3>Status</h3><p>Proof of concept.</p>
 			<h3>Future direction</h3><ul>
 				<li>Add properties for more fine grained control</li>
 			</ul>
@@ -250,7 +269,7 @@ import { Content } from 'src/mdx/components.mdx';
 			>. The vertical and horizontal scroll <mark>positions just stay where the are</mark>
 			before you clicked a link.
 
-			<h3>Status</h3><p>Brand new.</p>
+			<h3>Status</h3><p>Used on several additional demos including image gallery and the animation demos.</p>
 			<h3>Future direction</h3><ul>
 				<li>Do we need properties for more fine grained control?</li>
 			</ul>
@@ -273,7 +292,7 @@ import { Content } from 'src/mdx/components.mdx';
 				transitions. Admittedly, you typically want transitions to be slick and snappy. So this is a
 				bit of a niche feature, but it can be very helpful for testing and debugging.
 			</p>
-			<h3>Status</h3><p>New but reliable</p>
+			<h3>Status</h3><p>Reliable and ready to use.</p>
 			<h3>Future direction</h3><ul>
 				<li>Do we need additional properties for more fine grained control?</li>
 			</ul>

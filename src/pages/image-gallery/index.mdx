@@ -1,0 +1,19 @@
+---
+layout: src/layouts/GalleryMdxLayout.astro
+---
+
+# Image Gallery
+
+<p style="font-family: cursive">In the quiet whispers of the digital cosmos, Astro is a beloved tool, known and cherished by all who craft beauty from pixels. Yet, within its daily magic lies a well-kept secret known only to a select few: Astro is touted for its versatility &hellip;</p>
+<p>&hellip; but what people really want to build with it are **image galleries**.</p>
+<p style="font-family: cursive">These visual treasures, woven with mystique and wonder, transform everyday moments into timeless tales, waiting to enchant those who discover them.</p>
+
+[[Click me]](/image-gallery/)
+
+<div class="gallery"/>
+
+[[Click me]](/image-gallery/)
+
+This gallery uses the [`<AutoNameSelected />` component](/library/AutoNameSelected/) to give all images a unique `view-transition-name` that will also shows up on the next page.
+
+The names are assigned in random order. This forces the tiles to move to match their position on the next page. These movements are standard [morph transitions](/jotter/api/#morph-animations) which might not only slowly change position but also the size of the tiles.

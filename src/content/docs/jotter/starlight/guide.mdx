@@ -289,6 +289,26 @@ Refrain from merging rules with pseudo-elements with rules without pseudo-elemen
 
 </details>
 
+### Additional Morph Effects
+
+Now it's getting funny! I made a component that I could use to make the headings of the pages stand out during view transitions. It is called [`AutoNameSelected`](/library/AutoNameSelected/).
+
+Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`, &hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
+
+You see this effect on the Jotter pages.
+
+After I added some configuration options to the component, I saw much more potential. Have a look at the image gallery demo, which uses `AutoNameSelected` to shuffle image tiles around. Or take a look at the table of contents to the right which has a similar effect. Here is how that is done:
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
+---
+...
+<AutoNameSelected selector="starlight-toc li" prefix="vtbot-toc" shuffle={true} />
+```
+
+Event though this component was crafted as part of The Bag's Stalivht support, it is a general purpose component that can well be used beyond Astro.
+
 ### Customize the Sidebar
 In case you want to change the [default behavior of the sidebar](#sidebar-behavior), the <BoT/> offers some switches and utility functions.
 
@@ -342,8 +362,15 @@ import DemoHead3 from 'src/components/starlight/DemoHead3.astro?raw'
 What follows is a yet more extended version of the [extended configuration example](#extended-configuration-example), but without the styling examples. It is not meant to be copied over into your `Head` but rather as a showcase what optional components you might mix and match in your own `Head` component. The section with the optional components is highlighted.
 
 
-<Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,15,16,18,19,21,22]} />
+<Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,8,16,17,19,20,22,23,25,26,27]} />
 
+## Friendly Neighbor
+
+Currently, The Bag's support for view transitions is aware of and compatible with the following plugins you might use with your starlight site:
+* `starlight-image-zoom`
+* `starlight-util` (f.k.a. `starlight-muti-sidebar`)
+
+I plan to support compatibility to both also in the future.
 
 ## Known Issues
 
@@ -355,19 +382,10 @@ If you link to a page of your Starlight site from the outside, you should not us
 
 The website of The Bag automatically intercepts all links that return to the `/jotter/` and does a full page load. The Bag will soon offer a reusable component to facilitate that.
 
-### Not tested with arbitrary config options
+### Not tested with arbitrary Starlight options
 Starlight supports a lot of different config options. The Bags view transition support is so far only tested with a few typical combinations.
 
 Multilingual Starlight sites force a complete reload of the page if you select a different language. This is a good thing, as the app frame changes completely and has to be reloaded anyway.
-
-### Starlight Image Zoom
-
-If you are using the `starlight-image-zoom` plugin (highly recommended!), make sure you are using the latest version.
-
-### How to use `transition:persist`
-The Starlight integration of the <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which automatically persists everything outside the `div.main-frame` area. If you are flexible where to place things, just put them somewhere outside the `div.main-frame`  to persist them and you are done.
-
-As of v1.7.8 `<ReplacementSwap />` also handles `data-transition-persist` attributes in the document trees that are swapped in from the new page. You can use this to persist an element inside the `div.main-frame` area to keep its state on all Starlight pages.
 
 ## As always, feedback is very welcome!
 

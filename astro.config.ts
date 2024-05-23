@@ -9,7 +9,7 @@ import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
-import starlightMultiSidebar from "@lorenzo_lewis/starlight-multi-sidebar";
+import starlightUtils from "@lorenzo_lewis/starlight-utils";
 
 // https://astro.build/config
 export default defineConfig({
@@ -30,8 +30,15 @@ export default defineConfig({
 	trailingSlash: 'ignore',
 	integrations: [d2({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
-	}), vtbot({}), starlight({
-		plugins: [starlightImageZoom(), starlightMultiSidebar],
+	}),
+	vtbot({}),
+	starlight({
+		plugins: [
+			starlightImageZoom(),
+			starlightUtils({
+				multiSidebar: { switcherStyle: 'horizontalList' },
+				navLinks: {leading: {useSidebarLabelled: 'leading'}}
+		})],
 		tableOfContents: {
 			minHeadingLevel: 2,
 			maxHeadingLevel: 4
@@ -62,7 +69,14 @@ export default defineConfig({
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
 		},
-		sidebar: [{ label: "Astro", items: sidebar1() }, { label: "All", items: sidebar2() }]
+		sidebar: [
+			{ label: "Astro", items: sidebar1() },
+			{ label: "General", items: sidebar2() },
+			{ label: "leading", items: [
+				{ label: "Components", link: "/components/" },
+				{ label: "Demos", link: "/demos/" },
+			]}
+		]
 	})],
 	vite: {
 		build: {

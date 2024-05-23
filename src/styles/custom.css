@@ -103,16 +103,19 @@ h4 a {
 }
 
 nav ::-webkit-scrollbar {
-	width: 0;
+	width: 8px;
 }
 ::-webkit-scrollbar {
-	background-color: var(--sl-color-gray-6);
+	background-color:  var(--vtbot-bg-color);
 }
 ::-webkit-scrollbar-thumb {
-	background-color: var(--sl-color-gray-5);
+	background-color:  var(--vtbot-bg-color);
 }
 nav:hover ::-webkit-scrollbar {
-	width: 10px;
+	background-color: var(--sl-color-gray-6);
+}
+nav:hover ::-webkit-scrollbar-thumb {
+	background-color: var(--sl-color-gray-5);
 }
 
 starlight-menu-button button {
