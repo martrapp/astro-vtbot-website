@@ -10,6 +10,7 @@ import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightUtils from "@lorenzo_lewis/starlight-utils";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://astro.build/config
 export default defineConfig({
@@ -37,8 +38,8 @@ export default defineConfig({
 			starlightImageZoom(),
 			starlightUtils({
 				multiSidebar: { switcherStyle: 'horizontalList' },
-				navLinks: {leading: {useSidebarLabelled: 'leading'}}
-		})],
+				navLinks: { leading: { useSidebarLabelled: 'leading' } }
+			})],
 		tableOfContents: {
 			minHeadingLevel: 2,
 			maxHeadingLevel: 4
@@ -72,10 +73,12 @@ export default defineConfig({
 		sidebar: [
 			{ label: "Astro", items: sidebar1() },
 			{ label: "General", items: sidebar2() },
-			{ label: "leading", items: [
-				{ label: "Components", link: "/components/" },
-				{ label: "Demos", link: "/demos/" },
-			]}
+			{
+				label: "leading", items: [
+					{ label: "Components", link: "/components/" },
+					{ label: "Demos", link: "/demos/" },
+				]
+			}
 		]
 	})],
 	vite: {
@@ -88,7 +91,8 @@ export default defineConfig({
 			fs: {
 				allow: ['/Users/', '/home/']
 			}
-		}
+		},
+		plugins: [visualizer({  brotliSize: true })]
 	}
 });
 function sidebar1() {
