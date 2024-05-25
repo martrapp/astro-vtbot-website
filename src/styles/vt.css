@@ -52,10 +52,6 @@ main {
 	scrollbar-gutter: stable;
 }
 
-[data-astro-transition-fallback] main {
-	box-shadow: var(--vtbot-glow-shadow);
-	position: fixed;
-}
 
 [data-astro-transition-fallback='old'] main {
 	animation: swingOut 0.4s ease-in both;

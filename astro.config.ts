@@ -11,6 +11,7 @@ import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sideba
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightUtils from "@lorenzo_lewis/starlight-utils";
 import { visualizer } from "rollup-plugin-visualizer";
+//import starlightBlog from 'starlight-blog'
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,6 +37,7 @@ export default defineConfig({
 	starlight({
 		plugins: [
 			starlightImageZoom(),
+		//	starlightBlog(),
 			starlightUtils({
 				multiSidebar: { switcherStyle: 'horizontalList' },
 				navLinks: { leading: { useSidebarLabelled: 'leading' } }
