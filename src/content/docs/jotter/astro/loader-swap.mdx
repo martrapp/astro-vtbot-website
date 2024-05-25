@@ -136,7 +136,7 @@ These are implementation details, not part of the API and might change without p
 1. Determine which of the scripts in `event.newDocument` should not be run between `astro:after-swap` and `astro:page-load`. These are the script that were already part of the previous page and were not marked with `data-astro-rerun`. Mark those scripts as already executed in `event.newDocument`.
 2. Swap the attributes of the `<html>` element. Typically the current attributes are just replaced with the ones from the new DOM.
 3. Swap the children of the `<head>` element. Instead of removing all existing elements and then add the new ones, Astro keeps some elements untouched. These are a) style sheet links with same href that are present in both DOMs and b)
-elements with same `data-astro-transition-persist` name in both DOMS.
+elements with same `data-astro-transition-persist` name in both DOMs.
 4. Save the current input focus and text selection
 5. Replace `window.document.body` with the `event.newDocument.body`
 6. Replace elements in the now current body with the corresponding elements from the old body if they are marked with the same `data-astro-transition-persist` name in both DOMs. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
