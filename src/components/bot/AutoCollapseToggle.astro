@@ -1,7 +1,11 @@
 ---
-
+interface Props {
+	label?: string;
+}
+const { label } = Astro.props;
 ---
 
+{label && <meta name="vtbot-auto-collapse-label" content={label} />}
 <script>
 	import * as STARLIGHT from 'astro-vtbot/components/starlight/utils';
 	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
@@ -14,7 +18,10 @@
 		let toggle = document.querySelector('#vtbot-auto-collapse-toggle');
 		if (toggle) return;
 		toggle = document.createElement('div');
-		toggle.innerHTML = `<label for="vtbot-auto-collapse-toggle">auto collapse </label><input type="checkbox" ${initial ? 'checked' : ''} id="vtbot-auto-collapse-toggle">`;
+		const autoCollapse =
+			document.querySelector<HTMLMetaElement>('meta[name="vtbot-auto-collapse-label"]')?.content ||
+			'auto collapse';
+		toggle.innerHTML = `<label for="vtbot-auto-collapse-toggle">${autoCollapse}</label><input type="checkbox" ${initial ? 'checked' : ''} id="vtbot-auto-collapse-toggle">`;
 		toggle.querySelector<HTMLInputElement>('input')!.addEventListener('change', (e) => {
 			const checked = (e.target as HTMLInputElement).checked;
 			content.classList[checked ? 'remove' : 'add']('vtbot-no-auto-collapse');

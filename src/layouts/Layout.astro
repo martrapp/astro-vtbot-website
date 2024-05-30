@@ -2,10 +2,11 @@
 import { ViewTransitions } from 'astro:transitions';
 export interface Props {
 	title: string;
+	pageFindIgnore?: boolean;
 	background?: string;
 }
 
-const { title, background = '' } = Astro.props;
+const { title, background = '', pageFindIgnore=false } = Astro.props;
 ---
 
 <!doctype html>
@@ -19,7 +20,7 @@ const { title, background = '' } = Astro.props;
 		<title>{title + ' | Bag of Tricks'}</title>
 		<slot name="head2" />
 	</head>
-	<body data-pagefind-body style={background ? `background: ${background}` : ''}>
+	<body data-pagefind-body={!pageFindIgnore} style={background ? `background: ${background}` : ''}>
 		<slot />
 	</body>
 </html>

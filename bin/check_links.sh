@@ -21,7 +21,7 @@ anchors() {
 	file="$1"
 	from=$(echo "$file" | sed 's/index\.html$//')
 	cat "dist$file" | tr ' >' '\n\n' | grep 'id="' | sed 's/id="\(.*\)"/\1/' | \
-	awk '{ print "'"$from"'#" $0, "'"$from"'#" $0}'
+	awk '{ print "'"$from"'#" $0, "'"$from"'#" $0}END{$0="top";print "'"$from"'#" $0, "'"$from"'#" $0}'
 }
 files=$(find dist -type f -name "*.html" | sed 's/^dist//')
 for file in $files; do

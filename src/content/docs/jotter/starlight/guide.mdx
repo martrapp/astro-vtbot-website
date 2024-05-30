@@ -1,5 +1,5 @@
 ---
-title: "SPA-like Look & Feel: Add View Transitions to Starlight"
+title: "Guide: Add View Transitions to Starlight"
 ---
 
 import BoT from "/src/components/BoT.astro"
@@ -169,6 +169,8 @@ import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+import ProgressBar from "astro-vtbot/components/ProgressBar.astro";
+
 // import one of Astro's predefined animation functions,
 // see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
 import { slide } from 'astro:transitions';
@@ -183,6 +185,19 @@ import { slide } from 'astro:transitions';
 
 {/* update this one to whatever image you want to show as a loading indicator */}
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
+
+{/* As an alterative to the LoadingIndicator: */}
+<ProgressBar />
+<style is:global>
+  .swup-progress-bar {
+    background: linear-gradient(
+      to bottom,
+      var(--sl-color-accent),
+      var(--sl-color-accent-high),
+      var(--sl-color-accent)
+    );
+    height: 5px;
+  }</style>
 
 <style is:global>
 	/* Slow down Chrome's default animation */
@@ -214,7 +229,11 @@ import { slide } from 'astro:transitions';
 This section shows how to add features from the [optional feature list](/jotter/starlight/inner-workings/#optional-part). This has just two entries right now but will soon grow further.
 
 ### Loading indicator
-Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#extended-configuration-example) already contains the indicator that makes your favicon flash happily in the top right corner during loading.
+Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#extended-configuration-example) contains
+* the indicator that makes your favicon flash happily in the top right corner during loading (`<LoadingIndicator />`)
+* as well as the `<ProgressBar />` with some basic styling.
+
+Choose one of those.
 
 ### Eliminate Pseudo-Scrolling
 
@@ -293,7 +312,7 @@ Refrain from merging rules with pseudo-elements with rules without pseudo-elemen
 
 Now it's getting funny! I made a component that I could use to make the headings of the pages stand out during view transitions. It is called [`AutoNameSelected`](/library/AutoNameSelected/).
 
-Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`, &hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
+Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`, &hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph--group-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
 
 You see this effect on the Jotter pages.
 
@@ -354,6 +373,42 @@ To use the utility functions, import one ore more from `astro-vtbot/components/s
 </script>
 ```
 
+### Re-initialize Starlight Pages
+
+For most Starlight sites, the following topic is *not relevant*. We talk about an issue with re-initialization of Starlight pages when there are view transitions that originate from outside the Starlight pages. To be affected by this problem you must fulfill the following conditions:
+- Under the same origin (= protocol, hostname, port): You have additional pages that are not part of your current Starlight content, or yiu even have a second Starlight site.
+- Those pages also have view transitions enabled.
+
+The issue here is that the Starlight pages are perfectly initialized on the first load, which is a full page load. Later navigation within the Starlight realm is also fine, as we use the [`<ReplacementSwap />` component to keep the app state up to date](/jotter/starlight/inner-workings/#keep-app-state-up-to-date). But view transitions that come from outside the Starlight's realm are soft reloads that cannot properly re-initialize the app state.
+
+The Bag's website has this structure. If that also sounds like your setup, use the [`<BorderControl />` component](/library/BorderControl/) to define and protect your Starlight realm by forcing full page loads on incoming view transitions.
+
+Here is the setting used by the Jotter to protect it from incoming view transitions from demos or reusable components.
+
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import BorderControl from 'astro-vtbot/components/BorderControl.astro';
+
+---
+...
+<BorderControl fence={{ inside: ['/jotter/'] }} />
+```
+### Make Some Noise
+I apologize if the sounds of the jotter bother you, but I just couldn't resist triggering something other than animations through the life cycle events of the astro view transitions.
+Maybe you have a more subtle sound file than the one the jotter uses. If you want to try it out, it's really easy:
+
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import SwapSound from 'astro-vtbot/components/SwapSound.astro';
+
+---
+...
+<SwapSound src="/large-steampunk-factory-machine-188048.mp3" />
+```
+For further details see [the description of the `<SwapSound />` component](/library/SwapSound/).
+
 ## Custom Combo Options
 
 import { Code } from '@astrojs/starlight/components';
@@ -367,11 +422,13 @@ What follows is a yet more extended version of the [extended configuration examp
 ## Friendly Neighbor
 
 Currently, The Bag's support for view transitions is aware of and compatible with the following plugins you might use with your starlight site:
-* `starlight-image-zoom`
-* `starlight-util` (f.k.a. `starlight-muti-sidebar`)
+*
+* `HiDeoo/starlight-image-zoom` (https://starlight-image-zoom.vercel.app/)
+* `@lorenzo_lewis/starlight-utils` (f.k.a. `starlight-mul	ti-sidebar`) (https://starlight-utils.pages.dev/)
+* `HiDeoo/starlight-blog` (https://starlight-blog-docs.vercel.app/)
+* `@astrojs/starlight-docsearch` (https://starlight.astro.build/guides/site-search/#algolia-docsearch)
 
-I plan to support compatibility to both also in the future.
-
+I plan to continue to support compatibility with these packages in future versions of the <BoT/>.
 ## Known Issues
 
 There are some facts that you should be aware of. None of them is a real obstacle on using The Bag's Starlight support.

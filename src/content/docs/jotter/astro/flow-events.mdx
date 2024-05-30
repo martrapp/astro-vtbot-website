@@ -27,7 +27,7 @@ There are  four types of actions that trigger Astro's View Transitions:
 1. Clicking on a link (HTML `<a>` Element, SVG Anchor `<a>` and `<map><area>`)
 2. Submitting a `<form>`
 3. Pressing a browsers buttons for history navigation, using according keyboard shortcuts, or calls to `history` functions `back()`, `forward()`, or `go()`
-4. Calling the function `navigate()`, which is provided by `astro:transitions/client`
+4. Calling the [`navigate()` function](#navigate), which is provided by `astro:transitions/client`
 
 Customization of the view transition is supported by [Astro's transition events](./#events) and a view transition object with three promises that resolve or reject at different points during the transition. For details see the [View Transition documentation](https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition) on MDN. Users can use the events and the promises to trigger custom code.
 
@@ -140,3 +140,27 @@ For documentation on `startViewTransition` visit [mdn](https://developer.mozilla
 | Type            | `astro:before-swap`         |
 | TypeScript Type | `TransitionBeforeSwapEvent` |
 | Cancelable      | no                          |
+
+## Navigate()
+
+The navigate function gives you programmatic access to view transitions. When you call it, it starts the [processing flow described above](/jotter/astro/flow-events/#processing-flow).
+
+The function accepts two parameters: the URL to be navigated to and an optional option parameter.
+
+```ts
+type Options = {
+        history?: 'auto' | 'push' | 'replace';
+        state?: any;
+        info?: any;
+        formData?: FormData;
+        sourceElement?: Element;
+};
+async function navigate(href: string, options?: Options);
+```
+
+The function and its options are inspired by the [Navigation API's `navigate()`](https://developer.mozilla.org/en-US/docs/Web/API/Navigation/navigate).
+* `history` controls whether the `navigate()` will change the browser's history by calling `history.pushState()` or `history.replaceState()`. The values of `push` and `auto` are equivalent  because the differences described as `NotSupportedError` at [https://developer.mozilla.org/en-US/docs/Web/API/Navigation/navigate#exceptions](https://developer.mozilla.org/en-US/docs/Web/API/Navigation/navigate#exceptions) can not be triggered with Astro.
+* `state` can be an arbitrary value that will be written into the browser's history state.
+* `info`, `formData` and `sourceElement`: These are values that can be accessed in the [`astro:before-*` events](#events).
+
+The function returns a promise that fulfills when the new page got swapped in and the history entry got written. It does not wait for the animation of the view transition.

@@ -2,12 +2,13 @@
 import Layout from './Layout.astro';
 interface Props {
 	title: string;
+	pageFindIgnore: boolean;
 	background: string;
 }
-const { title, background } = Astro.props;
+const { title, background, pageFindIgnore } = Astro.props;
 ---
 
-<Layout title={title} {background}>
+<Layout title={title} {background} {pageFindIgnore}>
 	<h1>{title}</h1>
 	<slot />
 </Layout>
