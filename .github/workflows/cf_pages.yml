@@ -42,6 +42,8 @@ jobs:
 
       - name: Build with Astro
         run: npm run build
+        env:
+          GS: ${{ secrets.TEST }}
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
