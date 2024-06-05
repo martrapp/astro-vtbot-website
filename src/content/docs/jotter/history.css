@@ -5,16 +5,17 @@
 
 .item {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	border-top: 1pt dashed #888;
 }
 
-@media screen and (orientation: portrait) {
+@media screen and (min-width: 50rem) {
 	.item {
-		border-top: 1pt dashed #888;
-		flex-direction: column;
+		flex-direction: row;
+		border-top: 0pt;
 	}
 }
 

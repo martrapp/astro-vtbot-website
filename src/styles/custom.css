@@ -12,6 +12,9 @@
 :root {
 	transition: --vtbot-bg-color 0.5s;
 }
+:root[loading] * {
+	cursor: progress;
+}
 body {
 	text-align: left;
 	hyphens: auto;
@@ -109,10 +112,10 @@ h4 a {
 nav ::-webkit-scrollbar {
 	width: 8px;
 }
-::-webkit-scrollbar {
+nav ::-webkit-scrollbar {
 	background-color:  var(--vtbot-bg-color);
 }
-::-webkit-scrollbar-thumb {
+nav ::-webkit-scrollbar-thumb {
 	background-color:  var(--vtbot-bg-color);
 }
 nav:hover ::-webkit-scrollbar {

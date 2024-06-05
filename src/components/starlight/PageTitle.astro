@@ -29,8 +29,12 @@ Should be a bit more than 2/3 SidebarSelect duration
 
 <ReadyToFinished duration="0.333s"/>
 
-<span id="vtbot-head-last-update" data-astro-transition-scope={swingScope}><LastUpdated {...Astro.props} /></span>
+<div id="vtbot-head-last-update" data-astro-transition-scope={swingScope}>
+	<LastUpdated {...Astro.props} />
+</div>
+
 <StarlightPageTitle {...Astro.props}><slot /></StarlightPageTitle>
+
 <AnimationStyle name="head-last-update" />
 
 <style is:global>
