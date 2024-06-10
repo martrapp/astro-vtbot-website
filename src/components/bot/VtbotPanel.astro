@@ -6,7 +6,7 @@ import off from './mono-off.url?raw';
 import sbs from './mono-side-by-side.url?raw';
 ---
 
-<div id="vtbot-ui-panel" style="view-transition-name: vtbot-div-panel">
+<div id="vtbot-ui-panel">
 	<div id="vtbot-ui-messages" style="view-transition-name: vtbot-div-messages">
 		<h4>Welcome &hellip;</h4>
 		<p>&hellip; to the <b>Engine Room</b> deep down at the bottom of the <b>Bag of Tricks!</b></p>
@@ -18,7 +18,7 @@ import sbs from './mono-side-by-side.url?raw';
 		<p style="margin-bottom:0">Then click a link on your page to <b>start a view transition</b>.</p>
 	</div>
 
-	<div id="vtbot-ui-modi" style="view-transition-name: vtbot-div-modi" class="visible">
+	<div id="vtbot-ui-modi" style="view-transition-name: vtbot-div-modi">
 		<h4>Select Mode:</h4>
 
 		<ul>
@@ -58,12 +58,44 @@ import sbs from './mono-side-by-side.url?raw';
 			</li>
 		</ul>
 	</div>
-	<div id="vtbot-ui-slow-motion" style="view-transition-name: vtbot-div-slo-mo" class="visible">
+	<div id="vtbot-ui-slow-motion" style="view-transition-name: vtbot-div-slo-mo">
 		<h4>Slow Motion:</h4>
-		<label for="vtbot-ui-slo-mo">Speed:</label><br/>
-		<input id="vtbot-ui-slo-mo" type="range" min="0" max="1000" value="100" />
+		<label for="vtbot-ui-slo-mo">Stretch Factor: <span id="vtbot-ui-tsf">1.0</span></label><br />
+		<input
+			id="vtbot-ui-slo-mo"
+			data-vtbot-slow-motion="1.0"
+			type="range"
+			min="0"
+			max="2000"
+			value="100"
+		/>
 	</div>
-	<div id="vtbot-ui-filter" style="view-transition-name: vtbot-div-filter" class="visible">
+	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
+		<h4>Full Manual Control:</h4>
+		<label for="vtbot-ui-controller">Progress:</label><br />
+		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
+		<div style="display:flex; justify-content: space-between">
+			<span>0%</span><span>100%</span>
+		</div>
+	</div>
+	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
+		<h4>View transition names:</h4>
+		<ol>
+			<li>Name 1</li>
+			<li>Name 2</li>
+			<li class="left">Name 3</li>
+			<li class="right selected">Name 2</li>
+			<li class="left right">Name 3</li>
+			<li>Name 2</li>
+		</ol>
+	</div>
+
+	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info">
+		<h4>Info:</h4>
+		Selector: egal
+	</div>
+
+	<div id="vtbot-ui-filter" style="view-transition-name: vtbot-div-filter">
 		<h4>Filter Names:</h4>
 		<ul>
 			<li>
@@ -96,18 +128,7 @@ import sbs from './mono-side-by-side.url?raw';
 		</form>
 		<button>Reset</button>
 	</div>
-	<div id="vtbot-ui-names" class="visible" style="view-transition-name: vtbot-div-names">
-		<h4>View transition names</h4>
-		<ol>
-			<li>Name 1</li>
-			<li>Name 2</li>
-			<li class="left">Name 3</li>
-			<li class="right selected">Name 2</li>
-			<li class="left right">Name 3</li>
-			<li>Name 2</li>
-		</ol>
-	</div>
-	<div id="vtbot-ui-selectors" style="view-transition-name: vtbot-div-selectors" class="visible">
+	<div id="vtbot-ui-selectors" style="view-transition-name: vtbot-div-selectors" class="hidden">
 		<h4>Left side</h4>
 		<p>(No element)</p>
 		<hr />
@@ -128,6 +149,9 @@ import sbs from './mono-side-by-side.url?raw';
 	style="view-transition-name: vtbot-button-close">🗙</button
 >
 <style is:inline>
+	:root {
+		transition: color 1s;
+	}
 	#vtbot-ui-panel ~ button {
 		border-radius: 6px;
 		border: 0;
@@ -137,16 +161,16 @@ import sbs from './mono-side-by-side.url?raw';
 		background-color: darkolivegreen;
 	}
 	#vtbot-ui-panel ~ #vtbot-ui-close {
-		padding-bottom: 3pt;
+		padding-bottom: 4pt;
 		cursor: pointer;
-		right: 1px;
+		right: 11px;
 		background-color: darkgoldenrod;
 	}
 	#vtbot-ui-turn {
 		padding-top: 4pt;
 		padding-bottom: 2pt;
 		cursor: pointer;
-		right: 30px;
+		right: 40px;
 		color: white;
 	}
 
@@ -154,29 +178,27 @@ import sbs from './mono-side-by-side.url?raw';
 		padding-top: 4pt;
 		padding-bottom: 2pt;
 		cursor: pointer;
-		right: 57px;
+		right: 67px;
 		color: white;
 	}
 
-	#vtbot-ui-panel div {
+	#vtbot-ui-panel > div {
 		padding: 8px;
 		margin: 4px;
 		border: 1px solid #888;
-		min-height: 160px;
 		min-width: 140px;
+	}
+	#vtbot-ui-messages {
+		min-height: 120px;
+	}
+	:root:not(.vtbot-ui-column) #vtbot-ui-panel div {
+		min-height: 160px;
 	}
 	#vtbot-ui-panel div.hidden {
 		display: none;
 	}
 
-	#vtbot-ui-slo-mo::after {
-    content: attr(value);
-    position: relative;
-    top: -1em;
-  }
-
 	#vtbot-ui-messages {
-		flex-grow: 1;
 		overflow-y: auto;
 	}
 	#vtbot-ui-filter {
@@ -226,8 +248,7 @@ import sbs from './mono-side-by-side.url?raw';
 		border-right: 8px solid darkgoldenrod;
 	}
 	#vtbot-ui-names ol li.selected {
-		border-top: 1pt solid olive;
-		border-bottom: 1pt solid olive;
+		background-color: #859b5f66;
 	}
 
 	#vtbot-ui-filter ul {
@@ -285,7 +306,8 @@ import sbs from './mono-side-by-side.url?raw';
 		margin-bottom: 8px;
 	}
 	:root:not(.vtbot-ui-column) #vtbot-ui-panel ~ button {
-		bottom: calc(var(--vtbot-panel-height, 204px) - 14px);
+		/*	bottom: calc(var(--vtbot-panel-height, 204px) - 14px);*/
+		bottom: 6px;
 	}
 	#vtbot-ui-panel {
 		background-color: #4861;
@@ -318,7 +340,28 @@ import sbs from './mono-side-by-side.url?raw';
 			display: none;
 		}
 	}
+
+	:root:has(#vtbot-ui-names li.selected) #vtbot-ui-messages {
+		display: none;
+	}
+	#vtbot-ui-info {
+		display: none;
+	}
+	:root:has(#vtbot-ui-names li.selected) #vtbot-ui-info {
+		display: block;
+	}
 	:root:not([data-vtbot-modus='compare']) #vtbot-ui-filter ul {
 		display: none;
+	}
+	:root:not([data-vtbot-modus='slow-motion']) #vtbot-ui-slow-motion {
+		display: none;
+	}
+	:root:not([data-vtbot-modus='control']) #vtbot-ui-control {
+		display: none;
+	}
+
+	input[type='range'] {
+		width: calc(100% - 16px);
+		margin: 8px;
 	}
 </style>

@@ -26,12 +26,10 @@
 			const docTitle = document.title;
 
 			setTimeout(async () => {
-				const text = (await (await fetch('http://127.0.0.1:4321/bench/')).text())
-					.replace(
-						'<iframe id="vtbot-main-frame" src="/"></iframe>',
-						`<iframe id="vtbot-main-frame" style="opacity: 0" src="${location.href}"></iframe>`
-					)
-					.replaceAll(/class="visible"/g, 'class="hidden"');
+				const text = (await (await fetch('http://127.0.0.1:4321/bench/')).text()).replace(
+					'<iframe id="vtbot-main-frame" src="/"></iframe>',
+					`<iframe id="vtbot-main-frame" style="opacity: 0" src="${location.href}"></iframe>`
+				);
 				setOrientation();
 				document.documentElement.innerHTML = text;
 				document.querySelector('#vtbot-ui-turn')?.addEventListener('click', switchOrientation);
@@ -55,13 +53,32 @@
 					e.newDocument.head.insertAdjacentHTML(
 						'beforeend',
 						`
-				<style>
-				::view-transition-group(*) {
-					animation-play-state: paused;
-					animation-delay: 0s;
-				}
-				</style>`
+<style>
+	::view-transition-group(*),
+	::view-transition-new(*),
+	::view-transition-old(*) {
+		animation-play-state: paused;
+		animation-delay: 0s;
+	}
+</style>`
 					);
+					e.viewTransition.ready.then(() => {
+						mainDocument
+							.getAnimations()
+							.forEach(
+								(a) => (
+									(a.playbackRate =
+										1.0 /
+										Math.max(
+											0.000001,
+											parseFloat(
+												document.querySelector<HTMLSpanElement>('#vtbot-ui-tsf')?.innerText ?? '1.0'
+											)
+										)),
+									a.play()
+								)
+							);
+					});
 				});
 			}, 500);
 		});
@@ -91,14 +108,13 @@
 
 	function initPanel(leftTransitionNames: Set<string>, rightTransitionNames: Set<string>) {
 		updateNames(leftTransitionNames, rightTransitionNames);
-		panel.querySelector('#vtbot-ui-modi')!.classList.remove('hidden');
-		panel.querySelector('#vtbot-ui-names')!.classList.remove('hidden');
-		panel.querySelector('#vtbot-ui-filter')!.classList.remove('hidden');
 		document.querySelector('#vtbot-ui-names ol')!.addEventListener('click', (e) => {
 			if (e.target instanceof HTMLElement) {
 				const targetLi = e.target.closest('li');
 				if (targetLi) {
-					highlightInFrame(leftFrame.contentDocument!, targetLi.innerText);
+					document.startViewTransition(() => {
+						highlightInFrame(leftFrame.contentDocument!, targetLi.innerText);
+					});
 				}
 			}
 		});
@@ -114,14 +130,14 @@
 		document
 			.querySelector<HTMLUListElement>('#vtbot-ui-modi ul')!
 			.addEventListener('change', updateModus);
-			const sloMo = document.querySelector<HTMLInputElement>('#vtbot-ui-slo-mo')!;
-				sloMo.addEventListener('input', (e) => {
-					if (e.target instanceof HTMLInputElement) {
-						const value = e.target.value;
-
-						sloMo.style.setProperty('--vtbot-slow-motion', value);
-					}
-			});
+		const sloMo = document.querySelector<HTMLInputElement>('#vtbot-ui-slo-mo')!;
+		const sloMoTsf = document.querySelector<HTMLInputElement>('#vtbot-ui-tsf')!;
+		sloMo.addEventListener('input', (e) => {
+			if (e.target instanceof HTMLInputElement) {
+				const value = (parseInt(e.target.value, 10) - 100) / 100 + 1;
+				sloMoTsf.innerText = `${value.toFixed(2)}`;
+			}
+		});
 		window.addEventListener('keyup', function (e) {
 			if (e.key === 'Escape') {
 				window.location.reload();
@@ -154,15 +170,17 @@
 		doc
 			.querySelectorAll("[data-vtbot-transition-name='" + name + "']")
 			.forEach((target) => target.classList.add('selected'));
+
+		const control = document.documentElement.dataset.vtbotModus === 'control';
 		const lis = document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li');
 		let selected: HTMLLIElement | undefined;
 		lis.forEach((li) => {
 			if (li.innerText === name) {
-				li.classList.add('selected');
+				li.classList[control?'toggle':'add']('selected');
 				selected = li;
 				if (li.style.display === 'none') reset();
 			} else {
-				li.classList.remove('selected');
+				if (!control) li.classList.remove('selected');
 			}
 		});
 		const left =
@@ -250,17 +268,19 @@
 	}
 
 	function updateModus() {
+		const root = document.documentElement;
 		const checked = document.querySelector<HTMLInputElement>('#vtbot-ui-modi ul input:checked');
 		if (checked) {
 			const modus = checked.id.replace('vtbot-m-', '');
-			if (modus !== document.documentElement.dataset.vtbotModus) {
+			if (modus !== root.dataset.vtbotModus) {
 				document.startViewTransition(() => {
-					document.documentElement.dataset.vtbotModus = modus;
+					root.dataset.vtbotModus = modus;
+					if (modus !== 'compare')
+						document.querySelector<HTMLInputElement>('#vtbot-ui-filter ul input')!.click();
+					if (modus !== 'control') {
+						document.querySelector<HTMLLIElement>('#vtbot-ui-names .selected')?.click();
+					}
 				});
-			}
-			if (modus === 'slow-motion') {
-				document.querySelector<HTMLDivElement>('#vtbot-ui-slow-motion')!.classList.remove('hidden');
-			} else {
 			}
 		}
 	}
