@@ -50,6 +50,7 @@
 				panel = document.querySelector<HTMLDivElement>('#vtbot-ui-panel')!;
 				const names = markTransitions(mainDocument);
 				initPanel(names, names);
+				initGrabbing();
 				mainDocument.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
 					e.newDocument.head.insertAdjacentHTML(
 						'beforeend',
@@ -113,6 +114,14 @@
 		document
 			.querySelector<HTMLUListElement>('#vtbot-ui-modi ul')!
 			.addEventListener('change', updateModus);
+			const sloMo = document.querySelector<HTMLInputElement>('#vtbot-ui-slo-mo')!;
+				sloMo.addEventListener('input', (e) => {
+					if (e.target instanceof HTMLInputElement) {
+						const value = e.target.value;
+
+						sloMo.style.setProperty('--vtbot-slow-motion', value);
+					}
+			});
 		window.addEventListener('keyup', function (e) {
 			if (e.key === 'Escape') {
 				window.location.reload();
@@ -249,6 +258,43 @@
 					document.documentElement.dataset.vtbotModus = modus;
 				});
 			}
+			if (modus === 'slow-motion') {
+				document.querySelector<HTMLDivElement>('#vtbot-ui-slow-motion')!.classList.remove('hidden');
+			} else {
+			}
 		}
+	}
+
+	function initGrabbing() {
+		const root = document.documentElement;
+
+		const divider = document.querySelector('#divider')!;
+		divider.addEventListener('mousedown', (e) => {
+			root.classList.add('dragging');
+			root.querySelector<HTMLIFrameElement>('#vtbot-main-frame')!.style.pointerEvents = 'none';
+			e.preventDefault();
+		});
+
+		document.addEventListener('mousemove', (e) => {
+			if (root.classList.contains('dragging')) {
+				if (root.classList.contains('vtbot-ui-column')) {
+					root.style.setProperty(
+						'--vtbot-panel-width',
+						`calc(max(183px, 100vw - ${Math.max(100, e.clientX + 1)}px))`
+					);
+				} else {
+					root.style.setProperty(
+						'--vtbot-panel-height',
+						`calc(max(204px, 100vh - ${Math.max(100, e.clientY + 1)}px))`
+					);
+				}
+			}
+		});
+
+		document.addEventListener('mouseup', () => {
+			root.classList.remove('dragging');
+			document.body.style.cursor = 'default';
+			root.querySelector<HTMLIFrameElement>('#vtbot-main-frame')!.style.pointerEvents = 'auto';
+		});
 	}
 </script>
