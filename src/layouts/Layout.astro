@@ -6,15 +6,15 @@ export interface Props {
 	background?: string;
 }
 
-const { title, background = '', pageFindIgnore=false } = Astro.props;
+const { title, background = '', pageFindIgnore = false } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style="color-scheme: dark; view-transition-name: none">
 	<head>
+		<meta charset="UTF-8" />
 		<slot name="head" />
 		<ViewTransitions />
-		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, viewport-fit=cover" />
 		<link rel="icon" href="/favicon.svg" />
 		<title>{title + ' | Bag of Tricks'}</title>

@@ -18,6 +18,7 @@ import '../../styles/ec.s8bdm.css';
 import AutoCollapseToggle from '../bot/AutoCollapseToggle.astro';
 import AutoCollapse from '../bot/AutoCollapse.astro';
 import EagerImageLoading from '../EagerImageLoading.astro';
+import Trial from '../bot/Trial.astro';
 ---
 
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
@@ -36,7 +37,6 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 
 <PageOffset name="main" />
 <PageOrder />
-
 <AutoNameSelected
 	selector='head:has(link[rel="canonical"][href*="/jotter/"]) + body main :is(h1, h2, h3, h4, h5, h6)'
 	prefix="vtbot-hds"
@@ -61,12 +61,4 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
 </script>
 
-{
-	/*
-<style is:global>
-	:root {
-		view-transition-name: none;
-	}
-</style>
- */
-}
+<Trial/>

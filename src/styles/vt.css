@@ -307,3 +307,7 @@ main {
 		transform: rotateY(0deg) translate3d(0, 0, 0);
 	}
 }
+
+:root {
+	scroll-timeline: --vtbotSlider ;
+}

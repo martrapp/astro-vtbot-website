@@ -1,0 +1,65 @@
+---
+import favicon from 'astro-vtbot/assets/bag-of-tricks.svg?raw';
+import VtbotPanel from '../components/bot/VtbotPanel.astro';
+
+const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
+---
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" type="image/svg+xml" href={url} />
+	<title></title>
+</head>
+<body>
+	<iframe id="vtbot-main-frame" src="/"></iframe>
+	<VtbotPanel />
+</body>
+<style is:inline>
+	:root {
+		--vtbot-panel-height: 204px;
+		--vtbot-panel-width: 183px;
+	}
+	#vtbot-main-frame {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: calc(100vh - var(--vtbot-panel-height));
+		border: none;
+	}
+	#vtbot-ui-panel {
+		position: fixed;
+		right: 1px;
+		bottom: 0;
+		right: 0;
+	}
+	#vtbot-ui-panel,
+	#vtbot-ui-panel ~ button {
+		animation: slide-from-bottom 0.5s both;
+	}
+
+	:root.vtbot-ui-column {
+		#vtbot-main-frame {
+			height: 100vh;
+			width: calc(100vw - var(--vtbot-panel-width));
+		}
+
+		#vtbot-ui-panel,
+		#vtbot-ui-panel ~ button {
+			animation: slide-from-right 0.5s both;
+		}
+	}
+
+	@keyframes slide-from-bottom {
+		from {
+			transform: translateY(var(--vtbot-panel-height));
+		}
+	}
+
+	@keyframes slide-from-right {
+		from {
+			transform: translateX(var(--vtbot-panel-width));
+		}
+	}
+</style>
