@@ -8,31 +8,34 @@ import sbs from './mono-side-by-side.url?raw';
 
 <div id="vtbot-ui-panel">
 	<div id="vtbot-ui-messages" style="view-transition-name: vtbot-div-messages">
-		<h4>Welcome &hellip;</h4>
-		<p>&hellip; to the <b>Engine Room</b> deep down at the bottom of the <b>Bag of Tricks!</b></p>
+		<h4>You are &hellip;</h4>
+		<p>&hellip; in the <b>Engine Room</b> deep down at the bottom of the <b>Bag of Tricks!</b></p>
 		<p>
-			<b>Select a mode</b> from <code>Bypass</code> (= do nothing), <code>Slow Motion</code>, <code
-				>Full Manual Control</code
+			<b>Select a mode</b> from <code>Bypass</code> (= no interception), <code>Slow Motion</code>, <code
+				>Full Control</code
 			> or <code>Side-by-side Comparison</code>.
 		</p>
-		<p style="margin-bottom:0">Then click a link on your page to <b>start a view transition</b>.</p>
+		<p style="margin-bottom:0">
+			<b>Examine</b> the defined transitions, then <b>navigate</b> by clicking a link on your page.
+		</p>
 	</div>
 
 	<div id="vtbot-ui-modi" style="view-transition-name: vtbot-div-modi">
 		<h4>Select Mode:</h4>
-
 		<ul>
 			<li>
 				<input type="radio" name="vtbot-m-rg" id="vtbot-m-bypass" checked /><label
 					for="vtbot-m-bypass"
-					><span style="display: inline-block; width:6.7em">Bypass</span>
-					<img style="transform: scale(1.5) translateY(1px)" src={off} /></label
+					><span style="display: inline-block; width:7em; padding-left: 0.7em"> Bypass</span><img
+						style="transform: scale(1.5) translateY(1px)"
+						src={off}
+					/></label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-m-rg" id="vtbot-m-slow-motion" /><label
 					for="vtbot-m-slow-motion"
-					><span style="display: inline-block; width:7em">Slow Motion</span><img
+					><span style="display: inline-block; width:7em; padding-left: 0.7em"> Slow Motion</span><img
 						style="transform: scale(1.5)"
 						src={snail}
 					/></label
@@ -40,7 +43,7 @@ import sbs from './mono-side-by-side.url?raw';
 			</li>
 			<li>
 				<input type="radio" name="vtbot-m-rg" id="vtbot-m-control" /><label for="vtbot-m-control"
-					><span style="display: inline-block; width:6.7em">Full Control</span>
+					><span style="display: inline-block; width:6.7em; padding-left: 0.7em"> Full Control</span>
 					<img class="horizontal" style="transform: scale(1.5)" src={hslider} /><img
 						class="vertical"
 						style="transform: scale(1.5)"
@@ -50,7 +53,7 @@ import sbs from './mono-side-by-side.url?raw';
 			</li>
 			<li>
 				<input type="radio" name="vtbot-m-rg" id="vtbot-m-compare" /><label for="vtbot-m-compare"
-					><span style="display: inline-block; width:7em">Side-by-side</span><img
+					><span style="display: inline-block; width:7em; padding-left: 0.7em"> Side-by-side</span><img
 						style="transform: scale(1.5)"
 						src={sbs}
 					/></label
@@ -60,41 +63,38 @@ import sbs from './mono-side-by-side.url?raw';
 	</div>
 	<div id="vtbot-ui-slow-motion" style="view-transition-name: vtbot-div-slo-mo">
 		<h4>Slow Motion:</h4>
-		<label for="vtbot-ui-slo-mo">Stretch Factor: <span id="vtbot-ui-tsf">1.0</span></label><br />
+		<label for="vtbot-ui-slo-mo">Time stretch Factor: <span id="vtbot-ui-tsf">1.0</span></label><br
+		/>
 		<input
 			id="vtbot-ui-slo-mo"
 			data-vtbot-slow-motion="1.0"
 			type="range"
-			min="0"
-			max="2000"
-			value="100"
+			min="264"
+			max="852"
+			value="473"
 		/>
-	</div>
-	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
-		<h4>Full Manual Control:</h4>
-		<label for="vtbot-ui-controller">Progress:</label><br />
-		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
-		<div style="display:flex; justify-content: space-between">
-			<span>0%</span><span>100%</span>
+		<div style="view-transition-name: vtbot-checkbox-styled">
+			<input id="vtbot-ui-styled" type="checkbox" />
+			<label for="vtbot-ui-styled">Highlight elements</label>
 		</div>
 	</div>
-	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
-		<h4>View transition names:</h4>
-		<ol>
-			<li>Name 1</li>
-			<li>Name 2</li>
-			<li class="left">Name 3</li>
-			<li class="right selected">Name 2</li>
-			<li class="left right">Name 3</li>
-			<li>Name 2</li>
-		</ol>
+	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
+		<h4>Full Control:</h4>
+		<label for="vtbot-ui-controller">Selected:</label>
+		<span id="vtbot-ui-progress">0</span> ms<br />
+		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
+		<div style="display:flex; justify-content: space-between">
+			<span>0</span><span id="vtbot-ui-controller-max">100%</span>
+		</div><br />
+		<label for="vtbot-ui-controller2">Others:</label>
+		<span id="vtbot-ui-progress2">0</span> ms<br />
+		<input type="range" id="vtbot-ui-controller2" min="0" max="100" value="0" />
+		<div style="view-transition-name: vtbot-checkbox-styled">
+			<input id="vtbot-ui-styled2" type="checkbox" />
+			<label for="vtbot-ui-styled2">Highlight elements</label>
+		</div>
+		<button>Exit</button>
 	</div>
-
-	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info">
-		<h4>Info:</h4>
-		Selector: egal
-	</div>
-
 	<div id="vtbot-ui-filter" style="view-transition-name: vtbot-div-filter">
 		<h4>Filter Names:</h4>
 		<ul>
@@ -128,6 +128,20 @@ import sbs from './mono-side-by-side.url?raw';
 		</form>
 		<button>Reset</button>
 	</div>
+	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
+		<h4>View Transition Names</h4>
+		<ol>
+			<li>Name 1</li>
+			<li>Name 2</li>
+			<li class="left">Name 3</li>
+			<li class="right selected">Name 2</li>
+			<li class="left right">Name 3</li>
+			<li>Name 2</li>
+		</ol>
+	</div>
+
+	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info"></div>
+
 	<div id="vtbot-ui-selectors" style="view-transition-name: vtbot-div-selectors" class="hidden">
 		<h4>Left side</h4>
 		<p>(No element)</p>
@@ -139,7 +153,7 @@ import sbs from './mono-side-by-side.url?raw';
 <button
 	id="vtbot-ui-mode"
 	style="view-transition-name: vtbot-button-mode"
-	onclick="document.querySelector('#vtbot-main-frame').contentDocument.documentElement.style.colorScheme = (document.documentElement.style.colorScheme=document.documentElement.style.colorScheme==='dark'?'light':'dark')"
+	onclick="document.querySelector('#vtbot-main-frame').contentDocument.documentElement.style.colorScheme = (document.documentElement.style.colorScheme = document.documentElement.style.colorScheme === 'dark'?'light' : 'dark')"
 	>◑</button
 >
 <button id="vtbot-ui-turn" style="view-transition-name: vtbot-button-turn">⇲</button>
@@ -151,6 +165,10 @@ import sbs from './mono-side-by-side.url?raw';
 <style is:inline>
 	:root {
 		transition: color 1s;
+	}
+
+	#vtbot-ui-panel {
+		--vtbot-name-border-width: 12px;
 	}
 	#vtbot-ui-panel ~ button {
 		border-radius: 6px;
@@ -186,24 +204,29 @@ import sbs from './mono-side-by-side.url?raw';
 		padding: 8px;
 		margin: 4px;
 		border: 1px solid #888;
-		min-width: 140px;
+		min-width: 150px;
 	}
 	#vtbot-ui-messages {
 		min-height: 120px;
+		font-family: monospace;
+		hyphens: auto;
 	}
-	:root:not(.vtbot-ui-column) #vtbot-ui-panel div {
+	#vtbot-ui-messages {
+		overflow-y: auto;
+	}
+
+	:root:not(.vtbot-ui-column) #vtbot-ui-panel > div {
 		min-height: 160px;
 	}
 	#vtbot-ui-panel div.hidden {
 		display: none;
 	}
 
-	#vtbot-ui-messages {
-		overflow-y: auto;
-	}
-	#vtbot-ui-filter {
+	#vtbot-ui-filter,
+	#vtbot-ui-control {
 		position: relative;
 	}
+	#vtbot-ui-control button,
 	#vtbot-ui-filter button {
 		cursor: pointer;
 		padding-bottom: 3pt;
@@ -219,11 +242,14 @@ import sbs from './mono-side-by-side.url?raw';
 		display: flex;
 		flex-direction: column;
 	}
+
+	#vtbot-ui-messages ol {
+		padding-left: 10pt;
+	}
 	#vtbot-ui-names ol {
-		padding-right: 8px;
+		padding-right: 0px;
 		padding-left: 0px;
-		margin-right: 8px;
-		margin-left: 0px;
+		margin: 8px;
 		overflow-y: auto;
 		width: calc(100% - 8px);
 		flex-grow: 1;
@@ -232,20 +258,20 @@ import sbs from './mono-side-by-side.url?raw';
 	#vtbot-ui-names ol li {
 		cursor: pointer;
 		padding: 2pt 8pt;
-		border-left: 8px solid transparent;
-		border-right: 8px solid transparent;
+		border-left: var(--vtbot-name-border-width) solid transparent;
+		border-right: var(--vtbot-name-border-width) solid transparent;
 	}
 	#vtbot-ui-names ol li.left {
-		border-left: 8px solid darkolivegreen;
+		border-left: var(--vtbot-name-border-width) solid darkolivegreen;
 	}
 	#vtbot-ui-names ol li.leftHidden {
-		border-left: 8px solid darkgoldenrod;
+		border-left: var(--vtbot-name-border-width) solid darkgoldenrod;
 	}
 	#vtbot-ui-names ol li.right {
-		border-right: 8px solid darkolivegreen;
+		border-right: var(--vtbot-name-border-width) solid darkolivegreen;
 	}
 	#vtbot-ui-names ol li.rightHidden {
-		border-right: 8px solid darkgoldenrod;
+		border-right: var(--vtbot-name-border-width) solid darkgoldenrod;
 	}
 	#vtbot-ui-names ol li.selected {
 		background-color: #859b5f66;
@@ -253,6 +279,7 @@ import sbs from './mono-side-by-side.url?raw';
 
 	#vtbot-ui-filter ul {
 		list-style-type: none;
+		margin: 8px 0 8px 0;
 		padding-left: 0;
 	}
 	#vtbot-ui-filter ul label {
@@ -298,8 +325,7 @@ import sbs from './mono-side-by-side.url?raw';
 	#vtbot-ui-modi ul {
 		padding-right: 8px;
 		padding-left: 0px;
-		margin-right: 8px;
-		margin-left: 0px;
+		margin: 8px 0 8px 0;
 		list-style-type: none;
 	}
 	#vtbot-ui-modi li {
@@ -341,16 +367,7 @@ import sbs from './mono-side-by-side.url?raw';
 		}
 	}
 
-	:root:has(#vtbot-ui-names li.selected) #vtbot-ui-messages {
-		display: none;
-	}
-	#vtbot-ui-info {
-		display: none;
-	}
-	:root:has(#vtbot-ui-names li.selected) #vtbot-ui-info {
-		display: block;
-	}
-	:root:not([data-vtbot-modus='compare']) #vtbot-ui-filter ul {
+	#vtbot-ui-info:empty {
 		display: none;
 	}
 	:root:not([data-vtbot-modus='slow-motion']) #vtbot-ui-slow-motion {
@@ -363,5 +380,16 @@ import sbs from './mono-side-by-side.url?raw';
 	input[type='range'] {
 		width: calc(100% - 16px);
 		margin: 8px;
+	}
+
+	h4 {
+		margin-bottom: 8pt;
+	}
+	:root.vtbot-vt-active h4 {
+		color: darkgoldenrod;
+	}
+
+	.vtbot-highlight:hover {
+		background-color: #859b5f66;
 	}
 </style>

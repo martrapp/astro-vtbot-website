@@ -8,7 +8,10 @@
 	inherits: true;
 	initial-value: #102030;
 }
-
+/*
+:root {
+  --sl-content-width: calc(100vw - 0.3 * var(--sl-sidebar-pad-x) - 2 * var(--sl-sidebar-width));
+}*/
 :root {
 	transition: --vtbot-bg-color 0.5s;
 }

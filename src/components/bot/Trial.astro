@@ -64,7 +64,7 @@ import VtbotPanel from './VtbotPanel.astro';
 			.querySelectorAll('[data-vtbot-transition-name]')
 			.forEach((el) => el.removeAttribute('data-vtbot-transition-name'));
 
-		const els = elementsWithStyleProperty('view-transition-name');
+		const els = elementsWithStyleProperty(document, 'view-transition-name');
 		els.forEach((set, key) =>
 			set.forEach((el) => {
 				el.classList.add('vtbot-highlight');
