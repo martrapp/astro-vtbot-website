@@ -1,13 +1,13 @@
 ---
-import Gallery from "../components/Gallery.astro";
-import AutoNameSelected from "astro-vtbot/components/AutoNameSelected.astro";
-import NoScroll from "astro-vtbot/components/NoScroll.astro";
-import MdxLayout from "./MdxLayout.astro"
+import Gallery from '../components/Gallery.astro';
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
+import NoScroll from 'astro-vtbot/components/NoScroll.astro';
+import MdxLayout from './MdxLayout.astro';
 ---
 
 <MdxLayout>
-	<Gallery slot="head"/>
-	<AutoNameSelected selector="div.gallery img" prefix="g" shuffle={true} slot="head"/>
-	<NoScroll slot="head"/>
-	<slot/>
+	<Gallery slot="head" />
+	<AutoNameSelected selector="div.gallery img" prefix="g" shuffle={true} slot="head" />
+	<NoScroll slot="head" />
+	<slot />
 </MdxLayout>

@@ -2,7 +2,6 @@ main {
 	view-transition-name: main;
 }
 
-
 ::view-transition-group(main) {
 	background: var(--vtbot-glow);
 	overflow: clip;
@@ -51,7 +50,6 @@ main {
 [data-astro-transition] body {
 	scrollbar-gutter: stable;
 }
-
 
 [data-astro-transition-fallback='old'] main {
 	animation: swingOut 0.4s ease-in both;

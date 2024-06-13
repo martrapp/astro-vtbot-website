@@ -6,6 +6,6 @@ export const collections = {
 	docs: defineCollection({
 		schema: docsSchema({
 			extend: blogSchema().merge(z.object({ firstPublished: z.date().optional() })),
-		})
+		}),
 	}),
 };
