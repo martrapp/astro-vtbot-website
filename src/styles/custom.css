@@ -8,6 +8,7 @@
 	inherits: true;
 	initial-value: #102030;
 }
+
 /*
 :root {
   --sl-content-width: calc(100vw - 0.3 * var(--sl-sidebar-pad-x) - 2 * var(--sl-sidebar-width));
@@ -23,12 +24,21 @@ body {
 	hyphens: auto;
 	--sl-line-height: 1.5;
 }
+:root[data-theme='light'] #starlight__search mark {
+	background-color: yellow;
+	color: #000;
+}
+:root[data-theme='dark'] #starlight__search mark {
+	background-color: darkslateblue;
+	color: #fff;
+}
+
 
 /* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #3b1a00;
 	--sl-color-accent: #998877;
-	--sl-color-accent-high: #a98B6C;
+	--sl-color-accent-high: #a98b6c;
 	--sl-color-white: #ddccbb;
 	--sl-color-gray-1: #eceef2;
 	--sl-color-gray-2: #c0c2c7;
@@ -116,10 +126,10 @@ nav ::-webkit-scrollbar {
 	width: 8px;
 }
 nav ::-webkit-scrollbar {
-	background-color:  var(--vtbot-bg-color);
+	background-color: var(--vtbot-bg-color);
 }
 nav ::-webkit-scrollbar-thumb {
-	background-color:  var(--vtbot-bg-color);
+	background-color: var(--vtbot-bg-color);
 }
 nav:hover ::-webkit-scrollbar {
 	background-color: var(--sl-color-gray-6);
