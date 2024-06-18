@@ -30,3 +30,24 @@ export function pointInPolygon(point: Coords, polygon: Coords[]) {
 	}
 	return isInside;
 }
+
+export function applyTransform(x, y, matrix, originX, originY, bbox) {
+	const ox = bbox.left + originX * bbox.width;
+	const oy = bbox.top + originY * bbox.height;
+
+	// Translate point to origin
+	const tx = x - ox;
+	const ty = y - oy;
+
+	// Apply transform matrix
+	const transformed = {
+			x: matrix[0][0] * tx + matrix[0][1] * ty + matrix[0][3],
+			y: matrix[1][0] * tx + matrix[1][1] * ty + matrix[1][3]
+	};
+
+	// Translate back from origin
+	transformed.x += ox;
+	transformed.y += oy;
+
+	return transformed;
+}
