@@ -227,6 +227,19 @@
 		);
 	}
 
+	function updateImageVisability(doc: Document) {
+		const rules: string[] = [];
+		document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li.left-hidden').forEach((li) => {
+			const name = li.innerText;
+			rules.push(`::view-transition-old(${name}) { visibility: hidden; }`);
+		});
+		document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li.right-hidden').forEach((li) => {
+			const name = li.innerText;
+			rules.push(`::view-transition-new(${name}) { visibility: hidden; }`);
+		});
+		setStyles(doc, rules.join('\n'), 'image-visibility');
+	}
+
 	function updateAnimationNames() {
 		const oldNames = new Set<string>();
 		const newNames = new Set<string>();
@@ -281,11 +294,11 @@
 						.forEach((e) => e.remove());
 					return;
 				}
-			const original = frameDocument.startViewTransition;
-				frameDocument.startViewTransition = (cb: () => void) =>{
+				const original = frameDocument.startViewTransition;
+				frameDocument.startViewTransition = (cb: () => void) => {
 					addFrames(frameDocument, false);
 					return original.call(frameDocument, cb);
-				}
+				};
 
 				updateNames(markTransitions(frameDocument));
 				initPanelHandlers(mainFrame);
@@ -351,12 +364,23 @@
 				});
 			}
 		} else {
-			animations?.filter(a=>{
+			animations?.filter((a) => {
 				//@ts-ignore
-				const {target, pseudoElement} = a.effect;
-				const {top, right, bottom, left, width, height, transform, transformOrigin} = getComputedStyle(target, pseudoElement)
-				console.log(pseudoElement, left, top, right, bottom, width, height, transform, transformOrigin)
-			})
+				const { target, pseudoElement } = a.effect;
+				const { top, right, bottom, left, width, height, transform, transformOrigin } =
+					getComputedStyle(target, pseudoElement);
+				console.log(
+					pseudoElement,
+					left,
+					top,
+					right,
+					bottom,
+					width,
+					height,
+					transform,
+					transformOrigin
+				);
+			});
 		}
 	}
 
@@ -405,8 +429,25 @@
 		document.querySelector('#vtbot-ui-names ol')!.addEventListener('click', (e) => {
 			if (e.target instanceof HTMLElement) {
 				const targetLi = e.target.closest('li');
-				if (targetLi) {
+
+				if (targetLi && e instanceof MouseEvent) {
 					mayViewTransition(() => {
+						const { left, width } = targetLi.getBoundingClientRect();
+						const x = e.clientX - left;
+						const leftClick = x >= 0 && x <= 20;
+						const rightClick = x >= width - 20 && x <= width;
+
+						const classes = targetLi.classList;
+						if (leftClick && classes.contains('left')) {
+							classes.toggle('left-hidden');
+							updateImageVisability(frame.contentDocument!);
+							return;
+						}
+						if (rightClick && classes.contains('right')) {
+							classes.toggle('right-hidden');
+							updateImageVisability(frame.contentDocument!);
+							return;
+						}
 						const name = targetLi.innerText;
 						highlightInFrame(name, frame);
 						highlightNames(name);
@@ -497,6 +538,9 @@
 			? 'Animations'
 			: 'Elements w/ View Transition Names';
 
+		document.querySelector<HTMLElement>('#vtbot-ui-names div')!.style.display = rightTransitionNames
+			? 'flex'
+			: 'none';
 		const list = document.querySelector('#vtbot-ui-names > ol')!;
 		const names = [...new Set([...leftTransitionNames, ...(rightTransitionNames ?? [])])].sort();
 		names.forEach((name, idx) => {
@@ -593,8 +637,8 @@
 	}
 	function resetSelected() {
 		document
-			.querySelectorAll<HTMLInputElement>('#vtbot-ui-names li.selected')
-			.forEach((item) => item.classList.remove('selected'));
+			.querySelectorAll<HTMLInputElement>('#vtbot-ui-names li')
+			.forEach((item) => item.classList.remove('selected', 'left-hidden', 'right-hidden'));
 		updateControl();
 	}
 	function refreshNames() {
@@ -640,10 +684,10 @@
 		);
 	};
 	const message: Record<Modus, string> = {
-		bypass: `<h4>Bypass</h4><p>Navigation is <b>not intercepted</b>.</p><ol><li>Optional: Examine elements by selecting from the View Transition Name list</li><li>Navigate your page as usual</li></ol>`,
-		'slow-motion': `<h4>Slow Motion</h4><ol><li>Use the slider to set a <b>time stretch factor</b></li><li>Press a link on your page to start a view transition and study the <b>slowed down animations!</li></ol>`,
-		control: `<h4>Full Control</h4><ol><li>Start a transition</li><li>Select animations</li><li>Move freely through the timeline and concentrate on selected elements and groups.</li></ol>`,
-		compare: `<h4>Side-by-side</h4><p>Sometimes you need a clear view of where you're coming from and where you're going!</p><p>Compare the <b>old and new pages side by side</b> and see what morphs where.</p>`,
+		bypass: `<h4>How to Bypass</h4><p>Navigation is <b>not intercepted</b>.</p><ol><li>Optional: Examine elements by selecting from the View Transition Name list</li><li>Navigate your page as usual</li></ol>`,
+		'slow-motion': `<h4>Use Slow Motion</h4><ol><li>Use the slider to set a <b>time stretch factor</b></li><li>Press a link on your page to start a view transition and study the <b>slowed down animations!</li></ol>`,
+		control: `<h4>Take Full Control</h4><ol><li>Start a transition</li><li>Select animations</li><li>Move freely through the timeline and concentrate on selected elements and groups.</li></ol>`,
+		compare: `<h4>Compare Side-by-side</h4><p>Sometimes you need a clear view of where you're coming from and where you're going!</p><p>Compare the <b>old and new pages side by side</b> and see what morphs where.</p>`,
 	};
 
 	let firstModusInteraction = true;
