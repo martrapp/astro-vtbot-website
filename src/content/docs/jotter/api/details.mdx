@@ -166,7 +166,7 @@ This is a more elaborated description of what the `startViewTransitions()` funct
    \
    It might be worth noting, that not the new elements are placed in the view transition layer but only their images as replaced elements.
 
-5. For each view transition name (other than `none`) found in the previous or updated state of the document, the browser generates a `::view-transition-image-pair(<name>)` pseudo element that becomes the direct parent of `::view-transition-old(<name>)` and `::view-transition-new(<name>)`. As not necessarily bot images might exist for a given view transition name, the `::view-transition-image-pair(<name>)` has one or two children.\
+5. For each view transition name (other than `none`) found in the previous or updated state of the document, the browser generates a `::view-transition-image-pair(<name>)` pseudo element that becomes the direct parent of `::view-transition-old(<name>)` and `::view-transition-new(<name>)`. As not necessarily both images might exist for a given view transition name, the `::view-transition-image-pair(<name>)` has one or two children.\
    \
    For each `::view-transition-image-pair(<name>)` a `::view-transition-group(<name>)` pseudo element is created as the direct parent. All `::view-transition-group(<name>)` are children of a global `::view-transition` pseudo element.\
    \
