@@ -6,6 +6,7 @@
 	import { TRANSITION_AFTER_SWAP, TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
 	import { elementsWithStyleProperty } from 'node_modules/astro-vtbot/components/css';
 	import { deriveCSSSelector } from 'node_modules/astro-vtbot/components/derive-css-selector';
+	import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 
 	declare global {
 		interface Window {
@@ -69,6 +70,7 @@
 		);
 
 		animations!.map((a) => {
+			//@ts-ignore
 			const name = a.effect.pseudoElement;
 			const styles = window.getComputedStyle(doc.documentElement, name);
 			console.log(name, styles.transform, '|', styles.inset);
@@ -208,10 +210,10 @@
 			doc,
 			`
 	::view-transition-old(*) {
-		border: 2px dashed darkred;
+		border: 3px dashed darkblue;
 	}
 	::view-transition-new(*) {
-		border: 2px dashed darkolivegreen;
+		border: 3px dashed darkolivegreen;
 	}
 	::view-transition-group(*),
 	[data-vtbot-transition-name] {
@@ -251,12 +253,6 @@
 		window.__vtbot.framed = true;
 
 		window.addEventListener('pageshow', () => {
-			if (!document.startViewTransition) {
-				console.error(
-					'[Vtbot Test Chamber] View Transitions are not natively supported by this browser. Giving up.'
-				);
-				return;
-			}
 			const docTitle = document.title;
 
 			setTimeout(async () => {
@@ -274,6 +270,23 @@
 				await new Promise((r) => (mainFrame.onload = r));
 				const frameDocument = mainFrame.contentDocument!;
 
+				if (!document.startViewTransition) {
+					document.querySelector('#vtbot-ui-messages')!.innerHTML = `
+					<h4>You are &hellip;</h4>
+					<p>&hellip; in the <b>Engine Room</b><img style="width:4em; float:right" src="/favicon.svg" /> deep down at the bottom of <b>The Bag!</b></p>
+					<p>I'm sorry!</p><p>Native view transitions are required to make the Test Chamber work, but they are not supported by this browser.</p>
+					<p>Sadly have to give up.</p>`;
+					document
+						.querySelectorAll('#vtbot-ui-modi, #vtbot-ui-filter, #vtbot-ui-names, #vtbot-ui-info')
+						.forEach((e) => e.remove());
+					return;
+				}
+			const original = frameDocument.startViewTransition;
+				frameDocument.startViewTransition = (cb: () => void) =>{
+					addFrames(frameDocument, false);
+					return original.call(frameDocument, cb);
+				}
+
 				updateNames(markTransitions(frameDocument));
 				initPanelHandlers(mainFrame);
 				initGrabbing();
@@ -281,43 +294,47 @@
 					duration: 50,
 					fill: 'forwards',
 				});
-				const mode: Record<Modus, () => void> = {
-					bypass: () => {},
-					'slow-motion': sloMoPlay,
-					control: controlledPlay,
-					compare: () => {},
-				};
-				frameDocument.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
-					viewTransition = e.viewTransition;
-					e.newDocument.documentElement.style.colorScheme =
-						document.documentElement.style.colorScheme;
-					root.classList.add('vtbot-vt-active');
-					const modus = root.dataset.vtbotModus as Modus;
-					if (modus && modus !== 'bypass') {
-						pauseAnimations(e.newDocument);
-						e.viewTransition.ready.then(async () => {
-							await retrieveViewTransitionAnimations(frameDocument);
-							addFrames(
-								frameDocument,
-								document.querySelector<HTMLInputElement>('#vtbot-ui-styled')!.checked
-							);
-							updateAnimationNames();
-							mode[modus]();
-						});
-					}
-					e.viewTransition.finished.finally(() => {
-						viewTransition = undefined;
-						root.classList.remove('vtbot-vt-active');
-						unleashAllAnimations(document);
-						animations = undefined;
-						updateNames(markTransitions(frameDocument));
-					});
-				});
+				frameDocument.addEventListener(TRANSITION_BEFORE_SWAP, beforeSwap);
 				frameDocument.addEventListener(TRANSITION_AFTER_SWAP, () => {
 					history.replaceState(history.state, '', mainFrame.contentWindow!.location.href);
 				});
 				frameDocument.addEventListener('click', innerClick);
 			}, 500);
+		});
+	}
+
+	function beforeSwap(e: TransitionBeforeSwapEvent) {
+		const root = document.documentElement;
+		const mainFrame = document.querySelector<HTMLIFrameElement>('#vtbot-main-frame')!;
+		const frameDocument = mainFrame.contentDocument!;
+		const mode: Record<Modus, () => void> = {
+			bypass: () => {},
+			'slow-motion': sloMoPlay,
+			control: controlledPlay,
+			compare: () => {},
+		};
+		viewTransition = e.viewTransition;
+		e.newDocument.documentElement.style.colorScheme = document.documentElement.style.colorScheme;
+		root.classList.add('vtbot-vt-active');
+		const modus = root.dataset.vtbotModus as Modus;
+		if (modus && modus !== 'bypass') {
+			pauseAnimations(e.newDocument);
+			e.viewTransition.ready.then(async () => {
+				await retrieveViewTransitionAnimations(frameDocument);
+				addFrames(
+					frameDocument,
+					document.querySelector<HTMLInputElement>('#vtbot-ui-styled')!.checked
+				);
+				updateAnimationNames();
+				mode[modus]();
+			});
+		}
+		e.viewTransition.finished.finally(() => {
+			viewTransition = undefined;
+			root.classList.remove('vtbot-vt-active');
+			unleashAllAnimations(document);
+			animations = undefined;
+			updateNames(markTransitions(frameDocument));
 		});
 	}
 
@@ -333,6 +350,13 @@
 					}
 				});
 			}
+		} else {
+			animations?.filter(a=>{
+				//@ts-ignore
+				const {target, pseudoElement} = a.effect;
+				const {top, right, bottom, left, width, height, transform, transformOrigin} = getComputedStyle(target, pseudoElement)
+				console.log(pseudoElement, left, top, right, bottom, width, height, transform, transformOrigin)
+			})
 		}
 	}
 
@@ -441,7 +465,11 @@
 
 		window.addEventListener('keyup', function (e) {
 			if (e.key === 'Escape') {
-				window.location.reload();
+				if (document.documentElement.classList.contains('vtbot-vt-active')) {
+					exitViewTransition();
+				} else {
+					window.location.reload();
+				}
 			}
 		});
 	}
@@ -557,7 +585,6 @@
 
 	function exitViewTransition() {
 		viewTransition?.skipTransition();
-		disableController();
 	}
 	function resetFilter() {
 		document.querySelector<HTMLInputElement>('#vtbot-ui-filter input[type="text"]')!.value = '';
@@ -637,7 +664,6 @@
 					}
 					if (modus === 'control') {
 						attachFrameToggle('#vtbot-ui-control');
-						disableController();
 					}
 					document.querySelector<HTMLInputElement>('#vtbot-ui-messages')!.innerHTML =
 						message[modus];
@@ -654,11 +680,6 @@
 				}, 'update-modus');
 			}
 		}
-	}
-
-	function disableController() {
-		document.querySelector<HTMLInputElement>('#vtbot-ui-controller2')!.disabled = true;
-		document.querySelector<HTMLInputElement>('#vtbot-ui-controller')!.disabled = true;
 	}
 
 	function attachFrameToggle(divId: string) {

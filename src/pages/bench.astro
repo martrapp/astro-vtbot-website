@@ -12,6 +12,7 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 	<title></title>
 </head>
 <body>
+	<canvas id="canvas"></canvas>
 	<iframe id="vtbot-main-frame" src="/jotter/"></iframe>
 	<div id="divider" class="divider"></div>
 	<VtbotPanel />
@@ -20,6 +21,18 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 			--vtbot-panel-height: 204px;
 			--vtbot-panel-width: 188px;
 		}
+		#canvas {
+			position: absolute;
+			top:0;
+			left:0;
+			height: calc(100vh - var(--vtbot-panel-height));
+			width: 100vw;
+		}
+		:root.vtbot-ui-column #canvas {
+			width: calc(100vw - var(--vtbot-panel-width));
+			height: 100vh;
+		}
+
 		#vtbot-main-frame {
 			position: fixed;
 			top: 0;

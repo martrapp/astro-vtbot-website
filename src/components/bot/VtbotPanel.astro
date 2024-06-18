@@ -101,15 +101,15 @@ import play from './mono-play.url?raw';
 	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
 		<h4>Full Control:</h4>
 		<p id="vtbot-ui-control-hint">Start a transition to activate sliders</p>
-		<label for="vtbot-ui-controller">Marked animations:</label>
-		<span id="vtbot-ui-progress">0</span> ms<br />
-		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
+		<p id="vtbot-ui-control-hint2">Select animations below</p>
+		<label for="vtbot-ui-controller2">Unselected: </label><span id="vtbot-ui-progress2">0</span> ms<br />
+		<input type="range" id="vtbot-ui-controller2" min="0" max="100" value="0" />
 		<div style="display:flex; justify-content: space-between">
 			<span>0</span><span id="vtbot-ui-controller-max">100%</span>
 		</div><br />
-		<label for="vtbot-ui-controller2">Other animations:</label>
-		<span id="vtbot-ui-progress2">0</span> ms<br />
-		<input type="range" id="vtbot-ui-controller2" min="0" max="100" value="0" />
+		<label for="vtbot-ui-controller">Selected:</label>
+		<span id="vtbot-ui-progress">0</span> ms<br />
+		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
 		<button id="vtbot-ui-control-exit">Exit</button>
 	</div>
 	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
@@ -249,8 +249,27 @@ import play from './mono-play.url?raw';
 		right: 0;
 		border-bottom-left-radius: 6px;
 	}
+	#vtbot-ui-control-hint {
+		color: goldenrod;
+	}
+	#vtbot-ui-control-hint2,
 	:root.vtbot-vt-active #vtbot-ui-control-hint {
 		display: none;
+	}
+	:root.vtbot-vt-active #vtbot-ui-control-hint2 {
+		display: block;
+	}
+	#vtbot-ui-controller,
+	#vtbot-ui-controller2 {
+		accent-color: #888888;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+	:root.vtbot-vt-active #vtbot-ui-controller,
+	:root.vtbot-vt-active #vtbot-ui-controller2 {
+		cursor: unset;
+		pointer-events: unset;
+		accent-color: unset;
 	}
 
 	#vtbot-ui-names {
@@ -278,7 +297,7 @@ import play from './mono-play.url?raw';
 		border-right: var(--vtbot-name-border-width) solid transparent;
 	}
 	#vtbot-ui-names ol li.left {
-		border-left: var(--vtbot-name-border-width) solid darkolivegreen;
+		border-left: var(--vtbot-name-border-width) solid darkslateblue;
 	}
 	#vtbot-ui-names ol li.left.invis {
 		border-left: var(--vtbot-name-border-width) solid darkgoldenrod;
@@ -293,9 +312,9 @@ import play from './mono-play.url?raw';
 	#vtbot-ui-names ol li.selected {
 		background-color: olive;
 	}
-#vtbot-ui-names ol li.invis {
-	color:#888
-}
+	#vtbot-ui-names ol li.invis {
+		color: #888;
+	}
 	#vtbot-ui-filter ul {
 		list-style-type: none;
 		margin: 8px 0 8px 0;
