@@ -5,7 +5,7 @@ import { blogSchema } from 'starlight-blog/schema';
 export const collections = {
 	docs: defineCollection({
 		schema: docsSchema({
-			extend: blogSchema().merge(z.object({ firstPublished: z.date().optional() })),
+			extend: (context) => blogSchema(context).merge(z.object({ firstPublished: z.date().optional() })),
 		}),
 	}),
 };
