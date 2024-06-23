@@ -18,6 +18,9 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
+	redirects: {
+		'/about/': 'http://127.0.0.1:4321/jotter/api/test-page/',
+		},
 	site: "https://events-3bg.pages.dev/",
 	prefetch: true,
 	markdown: {

@@ -308,3 +308,7 @@ main {
 	}
 }
 
+
+:root {
+	view-transition-name: none;
+}
