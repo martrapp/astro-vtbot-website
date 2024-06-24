@@ -312,3 +312,7 @@ main {
 :root {
 	view-transition-name: none;
 }
+
+#vtbot-ready-to-finished {
+	display: none;
+}
