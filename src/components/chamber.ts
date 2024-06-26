@@ -493,10 +493,10 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 					await cb();
 					setStyles(frameDocument, `
 						@keyframes vtbot-twin-noop {
-							from { width: inherit; } to { width: inherit; }
+							from { opacity: inherit; } to { opacity: inherit; }
 						}
 						::view-transition-image-pair(*) {
-							animation: vtbot-twin-noop;
+							animation: vtbot-twin-noop both;
 							animation-duration: inherit;
 						}`, 'catch', true);
 				});
