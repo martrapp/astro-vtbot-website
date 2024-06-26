@@ -458,7 +458,9 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 		setTimeout(async () => {
 			const root = document.documentElement;
 			const colorScheme = getComputedStyle(root).colorScheme;
+
 			const page = (await (await fetch("/bench/")).text()).replace(
+				//const page = bench.replace(
 				'<iframe id="vtbot-main-frame" src="/"></iframe>',
 				`<iframe id="vtbot-main-frame" style="opacity: 0" src="${location.href}"></iframe>`
 			);
@@ -473,6 +475,9 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 			await new Promise((r) => (mainFrame.onload = r));
 			const frameDocument = mainFrame.contentDocument!;
 
+			mainFrame.contentWindow!.addEventListener('pageswap', pageSwap);
+
+
 			if (!document.startViewTransition) {
 				document.querySelector('#vtbot-ui-messages')!.innerHTML = `
 				<h4>You are &hellip;</h4>
@@ -484,6 +489,7 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 					.forEach((e) => e.remove());
 				return;
 			}
+
 			const original = frameDocument.startViewTransition;
 			frameDocument.startViewTransition = (cb: () => void | Promise<void>) => {
 				addFrames(frameDocument, false);
@@ -495,7 +501,7 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 							from { opacity: inherit; } to { opacity: inherit; }
 						}
 						::view-transition-image-pair(*) {
-							animation: vtbot-twin-noop both;
+							animation: vtbot-twin-noop forwards;
 							animation-duration: inherit;
 						}`, 'catch', true);
 				});
@@ -503,7 +509,6 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 				beforeSwap(viewTransition);
 				return viewTransition;
 			};
-
 			updateNames(markTransitions(frameDocument));
 			initPanelHandlers(mainFrame);
 			initGrabbing();
@@ -515,6 +520,12 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 		}, 500);
 	});
 }
+
+function pageSwap(_e: Event) {
+	addFrames(document.querySelector<HTMLIFrameElement>('#vtbot-main-frame')!.contentDocument!, false);
+}
+
+
 
 function beforeSwap(eViewTransition: ViewTransition) {
 	viewTransition = eViewTransition;
