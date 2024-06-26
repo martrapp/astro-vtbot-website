@@ -56,8 +56,9 @@ function mayViewTransition(fun: () => void, name: string, disabled = false) {
 let viewTransition: ViewTransition | undefined;
 let animations: Animation[] | undefined;
 let animationMap: Map<string, Animation> | undefined;
-let longestAnimation: Animation|undefined;
+let longestAnimation: Animation | undefined;
 let animationEndTime = 0;
+
 type Twin = { animations: Animation[]; dom: HTMLElement; map: Map<string, HTMLElement>; };
 
 let twin: Twin | undefined;
@@ -415,37 +416,34 @@ function syncTwinAnimations() {
 	});
 }
 
+function setBackgroundAccent() {
+	const root = document.documentElement;
+	root.style.setProperty("--vtbot-background-accent", root.style.colorScheme === 'dark' ? "#4b5b56" : "#c6d1d7");
+}
+
 function updateNameVisibility(doc: Document) {
 	const mode = document.documentElement.dataset.vtbotModus;
+	const computedStyle = getComputedStyle(document.documentElement);
+	const panelWidth = parseFloat(computedStyle.getPropertyValue('--vtbot-panel-width') || "0");
+	const panelHeight = parseFloat(computedStyle.getPropertyValue('--vtbot-panel-height') || "0");
 	syncTwinAnimations();
 	document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li').forEach((li) => {
 		doc.documentElement.offsetHeight;
 		const name = li.innerText;
 		const classes = li.classList;
-		classes.remove('invisible', 'old-invisible', 'new-invisible');
 
 		if (mode === 'control' || mode === 'slow-motion') {
-			if (
-				classes.contains('old') &&
-				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-old-${name}`)) === false
-			) {
-				classes.add('old-invisible');
-			}
-			if (
-				classes.contains('new') &&
-				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-new-${name}`)) === false
-			) {
-				classes.add('new-invisible');
-			}
-			if ((!classes.contains("old") || classes.contains("old-invisible")) && (!classes.contains("new") || classes.contains("new-invisible"))) {
-				classes.add('invisible');
-			}
+			classes[classes.contains('old') &&
+				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-old-${name}`), panelWidth, panelHeight) === false ? "add" : "remove"]('old-invisible');
+			classes[classes.contains('new') &&
+				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-new-${name}`), panelWidth, panelHeight) === false ? "add" : 'remove']('new-invisible');
+			classes[(!classes.contains("old") || classes.contains("old-invisible")) && (!classes.contains("new") || classes.contains("new-invisible")) ? "add" : "remove"]('invisible');
 		}
 	});
 	if (mode === 'slow-motion' && longestAnimation) {
 		document.querySelector<HTMLSpanElement>("#vtbot-ui-slo-mo-progress")!.innerText = ` ${~~(longestAnimation.currentTime ?? 0)} / ${animationEndTime} ms`;
 	}
-	if (mode === 'control' || mode === 'slow-motion' && document.documentElement.classList.contains('vtbot-vt-active')) {
+	if ((mode === 'control' || mode === 'slow-motion') && document.documentElement.classList.contains('vtbot-vt-active')) {
 		setTimeout(() => updateNameVisibility(doc), 33);
 	}
 }
@@ -467,6 +465,7 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 			setOrientation();
 			root.innerHTML = page;
 			root.style.colorScheme = colorScheme;
+			setBackgroundAccent();
 
 			document.title = '⛑️ ' + docTitle;
 			root.dataset.vtbotModus = '';
@@ -528,7 +527,6 @@ function beforeSwap(eViewTransition: ViewTransition) {
 		control: controlledPlay,
 		compare: () => { },
 	};
-	sessionStorage.setItem('vtbot-ui-colorScheme', document.documentElement.style.colorScheme);
 	root.classList.add('vtbot-vt-active');
 	const modus = root.dataset.vtbotModus as Modus;
 
@@ -637,6 +635,12 @@ function initPanelHandlers(frame: HTMLIFrameElement) {
 		location.href = frame.contentWindow!.location.href;
 	});
 	document.querySelector('#vtbot-ui-turn')!.addEventListener('click', switchOrientation);
+
+	document.querySelector('#vtbot-ui-light-dark')!.addEventListener('click', () => {
+		const rootStyle = document.documentElement.style;
+		document.querySelector<HTMLIFrameElement>('#vtbot-main-frame')!.contentDocument!.documentElement.style.colorScheme = (rootStyle.colorScheme = rootStyle.colorScheme === 'dark' ? 'light' : 'dark');
+		setBackgroundAccent();
+	});
 	document.querySelector('#vtbot-ui-modi ul')!.addEventListener('change', updateModus);
 
 	document.querySelector('#vtbot-ui-names ol')!.addEventListener('click', (e) => {
@@ -644,29 +648,29 @@ function initPanelHandlers(frame: HTMLIFrameElement) {
 			const targetLi = e.target.closest('li');
 
 			if (targetLi && e instanceof MouseEvent) {
-				//	mayViewTransition(() => {
-				const { left, width } = targetLi.getBoundingClientRect();
-				const x = e.clientX - left;
-				const leftClick = x >= 0 && x <= 20;
-				const rightClick = x >= width - 20 && x <= width;
+				mayViewTransition(() => {
+					const { left, width } = targetLi.getBoundingClientRect();
+					const x = e.clientX - left;
+					const leftClick = x >= 0 && x <= 20;
+					const rightClick = x >= width - 20 && x <= width;
 
-				const classes = targetLi.classList;
-				if (leftClick && classes.contains('old')) {
-					classes.toggle('old-hidden');
-					updateImageVisibility(frameDocument);
-					return;
-				}
-				if (rightClick && classes.contains('new')) {
-					classes.toggle('new-hidden');
-					updateImageVisibility(frameDocument);
-					return;
-				}
-				const name = targetLi.innerText;
-				highlightInFrame(name, frame);
-				highlightNames(name);
-				const elem = frameDocument.querySelector(`[data-vtbot-transition-name="${name}"]`);
-				writeSelectorToClipboard(elem);
-				//	}, 'names');
+					const classes = targetLi.classList;
+					if (leftClick && classes.contains('old')) {
+						classes.toggle('old-hidden');
+						updateImageVisibility(frameDocument);
+						return;
+					}
+					if (rightClick && classes.contains('new')) {
+						classes.toggle('new-hidden');
+						updateImageVisibility(frameDocument);
+						return;
+					}
+					const name = targetLi.innerText;
+					highlightInFrame(name, frame);
+					highlightNames(name);
+					const elem = frameDocument.querySelector(`[data-vtbot-transition-name="${name}"]`);
+					writeSelectorToClipboard(elem);
+				}, 'names');
 			}
 		}
 		updateControl();
@@ -887,15 +891,16 @@ function refreshNames() {
 	}, 'refresh names');
 }
 
-function insideViewport(element: HTMLElement | null) {
+function insideViewport(element: HTMLElement | null, panelWidth = 0, panelHeight = 0) {
 	if (!element) return undefined;
 	const { top, right, bottom, left, width, height } = element.getBoundingClientRect();
+
 	return (
 		width > 0 &&
 		height > 0 &&
-		top < window.innerHeight &&
+		top < (window.innerHeight - panelHeight) &&
 		bottom > 0 &&
-		left < window.innerWidth &&
+		left < (window.innerWidth - panelWidth) &&
 		right > 0
 	);
 }
