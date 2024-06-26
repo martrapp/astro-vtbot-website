@@ -1,7 +1,14 @@
-import { elementsWithStyleProperty } from 'node_modules/astro-vtbot/components/css';
-import { deriveCSSSelector } from 'node_modules/astro-vtbot/components/derive-css-selector';
+import { elementsWithStyleProperty } from '../../node_modules/astro-vtbot/components/css';
+import { deriveCSSSelector } from '../../node_modules/astro-vtbot/components/derive-css-selector';
 
-import bench from "./bench.html?raw";
+//import bench from "./bench.html?raw";
+
+class VtbotPseudoTwin extends HTMLElement {
+	constructor() {
+		super();
+	}
+}
+customElements.define('vtbot-pseudo-twin', VtbotPseudoTwin);
 
 declare global {
 	interface Window {
@@ -49,14 +56,16 @@ function mayViewTransition(fun: () => void, name: string, disabled = false) {
 let viewTransition: ViewTransition | undefined;
 let animations: Animation[] | undefined;
 let animationMap: Map<string, Animation> | undefined;
-let animationDuration = 0;
+let longestAnimation: Animation|undefined;
+let animationEndTime = 0;
 type Twin = { animations: Animation[]; dom: HTMLElement; map: Map<string, HTMLElement>; };
 
 let twin: Twin | undefined;
 
-function retrieveViewTransitionAnimations(doc: Document) {
+async function retrieveViewTransitionAnimations(doc: Document) {
 	animations = [];
 	animationMap = new Map();
+	const names = new Set<string>();
 
 	const set = new WeakSet();
 	let growing = true;
@@ -69,42 +78,48 @@ function retrieveViewTransitionAnimations(doc: Document) {
 				a.effect?.pseudoElement?.startsWith('::view-transition') &&
 				a.playState !== 'finished'
 			) {
-				animations?.push(a);
+				//@ts-ignore
 				animationMap?.set((a as CSSAnimation).animationName, a);
-				a.pause();
-				a.currentTime = 0;
-//				growing = true;
+				names.add(viewTransitionNameOfAnimation(a));
+				if ((a as CSSAnimation).animationName !== 'vtbot-twin-noop') {
+					animations!.push(a);
+					a.pause();
+					a.currentTime = 0;
+				}
+				growing = true;
 			}
 			set.add(a);
 		});
-		//growing && (await new Promise((r) => setTimeout(r)));
+		growing && (await new Promise((r) => setTimeout(r)));
 	}
-	const names = new Set<string>();
-	animationDuration = ~~animations.reduce(
-		(acc, anim) => (
-			names.add(viewTransitionNameOfAnimation(anim)),
-			Math.max(acc, (anim.effect?.getComputedTiming().activeDuration?.valueOf() as number) ?? 0)
-		),
-		0
-	);
+	longestAnimation = animations.reduce((acc, anim) => {
+		const animValue = anim?.effect?.getComputedTiming().endTime?.valueOf();
+		const accValue = acc?.effect?.getComputedTiming().endTime?.valueOf();
+		return animValue && accValue && animValue > accValue ? anim : acc;
+	}, animations[0]);
+	animationEndTime = ~~(longestAnimation?.effect?.getComputedTiming().endTime?.valueOf() as number ?? 0);
 
-	twin = { animations: [], dom: doc.createElement('div'), map: new Map<string, HTMLElement>() };
+	const oldNames = new Set<string>();
+	const newNames = new Set<string>();
+	twin = { animations: [], dom: doc.createElement('vtbot-pseudo-twin'), map: new Map<string, HTMLElement>() };
 	const styles: string[] = [];
 	addToTwin(twin.dom, doc, '', '', styles);
 	twin.dom = twin.dom.firstElementChild as HTMLElement;
 	names.forEach((name: string) => {
 		const group = addToTwin(twin!.dom, doc, 'group', name, styles);
 		const pair = addToTwin(group, doc, 'image-pair', name, styles);
-		addToTwin(pair, doc, 'old', name, styles);
-		addToTwin(pair, doc, 'new', name, styles);
+		addToTwin(pair, doc, 'old', name, styles) && oldNames.add(name);
+		addToTwin(pair, doc, 'new', name, styles) && newNames.add(name);
 	});
+
+
 
 	[...twin.dom.children].forEach(async (g) => {
 		const name = g.id.substring('vtbot-twin--view-transition-group-'.length);
 		const anim = animationMap!.get(`-ua-view-transition-group-anim-${name}`);
 		if (anim) {
 			const savedTime = anim.currentTime;
-			anim.currentTime = animationDuration * 2;
+			anim.currentTime = animationEndTime * 2;
 			const endStyle = doc.defaultView!.getComputedStyle(
 				doc.documentElement,
 				`::view-transition-group(${name})`
@@ -120,15 +135,19 @@ function retrieveViewTransitionAnimations(doc: Document) {
 		doc,
 		`
 @keyframes vtbot-twin-fade-out {
-to { opacity: 0; }
+	to { opacity: 0; }
 }
 @keyframes vtbot-twin-fade-in {
-from { opacity: 0; }
+	from { opacity: 0; }
 }
 ` + styles.join('\n'),
 		'keyframes'
 	);
 	doc.body.insertAdjacentElement('beforeend', twin.dom);
+
+	updateNames(oldNames, newNames);
+	updateNameVisibility(doc);
+	document.querySelector<HTMLCanvasElement>("#canvas")!.style.zIndex = "";
 
 	growing = true;
 	while (growing) {
@@ -146,11 +165,11 @@ from { opacity: 0; }
 				animationMap?.set(animationName, a);
 				a.pause();
 				a.currentTime = 0;
-		//		growing = true;
+				growing = true;
 			}
 			set.add(a);
 		});
-	//	await new Promise((r) => setTimeout(r));
+		await new Promise((r) => setTimeout(r));
 	}
 }
 
@@ -177,8 +196,8 @@ function addToTwin(
 		doc.documentElement,
 		pseudo ? `::view-transition-${pseudo}(${name})` : '::view-transition'
 	);
-	if (styles.height === 'auto') return undefined;
-	const elem = doc.createElement('div');
+	if (!styles.height.endsWith('px')) return undefined;
+	const elem = doc.createElement('vtbot-pseudo-twin');
 	elem.id = pseudo
 		? `vtbot-twin--view-transition-${pseudo}-${name}`
 		: 'vtbot-twin--view-transition';
@@ -192,8 +211,8 @@ function addToTwin(
 		}
 	});
 
-	//elemStyle.visibility = 'hidden';
-	elemStyle.border= '1px solid red';
+	//	elemStyle.border = '1px dashed red';
+	elemStyle.visibility = 'hidden';
 	const buildIn = styles.getPropertyValue('animation-name').split(',')[0];
 	if (buildIn && buildIn.startsWith('-ua-view-transition-')) {
 		const twin = buildIn.replace('-ua-view-transition', 'vtbot-twin');
@@ -248,15 +267,15 @@ function sloMoPlay() {
 
 function controlledPlay() {
 	document.querySelector<HTMLSpanElement>('#vtbot-ui-controller-max')!.innerText =
-		animationDuration + ' ms';
+		animationEndTime + ' ms';
 	document.querySelector<HTMLSpanElement>('#vtbot-ui-progress')!.innerText = '0';
 	const controller = document.querySelector<HTMLInputElement>('#vtbot-ui-controller')!;
-	controller.max = '' + animationDuration;
+	controller.max = '' + animationEndTime;
 	controller.value = '0';
 	controller.disabled = false;
 	document.querySelector<HTMLSpanElement>('#vtbot-ui-progress2')!.innerText = '0';
 	const controller2 = document.querySelector<HTMLInputElement>('#vtbot-ui-controller2')!;
-	controller2.max = '' + animationDuration;
+	controller2.max = '' + animationEndTime;
 	controller2.value = '0';
 	controller2.disabled = false;
 	control();
@@ -265,7 +284,7 @@ function controlledPlay() {
 function viewTransitionNameOfAnimation(animation: Animation) {
 	//@ts-ignore
 	return animation.effect?.pseudoElement?.replace(
-		/::view-transition-(new|old|group)\((.*)\)/,
+		/::view-transition-(new|old|group|image-pair)\((.*)\)/,
 		'$2'
 	);
 }
@@ -284,20 +303,15 @@ function control() {
 		animations.forEach((animation) => {
 			const name = viewTransitionNameOfAnimation(animation);
 			animation.currentTime = selectedElements.has(name) ? selectedTime : otherTime;
-			const anima = (animation as CSSAnimation).animationName;
-			const twin = animationMap?.get(anima.replace('-ua-view-transition', 'vtbot-twin'));
-			if (twin) {
-				twin.currentTime = animation.currentTime;
-			}
 		});
 	}
 }
 
-function setStyles(doc: Document, styles: string, suffix = '') {
+function setStyles(doc: Document, styles: string, suffix = '', prepend = false) {
 	const id = 'vtbot-adopted-sheet' + (suffix ? '-' + suffix : '');
 	doc.getElementById(id)?.remove();
 	doc.documentElement.offsetHeight;
-	styles && doc.head.insertAdjacentHTML('beforeend', `<style id="${id}">${styles}</style>`);
+	styles && doc.head.insertAdjacentHTML(prepend ? 'afterbegin' : 'beforeend', `<style id="${id}">${styles}</style>`);
 }
 
 function unleashAllAnimations(doc: Document) {
@@ -322,7 +336,7 @@ const oldGlow = [
 		display: 'inline-block',
 		minWidth: '20px',
 		minHeight: '20px',
-		backgroundColor: 'mediumblue',
+		backgroundColor: 'darkslateblue',
 	},
 	{ boxShadow: '0 0 50px blue' },
 	{ boxShadow: '0 0  0px blue' },
@@ -387,52 +401,52 @@ function updateImageVisibility(doc: Document) {
 	setStyles(doc, rules.join('\n'), 'image-visibility');
 }
 
-function updateAnimationNames(doc: Document) {
-	const oldNames = new Set<string>();
-	const newNames = new Set<string>();
-
-	animations?.forEach((animation) => {
-		//@ts-ignore
-		const pseudo = animation.effect.pseudoElement;
-		const match = pseudo?.match(/::view-transition-(new|old|group)\((.*)\)/);
-		if (match) {
-			const name = match[2];
-			if (match[1] === 'new') newNames.add(name);
-			if (match[1] === 'old') oldNames.add(name);
-		}
-	});
-	const names = updateNames(oldNames, newNames);
-	updateNameVisibility(doc);
-	return names;
-}
 
 function addFrames(doc: Document, show: boolean) {
 	show ? frame(doc) : unframe(doc);
 }
 
+function syncTwinAnimations() {
+	animations?.forEach((animation) => {
+		const twin = animationMap?.get((animation as CSSAnimation).animationName.replace('-ua-view-transition', 'vtbot-twin'));
+		if (twin) {
+			twin.currentTime = animation.currentTime;
+		}
+	});
+}
+
 function updateNameVisibility(doc: Document) {
-	const controlMode = document.documentElement.dataset.vtbotModus === 'control';
+	const mode = document.documentElement.dataset.vtbotModus;
+	syncTwinAnimations();
 	document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li').forEach((li) => {
 		doc.documentElement.offsetHeight;
 		const name = li.innerText;
 		const classes = li.classList;
-		classes.remove('old-invisible', 'new-invisible');
+		classes.remove('invisible', 'old-invisible', 'new-invisible');
 
-		if (controlMode) {
+		if (mode === 'control' || mode === 'slow-motion') {
 			if (
 				classes.contains('old') &&
 				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-old-${name}`)) === false
-			)
+			) {
 				classes.add('old-invisible');
+			}
 			if (
 				classes.contains('new') &&
 				insideViewport(doc.querySelector(`#vtbot-twin--view-transition-new-${name}`)) === false
-			)
+			) {
 				classes.add('new-invisible');
+			}
+			if ((!classes.contains("old") || classes.contains("old-invisible")) && (!classes.contains("new") || classes.contains("new-invisible"))) {
+				classes.add('invisible');
+			}
 		}
 	});
-	if (controlMode && document.documentElement.classList.contains('vtbot-vt-active')) {
-		setTimeout(() => updateNameVisibility(doc), 100);
+	if (mode === 'slow-motion' && longestAnimation) {
+		document.querySelector<HTMLSpanElement>("#vtbot-ui-slo-mo-progress")!.innerText = ` ${~~(longestAnimation.currentTime ?? 0)} / ${animationEndTime} ms`;
+	}
+	if (mode === 'control' || mode === 'slow-motion' && document.documentElement.classList.contains('vtbot-vt-active')) {
+		setTimeout(() => updateNameVisibility(doc), 33);
 	}
 }
 
@@ -445,12 +459,14 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 
 		setTimeout(async () => {
 			const root = document.documentElement;
-			const page = bench.replace(
+			const colorScheme = getComputedStyle(root).colorScheme;
+			const page = (await (await fetch("/bench/")).text()).replace(
 				'<iframe id="vtbot-main-frame" src="/"></iframe>',
 				`<iframe id="vtbot-main-frame" style="opacity: 0" src="${location.href}"></iframe>`
 			);
 			setOrientation();
 			root.innerHTML = page;
+			root.style.colorScheme = colorScheme;
 
 			document.title = '⛑️ ' + docTitle;
 			root.dataset.vtbotModus = '';
@@ -470,13 +486,21 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 				return;
 			}
 			const original = frameDocument.startViewTransition;
-			frameDocument.startViewTransition = (cb: () => void) => {
+			frameDocument.startViewTransition = (cb: () => void | Promise<void>) => {
 				addFrames(frameDocument, false);
-				const viewTransition = original.call(frameDocument, ()=>{
-					const colorScheme = document.documentElement.style.colorScheme;
-					cb();
-					document.documentElement.style.colorScheme = colorScheme;
+				const viewTransition = original.call(frameDocument, async () => {
+					await Promise.resolve();
+					await cb();
+					setStyles(frameDocument, `
+						@keyframes vtbot-twin-noop {
+							from { width: inherit; } to { width: inherit; }
+						}
+						::view-transition-image-pair(*) {
+							animation: vtbot-twin-noop;
+							animation-duration: inherit;
+						}`, 'catch', true);
 				});
+
 				beforeSwap(viewTransition);
 				return viewTransition;
 			};
@@ -487,10 +511,6 @@ if (window === window.parent || !window.parent?.__vtbot?.framed) {
 			mainFrame.animate([{ opacity: 0 }, { opacity: 1 }], {
 				duration: 50,
 				fill: 'forwards',
-			});
-			//			frameDocument.addEventListener("astro:before-swap", (e) => beforeSwap(e.viewTransition));
-			frameDocument.addEventListener("astro:after-swap", () => {
-				history.replaceState(history.state, '', mainFrame.contentWindow!.location.href);
 			});
 			frameDocument.addEventListener('click', innerClick);
 		}, 500);
@@ -514,18 +534,24 @@ function beforeSwap(eViewTransition: ViewTransition) {
 
 	if (modus && modus !== 'bypass') {
 		viewTransition!.ready.then(async () => {
-			retrieveViewTransitionAnimations(frameDocument);
+			const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
+			canvas.style.zIndex = "1000";
+			canvas.style.cursor = 'wait';
+			await retrieveViewTransitionAnimations(frameDocument);
 			addFrames(
 				frameDocument,
 				document.querySelector<HTMLInputElement>('#vtbot-ui-styled')!.checked
 			);
-			updateAnimationNames(frameDocument);
 			mode[modus]();
 		});
 	}
+	viewTransition!.updateCallbackDone.then(() => history.replaceState(history.state, '', mainFrame.contentWindow!.location.href)
+	);
+
 	viewTransition!.finished.finally(() => {
 		viewTransition = undefined;
 		root.classList.remove('vtbot-vt-active');
+		document.querySelector<HTMLSpanElement>("#vtbot-ui-slo-mo-progress")!.innerText = "";
 		unleashAllAnimations(frameDocument);
 		animations = undefined;
 		updateNames(markTransitions(frameDocument));
@@ -536,6 +562,7 @@ function beforeSwap(eViewTransition: ViewTransition) {
 function innerClick(e: MouseEvent) {
 	const target = e.target as HTMLElement;
 	if (!document.documentElement.classList.contains('vtbot-vt-active')) {
+		if (e.defaultPrevented) return;
 		const vt = target.closest<HTMLElement>('[data-vtbot-transition-name]');
 		if (vt) {
 			const name = vt.dataset.vtbotTransitionName;
@@ -549,7 +576,7 @@ function innerClick(e: MouseEvent) {
 		let entry: HTMLLIElement | undefined;
 		let size = Infinity;
 		target.ownerDocument
-			.querySelectorAll<HTMLElement>('#vtbot-twin--view-transition > div > div > div')
+			.querySelectorAll<HTMLElement>('#vtbot-twin--view-transition > vtbot-pseudo-twin > vtbot-pseudo-twin > vtbot-pseudo-twin')
 			.forEach((d) => {
 				const { clientX, clientY } = e;
 				const { top, bottom, left, right, width, height } = d.getBoundingClientRect();
@@ -721,7 +748,7 @@ function updateNames(leftTransitionNames: Set<string>, rightTransitionNames?: Se
 	document.querySelector('#vtbot-ui-info')!.innerHTML = '';
 	document.querySelectorAll('#vtbot-ui-names li').forEach((li) => li.remove());
 	document.querySelector<HTMLElement>('#vtbot-ui-names h4')!.innerText = rightTransitionNames
-		? 'Animations'
+		? 'Animation Groups'
 		: 'Elements w/ View Transition Names';
 
 	document.querySelector<HTMLElement>('#vtbot-ui-names div')!.style.display = rightTransitionNames
@@ -757,9 +784,8 @@ function highlightInFrame(name: string, frame: HTMLIFrameElement) {
 
 function highlightNames(name: string) {
 	const control =
-		false &&
 		document.documentElement.dataset.vtbotModus === 'control' &&
-		document.querySelector<HTMLElement>('#vtbot-ui-names h4')!.innerText === 'Animations';
+		document.querySelector<HTMLElement>('#vtbot-ui-names h4')!.innerText === 'Animation Groups';
 	const lis = document.querySelectorAll<HTMLLIElement>('#vtbot-ui-names li');
 	let selected: HTMLLIElement | undefined;
 	lis.forEach((li) => {

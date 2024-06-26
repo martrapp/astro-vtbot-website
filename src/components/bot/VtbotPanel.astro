@@ -12,8 +12,10 @@ import play from './mono-play.url?raw';
 	<div id="vtbot-ui-messages" style="view-transition-name: vtbot-div-messages">
 		<h4>You are &hellip;</h4>
 		<p>
-			&hellip; in the <b>Engine Room</b><img style="width:4em; float:right" src="/node_modules/astro-vtbot/assets/bag-of-tricks.svg" /> deep
-			down at the bottom of <b>The Bag!</b>
+			&hellip; in the <b>Engine Room</b><img
+				style="width:4em; float:right"
+				src="/node_modules/astro-vtbot/assets/bag-of-tricks.svg"
+			/> deep down at the bottom of <b>The Bag!</b>
 		</p>
 		<p>
 			<b>Select a mode</b> from <code>Bypass</code> (= no interception), <code>Slow Motion</code>, <code
@@ -74,7 +76,10 @@ import play from './mono-play.url?raw';
 			<li>
 				<input disabled type="radio" name="vtbot-m-rg" id="vtbot-m-compare" /><label
 					for="vtbot-m-compare"
-					><span title="Coming soon!"style="color:#888; display: inline-block; width:7em; padding-left: 0.7em">
+					><span
+						title="Coming soon!"
+						style="color:#888; display: inline-block; width:7em; padding-left: 0.7em"
+					>
 						Side-by-side</span
 					><img style="transform: scale(1.5)" src={sbs} /></label
 				>
@@ -82,7 +87,7 @@ import play from './mono-play.url?raw';
 		</ul>
 	</div>
 	<div id="vtbot-ui-slow-motion" style="view-transition-name: vtbot-div-slo-mo">
-		<h4>Slow Motion:</h4>
+		<h4>Slow Motion:<span id="vtbot-ui-slo-mo-progress"></span></h4>
 		<label for="vtbot-ui-slo-mo">Time stretch Factor: <span id="vtbot-ui-tsf">10.0</span></label><br
 		/>
 		<input
@@ -95,14 +100,15 @@ import play from './mono-play.url?raw';
 		/>
 		<div style="view-transition-name: vtbot-checkbox-styled">
 			<input id="vtbot-ui-styled" type="checkbox" />
-			<label for="vtbot-ui-styled">Highlight animations</label>
+			<label for="vtbot-ui-styled">Highlight groups</label>
 		</div>
 	</div>
 	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
 		<h4>Full Control:</h4>
 		<p id="vtbot-ui-control-hint">Start a transition to activate</p>
 		<p id="vtbot-ui-control-hint2">Select animations, then &hellip;</p>
-		<label for="vtbot-ui-controller2">Unselected: </label><span id="vtbot-ui-progress2">0</span> ms<br />
+		<label for="vtbot-ui-controller2">Unselected: </label><span id="vtbot-ui-progress2">0</span> ms<br
+		/>
 		<input type="range" id="vtbot-ui-controller2" min="0" max="100" value="0" />
 		<div style="display:flex; justify-content: space-between; transform: translateY(-10px)">
 			<span>0</span><span id="vtbot-ui-controller-max">100%</span>
@@ -115,7 +121,11 @@ import play from './mono-play.url?raw';
 	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
 		<h4>Elements w/ View Transition Names</h4>
 		<div style="display:none; justify-content: space-between">
-			<span>old</span><span>new</span>
+			<span>old</span><span
+				><input id="vtbot-ui-visible-only" type="checkbox" checked/><label for="vtbot-ui-visible-only"
+					>in viewport</label
+				></span
+			><span>new</span>
 		</div>
 		<ol>
 			<li>Name 1</li>
@@ -182,11 +192,11 @@ import play from './mono-play.url?raw';
 >
 <style is:inline>
 	#vtbot-ui :where(*, ::before, ::after) {
-    box-sizing: border-box;
-  }
-  #vtbot-ui
-    :where
-    (
+		box-sizing: border-box;
+	}
+	#vtbot-ui
+		:where
+		(
       body,
       h1,
       h2,
@@ -263,41 +273,41 @@ import play from './mono-play.url?raw';
       audio,
       video
     ) {
-    margin: 0;
-    padding: 0;
-  }
+		margin: 0;
+		padding: 0;
+	}
 
-  #vtbot-ui
-    :where(
-      article,
-      aside,
-      details,
-      figcaption,
-      figure,
-      footer,
-      header,
-      hgroup,
-      main,
-      menu,
-      nav,
-      section
-    ) {
-    display: block;
-  }
-  #vtbot-ui :where(ol, ul) {
-    list-style: none;
-  }
+	#vtbot-ui
+		:where(
+			article,
+			aside,
+			details,
+			figcaption,
+			figure,
+			footer,
+			header,
+			hgroup,
+			main,
+			menu,
+			nav,
+			section
+		) {
+		display: block;
+	}
+	#vtbot-ui :where(ol, ul) {
+		list-style: none;
+	}
 
-  #vtbot-ui img {
-    border-style: none;
-  }
+	#vtbot-ui img {
+		border-style: none;
+	}
 
-  #vtbot-ui :where(button, input, optgroup, select, textarea) {
-    font-family: inherit;
-    font-size: 100%;
-    line-height: 1.15;
-    margin: 0;
-  }
+	#vtbot-ui :where(button, input, optgroup, select, textarea) {
+		font-family: inherit;
+		font-size: 100%;
+		line-height: 1.15;
+		margin: 0;
+	}
 
 	:root {
 		transition: color 1s;
@@ -441,9 +451,9 @@ import play from './mono-play.url?raw';
 
 	#vtbot-ui-names li.old-hidden::before {
 		top: 50%;
-    transform: translateY(-50%);
-		left:-18px;
-		display:inline-block;
+		transform: translateY(-50%);
+		left: -18px;
+		display: inline-block;
 		content: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImRhcmtnb2xkZW5yb2QiIGQ9Ik0yIDUuMjdMMy4yOCA0TDIwIDIwLjcyTDE4LjczIDIybC0zLjA4LTMuMDhjLTEuMTUuMzgtMi4zNy41OC0zLjY1LjU4Yy01IDAtOS4yNy0zLjExLTExLTcuNWMuNjktMS43NiAxLjc5LTMuMzEgMy4xOS00LjU0ek0xMiA5YTMgMyAwIDAgMSAzIDNhMyAzIDAgMCAxLS4xNyAxTDExIDkuMTdBMyAzIDAgMCAxIDEyIDltMC00LjVjNSAwIDkuMjcgMy4xMSAxMSA3LjVhMTEuOCAxMS44IDAgMCAxLTQgNS4xOWwtMS40Mi0xLjQzQTkuODYgOS44NiAwIDAgMCAyMC44MiAxMkE5LjgyIDkuODIgMCAwIDAgMTIgNi41Yy0xLjA5IDAtMi4xNi4xOC0zLjE2LjVMNy4zIDUuNDdjMS40NC0uNjIgMy4wMy0uOTcgNC43LS45N00zLjE4IDEyQTkuODIgOS44MiAwIDAgMCAxMiAxNy41Yy42OSAwIDEuMzctLjA3IDItLjIxTDExLjcyIDE1QTMuMDY0IDMuMDY0IDAgMCAxIDkgMTIuMjhMNS42IDguODdjLS45OS44NS0xLjgyIDEuOTEtMi40MiAzLjEzIi8+PC9zdmc+');
 		position: absolute;
 	}
@@ -464,8 +474,14 @@ import play from './mono-play.url?raw';
 	#vtbot-ui-names ol li.selected {
 		background-color: olive;
 	}
-	#vtbot-ui-names ol li.invis {
+	:root.vtbot-vt-active #vtbot-ui-names li.invisible {
 		color: #888;
+	}
+
+	:root.vtbot-vt-active #vtbot-ui-names:has(input:checked) li.invisible {
+		border-top: 1pt dotted grey;
+		font-size:0;
+		padding:0;
 	}
 	#vtbot-ui-filter ul {
 		list-style-type: none;
