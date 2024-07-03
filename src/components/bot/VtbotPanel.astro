@@ -127,10 +127,10 @@ import play from './mono-play.url?raw';
 				></span
 			><span>new</span>
 		</div>
-		<ol>
+		<ol title="Select names\n(During transition:\nClick colors to hides images)">
 			<li>Name 1</li>
 		</ol>
-		<button>Reset</button>
+		<button title="Reset selection">Reset</button>
 	</div>
 	<div id="vtbot-ui-filter" style="view-transition-name: vtbot-div-filter">
 		<h4>Filter Names:</h4>
@@ -173,101 +173,23 @@ import play from './mono-play.url?raw';
 				placeholder="Fragment"
 			/>
 		</form>
-		<button>Reset</button>
+		<button title="Reset filters">Reset</button>
 	</div>
 
 	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info"></div>
 </div>
-<button id="vtbot-ui-light-dark" style="view-transition-name: vtbot-button-mode">◑</button>
-<button id="vtbot-ui-turn" style="view-transition-name: vtbot-button-turn">⇲</button>
+<button id="vtbot-ui-light-dark" style="view-transition-name: vtbot-button-mode" title="Switch light/dark mode">◑</button>
+<button id="vtbot-ui-turn" title="Switch panel orientation\n(also cancels view transitions)" style="view-transition-name: vtbot-button-turn">⇲</button>
 <button
 	id="vtbot-ui-close"
-	onclick="window.location.reload()"
+	title="Close"
 	style="view-transition-name: vtbot-button-close">🗙</button
 >
 <style is:inline>
 	#vtbot-ui :where(*, ::before, ::after) {
 		box-sizing: border-box;
 	}
-	#vtbot-ui
-		:where
-		(
-      body,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      p,
-      blockquote,
-      pre,
-      a,
-      abbr,
-      acronym,
-      address,
-      big,
-      cite,
-      code,
-      del,
-      dfn,
-      em,
-      img,
-      ins,
-      kbd,
-      q,
-      s,
-      samp,
-      small,
-      strike,
-      strong,
-      sub,
-      sup,
-      tt,
-      var,
-      b,
-      u,
-      i,
-      center,
-      dl,
-      dt,
-      dd,
-      ol,
-      ul,
-      li,
-      fieldset,
-      form,
-      label,
-      legend,
-      table,
-      caption,
-      tbody,
-      tfoot,
-      thead,
-      tr,
-      th,
-      td,
-      article,
-      aside,
-      canvas,
-      details,
-      embed,
-      figure,
-      figcaption,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      output,
-      ruby,
-      section,
-      summary,
-      time,
-      mark,
-      audio,
-      video
-    ) {
+	#vtbot-ui * {
 		margin: 0;
 		padding: 0;
 	}
@@ -325,6 +247,9 @@ import play from './mono-play.url?raw';
 		position: fixed;
 		color: white;
 		background-color: darkolivegreen;
+	}
+:root.vtbot-vt-active #vtbot-ui-panel ~ #vtbot-ui-turn {
+		background-color: darkgoldenrod;
 	}
 	#vtbot-ui-panel ~ #vtbot-ui-close {
 		padding-bottom: 4pt;
@@ -519,7 +444,7 @@ import play from './mono-play.url?raw';
 		margin-bottom: 8px;
 	}
 	:root:not(.vtbot-ui-column) #vtbot-ui-panel ~ button {
-		/*	bottom: calc(var(--vtbot-panel-height, 204px) - 14px);*/
+		/*	bottom: calc(var(--vtbot-panel-height, 226px) - 14px);*/
 		bottom: 6px;
 	}
 	#vtbot-ui-panel {
@@ -531,7 +456,7 @@ import play from './mono-play.url?raw';
 		font-family: sans-serif;
 		font-size: 12px;
 		width: 100vw;
-		height: var(--vtbot-panel-height, 204px);
+		height: var(--vtbot-panel-height, 226px);
 		margin: 0px;
 		min-height: fit-content;
 		border: 0px solid red;

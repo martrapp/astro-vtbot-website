@@ -20,6 +20,7 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 import EagerImageLoading from '../EagerImageLoading.astro';
 ---
 
+
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
 	<script type="application/ld+json" data-vtbot-linter="ignore" is:inline>
 		{
@@ -55,6 +56,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 
 <script>
 	import '../navigate';
+	import '../chamber'
 	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '@feelback/js/auto';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
