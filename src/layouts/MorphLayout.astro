@@ -13,26 +13,16 @@ const { title, background, pageFindIgnore } = Astro.props;
 	<slot />
 </Layout>
 <script>
-	import {
-		isTransitionBeforePreparationEvent,
-		supportsViewTransitions,
-	} from 'astro:transitions/client';
+	import {supportsViewTransitions} from 'astro:transitions/client';
 
 	let viewTransitionName: string;
-	document.addEventListener('astro:before-preparation', (event: Event) => {
-		// @ts-ignore
-		if (
-			isTransitionBeforePreparationEvent(event) &&
-			supportsViewTransitions &&
-			//@ts-ignore
-			document.body.computedStyleMap
-		) {
+	document.addEventListener('astro:before-preparation', (event) => {
+		if (supportsViewTransitions) {
 			const originalLoader = event.loader;
 			event.loader = async () => {
 				await originalLoader();
 				if (event.navigationType !== 'traverse') {
-					viewTransitionName =
-						'' + event.sourceElement!.computedStyleMap().get('view-transition-name');
+					viewTransitionName = getComputedStyle(event.sourceElement!).viewTransitionName;
 					event.newDocument.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
 					history.replaceState({ ...history.state, viewTransitionName }, '');
 				} else {
@@ -53,7 +43,7 @@ const { title, background, pageFindIgnore } = Astro.props;
 		display: inline-block;
 	}
 	body {
-		max-width: 70ch;
+		max-width: 110ch;
 		margin: auto;
 		padding: 2ch;
 	}
