@@ -129,7 +129,11 @@ Alternatively, you can also check the `event.from` and `event.to` values at the 
 
 ### TypeScript
 
-All event listeners have a single parameter of type `Event`. This type does not know the special properties that a `TransitionBeforePreparationEvent` or a `TransitionBeforeSwapEvent` has. For type-safe access to these properties, you can use the provided functions `isTransitionBeforePreparationEvent` and `isTransitionBeforeSwapEvent`:
+:::note[Deprecated]
+Astro's language server is now smart enough to know that a listener to `astro:before-preparation` is called with a `TransitionBeforePreparationEvent` and a listener to `astro:before-swap` is called with a `TransitionBeforeSwapEvent` event ;-)
+:::
+
+> *All event listeners have a single parameter of type `Event`. This type does not know the special properties that a `TransitionBeforePreparationEvent` or a `TransitionBeforeSwapEvent` has. For type-safe access to these properties, you can use the provided functions `isTransitionBeforePreparationEvent` and `isTransitionBeforeSwapEvent`:*
 
 ```astro
 <script>

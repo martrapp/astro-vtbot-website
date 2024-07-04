@@ -1,0 +1,48 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: SwapSound
+overview: /components/
+vtn: swaps-3
+---
+
+<h1 style="display: inline-block; view-transition-name: swaps-1"><span style="display:inline-block; view-transition-name:swaps-2;">🔊 </span>Make Swapping Sounds</h1>
+
+
+The `<SwapSound />` component can play a sound file during a view transition.
+
+## Contents
+
+## Why should I use this component?
+That's not something I can answer for you.
+
+## How Does it Work?
+The sound file is played from the start of the [Preparation phase](jotter/astro/flow-events/#processing-flow) and ends synchronously with the visual effect of the view transition. The sound is slightly muted while the new page is loading. During the visual effect of the transition, it is played at full volume. As soon as the visual effect ends, the sound fades out quickly, regardless of the original length of the sound in the file.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+The recommended way is to place the `<SwapSound />` component in your basic layout after the `<ViewTransitions />` component.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import SwapSound from 'astro-vtbot/components/SwapSound.astro';
+---
+<html>
+  <head>
+    <ViewTransitions />
+    <SwapSound src="/my-sound-file.mp3"/>
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component has properties that you can use to target it on what elements to name and what name to use. You can also decided if you want to override existing `view-transition-name` or if elements that already have an view transition name should be ignored.
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| src | string | This is the sound file that should be played. Put the file into your `public` directory and precede the filename with a slash|

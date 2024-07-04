@@ -1,0 +1,73 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: AutoNameSelected
+overview: /components/
+vtn: ans-3
+---
+
+<h1 style="display: inline-block; view-transition-name: ans-1"><span style="display:inline-block; view-transition-name:ans-2;">📛 </span>Automatically Name Selected Elements</h1>
+
+
+The `<AutoNameSelected />` component can assign `view-transition-names` to elements based on a CSS selector.
+
+## Contents
+
+## Why should I use this component?
+
+There are situation where you are not able or do want to set `view-transition-name` CSS properties automatically for your elements. This is regularly the case when the set of elements is not statically known or you do not have full control over the HTML, because you generate it from something else, e.g. Markdown.
+
+## Example
+
+The <a href="/image-gallery/" data-astro-reload>image gallery demo</a> uses the `AutoNameSelected` component to create morph effects when navigating from one page with an image gallery to the next. On navigation, it assigns a `view-transition-name` to each image in the current gallery and the same set of names to the images on the next page. The order of names is randomized to achieve a "pictures morph all over the place" effect.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+The recommended way is to place the `<AutoNameSelected />` component in your basic layout after the `<ViewTransitions />` component.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
+---
+<html>
+  <head>
+    <ViewTransitions />
+    <AutoNAmeSelected prefix="image" selector="main .gallery img"/>
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component has properties that you can use to target it on what elements to name and what name to use. You can also decided if you want to override existing `view-transition-name` or if elements that already have an view transition name should be ignored.
+
+|   Property | Type| Default | Effect |
+|------------|------|--------|--------|
+| selector | string | 'h1, h2, h3, h4, h5, h6'|Instructs the `<AutoNameSelected>` component to give `view-transition-names` to all elements identified by this CSS selector. The selector must not be the empty string.|
+|force|boolean| true | By default `view-transition-names` are given to all selected elements. If you set `force={false}`, elements that already have a `style.viewTransitionName` are exempt.|
+|prefix|string|'vtbot-hx'|This value is used to construct the names. The names are created by adding a dash and a number to the prefix. With the default, the component generates names `vtbot-hx-0`, `vtbot-hx-1`, &hellip; An exception are the empty string and the value 'none', which will be used without adding anything. Do only use characters from this set: `A-Za-z-_` |
+|shuffle|boolean|false|If this property is set to true, `AutoNameSelected` will name the selected elements in some random order. Otherwise they are named in the order returned by `querySelectorAll()` which is depth-first pre-order.
+
+You can use this component to clear view transition names if you explicitly set the prefix to the empty string.
+
+You can have multiple instances of this component on your layout / on a page. They are all applied in order. If the selector does not select any elements, the component has no effect on the page.
+
+The component needs to be on both pages, the _from_ page and the _to_ page of a navigation. Config options can be different on both pages.
+
+
+**Avoid adding the same view transition names to the same DOM twice using this component.
+That will break the view transition due to the non-unique names.**
+Typical situations for this are:
+* You are using `transition:persist`/`data-astro-transition-persist` and your selector selects a persisted element.
+* You are using the `ReplacementSwap` component and your selector selects an element outside any `data-vtbot-replace` tree.
+
+
+Use simple selectors like `img` to select all images on all pages. Or use some elaborated CSS to exactly target the effect:
+```css
+selector='head:has(link[rel="canonical"][href^="/jotter/"]) + body main :is(h1, h2, h3, h4, h5, h6)'
+```
+This is what I use to name all headings in the `<main>` area, but only on the pages of the Jotter.

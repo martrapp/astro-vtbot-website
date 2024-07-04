@@ -1,0 +1,19 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import BorderControl from 'astro-vtbot/components/BorderControl.astro';
+import Mini from './Mini.astro';
+---
+
+<html>
+	<head>
+		<ViewTransitions />
+		<BorderControl fence={{}} />
+	</head>
+	<body>
+		<main transition:name="main">
+			<h1>Heading</h1>
+			<a href="/">Link</a>
+			<Mini />
+		</main>
+	</body>
+</html>

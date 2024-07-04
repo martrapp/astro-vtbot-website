@@ -8,21 +8,27 @@
 	inherits: true;
 	initial-value: #102030;
 }
-
+/*
+:root {
+  --sl-content-width: calc(100vw - 0.3 * var(--sl-sidebar-pad-x) - 2 * var(--sl-sidebar-width));
+}*/
 :root {
 	transition: --vtbot-bg-color 0.5s;
+}
+:root[loading] * {
+	cursor: progress;
 }
 body {
 	text-align: left;
 	hyphens: auto;
-	--sl-line-height: 1.25;
+	--sl-line-height: 1.5;
 }
 
 /* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #3b1a00;
 	--sl-color-accent: #998877;
-	--sl-color-accent-high: #a98B6C;
+	--sl-color-accent-high: #a98b6c;
 	--sl-color-white: #ddccbb;
 	--sl-color-gray-1: #eceef2;
 	--sl-color-gray-2: #c0c2c7;
@@ -35,6 +41,8 @@ body {
 	--vtbot-bg-color: #101820;
 	--vtbot-glow: radial-gradient(circle, #103050 50%, #081828 100%);
 	--vtbot-glow-shadow: 0 0 10px #08f, 0 0 20px #08f, 0 0 30px #08f, 0 0 40px #08f;
+
+	--sl-color-purple-low: #19052b;
 }
 
 /* Light mode colors. */
@@ -55,6 +63,8 @@ body {
 	--vtbot-bg-color: #e8f0f8;
 	--vtbot-glow: radial-gradient(circle, #c0d0e0 50%, #d8e8f8 100%);
 	--vtbot-glow-shadow: 0 0 20px #cccc, 0 0 40px #ca88, 0 0 50px #c966, 0 0 60px #c844;
+
+	--sl-color-purple-low: #e6d1f9;
 }
 
 header,
@@ -103,16 +113,19 @@ h4 a {
 }
 
 nav ::-webkit-scrollbar {
-	width: 0;
+	width: 8px;
 }
-::-webkit-scrollbar {
-	background-color: var(--sl-color-gray-6);
+nav ::-webkit-scrollbar {
+	background-color: var(--vtbot-bg-color);
 }
-::-webkit-scrollbar-thumb {
-	background-color: var(--sl-color-gray-5);
+nav ::-webkit-scrollbar-thumb {
+	background-color: var(--vtbot-bg-color);
 }
 nav:hover ::-webkit-scrollbar {
-	width: 10px;
+	background-color: var(--sl-color-gray-6);
+}
+nav:hover ::-webkit-scrollbar-thumb {
+	background-color: var(--sl-color-gray-5);
 }
 
 starlight-menu-button button {

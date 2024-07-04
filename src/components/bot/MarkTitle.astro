@@ -1,61 +1,37 @@
 ---
-export interface Props {
-	prefix?: string;
-}
-const { prefix } = Astro.props;
+
 ---
 
-{prefix && <meta name="vtbot-mark-title-prefix" content={prefix} />}
 <script>
-	import {
-		isTransitionBeforeSwapEvent,
-		TRANSITION_BEFORE_SWAP,
-		isTransitionBeforePreparationEvent,
-		TRANSITION_BEFORE_PREPARATION,
-		type TransitionBeforePreparationEvent,
+	import type {
+		TransitionBeforePreparationEvent,
+		TransitionBeforeSwapEvent,
 	} from 'astro:transitions/client';
+	import {
+		TRANSITION_AFTER_PREPARATION,
+		TRANSITION_BEFORE_PREPARATION,
+	} from 'astro:transitions/client';
+	import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
 
-	const prefix =
-		(document.querySelector('meta[name="vtbot-mark-title-prefix"]') as HTMLMetaElement)?.content ??
-		'/';
-
-	function markTitleHeading(e: TransitionBeforePreparationEvent) {
-		const h1 = e.newDocument.querySelector('main h1') as HTMLHeadingElement;
-		h1 && (h1.style.viewTransitionName = 'vtbot-hx');
-	}
-
-	function clearTitleInSidebar() {
-		document.querySelectorAll('.sidebar-pane a, main h1').forEach((e) => {
-			const style = (e as HTMLAnchorElement).style;
-			if (style.viewTransitionName === 'vtbot-hx') style.viewTransitionName = '';
-		});
-	}
-
-	function markTitleInSidebar(e: TransitionBeforePreparationEvent) {
-		if (!e.to.pathname.startsWith(prefix)) return;
-		clearTitleInSidebar();
-		const next = document.querySelector(
-			`.sidebar-pane a[href="${e.to.pathname}"]`
-		) as HTMLAnchorElement;
+	function afterPreparation(e: TransitionBeforePreparationEvent) {
+		const oldHeading = document.querySelector<HTMLElement>('main h1');
+		oldHeading && (oldHeading.style.viewTransitionName = '');
+		const next = document.querySelector<HTMLElement>(`.sidebar-pane a[href="${e.to.pathname}"]`);
 		next && (next.style.viewTransitionName = 'vtbot-hx');
 	}
 
-	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => {
-		if (isTransitionBeforePreparationEvent(e)) {
-			markTitleInSidebar(e);
-			const originalLoader = e.loader;
-			e.loader = async () => {
-				await originalLoader();
-				markTitleHeading(e);
-			};
-		}
-	});
-	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
-		if (isTransitionBeforeSwapEvent(e)) {
-			if (!e.to.pathname.startsWith(prefix)) return;
-			clearTitleInSidebar();
-		}
-	});
+	function beforeSwap(e: TransitionBeforeSwapEvent) {
+		document.querySelectorAll<HTMLElement>('.sidebar-pane a').forEach((el) => {
+			el.style.viewTransitionName === 'vtbot-hx' && (el.style.viewTransitionName = '');
+		});
+		const newHeading = e.newDocument.querySelector<HTMLElement>('main h1');
+		newHeading && (newHeading.style.viewTransitionName = 'vtbot-hx');
+	}
+
+	let event: TransitionBeforePreparationEvent;
+	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => (event = e));
+	document.addEventListener(TRANSITION_AFTER_PREPARATION, () => afterPreparation(event));
+	document.addEventListener(TRANSITION_BEFORE_SWAP, beforeSwap);
 </script>
 <style is:global>
 	::view-transition-new(vtbot-hx),
@@ -66,7 +42,7 @@ const { prefix } = Astro.props;
 	}
 	::view-transition-new(vtbot-hx) {
 		animation-delay: 0.1s;
-}
+	}
 	::view-transition-old(vtbot-hx) {
 		opacity: 0;
 	}

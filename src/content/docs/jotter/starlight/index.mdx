@@ -16,15 +16,37 @@ Supporting view transitions for Starlight is not just about cross-fade navigatio
 
 ## Will the Bag offer Support for Starlight?
 
-Yes, it has already started. The <BoT/> provides initial basic support for view transitions for  Starlight sites! In the future, in the best of all worlds, The Bag can provide small, independent gadgets that developers can combine as they wish. Keep your fingers crossed ;-) and stay tuned.
-
-There are a few things that need to be configured to enable view transitions in Starlight. Others are more optional. The mandatory changes are covered by the initial view transition support for Starlight sites by The Bag. Other features will follow.
+Yes, it has already started. The <BoT/> provides initial basic support for view transitions for  Starlight sites!
 
 :::note
 If you're here because you, too, want to add view transitions to your Starlight site, then visit the [step-by-step guide](/jotter/starlight/guide/).
 :::
 
-[Read on](/jotter/starlight/inner-workings/) if you want to know what encounters I had on my journey to a Starlight website with view transitions.
+<style>{`
+	del {
+		text-decoration-style: solid wavy;
+		text-decoration-color: #888;
+	}
+`}</style>
+
+~~In the future, in the best of all worlds, The Bag can provide small, independent gadgets that developers can combine as they wish. Keep your fingers crossed ;-) and stay tuned.~~
+The future is here, and so are the first additional components to choose from!
+
+There are a few things that need to be configured to enable view transitions in Starlight. Others are more optional. The mandatory changes are covered by the initial view transition support for Starlight sites by The Bag. Other features followed.
+
+|Kind|Option|Component|
+|-|-|-|
+|Mandatory|The basic view transition support in just three steps|[Vtbot Starlight Support](/jotter/starlight/guide/#step-1-install-astro-vtbot)|
+|Optional|Indicate that the system is processing the click|[LoadingIndicator](/jotter/starlight/guide/#loading-indicator)|
+|Optional|Eliminate the pseudo scrolling of the main area|[PageOffset](/jotter/starlight/guide/#eliminate-pseudo-scrolling)|
+|Optional|Derive the direction of view transitions from the order of pages in the sidebar|[PageOrder](/jotter/starlight/guide/#page-order-directions)|
+|Optional|Simple way to declaratively add morph transitions to elements by just defining a CSS selector|[AutoNameSelected](/jotter/starlight/guide/#additional-morph-effects)|
+|Optional|Make incoming view transitions reload instead, e.g. to properly reinitialize ReplacementSwap realms |[BorderControl](/jotter/starlight/guide/#customize-the-sidebar)|
+|Optional|Change the default handling of the sidebar|[Vtbot Starlight](/jotter/starlight/guide/#customize-the-sidebar)|
+
+Select your preferred mix from the [custom combo options](/jotter/starlight/guide/#custom-combo-options) now!
+
+Read on if you want to know [what encounters I had on my journey](/jotter/starlight/inner-workings/) to a Starlight website with view transitions.
 
 
 

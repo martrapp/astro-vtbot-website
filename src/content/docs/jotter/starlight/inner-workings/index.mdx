@@ -35,8 +35,8 @@ You might want to add some animations to make the main content change look more 
 ### Loading Indicator
 Next, you need a [loading indicator](/library/LoadingIndicator/) to show that the website has recognized the click and is doing something.
 
-### Reload Fence
-The next step is only necessary if your website also contains pages that are not provided by Starlight. I've added a fence that recognizes when I leave the Starlight section and navigate to the demo or component pages of the site (and vice versa).  For these navigation events, I replace view transitions with full page loads  to reinitialize state, such as search.
+### BorderControl
+The next step is only necessary if your website also contains pages that are not provided by Starlight and if those also use view transitions. I built [a reusable component](/library/BorderControl/) that detects view transitions that are targeted to the Starlight realm and forces a full page reload of the target on navigation. This is important to [properly re-initialize ReplacementSwap areas](/jotter/starlight/guide/#re-initialize-starlight-pages) when the area is entered with a view transition from the outside.
 
 ### No more Annoying "Scrolling"
 If you have long pages, view transitions typically cause a lot of [pseudo-scrolling](/jotter/api/#scroll) when you navigate them from a scrolled down position. You know that this is no scrolling but just the morph animation of two large, only partially visible objects. The effect is less confusing, if you scroll both pages instantly to the top before the morphing starts.
@@ -52,8 +52,8 @@ The <BoT/> provides a [reusable component](/library/PageOffset/) for this use ca
 ### Ordered Pages
 Starlight pages can be configured to display links to the previous and next page at the bottom of each page. Here "previous" and "next" mean: In the [order in which they appear in the page navigation](/jotter/starlight/guide/#page-order-directions). Wouldn't it be cool if the page transition animation also used these directions? I was thinking the same thing!
 
-### Additional Image Pairs
-I gave the headings on the pages view-transition-names to make the change of pages more entertaining.
+### Additional Morph Effects
+I gave the headings on the pages view-transition-names to make the change of pages more entertaining. If you want you can add this to your site, too. See the guide on [how to](/jotter/starlight/guide/#additional-morph-effects) do so.
 
 
 
@@ -62,7 +62,18 @@ I gave the headings on the pages view-transition-names to make the change of pag
 The world will keep turning without or without what comes next.
 
 ### Silent Catch
-If you click rapidly or use the arrow keys to navigate quickly through the browser history, you will interrupt ongoing transitions. This will result in error messages in the browser console because you usually haven't been paying attention to promises that could be rejected. Better catch.
+~~If you click rapidly or use the arrow keys to navigate quickly through the browser history, you will interrupt ongoing transitions. This will result in error messages in the browser console because you usually haven't been paying attention to promises that could be rejected.~~ Better catch.
+
+Good news! [Starting from 4.7.1](https://github.com/withastro/astro/blob/main/packages/astro/CHANGELOG.md#471), Astro's view transitions will interrupt and abort ongoing transitions. So if you suffer from unhandled (in promise) errors first check whether your Astro version is current.
+
+As of now, I remove my original SilentCatch component and do not have further plans to offer a reusable component. Some things work themselves out after all.
+
+<style>{`
+	del {
+		text-decoration-style: solid wavy;
+		text-decoration-color: #888;
+	}
+`}</style>
 
 ### Swap Sound
-Just can't do without an annoying sound when the view transition is running? This is the audio equivalent of a page animation. Choose from different swoops! Or how about a loud clockwork sound as the internal gears of the site turn and click?
+Just can't do without an annoying sound when the view transition is running? This is the audio equivalent of a view transition. Choose from different swoops! Or how about a loud clockwork sound as the internal gears of the site turn and click? Now supported as a [reusable component](/library/SwapSound/).

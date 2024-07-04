@@ -1,0 +1,126 @@
+---
+
+---
+
+<script>
+	const pics: number[] = [];
+
+	function randomize(n: number) {
+		const array = Array.from({ length: n }, (_, i) => i);
+		for (let i = n - 1; i > 0; --i) {
+			let j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j]!, array[i]!];
+		}
+		return array;
+	}
+
+	document.addEventListener('astro:before-preparation', (e) => {
+		const originalLoader = e.loader;
+		e.loader = async () => {
+			await originalLoader();
+			await buildGallery(e.newDocument);
+		};
+	});
+
+	let arr = randomize(23);
+	async function buildGallery(doc: Document) {
+		randomPics();
+		const promises = pics.map((id, idx) => {
+			const w = idx < 2 ? 200 : 100;
+			const h = idx % 2 === 0 ? 200 : 100;
+			const img = new Image();
+			img.src = `https://picsum.photos/id/${id}/${w}/${h}`;
+			return new Promise((resolve, reject) => {
+				img.onload = resolve;
+				img.onerror = reject;
+			});
+		});
+
+		doc.querySelectorAll<HTMLDivElement>('.gallery')!.forEach((g) => {
+			arr = randomize(23);
+
+			g.innerHTML = '';
+			for (let i = 0; i < 29; ++i) {
+				const img = doc.createElement('img');
+				let id, w, h;
+				if (arr[i] === undefined) {
+					id = 3;
+					w = 1;
+					h = 1;
+				} else {
+					const ari = arr[i]!;
+					w = ari < 5 ? 2 : 1;
+					h = ari < 3 || ari === 6 || ari === 5 ? 2 : 1;
+					id = ari < 3 ? 0 : ari < 5 ? 1 : ari < 7 ? 2 : 3;
+				}
+				img.src = `https://picsum.photos/id/${pics[id]}/${w}00/${h}00`;
+				img.className = `s${w}x${h}`;
+				g.appendChild(img);
+			}
+		});
+		await Promise.allSettled(promises);
+		cacheNextPictures();
+	}
+
+	function randomPics(force = false) {
+		if (!force && Math.random() < 0) return;
+		pics[0] = Math.floor(Math.random() * 30);
+		pics[1] = Math.floor(Math.random() * 30);
+		pics[2] = Math.floor(Math.random() * 30);
+		pics[3] = Math.floor(Math.random() * 30);
+	}
+
+	function preload(id: number, w: number, h: number) {
+		let preloadLink = document.createElement('link');
+		preloadLink.href = `https://picsum.photos/id/${id}/${w}/${h}`;
+		preloadLink.rel = 'preload';
+		preloadLink.as = 'image';
+		document.head.appendChild(preloadLink);
+	}
+	function cacheNextPictures() {
+		randomPics();
+		preload(pics[0]!, 200, 200);
+		preload(pics[1]!, 200, 100);
+		preload(pics[2]!, 100, 200);
+		preload(pics[3]!, 100, 100);
+	}
+
+	randomPics(true);
+	buildGallery(document);
+</script>
+
+<style is:global>
+	:root::view-transition-group(*) {
+		animation-duration: 1s;
+	}
+	.gallery {
+		margin: auto;
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, min(100px, 11.5%));
+		grid-auto-rows: min(100px, 11.5%);
+		grid-auto-flow: dense;
+		gap: 10px;
+	}
+	.gallery img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.gallery img.s2x2 {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+	.gallery img.s1x1 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+	.gallery img.s2x1 {
+		grid-column: span 2;
+		grid-row: span 1;
+	}
+	.gallery img.s1x2 {
+		grid-column: span 1;
+		grid-row: span 2;
+	}
+</style>

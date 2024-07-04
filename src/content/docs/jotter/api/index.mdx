@@ -65,7 +65,7 @@ The styles for the fade animation are automatically defined by the browser.[^2]
 }
 ```
 <a id="custom-animation" />
-### Customize the Root Animation
+### Customize the Root Animation \{#custom-animation}
 
 You can replace the default animation with something else, e.g. a zoom effect:
 
@@ -129,13 +129,13 @@ Like `::view-transition-old(root)` or `::view-transition-new(root)`, the childre
 
 
 
-### Morph Animations
+### Morph / Group Animations
 
 For each view transition name `myName` the `::view-transition-image-pair(myName)` pseudo element is the single child of a `::view-transition-group(myName)`
 
 For each image pair with _two_ images, the browser automatically defines an additional _morph_ animation for `::view-transition-group(myName)`. This animation transitions both images from the position, size and transformation[^1] of the old image to the position, size and transformation of the new image. As the fade-in and fade-out animations are also played in parallel, the combined effect is that of morphing parts on your screen. And you can control this animation with CSS just as you do for the fade-out and fade-in animations.
 
-[^1]: plus some other CSS properties, see https://drafts.csswg.org/css-view-transitions/#style-transition-pseudo-elements-algorithm
+[^1]: plus some other CSS properties, see https://drafts.csswg.org/css-view-transitions/#style-transition-pseudo-elements-algorithm. Here, "position" & "size" are technically also  transformations, i.e. translation and scale to be precise.
 
 <MorphVt />
 

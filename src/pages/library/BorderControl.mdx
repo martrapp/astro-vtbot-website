@@ -1,0 +1,54 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: BorderControl
+overview: /components/
+vtn: border-3
+---
+
+<h1 style="display: inline-block; view-transition-name: border-1"><span style="display:inline-block; view-transition-name:border-2;">🛂 </span>Border Control</h1>
+
+
+The `<BorderControl />` component turns incoming view transitions into full page loads.
+
+## Contents
+
+## Why should I use this component?
+Forcing full page loads comes in handy if a view transition is not able to properly re-initialize the [app state](/jotter/starlight/inner-workings/app-state/) of the target page. This might be the case when are using the [ `<ReplacementSwap>` component](/library/ReplacementSwap/) and have other pages outside the area covered by `ReplacementSwap` and you  have view transitions from there into that `ReplacementSwap` area.
+
+## How Does it Work?
+You define URL patterns to tell the component which area is to be protected. You can define the inside or the outside of the fence, whichever is more practical. If a navigation starts outside and goes to page that is not outside of the fence &mdash;
+or if a navigation goes to a page inside the fence but does not start inside the fence, the target page is loaded with a full page load. Path name prefixes are used to specify whether a page is _inside_ or _outside_ the protected area.
+
+The full page load resets the browser state of the current tab/window and therefore does a proper (re-)initialization of the page content and all scripts.  This also works for history traversals (browser forward / backward navigation) that can not be annotated with [`data-astro-reload`](/jotter/astro/directives/).
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+The recommended way is to place the `<BorderControl />` component in your basic layout after the `<ViewTransitions />` component.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import BorderControl from 'astro-vtbot/components/BorderControl.astro';
+---
+<html>
+  <head>
+    <ViewTransitions />
+    <BorderControl fence={{inside:["/docs/", "/blog/"]}}/>
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component has a mandatory property called `fence`. This is an object with two alternative string arrays. To define the realm that should be protected by the `BorderControl` you can define all the pathname prefixes that are valid for pages `inside` the fence, or you define the pathname prefixes for all pages `outside` the fence. You can choose whichever is more practical but you must only define the inside _or_ the outside.
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| fence.inside | string[] | An array of path name prefixes that define what is inside the protected area |
+| fence.outside | string[] | An array of path name prefixes that define what is outside the protected area|
+
+One of these has to be set but not both.

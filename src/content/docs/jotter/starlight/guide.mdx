@@ -1,5 +1,5 @@
 ---
-title: Add Astro's View Transitions to Starlight for that SPA-like Look & Feel
+title: "Guide: Add View Transitions to Starlight"
 ---
 
 import BoT from "/src/components/BoT.astro"
@@ -7,13 +7,15 @@ import AnimateImages from "/src/components/AnimateImages.astro"
 
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
-<div style="background-color:#9872; border-radius: 9px; padding: 2ex; box-shadow: #00000028 1.6px 1.6px 3.2px 0px">
-The benefits of doing this include:
-* Looks like a Single Page Application: No full page reloads anymore
-* Behaves like a Single Page Application: Search terms, sidebar scroll position and collapsed category states are retained across navigation (No wild animations or automatic closing by default if you are worried when looking at this site's sidebar ;-D )
-* Enables you to easily add visual transition effects to your site
-* Has fallback support for browser that do not yet implement the View Transition API
-</div>
+:::note[Benefits of adding view Transitions to Starlight]
+
+* *Looks like a Single Page Application:* No full page reloads anymore
+* *Behaves like a Single Page Application:* Search terms, sidebar scroll position and collapsed category states are retained across navigation (No wild animations or automatic closing by default if you are worried when looking at this site's sidebar ;-D )
+* Keep all the *SEO benefits* of Starlight generated *static pages*
+* Enables you to easily add *visual transition effects* to your site
+* *Has fallback support* for browser that do not yet implement the View Transition API
+
+:::
 
 Don't be afraid that this will turn your beautiful website into a blinking jukebox. This Jotter is just an exaggerated example to show what is possible. If you follow the instructions below, you will be rewarded with a very _subtle_, SPA-like transition effect. And yes, if you want, you can of course later turn the whole thing into a ... blinking jukebox.
 
@@ -21,11 +23,26 @@ The [introduction page on The Bag's view transition support for Starlight](/jott
 
 I'm currently working on making the optional features available as reusable components as well and will then extend this guide.
 
-<div style="background-color:#9872; border-radius: 9px; padding: 2ex; box-shadow: #00000028 1.6px 1.6px 3.2px 0px">
+:::note[A short note]
 The Bag's support of view transition for Starlight is still young and has not yet been extensively tested in the wild. Enjoy being on the bleeding edge of technology with your Starlight site, but also be prepared that things might break when updating to a newer version or The Bag. Or that not everything you expect will be possible right from the start. I'm happy to improve and expand the initial support over time!
-</div>
+:::
+<style>{`
+.starlight-aside--note {
+	background-color:#9872;
+	border-radius: 9px;
+	padding: 2ex;
+	box-shadow: #00000028 1.6px 1.6px 3.2px 0px;
+	color:
+}
+`}</style>
 
-## Step 1: Install astro-vtbot
+## Enable View Transitions
+
+To enable view transitions, you will extend Starlight's  **`Head`** component. You create a replacement component and instruct Starlight to use it as a substitute for its Head[^1]. The replacement component covers all aspects classified as [mandatory actions](/jotter/starlight/inner-workings/#mandatory-actions). Components to cover the more optional things are in the works!
+
+[^1]: Here is [a pointer](https://starlight.astro.build/guides/overriding-components/) to background information on how overriding components works.
+
+### Step 1: Install astro-vtbot
 
 <a href="https://www.npmjs.com/package/astro-vtbot" target="_blank"><img style="margin:2ex 0; height:20px"  src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5))" data-zoom-off/></a>
 The <BoT/> is available on npm. The package is named `astro-vtbot`.
@@ -37,15 +54,9 @@ npm i -D astro-vtbot
 ```
 Make sure that you have the latest version installed.
 
-## Enable View Transitions
 
-To enable view transitions, we extend Starlight's  **`Head`** component. We create a replacement component and instruct Starlight to use it as a substitute for its Head. Here is [a pointer](https://starlight.astro.build/guides/overriding-components/) to background information on how overriding components works.
 
-The replacement component covers all aspects classified as [mandatory actions](/jotter/starlight/inner-workings/#mandatory-actions).
-
-Components to cover the more optional things are in the works!
-
-### Step 2: Create the New Head Component
+### Step 2: Create a Head Component
 Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
 
 ```astro title="./src/components/starlight/Head.astro"
@@ -62,9 +73,9 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 
 ### Step 3: Use the New Head Component
 
-Now we tell Starlight to replace its `Head` component with ours. Open the `astro.config.mjs`[^1] file from your project directory. Make it look like shown below: Make sure that there is an entry named `components` in the options of your Starlight integration. It must specify a `Head` entry with the path of the file you have just created.
+Now you tell Starlight to replace its `Head` component with yours. Open the `astro.config.mjs`[^2] file from your project directory. Make it look like shown below: Make sure that there is an entry named `components` in the options of your Starlight integration. It must specify a `Head` entry with the path of the file you have just created.
 
-[^1]:Assuming `.mjs` as the extension here but `.ts` would also be fine. of course!
+[^2]: Assuming `.mjs` as the extension here but `.ts` would also be fine, of course!
 
 ```js title="astro.config.mjs" {8-9}
 import { defineConfig } from 'astro/config';
@@ -103,13 +114,13 @@ import StarlightHead from '/src/components/MySpecialHead.astro';
 ### Try it out for yourself!
 Start your project. No matter what browser you use, you should see that there are no full page loads when navigating. The scroll bar and category toggles do not reset when you go to the next page. The search bar remembers your last entry.
 
-In Chromium browsers, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations, but just seamlessly swap pages.[^2]
-
-[^2]: Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. But see [here](#animating-the-main-section) on how to add a cool animation to the main section.
+In Chromium browsers, you will see the browser's standard animations for few transitions, i.e. a very quick fade-over of the complete viewport. Browser without native support for view transition will not yet show animations, but just seamlessly swap pages.
 
 :::note[Congratulations!]
 If you were just looking for a SPA-like navigation, you are all set!
 :::
+
+Having no fancy, whole viewport animation on a browser without native view transition support is a good thing here. As the exit and entry animations are required to play in sequence, you can not get a real cross-fade. But see [here](#animating-the-main-section) on how to add a cool animation to the main section.
 
 In the next section, we will extend the view transition effect by adding an animation to the main content area and optimizing the styling.
 
@@ -158,6 +169,8 @@ import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+import ProgressBar from "astro-vtbot/components/ProgressBar.astro";
+
 // import one of Astro's predefined animation functions,
 // see https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives
 import { slide } from 'astro:transitions';
@@ -172,6 +185,19 @@ import { slide } from 'astro:transitions';
 
 {/* update this one to whatever image you want to show as a loading indicator */}
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
+
+{/* As an alterative to the LoadingIndicator: */}
+<ProgressBar />
+<style is:global>
+  .swup-progress-bar {
+    background: linear-gradient(
+      to bottom,
+      var(--sl-color-accent),
+      var(--sl-color-accent-high),
+      var(--sl-color-accent)
+    );
+    height: 5px;
+  }</style>
 
 <style is:global>
 	/* Slow down Chrome's default animation */
@@ -203,58 +229,17 @@ import { slide } from 'astro:transitions';
 This section shows how to add features from the [optional feature list](/jotter/starlight/inner-workings/#optional-part). This has just two entries right now but will soon grow further.
 
 ### Loading indicator
-Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#extended-configuration-example) already contains the indicator that makes your favicon flash happily in the top right corner during loading.
+Independent of the Starlight support, The Bag provides [loading indicators](/library/LoadingIndicator/) for you to choose from. The above [example](#extended-configuration-example) contains
+* the indicator that makes your favicon flash happily in the top right corner during loading (`<LoadingIndicator />`)
+* as well as the `<ProgressBar />` with some basic styling.
 
-### Customize the Sidebar
-In case you want to change the [default behavior of the sidebar](#sidebar-behavior), the <BoT/> offers some switches and utility functions.
-
-#### Replace the Sidebar Content
-You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component).
-```astro title="/src/components/starlight/Head.astro"
-<VtbotStarlight {...Astro.props} replaceSidebarContent>
-```
-This will swap in the sidebar content from the next page when you navigate. This allows you to have different sidebar content on your pages. It also allows you to control the state of the categories, i.e. whether they are shown open or collapsed, with your static page content. Auto-opening and auto-scrolling to the current page marker is not disabled by this switch.
-
-#### Retain the Current Page Marker
-
-If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
-
-```astro title="/src/components/starlight/Head.astro"
-<VtbotStarlight {...Astro.props} retainCurrentPageMarker>
-```
-On navigation, this leaves the current page marker as is. If you already set the `replaceSidebarContent` attribute, you do not need `retainCurrentPageMarker`. To assist you in updating the page marker yourself, The Bag offers these utility functions:
-
-```ts title="astro-vtbot/components/starlight/utils.ts"
-// Return the <a> element inside the sidebar that best fits the URL parameter
-export function sidebarEntry(url: URL): HTMLAnchorElement | null {...}
-
-// Clears the current page marker in the sidebar without setting a new one
-export function clearCurrentPageMarker(): void {...}
-
-// Clears the current page marker and then sets it to the entry that best fits the URL
-export function updateCurrentPageMarker(url: URL): void {...}
-
-// Opens all nested categories of a sidebar entry. Without url parameter, opens the entry of the current page marker. With url parameter opens the corresponding sidebarEntry(url). You can set scrollIntoView to false to prevent the entry to be scrolled into view.
-export function openCategory(url?: URL, scrollIntoView = true): void {...}
-
-```
-Here _best fit_ in general means _exact match_, but if there is none, it also looks for the longest common prefix.
-
-To use the utility functions, import one ore more from `astro-vtbot/components/starlight/utils`:
-```astro title="MySidebarAnimations.astro"
----
----
-<script>
-  import { clearCurrentPageMarker, updateCurrentPageMarker, sidebarEntry } from 'astro-vtbot/components/starlight/utils';
-  ...
-</script>
-```
+Choose one of those.
 
 ### Eliminate Pseudo-Scrolling
 
 The default morph animations might look irritating when applied to elements that are larger than the current viewport. This is typical the case if you add an animation to your main area.  There is a [whole section on the effect](/jotter/starlight/inner-workings/transitions/#the-pseudo-scrolling-main-area) and possible solution in this Jotter.
 
-If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component):
+If you just want to get rid of it, add the following to your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component):
 ```astro title="/src/components/starlight/Head.astro"
 ---
 //...
@@ -274,7 +259,7 @@ For details on the PageOffset component see [its description](/library/PageOffse
 
 This would not make a difference if you use the default fade animation as it looks the same forwards and backwards. But the default slide animation for example has a direction. And maybe your special Starlight animation has one, too.
 
-The Bag has a component called `<PageOrder />` that you can add to your [`Head` component](/jotter/starlight/guide/#step-2-create-the-new-head-component). It automatically changes the order of normal navigation and history traversals. If you navigate to a page that is further down in the sidebar, that will be a _forward_ navigation. If you navigate to a page further up, this is _back_. If not both, the _from_ and the _to_ page are found in the sidebar, direction retains its original value.
+The Bag has a component called `<PageOrder />` that you can add to your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). It automatically changes the order of normal navigation and history traversals. If you navigate to a page that is further down in the sidebar, that will be a _forward_ navigation. If you navigate to a page further up, this is _back_. If not both, the _from_ and the _to_ page are found in the sidebar, direction retains its original value.
 
 
 ```astro title="/src/components/starlight/Head.astro"
@@ -323,6 +308,107 @@ Refrain from merging rules with pseudo-elements with rules without pseudo-elemen
 
 </details>
 
+### Additional Morph Effects
+
+Now it's getting funny! I made a component that I could use to make the headings of the pages stand out during view transitions. It is called [`AutoNameSelected`](/library/AutoNameSelected/).
+
+Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`, &hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph--group-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
+
+You see this effect on the Jotter pages.
+
+After I added some configuration options to the component, I saw much more potential. Have a look at the image gallery demo, which uses `AutoNameSelected` to shuffle image tiles around. Or take a look at the table of contents to the right which has a similar effect. Here is how that is done:
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
+---
+...
+<AutoNameSelected selector="starlight-toc li" prefix="vtbot-toc" shuffle={true} />
+```
+
+Event though this component was crafted as part of The Bag's Stalivht support, it is a general purpose component that can well be used beyond Astro.
+
+### Customize the Sidebar
+In case you want to change the [default behavior of the sidebar](#sidebar-behavior), the <BoT/> offers some switches and utility functions.
+
+#### Replace the Sidebar Content
+You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component).
+```astro title="/src/components/starlight/Head.astro"
+<VtbotStarlight {...Astro.props} replaceSidebarContent>
+```
+This will swap in the sidebar content from the next page when you navigate. This allows you to have different sidebar content on your pages. It also allows you to control the state of the categories, i.e. whether they are shown open or collapsed, with your static page content. Auto-opening and auto-scrolling to the current page marker is not disabled by this switch.
+
+#### Retain the Current Page Marker
+
+If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
+
+```astro title="/src/components/starlight/Head.astro"
+<VtbotStarlight {...Astro.props} retainCurrentPageMarker>
+```
+On navigation, this leaves the current page marker as is. If you already set the `replaceSidebarContent` attribute, you do not need `retainCurrentPageMarker`. To assist you in updating the page marker yourself, The Bag offers these utility functions:
+
+```ts title="astro-vtbot/components/starlight/utils.ts"
+// Return the <a> element inside the sidebar that best fits the URL parameter
+export function sidebarEntry(url: URL): HTMLAnchorElement | null {...}
+
+// Clears the current page marker in the sidebar without setting a new one
+export function clearCurrentPageMarker(): void {...}
+
+// Clears the current page marker and then sets it to the entry that best fits the URL
+export function updateCurrentPageMarker(url: URL): void {...}
+
+// Opens all nested categories of a sidebar entry. Without url parameter, opens the entry of the current page marker. With url parameter opens the corresponding sidebarEntry(url). You can set scrollIntoView to false to prevent the entry to be scrolled into view.
+export function openCategory(url?: URL, scrollIntoView = true): void {...}
+
+```
+Here _best fit_ in general means _exact match_, but if there is none, it also looks for the longest common prefix.
+
+To use the utility functions, import one ore more from `astro-vtbot/components/starlight/utils`:
+```astro title="MySidebarAnimations.astro"
+---
+---
+<script>
+  import { clearCurrentPageMarker, updateCurrentPageMarker, sidebarEntry } from 'astro-vtbot/components/starlight/utils';
+  ...
+</script>
+```
+
+### Re-initialize Starlight Pages
+
+For most Starlight sites, the following topic is *not relevant*. We talk about an issue with re-initialization of Starlight pages when there are view transitions that originate from outside the Starlight pages. To be affected by this problem you must fulfill the following conditions:
+- Under the same origin (= protocol, hostname, port): You have additional pages that are not part of your current Starlight content, or yiu even have a second Starlight site.
+- Those pages also have view transitions enabled.
+
+The issue here is that the Starlight pages are perfectly initialized on the first load, which is a full page load. Later navigation within the Starlight realm is also fine, as we use the [`<ReplacementSwap />` component to keep the app state up to date](/jotter/starlight/inner-workings/#keep-app-state-up-to-date). But view transitions that come from outside the Starlight's realm are soft reloads that cannot properly re-initialize the app state.
+
+The Bag's website has this structure. If that also sounds like your setup, use the [`<BorderControl />` component](/library/BorderControl/) to define and protect your Starlight realm by forcing full page loads on incoming view transitions.
+
+Here is the setting used by the Jotter to protect it from incoming view transitions from demos or reusable components.
+
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import BorderControl from 'astro-vtbot/components/BorderControl.astro';
+
+---
+...
+<BorderControl fence={{ inside: ['/jotter/'] }} />
+```
+### Make Some Noise
+I apologize if the sounds of the jotter bother you, but I just couldn't resist triggering something other than animations through the life cycle events of the astro view transitions.
+Maybe you have a more subtle sound file than the one the jotter uses. If you want to try it out, it's really easy:
+
+```astro title="/src/components/starlight/Head.astro"
+---
+//...
+import SwapSound from 'astro-vtbot/components/SwapSound.astro';
+
+---
+...
+<SwapSound src="/large-steampunk-factory-machine-188048.mp3" />
+```
+For further details see [the description of the `<SwapSound />` component](/library/SwapSound/).
+
 ## Custom Combo Options
 
 import { Code } from '@astrojs/starlight/components';
@@ -331,9 +417,71 @@ import DemoHead3 from 'src/components/starlight/DemoHead3.astro?raw'
 What follows is a yet more extended version of the [extended configuration example](#extended-configuration-example), but without the styling examples. It is not meant to be copied over into your `Head` but rather as a showcase what optional components you might mix and match in your own `Head` component. The section with the optional components is highlighted.
 
 
-<Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,15,16,18,19,21,22]} />
+{/*<Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,8,9,10,11,19,20,35,36,38,39,41,42,43,45,46,48,49]} />*/}
+```astro title="./src/components/starlight/Head.astro" ins={[4,5,6,7,8,9,10,11,19,20,36,37,39,40,42,43,44,46,47,49,50,51]}
+---
+import type { Props } from '@astrojs/starlight/props';
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
+import PageOffset from 'astro-vtbot/components/PageOffset.astro';
+import PageOrder from 'astro-vtbot/components/starlight/PageOrder.astro';
+import AutoNameSelected from 'astro-vtbot/components/AutoNameSelected.astro';
+import SwapSound from 'astro-vtbot/components/SwapSound.astro';
+import BorderControl from 'astro-vtbot/components/BorderControl.astro';
+---
+
+{/* Define a view transition animation for `<main>`*/}
+<VtbotStarlight {...Astro.props} transition:name="main" transition:animate="slide">
+	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+</VtbotStarlight>
+
+{/* Customize what image you want to show where */}
+<LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
+
+{/* As an alterative to the LoadingIndicator: */}
+<ProgressBar />
+<style is:global>
+	.swup-progress-bar {
+		background: linear-gradient(
+			to bottom,
+			var(--sl-color-accent),
+			var(--sl-color-accent-high),
+			var(--sl-color-accent)
+		);
+		height: 5px;
+	}
+</style>
+
+{/* Decent transitions for scrolled down pages */}
+<PageOffset name="main" />
+
+{/* Make animation direction based on the order of the pages in the sidebar */}
+<PageOrder />
+
+{/* Without further configuration, make headings stand out during view transitions.
+    Can be used to declaratively add view transition names which open a door to all kinds of funny thing. */}
+<AutoNameSelected />
+
+{/* If you have other pages in this project, protect the starlight part from incoming view transitions */}
+<BorderControl fence={{ inside: ['/jotter/', '/blog/'] }} />
+
+{/* If you want to swap the sound of the page transition */}
+<SwapSound src="/path/to/sound.mp3" />
+```
 
 
+## Friendly Neighbor
+
+Currently, The Bag's support for view transitions is aware of and compatible with the following plugins you might use with your starlight site:
+*
+* `HiDeoo/starlight-image-zoom` (https://starlight-image-zoom.vercel.app/)
+* `@lorenzo_lewis/starlight-utils` (f.k.a. `starlight-mul	ti-sidebar`) (https://starlight-utils.pages.dev/)
+* `HiDeoo/starlight-blog` (https://starlight-blog-docs.vercel.app/)
+* `@astrojs/starlight-docsearch` (https://starlight.astro.build/guides/site-search/#algolia-docsearch)
+
+I plan to continue to support compatibility with these packages in future versions of the <BoT/>.
 ## Known Issues
 
 There are some facts that you should be aware of. None of them is a real obstacle on using The Bag's Starlight support.
@@ -344,19 +492,10 @@ If you link to a page of your Starlight site from the outside, you should not us
 
 The website of The Bag automatically intercepts all links that return to the `/jotter/` and does a full page load. The Bag will soon offer a reusable component to facilitate that.
 
-### Not tested with arbitrary config options
+### Not tested with arbitrary Starlight options
 Starlight supports a lot of different config options. The Bags view transition support is so far only tested with a few typical combinations.
 
 Multilingual Starlight sites force a complete reload of the page if you select a different language. This is a good thing, as the app frame changes completely and has to be reloaded anyway.
-
-### Starlight Image Zoom
-
-If you are using the `starlight-image-zoom` plugin (highly recommended!), make sure you are using the latest version.
-
-### How to use `transition:persist`
-The Starlight integration of the <BoT/> is based on the [`<ReplacementSwap/>` component](/library/ReplacementSwap/), which automatically persists everything outside the `div.main-frame` area. If you are flexible where to place things, just put them somewhere outside the `div.main-frame`  to persist them and you are done.
-
-As of v1.7.8 `<ReplacementSwap />` also handles `data-transition-persist` attributes in the document trees that are swapped in from the new page. You can use this to persist an element inside the `div.main-frame` area to keep its state on all Starlight pages.
 
 ## As always, feedback is very welcome!
 

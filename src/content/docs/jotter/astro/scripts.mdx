@@ -2,70 +2,240 @@
 title: Updating State after Transitions
 ---
 
+import VtbotEye from "/src/components/VtbotEye.astro"
+import { Card, Steps } from '@astrojs/starlight/components';
 
-As with any existing Astro application, adding view transitions has two parts:
+Adding view transitions to an existing Astro project that uses some JavaScript usually consists of two parts:
 1. Add `<ViewTransitions />` to the `<head>`.
 2. Trying to get the scripts working again.
 
-Why is that? View transitions are a no-brainer for what Astro is famous for: statically generated pages without JavaScript. Do step 1 and you are done. It just works.
 
-## Updating the DOM
+Why is that? View transitions are a no-brainer for what Astro is famous for: statically generated pages without JavaScript. Do step 1 and you are all set. It just works.
 
-Unlike full page loads / cross-document navigation, Astro's view transitions perform a soft load. There is the client-side router that implements central parts of Astro's view transitions.
+## How Full Page Loads and Soft Loads Differ
 
-It [updates the current document](/jotter/astro/loader-swap/#swap-1) in the browser to look like the new document, and then updates the browser history so that it basically looks like a navigation with full page load to the next page.
+The scripts are there for a reason. Usually, they are used to attach event listeners to HTML elements in the window's current document (DOM) so that they can react to user interactions and the pages become interactive. Or provide some reusable functionality like encoding. Or they add animations or visualizations to the site. Or dynamically change the content. Or validate forms. Or prefetch stuff. Or do tracking and analytics. Or other things.
 
-For the DOM this even works better than normal browsing as Astro has the [additional ability to copy elements](/jotter/astro/directives/#transitionpersist) from the old page to the new page while keeping their state using `transition:persist="name"`.
+Most of these use cases work the same with or without view transitions. But all scripts that depend on a full page load or do not expect the DOM to change dynamically need some help to work with view transitions.
+
+### Mechanics of Full Page Loads
+
+Let's first investigate what happens on an initial full page load.
+
+##### Steps & Events During Initial Load
+Loading a new page is accompanied by events that are triggered in different phases of the process. The steps are as follows:
 
 
-## Script Handling on Full Page Loads
+<Steps>
+1. Parsing starts with an empty DOM as HTML streams in.
+2. Inline scripts are executed as they are parsed
+3. The DOM is completely parsed.
+4. Deferred scripts including external module scripts are executed.
+5. Document: DomContentLoaded fires.
+6. If they are still loading, wait for external resources like stylesheets, images, subframes, and not deferred `async` scripts
+7. Window: load fires
+</Steps>
 
-Scripts are a different story: On full page loads, the browser un-loads all old scripts including their data. It also initializes a new, clean window object and resets the global lexical scope. When it reads the new document, it executes all scripts inlined in or referenced from that document.
 
-The net effect is that the scripts are initialized on the new DOM and can link to the current HTML elements.
+##### Initial Load's Effect on Script State
+Scripts are a different story: Trying to simulate the exact effects of a full page load on global variables, and the state of scripts and the module loader is not possible.
 
-If we keep the old scripts without re-executing them, their state will still reference HTML elements of the previous DOM. And the scripts do not know about the elements on the new page. So we have to do something.
+On full page loads, the browser unloads all old scripts including their data. It also initializes a new, clean window object and resets the global lexical scope. When it reads the new document, it executes all scripts that are contained in this document or to which it refers. And the script often rely on being executed in a clean state.
 
-## Between a rock and a hard place
-So for soft loads we just un-load and re-load scripts during view transition navigation like the browser does on full page loads? No, that won't work and here are some reasons why we can not do this in general:
+The net effect is that the scripts are initialized on the new DOM and link to the current DOM elements.
+
+### Mechanics of Soft Loads
+
+Astro's [soft load mechanism](/jotter/astro/flow-events/#soft-load) has some implications on the relations between script state and DOM elements that can not be automatically mitigated. The simple answer is that updating the old DOM to look like the new DOM works pretty well but scripts often need some extra code to fix up things after the navigation.
+
+##### Steps & Events During Soft Load
+
+In contrast to the [initial full load](/jotter/astro/scripts/#steps--events-during-initial-load), the soft load has less distinct steps related to script loading and execution:
+<Steps>
+1. The HTML document is fetched and parsed completely to form the new DOM
+2. The new DOM is swapped in
+3. `astro:after-swap` fires
+4. Scripts are executed
+5. `astro:page-load` fires
+</Steps>
+
+Of course you can modify the [default behavior of loading and swapping](/jotter/astro/loader-swap/) using listeners to the `astro:before-preparation`, `astro:after-preparation` and `astro:before-swap` events.
+
+##### Effects of a Soft Load on Script State
+
+Typically, scripts set up some close relation between script state and the DOM:
+* Between *DOM elements* and event listeners, i.e. script *functions* to be called back when something happens and
+* Between long-lived script *variables* and *DOM elements* to be accessed and manipulated to achieve some dynamic effect.
+
+To achieve interactivity, there is no getting around the event listeners. But long-lived variables pointing to DOM elements can be completely omitted. Of course, this can come at a higher price, as these collections are usually used to increase performance or make the code more comprehensive and maintainable.
+
+
+<div class="container">
+<div class="box">
+```d2 width=300 sketch title="Normal relation between script state and DOM"
+Window: {
+	Script State: {
+  	Page 1 Functions: {
+    	Variables
+  	}
+	}
+	Page 1 DOM: {
+  	Element1 -> Element2
+	}
+	Script State.Page 1 Functions.Variables -> Page 1 DOM.Element1: {
+		style: {
+			stroke-width: 4
+			stroke: lightgreen
+			stroke-dash: 3
+		}
+	}
+	Page 1 DOM.Element2 -> Script State.Page 1 Functions: {
+		style: {
+			stroke-width: 4
+			stroke: lightgreen
+		}
+	}
+}
+...@../../../../common
+```
+</div>
+<div class="box">
+```d2 width=290 sketch title="Relation between script state and DOMs after view transition"
+Page 1 DOM: {
+  Element1 -> Element2
+}
+Window.Script State.Page 1\&2 Functions.Variables -> Page 1 DOM.Element1: {
+		style: {
+			stroke-width: 3
+			stroke: red
+			stroke-dash: 3
+		}
+	}
+Page 1 DOM.Element2 -> Window.Script State.Page 1\&2 Functions: {
+		style: {
+			stroke-width: 3
+			stroke: red
+		}
+	}
+Window: {
+Script State: {
+  Page 1\&2 Functions: {
+    Variables
+  }
+}
+Page 2 DOM: {
+  Element3 ---> Element4
+}
+Script State -> Page 2 DOM: {
+  style: {
+    stroke: transparent
+  }
+}}
+...@../../../../common
+```
+</div>
+</div>
+
+<style>{`
+	.container {
+	  display: flex;
+	  align-items: flex-end;
+	}
+
+	.container .box {
+	  width: 50%;
+	  padding: 10px;
+	}
+`}
+</style>
+
+The sketch to the left shows the normal relation between script state and DOM after a full page load: The arrows between script state and DOM are typically established by scripts that are executed when the page is loaded. Some variables may hold pointers to DOM elements. These might result, for example, from calling `document.querySelector()`. And some DOM elements might have references to event listener functions that have been set by calls to `addEventListener()`.
+
+Now the soft load happens and the window's DOM from page 1 is replaced by the DOM from page 2. This can be seen on the right-hand side. The new elements  have no event listeners. If you click on them, nothing happens. And the DOM elements referenced from the variables are no longer part of the window's DOM. If you animate them or change their styling, nobody will see this.
+
+That is why we have to do something.
+
+### Why we can't Emulate Full Page Loads
+So we better would just un-load and re-load scripts during view transition navigation like the browser does on full page loads? No, that won't work and here are some reasons why we can not do this in general:
 - We can not unload and reload all scripts as this would also remove Astro's  client-side router and all its state in the middle of the navigation. Resuming processing and state on the next page may be doable, but won't be efficient. And hey, we are talking about view transitions: the goal is a modern, snappy look when navigating a website, not something that takes forever to change pages.
 - We can neither unload nor reload scripts if they have both attributes `type="module"` and `src="..."` (after Astro's script processing that is). Those scripts are called _**external module scripts**_. All scripts declared in an `.astro` file with no attributes on the `<script>` tag or only a src attribute, are automatically converted to _external module scripts_ by Astro.
 \
 The browser caches _external module scripts_ and does not offer an API to interact with its own module loader. External module scripts are kept by the browser until the next full page load and can't be updated or restarted after the initial load.
 - We can not reset the windows object and can not clean out the state of the global lexical context where values are stored that are declared by top level `const` and `let`.
 
-## Inline and Non-Module Scripts
-We can re-execute all JavaScript scripts that are _no_ external module scripts.
-Astro does that in the [completion phase](/jotter/astro/flow-events/#processing-flow) between `astro:after-swap` and `astro:load`.
+Since we can't simply discard the state and the current scripts and start building everything from scratch again, we need a different solution. We need a way to specifically execute the parts of the code that can build up the relationship to the new DOM and get rid of references that might keep the old DOM alive and thus prevent garbage collection.
 
-Now, did I mention that we can not reset the global lexical scope? As a consequence, scripts that use top level `const` and `let` declarations can not be re-executed. This will immediately produce errors:
+### Required Updates after a Soft Load
+If you look at the lower part right-hand side of the images above, the two important questions are:
 
-```astro
-<script is:inline>
-	const a = 5;
-</script>
-<!-- first execution works just fine -->
+1. *How can references to DOM elements be updated* so that they forget elements that are no longer contained in `window.document` and learn about new elements that are now contained in `window.document`?
+2. And more important: *How do new DOM elements get their event listeners* after a soft load?
 
-<script is:inline>
-	const a = 5;
-</script>
-<!-- second execution causes an error in the browser console -->
+#### References into the DOM
+ The simplest approach to cope with references into the DOM is to avoid them.
+
+ Try to refrain from long-lived references into the DOM. Short-lived references, like a local variable in a short-lived function execution, are not a problem at all. These references only exist for a very short period of time and do not outlast a soft load.
+
+Long-lived references to the DOM are generally a bad idea, because the DOM might change dynamically without notice. So even without soft loads, you might end up with stale references and miss new elements over time. Instead of storing references into the DOM, you can always recalculate them. If necessary, individual DOM elements must be annotated with additional information in order to find them again. But references can always be replace by mutation and queries. As I already [said above](javascript:vtbotNavigate("#effects-of-a-soft-load-on-script-state","But%20long,higher%20price")), this might be less efficient, but it is always correct with out stale or missing elements.
+
+If you are convinced that you cannot do without such references, recalculate them after the soft load, e.g. with an event handler for the `astro:after-swap` event.
+
+
+#### Event Listeners
+
+For event listeners the story is quite similar. But there is no advice to avoid them. You simply can't.
+
+What is similar is that the set of elements that should have a particular event listener can change dynamically, as the DOM can also change independently of soft loads. Most scripts do not take such effects into account: a script that makes all headings clickable usually scans the DOM as soon as it is loaded and may not notice if a new heading is dynamically added to or removed from the DOM at a later time.
+
+Not recognizing removals is not really a problem as it has no impact on the user experience. But missing dynamically added headings means that they don't respond when you click on them.
+
+Wouldn't it be nice if such scripts had a function that could be called whenever the DOM was significantly changed? Or if we could re-run that part of the code that can reestablish the relation between DOM elements and script state?
+
+## Ways to Re-Execute Code in Astro
+
+
+There are several occasions where the browser can call user code that we might use to restore the script state / DOM relation.
+
+1. Execution of script elements during page load
+2. Calls to listeners that are triggered when certain events happen
+3. Execution of asynchronous callbacks found in the task and micro-task queues
+4. Execution of registered files and classes e.g. lifecycle methods of custom elements as well as the different kinds of workers & worklets.
+
+Option 1 is the only way that works without further requirements. The other options require a script to be executed in order to set them up: event listeners have to be added with `addEventListener`, asynchronous callbacks have to be set up using mechanisms like `setTimeout` or `then/await`, custom elements and worker/worklets must be explicitly declared using `customElements.define`, `navigator.serviceWorker.register`, `CSS.paintWorklet.addModule` or similar.
+
+Not all of these mechanisms are helpful to fix script state after view transitions. Some are not related to navigation like async callbacks triggered by `setTimeout()`. Others can not really help to limited DOM access, like for example the service workers.
+
+In the following sections we will look at script tags and event listeners. I'm also preparing some text on how to use the lifecycle methods of custom-components that you will find here, soon.
+
+### Common Example
+
+To see how to apply these techniques and what is best avoided, let's have a practical example to apply and discuss.
+
+We look at cases where scripts are used to add interactivity to a static web site. We focus on event listeners here. We call the example we are looking at *"Active Headings"*.
+
+<Card title="Active Headings">Make all headings clickable. When a heading is clicked, scroll it to the top of the viewport.</Card>
+
+We can start by adding CSS so that the headings already look like they are clickable:
+```css
+<style is:global>
+	h1, h2, h3, h4, h5, h6 {
+		cursor: pointer;
+	}
+</style>
 ```
-```console del={1}
-Uncaught SyntaxError: Identifier 'a' has already been declared
-```
+The code parts will be discussed in the sections to come.
 
-When writing your own scripts, you can use _immediately invoked function expressions_ to define your own top-level scope within a function and program defensively when testing and assigning values in the global "window" scope. Or you can write _inline_ module scripts that have their own top-level scope per script.
+<a id="the-best-way-to-execute-your-code-after-view-transitions"/>
 
-However, if you need to use external or third party scripts, chances are it won't work right away: There are many scripts that are not prepared to be executed again in the same execution context. Therefore, Astro ignores scripts that it has already seen on the previous page. If you want to run them anyway, add the attribute `data-astro-rerun` to the script tag. If scripts don't work as expected when you rerun them, you need to analyze them to find a workable solution.
+### Updates with External Module Scripts
+On transition, the newly swapped in DOM elements need to get their event listeners to add interactivity. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update the relation between the DOM and the scripts appropriately. This works perfect in combination with external module scripts in your basic `Layout` component.
 
-So if reloading scripts is not the best way to reinitialize the script state after navigation, what is?
+#### Set Listeners on New Elements
+Sounds complicated but isn't: An _external module script_ is what you get automatically if [Astro processes a script tag with no further attributes](/jotter/astro/scripts/#astros-script-processing).  The browser only loads them once and [keeps _external module scripts_ until the next full page load](/jotter/astro/scripts/#behavior-with-view-transitions). I.e. they do not get removed or updated  while you navigate using view transitions. If you want to [refresh you knowledge about `<script>` elements](#script-element-basics) you'll find some details further down this page.
 
-## The Best Way to Execute Your Code after View Transitions
-On transition, data structures of scripts have to forget about the old DOM and reference elements of the new DOM. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update state appropriately. This works perfect in combination with external module scripts im your basic layout
+The `window.document` object itself stays the same during view transitions. Only attributes and children of `document.documentElement` are updated[^4]. Therefore event listeners for `astro:page-load` or `astro:after-swap` on the document object will survive a view transitions navigation and their code will regularly be called after each view transition navigation to allow for state updates. Here is the basic pattern applied to our [example from above](#common-example):
 
-### Use an `astro:page-load` Listener in Your Layout
-Sounds complicated but isn't: An _external module script_ is what you get automatically if Astro processes a script tag with no further attributes.  The browser only loads them once and keeps them until the next full page load. I.e. they do not get removed or updated  while you navigate using view transitions. The document object itself stays the same during view transitions. Only attributes and children of `document.documentElement` are updated. Therefore event listeners for `astro:page-load` on the document object will survive a view transitions navigation and their code will regularly be called after each view transition navigation to allow for state updates. Here is the basic pattern:
+[^4]: Ok, it depends on what your your `swap()` function does. For example the, [ReplacementSwap](/library/ReplacementSwap/) does even change less. And even for [the built-in swap](/jotter/astro/loader-swap/#swap-1), this was oversimplified: There the `<head>` element also stays untouched.
 
 ```astro title="MyBasicLayout"
 ---
@@ -74,27 +244,87 @@ import { ViewTransitions } from 'astro:transitions'
 
 <html>
   <head>
-    <ViewTransitions/>
+    <ViewTransitions />
 	</head>
 	<body>
 	  ...
 	</body>
 </html>
 <script>
-	document.addEventListener('astro:page-load', onPageLoad);
-	function onPageLoad() {
-    // Initialize dynamic menu
-    const menu = document.getElementById('menu');
-    menu.addEventListener('click', function() {
-      // Code to handle menu clicks
-    });
+	function init() {
+		const headingSelector = 'h1, h2, h3, h4, h5, h6';
+		const headings = document.querySelectorAll(headingSelector);
+		headings.forEach((h) => {
+			h.addEventListener('click', (e) => {
+				(e.target as Element)
+					.closest(headingSelector)
+					?.scrollIntoView({ block: 'start', inline: 'nearest' });
+			});
+		});
 	}
-<script>
+	document.addEventListener('astro:after-swap', init);
+	init();
+</script>
 ```
-The `onPageLoad` function implements the code that (re)- initializes script state for your pages.
-In this example, we have an element with `id="menu"` on each page and we register a click handler for the `#menu` element right after the new DOM was swapped in. Note, that Astro also triggers `astro:page-load` on the initial page load. Thus the  `onPageLoad()` function also runs on the initial load and after each view transition navigation.
+For our example, we identify all headings on the page and we register a click handler for each of them. This code is provided by the `init()` function, which we call
+- once at the end of the script execution during the initial load
+- and during each view transition via the `astro:after-swap` event listener
 
-### Executing Code on Selected Pages, Only
+There is no code that un-registers the listeners before we leave the current page. Here is why: The listeners are added to the heading elements. If you [do not keep long-lived references into the DOM](/jotter/astro/scripts/#references-into-the-dom), these elements are not alive anymore after the swap and can be reclaimed by the garbage collector.
+
+#### astro:page-load vs. astro:after-swap
+
+Sometime you also see examples, where the init code is triggered by the `astro:page-load` event.
+
+The `astro:page-load` and `astro:after-swap` both have in common that
+- `window.document` already holds the new DOM when they fire
+- both fire only if `<ViewTransitions />` are enabled
+- both are standard `Event` objects without any additional properties
+
+The example form above, implemented with an `astro:page-load` listener, looks quite the same.
+
+```astro title="MyBasicLayout"
+---
+import { ViewTransitions } from 'astro:transitions'
+---
+
+<html>
+  <head><ViewTransitions /></head>
+	...
+</html>
+<script>
+	function init() {
+		...
+	}
+	document.addEventListener('astro:page-load', init);
+</script>
+```
+If you use `<ViewTransitions />` the `astro:page-load` event does not only fire during view transitions, but also on the initial page load. Therefore we removed the explicit call to `init()` at the end of the script.
+
+Now you might ask yourself wether those two events are interchangeable, and as you guess, they differ in some aspects.
+
+|astro:page-load fires &hellip;|astro:after-swap fires &hellip;|
+|-|-|
+| &hellip; on initial load and during view transitions | &hellip; during view transitions only|
+| &hellip; after animations started | &hellip; while the renderer is still frozen and before the animations start[^5]|
+| &hellip; after all new scripts are executed | &hellip; before any new scripts are executed|
+
+[^5]: True for native view transitions. In the simulation, the exit animations have already been completed, but the entry animation is still pending.
+
+The most important part here is that your listener should be fast when using `astro:after-swap` as it delays the start of the animations. But adding a few event listeners is perfectly fine here.
+
+The pattern with `astro:page-load` might be a bit more compact as you do not need to explicitly call `init()` on the initial page load and you even do not need an explicit `init()` function as you could write the callback as a function expression when calling `addEventListener()`.
+
+But what looks like an advantage at first glance, namely that the function is automatically executed during the initial load and during view transitions, turns out to be a disadvantage if you want to build components that work with and without view transitions: If `<ViewTransitions />` aren't enabled, the `init()` function will never be called!
+
+:::note
+While the pattern with `astro:page-load` only works if `<ViewTransitions />` are enabled, the pattern using `astro:after-swap` works fine with and without `<ViewTransitions />`.
+:::
+
+So if you are interested in building reusable components that can be used with and without view transitions, I would recommend the pattern using `astro:after-swap`.
+
+#### Execution on Selected Pages
+
 OK, we have code that runs after view transition navigation on all pages. But what if you want to execute different initialization stuff on different pages? Maybe you need to reinitialize handlers for a special toggle on some pages and some image galleries only on others?
 
 Than you should nevertheless keep that pattern:
@@ -109,8 +339,7 @@ Here is an example:
 ```astro title="MyLayout1.astro"
 ...
 <script>
-  document.addEventListener('astro:page-load', onPageLoad);
-	function onPageLoad(){
+	function init() {
 		// If only some pages have the #my-special-toggle element,
 		// the initialization code is only executed on those pages.
 		const toggle = document.getElementById('my-special-toggle');
@@ -120,31 +349,32 @@ Here is an example:
 		// A pattern that works for pages with zero, one or more image galleries
 		document.querySelectorAll('.image-gallery').forEach(...);
 	}
+  document.addEventListener('astro:after-swap, init);
+	init();
 </script>
 ```
 
-You might be afraid to load a script like this on a page because you know that the `astro:page-load` listener will execute on every page you visit using view transitions (up to the next full page load). But keep in mind that those tests are quick. If the selector doesn't select anything, the function returns immediately.
+You might be afraid to load a script like this on a page because you know that the `astro:after-swap` listener will run on every page you visit using view transitions (up to the next full page load). But keep in mind that those tests are quick. If the selectors don't select anything, the function returns immediately.
 
-The real benefit of this approach compared to inline scripts is that the script element is only executed once (until the next full page load) and therefore the event listener for `astro:page-load` will not be installed several times. Having multiple instances of the same event handler might not only be a waste of resources but might also have hard to debug side effects.
+The real benefit of this approach &mdash; compared to inline scripts &mdash; is that the script element is only executed once (until the next full page load) and therefore the event listener for `astro:after-swap` will not be installed several times. Having multiple instances of the same event handler might not only be a waste of resources but might also have hard to debug side effects.
 
-#### Increasing Encapsulation & Modularization
+#### Increasing Modularization
 You do not have to merge the initialization for all elements into the same event listeners. You might as well have several listeners for different tasks.
 
 ```astro title="MyLayout2.astro"
 ...
 <script>
-  document.addEventListener('astro:page-load', togglePageLoad);
-	document.addEventListener('astro:page-load', imageGalleryPageLoad);
-
-	function imageGalleryPageLoad() {
-		// works for pages zero, one or more image galleries
+	function imageGalleryInit() {
 		document.querySelectorAll('.image-gallery').forEach(...);
 	}
-	function togglePageLoad(){
-		// if only one page has the #my-special-toggle element,
-		// the foreach part is only executed for that element on that page.
+	document.addEventListener('astro:after-swap', toggleInit);
+	toggleInit();
+
+	function toggleInit() {
 		document.querySelectorAll('#my-special-toggle').forEach(...);
 	}
+	document.addEventListener('astro:after-swap', imageGalleryInit);
+	imageGalleryInit()
 </script>
 ```
 To further increase encapsulation, you might have the listeners in several scripts &hellip;
@@ -152,74 +382,93 @@ To further increase encapsulation, you might have the listeners in several scrip
 ```astro title="MyLayout3.astro"
 ...
 <script>
-  document.addEventListener('astro:page-load', imageGalleryPageLoad);
-	function imageGalleryPageLoad() {
+	function init() {
 		// works for pages zero, one or more image galleries
 		document.querySelectorAll('.image-gallery').forEach(...);
-	}
+  }
+	document.addEventListener('astro:after-swap', init);
+	init();
 </script>
 <script>
-  document.addEventListener('astro:page-load', togglePageLoad);
-	function togglePageLoad() {
+  function init() {
 		// if only one page has the #my-special-toggle element,
 		// the foreach part is only executed for that element on that page.
 		document.querySelectorAll('#my-special-toggle').forEach(...);
 	}
+	document.addEventListener('astro:after-swap', init);
+	init();
 </script>
 ```
 &hellip; which specially makes sense if you link with the `src` attribute to some external script. Just make no assumptions about the order in which the scripts are executed.
 
 ```astro title="MyLayout4.astro"
 ...
-<script src="/src/scripts/image-gallery-page-load.js" />
-<script src="/src/scripts/toggle-page-load.js" />
+<script src="/src/scripts/image-gallery.js" />
+<script src="/src/scripts/toggle.js" />
 ```
+
+You like, you can also put the script into a `.astro` file, which you then import and render.
+```astro title="MyLayout5.astro"
+---
+import ImageGalley from "src/components/ImageGallery.astro"
+import Toggle from "src/components/Toggle.astro"
+---
+...
+<ImageGallery />
+<Toggle />
+...
+
+```
+
 
 You might put all scripts into your common `Layout` component and they are ready to use on the pages that need them. Even though that might look like a lot of scripts in DEV mode, the bundler will merge them for production. But that also means that all your scripts are loaded on the first visit of a page of your site. That is not so bad, as your module scripts are deferred and load asynchronously. They do not block loading of the HTML or the execution of the renderer.
 
-Alternatively you might use the external module variant (`<script src="..." />`) and put the scripts on the pages that need them. This reduces the amount of JavaScript that has to be transferred on the first visit. Just keep in mind that this does not mean 'run `onPageLoad()` exactly on this page' but 'run `onPageLoad` from now on, on every page'.
+Alternatively you might put the scripts on the pages that need them using the external module variant (`<script src="..." />`) or an Astro component. This reduces the amount of JavaScript that has to be transferred on the first visit. Just keep in mind that this does not mean 'run `init()` exactly on this page' but 'run `init()` from now on, on every page'.
 
 
 
-#### Special Case: Libraries that can do the querySelectorAll for you
-The approach with `document.querySelectorAll()` is especially neat if you are using a library that can do this test for you. For example if you want to animate some elements with GSAP, you can have an `astro:page-load` listener that moves all images in an image gallery with the querySelectorAll-pattern from above.
+#### Delegating querySelectorAll
+The approach with `document.querySelectorAll()` is especially neat if you are using a library that can do this test for you. For example if you want to animate some elements with GSAP, you can have an `astro:after-swap` listener that moves all images in an image gallery with the querySelectorAll-pattern from above.
 
 ```astro
 <script>
 	import { gsap } from 'gsap';
-	document.addEventListener('astro:page-load', () => {
-		const images = document.querySelectorAll('.image-gallery img');
-		// works if the current page has some images in image galleries,
-		// simply does nothing if not
-		if (images.length > 0) {
-			gsap.from(images, { opacity: 0, y: 100, duration: 0.5 });
-		}
-	});
+
+	function init() {
+		const images = document.querySelectorAll('.image-gallery img').forEach((el) => {
+			gsap.from(el, { opacity: 0, y: 100, duration: 0.5 });
+		});
+	}
+	document.addEventListener('astro:after-swap', init);
+	init();
 </script>
 ```
 But you can also delegate the `querySelectorAll()` call to GSAP:
 ```astro
 <script>
 	import { gsap } from 'gsap';
-	document.addEventListener('astro:page-load', () => {
-		// works if the current page has some images in image galleries,
-		// simply does nothing if not (set gsap.config({ nullTargetWarn: false }) to omit warnings)
+
+	function init() {
 		gsap.from('.image-gallery img', { opacity: 0, y: 100, duration: 0.5 });
-	});
+	}
+	document.addEventListener('astro:after-swap', init);
+	init();
 </script>
 ```
-In this simple case, you don't need to explicitly query for images on the page.
+In this simple case, you don't need to explicitly query for images on the page. Set `gsap.config({ nullTargetWarn: false })` to prevent errors in the browser console if the selector selects the an empty set.
+
+If you use a library that accepts selectors as parameters, make sure that they are freshly evaluated each time and not cached from a previous call, as we want to [omit long-lived pointers from scripts to the DOM](/jotter/astro/scripts/#references-into-the-dom).
 
 Note that if you want to do more complex things like adding a click handler to all images, you'll have to fall back to the more general scheme shown above and run the `querySelectorAll()` yourself.
 
-### When CSS Selectors aren't Good Enough
+#### Beyond CSS Selectors
 
 There are times where simple CSS selectors are not powerful enough to direct your re-initialization code. You might also need to know on which page you are. You could test for the page's title, but it might be more efficient to check for URL patterns. For example, you could match URLs using `url.pathname.startsWith()` or check the current location against a regular expression.
 
 In `astro:page-load` listeners, `window.location.href` hold the actual location, no matter how you got there (click, browser back-navigation, ...). If checking the location is not enough, you could also check for the start and end point of the navigation. This information is not available in the `astro:page-load`handler but in both the `astro:before-preparation` and `astro:before-swap`
 handlers. You could evaluate your condition there and reuse the result in the `astro:page-load` handler.
 
-```astro title="MyLayout5.astro"
+```astro title="MyLayout6.astro"
 ...
 <script>
 	let wantToInitialize = false;
@@ -227,25 +476,258 @@ handlers. You could evaluate your condition there and reuse the result in the `a
 		wantToInitialize =
 			e.from.pathname.startsWith('/docs/') && e.to.pathname.startsWith('/glossary/');
 	});
-	document.addEventListener('astro:page-load', onPageLoad);
-	function onPageLoad(){
+	function init() {
 		if (wantToInitialize) {
 			//...
 		}
 	}
+	document.addEventListener('astro:after-swap', init);
+	init()
 </script>
 ```
+#### Set Listeners on Safe Elements
+Often it is more efficient to use global listeners on the `window` or `document` object instead of separate listeners on each element. Here is the modified code for our example:
 
-### The Enabler
+```astro title="MyBasicLayout"
+---
+import { ViewTransitions } from 'astro:transitions'
+---
 
-This is a quick preview notice. When you craft reusable components for view transitions -- as The Bag does -- you might want to offer your users control over when to apply initialization without the need to alter the code. The Bag will offer support for such situations shortly.
+<html>
+  <head><ViewTransitions /></head>
+	  ...
+</html>
+<script>
+	const headingSelector = 'h1, h2, h3, h4, h5, h6';
+	document.addEventListener('click', (e) => {
+		const target = e.target as Element;
+		const heading = target?.closest(headingSelector);
+		if (heading) {
+			heading.scrollIntoView({ block: 'start', inline: 'nearest' });
+		}
+	});
+</script>
+```
+Now this is a really robust solution. As `window.document` will not be changed by a swap, the click listener will survive a view transition. Note that [not holding long-lived references into the DOM](/jotter/astro/scripts/#references-into-the-dom) is a prerequisite for this approach to work. The listener does not hold pointers into the DOM. It just looks up the tree for the closest heading and if there is one, it scrolls to it. This approach continues to work, even if the DOM is replaced with a soft load. No need to use Astro's view transition lifecycle events here.
 
-## Alternative Approach for Third Party Scripts
+##### Built-in Swap
+With the [built-in `swap()`](/jotter/astro/loader-swap/#swap-1), save positions for listeners to survive a soft load are:
+- `window`
+- `window.document`
+- `window.document.documentElement` and
+- `window.document.documentElement.head`
 
-Adapting this pattern is easy if you write new code and know about the events and the limitations of scripts. When you have to use third party scripts, there are cases where you can not avoid to rewrite at least some re-initialization code.
+##### ReplacementSwap
+If you use the [`ReplacementSwap` component](/library/ReplacementSwap/), you have a larger set of safe positions: Only elements marked with `data-vtbot-replace` and their descendant are replaced during a soft load. All other elements stay untouched. Listeners set on those untouched elements will survive a soft load in the same way as the listener on `document` above.
 
-An alternative might be to only renew parts of the DOM on navigation and hope that all dynamic stuff happens outside that area. That is for example how [The Bag's Starlight support](/jotter/starlight/) works.
+##### transition:persist
+If you persist elements with [`transition:persist`] (/jotter/astro/directives/#transitionpersist), these elements also retain their listeners. Therefore, persisting elements to the next page is another good technique to keep listeners going across view transitions.
 
+### Updates with Classic or Inline Scripts
+So this title is a bit unwieldy. What I meant to say is: how to use scripts that are not external module scripts. That also wouldn't have been shorter or simpler in the title.
+
+> If you are used to inline scripts and simply add `<ViewTransitions />` to your website, you will likely be disappointed. Combined with some sloppy attempts to solve the problem by changing the attributes of the script tag with trial and error, you may well be doomed to failure.
+
+When setting up event handlers for [our example](/jotter/astro/scripts/#common-example), the first naive approach could look like this:
+
+```astro
+<script is:inline data-astro-rerun>
+	document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((h) => {
+		h.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.target.scrollIntoView({ block: "start", inline: "nearest" });
+		});
+	});
+</script>
+```
+We put this script on a page right before the closing `</body>` tag. The script works fine with and without `<ViewTransitions />`:
+
+<Steps>
+1. In a first step, the script determines all headings. For each heading, it adds a click handler. This handler cancels further processing of the event by calling `preventDefault()` and then scrolls the heading to the start of the viewport.
+
+2. When you navigate to another page without that script, the headings do not react to clicks. Also expected. The page does not have the script.
+
+3. When you come back to the first page, the headings are active again. All works well.
+</Steps>
+
+#### Five Major Pitfalls
+It is possible to successfully use view transitions with scripts other than external module scripts. But when I can, I try to avoid this. Here are five reasons why.
+
+##### Pitfall 1: Scripts that are Not Re-Executable
+This is a slightly modified version of the script from the last section.
+```astro "const"
+<script is:inline data-astro-rerun>
+	const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+	headings.forEach((h) => {
+		h.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.target.scrollIntoView({ block: "start", inline: "nearest" });
+		});
+	});
+</script>
+```
+<Steps>
+1. Reload the page. Again, everything works well, as expected.
+2. Navigate to a page without the script: No script, no active headings.
+3. Return to the first page: 💥*Boom!*
+</Steps>
+
+Many scripts are not well prepared to be re-executed: Did I mention that we can not reset the global lexical scope during soft loads? As a consequence, scripts that use top-level `const` and `let` declarations can not be re-executed. This will immediately produce errors in the browser console and the script is interrupted:
+
+```txt del={1} ShowLineNumbers=false
+Uncaught SyntaxError: Identifier 'headings' has already been declared
+```
+
+###### Repairing the Script
+
+In this simple case we can just eliminate it by calling forEach on the result of querySelectorAll as in the first inline script. A more general solution is to use an _immediately invoked function expression (iife)_:
+
+```astro
+<script is:inline data-astro-rerun>
+  (()=>{
+		const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+		headings.forEach((h) => {
+			h.addEventListener('click', (e) => {
+				e.preventDefault();
+				e.target.scrollIntoView({ block: "start", inline: "nearest" });
+			});
+		});
+	})();
+</script>
+```
+##### Pitfall 2: Ignored Scripts
+If you want to have this **inline script on every page** you can add it to your common Layout component or provide it by an Astro component that you put on every page. In both cases, **the script will not run at all** on view transitions, **unless you set the `data-astro-rerun` attribute** on the `<script>` tag as shown in the code above. The reason is that [Astro ignores scripts that it already has seen on the previous page](/jotter/astro/scripts/#behavior-with-view-transitions). Setting `data-astro-rerun` is the way to opt out of this rule.
+
+If your page has a link to itself &mdash; or more likely, your navigation bar has a link to visit the current page &mdash; clicking that link will do a soft load of your current page. All scripts will be recognized as "known from the previous page".  This is probably not what you intended. Spo better disable those links or use `data-astro-rerun` attributes as appropriate.
+
+
+
+##### Pitfall 3: Running too Early
+
+If you place the above script anywhere in your HTML page other than directly before the closing `<body>` tag, it will probably not work. Inline scripts
+
+##### Pitfall 4: Adding Listeners Twice
+Do not use Astro's view transition lifecycle event listeners careless in inline scripts or non-module, external scripts. Those scripts might be executed several times and care has to be taken to not set listeners on the document object multiple times. This can severely degrade your users' experience with your site and those situations are hard to debug.
+
+##### Pitfall 5: No Astro Processing
+This is pretty obvious: If you add an attribute other than `src=` to your script tag, you opt out of Astro's script processing. You cannot use the TypeScript and you cannot import node modules.
+
+
+
+
+
+{/*
+#### Web Components / Custom Elements
+From Astro view transition's perspective, properly confined custom elements are the next best thing to static pages without JavaScript. So let's start the discussion here. For more information on custom elements / web components in Astro [see this section in the docs](https://docs.astro.build/en/guides/client-side-scripts/#web-components-with-custom-elements).
+
+
+
+<div class="container">
+<div class="box" style="width:90px">
+<VtbotEye name="left"/>
+</div><div class="box">
+<VtbotEye name="right"/>
+</div>
+</div>
+
+Currently, I am a learner at web components, but I see a lot potential for well behaved script state here. Stay tuned for further content on this.
+
+
+#### Properly Confined Web Components
+If all script status you have is properly confined within web components, the web components handle the relation between script state and DOM elements for you. To understand this we have to see what properly confined means in our context:
+
+- If the web component holds long-lived references to DOM elements, then only to its custom element or its descendants.
+Listeners are setup
+- No references to the web component or its descendants are stored outside the web component.
+
+```d2 width=600 sketch title="Properly confined web components"
+Web Component: {
+	DOM: {
+
+	}
+	Class: {
+
+	}
+}
+...@../../../../common
+```
+*/}
+
+
+
+## Script Element Basics
+
+Even though there is only a single HTML element for scripts, scripts come in many different flavors.
+
+### Astro's Script Processing
+Be aware that Astro processes the script tags. That might be a bit confusing if you are not yet used to it.
+
+|N<sup><u>o</u></sup>|In your .astro file|In the generated HTML|Remark|
+|---|---------------|--------------------------|------|
+|1|`<script>` Java- or TypeScript `</script>`|`<script type="module" src="..."/>`|Included in the `<head>`. Might contain several scripts translated, minified, bundled into the same file.|
+|2|`<script src="<local-file under /src/>"/>`[^1] | `<script type="module" src="..."/>` | Same as above but Java- or TypeScript content from file.|
+|3|`<script src="<remote-resource>"/>`[^1]|`<script type="module" src="..."/>`|Imported as a bundled external module script but only for JavaScript.[^2]|
+|4|`<script is:inline>...</script>`|`<script>...</script>`|Inline script with no further attributes.|
+|5|`<script is:inline what-ever>...</script>`[^1]|`<script what-ever>...</script>`|Use this form with `src=` if you want to load external scripts located in `public/` |
+|6|`<script anything-but-a-single-src-attribute>...</script>`|`<script anything-but-a-single-src-attribute>...</script>`|Implicitly interpreted as `is:inline`. Better use the explicit form above.|
+
+<style is:global>{`
+.sl-markdown-content table,
+.sl-markdown-content table code  {
+	font-size:10pt;
+}
+`}</style>
+
+[^1]: If a `src` attribute is given, there should be no inline content as it is ignored.
+[^2]: This may require an entry for the URL in you `astro.config` file under `vite.build.rollupOptions.external`.
+
+
+### Script Behavior on Initial Load
+
+The first distinction is between inline scripts and external scripts.
+* **Inline scripts** embed the code directly between the opening and the closing script tag.
+* **External scripts** have a `src` attribute that holds an URI that identifies the source of the script.
+
+If a script tag has both, embedded code and a `src` attribute, the later wins and the embedded code is silently ignored.
+
+
+> If you use a **plain script tag without any attributes** or with only a `src` attribute in an `.astro` file, [Astro processes it](/jotter/astro/scripts/#astros-script-processing) and turns it **into an external module script**. In your HTML file you see it as `<script type="module" src="..."/>`.
+
+
+When loading an **HTML file**, plain `<script>` elements without any attributes are processed as soon as they are parsed. Processing means loading and executing. Loading an inline script is done by continuing reading the HTML stream. Loading an *external* script might include a server round-trip if it is not already available in the browser cache. Script processing blocks further parsing and rendering of the HTML file. And of course when the script inspects the current DOM, the DOM is incomplete as the parsing has not finish yet.
+
+##### Async
+If you want the loading of an *external* script to happen in parallel to parsing and rendering of the HTML document, set the `async` attribute on the script.  The asynchronous loaded script executes as soon as it is loaded. That might be before the HTML document is completely parsed. In this case, the execution of the script again blocks further parsing and the script can not yet see the complete DOM. On the other hand, if loading takes a long time, the script might still load after parsing of the DOM has ended. Then the script execution might even start after the `DOMContentLoaded` event fired. An `async` attribute has no effect on an inline script. It is ignored.
+
+##### Defer
+If you want to make sure that an *external* script is executed after HTML parsing is complete but before the `DOMContentLoaded` event fires, add the `defer` attribute to the script. If you specify both `async` and `defer`, the `async` attribute is ignored as it implicitly has the value true anyway and cannot be set to false when deferring scripts. Setting `defer` on an inline script has no effect all. It is ignored.
+
+##### Type="module"
+A script where you set `type="module"` is automatically loaded asynchronously and its execution is deferred unless you also set the `async` attribute, in which case it is only loaded asynchronously but it is not deferred: It executes as soon as it is loaded, which can be before the DOM is parsed completely or after the `DOMContentLoaded` event fired.
+
+##### Type="..."
+The type attribute can take other values as well. Besides "module" you could use `type="text/javascript"`. But this is also default if you do not have a `type` attribute or use the empty string as type. So you never need to specify `type="text/javascript"`. You might also use any other mime type here, like `<script type="application/ld+json">` or `<script type="text/partytown">` but then the browser will ignore the script and not try to execute it.
+
+#### External module scripts
+External module scripts are special. These are scripts of the form `<script type="module" src="..."/>`. As all other scripts, they are processed as soon as they are parsed. But the browser's module loader keeps track of the resources it has loaded *since the last full page load*. If a module with the same `src` attribute value was already seen before, it would not be loaded and executed again.
+As a consequence, external module scripts will not be re-executed during soft loads.
+
+### Behavior with View Transitions
+
+On navigation to another page using Astro's `<ViewTransition />` component, loading and execution of scripts is handled differently. Do to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
+
+Astro might execute all scripts that it finds on the target page. But there are exemptions given by these two rules:
+1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. This is a consequence of technically staying on the same page when doing a soft load.
+2. **Astro excludes a script** from execution **if the same script was found on the previous page**. Two external scripts are considered to be the same if they have the same `src` attribute value. Two inline scripts are considered the same if they have the same embedded code, character for character.
+
+#### data-astro-rerun
+You can opt-out of the second rule by setting the `data-astro-rerun` attribute for the script. This automatically turns the script into an inline script. Therefore, you cannot use TypeScript here. But you can use imports if you add `type="module"`.
+
+:::tip
+You can use the Bag's [VtBotDebug](/library/VtBotDebug/) component to inspect the list of scripts that will or will not run on a view transition. Typically `VtBotDebug` is only active in DEV mode. Add the `production` attribute and use `<VtBotDebug production />` in combination with `astro build` and `astro preview` to see which scripts are executed when built for production.
+:::
+
+During soft loads, the `async` and `defer` attributes of script tags are ignored. Independent of those attributes, loading and execution of scripts will only start after the whole target page was parsed and the new DOM was swapped in. The scripts that are not exempt by the two rules above are loaded and executed in their textual order one after the other at the [start of the completion phase](/jotter/astro/flow-events/#processing-flow) after the `astro:after-swap` event and before the `astro:page-load` event.
 
 
 

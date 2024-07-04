@@ -1,0 +1,19 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import SwapSound from 'astro-vtbot/components/SwapSound.astro';
+import Mini from './Mini.astro';
+---
+
+<html>
+	<head>
+		<ViewTransitions />
+		<SwapSound src=""/>
+	</head>
+	<body>
+		<main transition:name="main">
+			<h1>Heading</h1>
+			<a href="/">Link</a>
+			<Mini />
+		</main>
+	</body>
+</html>

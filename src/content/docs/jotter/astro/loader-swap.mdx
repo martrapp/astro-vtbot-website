@@ -5,17 +5,22 @@ title: Loading and Swapping
 import { Steps } from '@astrojs/starlight/components';
 import BoT from "/src/components/BoT.astro"
 
-Astro's support for view transitions defines two functions that can be overridden by users.
-The first is the `loader()` function, which is executed during the preparation phase, and the second is the `swap()` function, which is executed during the swap phase.
+
+
+
+Astro's support for view transitions defines two functions that are called during [view transition processing](/jotter/astro/flow-events/#processing-flow) and can be overridden by the user.
+The first is the `loader()` function, which is executed during the preparation phase, and the second is the `swap()` function, which is executed during the swap DOM phase.
+
+The `loader()` function provides the new content for the next page and `swap()` function implements the swapping of the DOM as part of the [soft loading](/jotter/astro/flow-events/#soft-load).
 
 Both functions can be extended or replaced with custom code, see below.
 
-[Some functionalities](../flow-events/#step-by-step) like the triggering of events and starting of animations is not covered by `loader()` and `swap()` and can not be exchanged by redefining them. Other steps like updating history and scroll position can also not be replaced but their effect can be overridden, for example in a listener for  `astro:after-swap`.
+[Some functionalities](/jotter/astro/flow-events/#step-by-step) like the triggering of events and starting of animations is not covered by `loader()` and `swap()` and can not be exchanged by redefining them. Other steps like updating history and scroll position can also not be replaced but their effect can be overridden, for example in a listener for  `astro:after-swap`.
 
 
 ## Semantics
 
-Together, the `loader()` and the `swap()` function provide the main functionality of [Astro's view transition processing](../flow-events/#processing-flow). The view transition API provides an _update callback_ to switch the current browser document to its new state. While this callback is executing, rendering is stopped and the browser's view is frozen. Therefore it is important that updating the DOM happens really fast. But how can you load the next page over the network and be fast anyhow?
+Together, the `loader()` and the `swap()` function provide the main functionality of [Astro's view transition processing](/jotter/astro/flow-events/#processing-flow). The view transition API provides an _update callback_ to switch the current browser document to its new state. While this callback is executing, rendering is stopped and the browser's view is frozen. Therefore it is important that updating the DOM happens really fast. But how can you load the next page over the network and be fast anyhow?
 
 This is the main reason for the separation into a _preparation_ phase with the `loader()` function and a _swap_ phase with the `swap()` function. The `loader()` function does the heavy lifting. All the time consuming actions like fetching and parsing the target document will happen inside the `loader()` function. During the preparation phase, the user can still fully interact with the current page. Once the preparation is done, the `swap()` function can directly access the future DOM in memory and quickly swap in the future DOM for the current DOM.
 
@@ -129,16 +134,16 @@ These are implementation details, not part of the API and might change without p
 
 <Steps>
 1. Determine which of the scripts in `event.newDocument` should not be run between `astro:after-swap` and `astro:page-load`. These are the script that were already part of the previous page and were not marked with `data-astro-rerun`. Mark those scripts as already executed in `event.newDocument`.
-2. Swap in the attributes of the `<html>` attribute. Typically the current attributes are just replaced with the ones from the new DOM.
-3. Swap in the children of the `<head>` element. Instead of removing all existing elements and then add the new ones, it is helpful to keep those that are in both versions untouched to prevent FOUC. These are a) style sheet links with same href that are already present in both DOMs and b)
-elements with same `data-astro-transition-persist` name in both DOMS.
+2. Swap the attributes of the `<html>` element. Typically the current attributes are just replaced with the ones from the new DOM.
+3. Swap the children of the `<head>` element. Instead of removing all existing elements and then add the new ones, Astro keeps some elements untouched. These are a) style sheet links with same href that are present in both DOMs and b)
+elements with same `data-astro-transition-persist` name in both DOMs.
 4. Save the current input focus and text selection
 5. Replace `window.document.body` with the `event.newDocument.body`
-6. Replace elements in the now current body with the corresponding elements from the old body if they are marked with the same `data-astro-transition-persist` name in both DOMs. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.7. Restore the previous input focus and text selection.
+6. Replace elements in the now current body with the corresponding elements from the old body if they are marked with the same `data-astro-transition-persist` name in both DOMs. Elements with the same `data-astro-transition-persist` name can have different element types, attributes and children.
+7. Restore the previous input focus and text selection.
 </Steps>
 
-For attributes of the `<html>` element and child elements of the `<head>` element, the order might change during swap. If they are part of the current and the new DOM they are not moved/added/removed but just left unchanged. The `<html>` and `<head>` elements themselves as well as `window.document` are never removed or added.
+For attributes of the `<html>` element and child elements of the `<head>` element, the order might change during swap.  The `<html>` and `<head>` elements themselves as well as `window.document` are never removed or added.
 
-Event listeners on `window` and `window.document` are retained. References to elements of the old DOM that didn't make it to the current DOM are invalid after swap. Event listeners for elements that are no longer part of the current DOM after the swap are never called and newly added elements have no listeners unless they have been explicitly set, e.g. by using  the `astro:after-swap` or `astro:page-load` handlers.
+Event listeners on `window` and `window.document` are not affected by the swap. References to elements of the old DOM that didn't make it to the current DOM are invalid after swap. Event listeners for elements that are no longer part of the current DOM after the swap are never called and newly added elements have no listeners unless they have been explicitly set, e.g. by using  the `astro:after-swap` or `astro:page-load` handlers.
 
-The <BoT/> offers several helpers if you want to redefine some aspects of the `swap()` function. See [https://github.com/martrapp/astro-vtbot/blob/main/components/swap-utils.ts](https://github.com/martrapp/astro-vtbot/blob/main/components/swap-utils.ts)

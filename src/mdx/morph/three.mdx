@@ -1,15 +1,29 @@
-```typescript title="morph.ts"
-if (event.navigationType !== 'traverse') {
-  viewTransitionName = "" + event.sourceElement!.computedStyleMap().get('view-transition-name');
-  event.newDocument.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
-  history.replaceState({ ...history.state, viewTransitionName }, ''); // remember for history traversal 
-} else {
-  if (event.direction === 'back') { 
-    viewTransitionName = history.state.viewTransitionName;
-    document.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
-  } else {
-		event.newDocument.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
-    viewTransitionName = history.state.viewTransitionName; 
-  }
-}
+```astro title="Layout.astro"
+...
+<script>
+	import {supportsViewTransitions} from 'astro:transitions/client';
+
+	let viewTransitionName: string;
+	document.addEventListener('astro:before-preparation', (event) => {
+		if (supportsViewTransitions) {
+			const originalLoader = event.loader;
+			event.loader = async () => {
+				await originalLoader();
+				if (event.navigationType !== 'traverse') {
+					viewTransitionName = getComputedStyle(event.sourceElement!).viewTransitionName;
+					event.newDocument.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
+					history.replaceState({ ...history.state, viewTransitionName }, '');
+				} else {
+					if (event.direction === 'back') {
+						viewTransitionName = history.state.viewTransitionName;
+						document.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
+					} else {
+						event.newDocument.querySelector('h1')!.style.viewTransitionName = viewTransitionName;
+						viewTransitionName = history.state.viewTransitionName;
+					}
+				}
+			};
+		}
+	});
+</script>
 ```

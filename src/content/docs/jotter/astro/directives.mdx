@@ -7,11 +7,13 @@ You use these directives to define what should be animated during view transitio
 
 * `transition:name` introduces a transition group for this element. If there is not also a `transition:animate` directive for the same element, Astro automatically inserts `transition:animate="fade"` for you.
 * `transition:animate` adds styling to the transition group. If there is not also a `transition:name` directive on the same element, Astro will automatically add one with a generated name like `astro-hg6bdnwq-1`
-* `transition:persist="name"` marks the element so that it will be copied into the updated document during the [swap phase](/jotter/astro/loader-swap/#swap). It is possible to omit the name, i.e. to only use `transition:persist`. This is only OK if you also use `transition:name` for the same element. Astro will then also use the transition name for `persist`.<a id="caution"/>
+* `transition:persist="name"` marks the element so that it will be copied into the updated document during the [swap phase](/jotter/astro/loader-swap/#swap). Technically, it is possible to omit the name, i.e. to only use `transition:persist`, but I do not recommend it. This is only OK if you also use `transition:name` for the same element. Astro will then also use the transition name for `persist`.
 
-:::caution
-If you use `transition:persist` without an explicit name and also have no `transition:name` directive on the element, Astro will add a `transition:animate` if it is not present and reuse the generated name for `persist`. It is not a good idea to have generated names for `persist`, as this might make it rather random whether `persist` finds a suitable name on the next page. Also, the implicit definition of a new transition group in this process could be surprising  and unintentional.
-:::
+There are also _custom data attributes_ that influence the way view transitions work
+* `data-astro-transition-persist` and `data-astro-transition-persist-props`, see [`transition:persist`](#transitionpersist)
+* `data-astro-reload` on links and forms opt-out of view transitions and forces a full page load instead
+* `data-astro-rerun` on `<script>` tags forces the [script to be re-run](/jotter/astro/scripts/#data-astro-rerun) even if it was already present on the previous page.
+
 
 ## transition:name
 
@@ -34,7 +36,9 @@ Astro uses a mechanism similar to scoped styles to set the `view-transition-name
 
 The main reason for setting the CSS property with a data attribute is that this attribute can be used as a fallback for the CSS property on browsers without native view transition support. The next section shows how this works.
 
-Normally you should not set the  `view-transition-name` CSS property directly in Astro. This will not work with the fallback simulation of view transitions and you will have to take care of the name encoding yourself. There may be cases where this makes sense, e.g. if you are only interested in morph animations, which are not supported by the simulation anyway, and you use them in places where Astro's transition directives are not supported, e.g. in `*.mdx` files or framework components.
+Normally you should not set the  `view-transition-name` CSS property directly in Astro. This will not work with the fallback simulation of view transitions and you will have to take care of the name encoding yourself.
+
+But there are situations where setting the `view-transition-name` makes sense: if you are only interested in morph animations &mdash; which can [not be supported by the simulation](/jotter/astro/differences/#consequences-for-the-simulation) anyway &mdash; and you need them in places where Astro's transition directives are not supported, e.g. in `*.mdx` files or framework components.
 
 Setting the `view-transition-name` **works only for browsers with native support for view transitions**. Other browsers ignore the attribute and you cannot use it in CSS rules for styling. If used carelessly, it can [also lead to unexpected loss of styling](/jotter/snippets/css-tricks-pitfalls/#ignored-style-rules).
 
@@ -43,9 +47,17 @@ Setting the `view-transition-name` **works only for browsers with native support
 
 You can use `transition:animate` with [predefined animation functions](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) or [provide your own version](https://docs.astro.build/en/guides/view-transitions/#customizing-animations).
 
-Each `transition:animate` directive generates a stylesheet with animations for the HTML element to which it is added. Astro directly supports the definition of _exit animations_ for old images and _entry animations_ for new images. Since Astro's fallback simulation cannot support morph animations, no CSS is generated for them. As a result, browsers with native support for view transitions show the default morph animation and other browsers only show the exit and entry animations, but no morph animation.
+`Initial`, `fade`, `slide`, `none`: The predefined functions are `fade()` and `slide()`. You can also also use `transition:animate="none"` on the `<html>` root tag to disable the default animation for this element. The value `initial` can be used prohibit the generation of styling for a new fade animation and instead use the browser's default animation.
 
-To enable animations during view transitions even for browsers that do not support view transitions natively, Astro uses a special scheme of data attributes and CSS rules. This is the general structure that Astro generates if you use `transition:animate` (explicit or [implicit](javascript:vtbotNavigate("#top","Astro%20automatically%20inserts%20transition:animate,for%20you")))
+Ever asked yourself how Astro's `fade` differs from the browser`s default animation?
+Well,
+* it works for browsers without native view transition support,
+* it does define entry and exit animations but [no group / morph animation]() and
+* it is with 180ms about 30% faster than the browser's 250ms fade and has a steep, kind of `ease-in-out` timing-function instead of the default `ease`.
+
+Each `transition:animate` directive (with a value other than "none" or "initial") generates a stylesheet with animations for the HTML element to which it is added. Astro directly supports the definition of _exit animations_ for old images and _entry animations_ for new images. Since Astro's fallback simulation cannot support morph animations, no CSS is generated for them. As a result, browsers with native support for view transitions show the default morph animation and other browsers only show the exit and entry animations, but no morph animation.
+
+To enable animations during view transitions even for browsers that do not support view transitions natively, Astro uses a special scheme of custom data attributes and CSS rules. This is the general structure that Astro generates if you use `transition:animate` (explicit or [implicit](javascript:vtbotNavigate("#top","Astro%20automatically%20inserts%20transition:animate,for%20you")))
 
 ```css
 [data-astro-transition-scope="astro-fgupyhpc-2"] { view-transition-name: myName; }
@@ -73,6 +85,14 @@ In Astro's fallback simulation, the exit and entry animations do not run in para
 
 `data-astro-transition-fallback` is first set to `old`, directly before the `astro:before-swap` event, which is raised as soon as all animations triggered in this way have ended. Right after the `astro:after-swap` event `data-astro-transition-fallback` is then set to `new`. As soon as all animations triggered in this way have ended, the attribute is removed. The variant without a space in front of the `data-astro-transition-scope` selector is required to be able to select transitions on the `<html>` element itself.
 
+:::tip
+If you are only adding `transition:name` directives to enable [morph transitions](/jotter/api/#morph--group-animations), you may want to suppress the creation of CSS styles for the new transition groups. Declare the transition group with
+```html
+... transition:name="myName" transition:animate="initial" ...
+```
+and thanks to the "Initial" value, Astro will not create its own fade styling for these elements. Instead, you will get the browser's default fade and morph effect.
+:::
+
 ## transition:persist
 
 
@@ -80,15 +100,18 @@ In Astro's fallback simulation, the exit and entry animations do not run in para
 
 It is intended for situations where you have an element with a certain state on the page where the navigation starts and you want to transfer this element, including its state, to the next page.
 
-This might come in handy for example to preserve the scroll position of a lengthy navigation bar during transitions.
+This might come in handy for example to preserve the scroll position of a lengthy navigation bar during transitions or a playing audio/video element.
 
-:::caution
-This can not prevent `<iframe>` elements from reload or CSS animations from restart.
+:::note
+The `transition:persist` directive can not prevent `<iframe>` elements from reload or CSS animations from restart.
 See the <a href="/library/ReplacementSwap/" data-astro-reload>`<ReplacementSwap />` component</a> for a solution of this problem.
 :::
 
 You mark this element on the original page with `transition:persist="a-name"` and use the same attribute and name for an element in the target DOM. The element itself does not have to be the same, not even similar. The element in the original DOM is used to replace the equally named element in the target DOM. For [Astro Islands](https://docs.astro.build/en/concepts/islands/) you can set the additional `transition:persist-props` attribute if you want to keep the original properties. Otherwise the island's properties are reevaluated on copy.
 
-Both directives can be simply replaced by their corresponding data attributes: `transition:persist="x"` translates to `data-astro-transition-persist="x"` and `transition:persist-props` translates to `data-astro-transition-persist-props`. This is can be helpful in places where the transition directives are not recognized e.g. in `*.mdx` and `*.html` files or framework components.
+:::caution
+If<a id="caution"/> you use `transition:persist` without an explicit name and also have no `transition:name` directive on the element, Astro will auto generate a name for `persist`. This name depends on the structure of your components and might not automatically match as you expect. Better keep control and actively name your persisted elements.
+:::
 
-Note that unlike the `transition:persist` directive, the `data-astro-transition-persist` attribute does not [implicitly define](javascript:vtbotNavigate("#caution","the%20implicit%20definition,and%20unintentional")) a new transition group.
+Both directives can be simply replaced by their corresponding custom data attributes: `transition:persist="x"` translates to `data-astro-transition-persist="x"` and `transition:persist-props` translates to `data-astro-transition-persist-props`. This is can be helpful in places where the transition directives are not recognized e.g. in `*.mdx` and `*.html` files or framework components.
+

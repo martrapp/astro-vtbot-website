@@ -45,7 +45,7 @@ During view transitions, the `<VtBotDebug>` component logs four types of informa
 ⯈ 18:09:18.404 [vtbot-debug] Properties of the astro:before-swap event
    18:09:18.407 [vtbot-debug] before execution of swap()
    18:09:18.411 [vtbot-debug] after execution of swap()
-⯈ 18:09:18.412 [vtbot-debug] Transitions from /morph/two/ to /morph/three/
+⯈ 18:09:18.412 [vtbot-debug] Transitions from /mrph/two/ to /mrph/three/
    18:09:18.416 [vtbot-debug] Event handler for astro:after-swap
    18:09:18.423 [vtbot-debug] resolve viewTransition.updateCallbackDone
    18:09:18.425 [vtbot-debug] reject viewTransition.ready with DOMException: Transition was aborted because of invalid state
@@ -64,8 +64,8 @@ The detailed view of the properties shows one line for each property of the even
    18:09:18.025 type: astro:before-preparation
    18:09:18.025 cancelable: true
    18:09:18.025 defaultPrevented: false
-   18:09:18.025 from: http://localhost:4321/morph/two/
-   18:09:18.025 to: http://localhost:4321/morph/three/
+   18:09:18.025 from: http://localhost:4321/mrph/two/
+   18:09:18.025 to: http://localhost:4321/mrph/three/
    18:09:18.026 direction: forward
    18:09:18.026 navigationType: traverse
    18:09:18.026 info: undefined
@@ -86,7 +86,7 @@ The detailed view of the properties shows one line for each property of the even
 The `<VtBotDebug>` component logs the transition groups that participate in the transition. Beside the name of the transition group, the component shows the CSS selector that matches the elements on the current page and the target page of the navigation. `(nowhere)` is used as placeholder if the transition name does not appear on both pages.
 
 ```console title="console.log" {1, 5}
-⯆ 18:09:18.412 [vtbot-debug] Transitions from /morph/two/ to /morph/three/
+⯆ 18:09:18.412 [vtbot-debug] Transitions from /mrph/two/ to /mrph/three/
    18:09:18.413 [ transition] 1 "a21" from body > p > a --to-> (nowhere)
    18:09:18.413 [ transition] 2 "a22" from body > p:nth-of-type(2) > a --to-> (nowhere)
    18:09:18.413 [ transition] 3 "a23" from body > p:nth-of-type(2) > a:nth-of-type(2) --to-> (nowhere)
@@ -133,6 +133,45 @@ After the view transition got started, the API provides three promises that can 
    18:09:18.710 [vtbot-debug] resolve viewTransition.finished
 ```
 
+### DOM Manipulations
+
+Ever asked yourself how the DOM is changed during `swap()`? Now you can see the changes, adds and deletes that the `swap()` function does to the DOM.
+
+```console title="console.log"
+⯆  15:47:39.858 [vtbot-debug] DOM Mutations
+   15:47:39.859 At html: override lang="en" (currently: "en")
+   15:47:39.859 At html: override data-astro-transition="forward" (currently: "forward")
+   15:47:39.859 At html: override lang="null" (currently: "en")
+   15:47:39.859 At html: override data-astro-transition="null" (currently: "forward")
+   15:47:39.859 At html > head: removed <meta name="vtbot-debug" content="true">
+   15:47:39.859 At html > head: removed <script data-astro-exec="">
+   15:47:39.859 At html > head: removed <link rel="stylesheet" href="https://w3schools.com/lib/topnav/main.css">
+   15:47:39.859 At html > head: removed <meta name="astro-view-transitions-enabled" content="true">
+   15:47:39.859 At html > head: removed <meta name="astro-view-transitions-fallback" content="animate">
+   15:47:39.859 At html > head: removed <meta charset="UTF-8">
+   15:47:39.859 At html > head: removed <meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover">
+   15:47:39.859 At html > head: removed <link rel="icon" href="/favicon.png">
+   15:47:39.859 At html > head: removed <title>
+   15:47:39.859 At html > head: removed <style>
+   15:47:39.859 At html > head: removed <script type="module" src="/_astro/hoisted.B56IdQDC.js" data-astro-exec="">
+   15:47:39.859 At html > head: added <meta name="astro-view-transitions-enabled" content="true">
+   15:47:39.859 At html > head: added <meta name="astro-view-transitions-fallback" content="animate">
+   15:47:39.859 At html > head: added <meta charset="UTF-8">
+   15:47:39.859 At html > head: added <meta name="viewport" content="width=device-width, minimum-scale=1, viewport-fit=cover">
+   15:47:39.859 At html > head: added <link rel="icon" href="/favicon.png">
+   15:47:39.859 At html > head: added <title>
+   15:47:39.859 At html > head: added <style>
+   15:47:39.859 At html > head: added <script type="module" src="/_astro/hoisted.B56IdQDC.js" data-astro-exec="">
+   15:47:39.859 At html: removed <body>
+   15:47:39.859 At html: added <body>
+   15:47:39.859 At html > head > title: removed "Debug2"
+   15:47:39.859 At html > head > title: added "Debug1"
+   15:47:39.859 At html > head > title: removed "Debug1"
+   15:47:39.859 At html > head > title: added "Debug2"
+   15:47:39.859 At html > body: added <div aria-live="assertive" aria-atomic="true" class="astro-route-announcer">
+
+```
+
 ### Animations
 
 Sometimes it can be quite difficult to keep track of the individual animations of a view transitions. Each definition of a `transition:name` defines three different animations and there are also three implicit ones for the `root` element! Now, with the `<VtBotDebug>` component, there is a way to look at all these animations in order to better understand what is happening here simultaneously.
@@ -168,7 +207,7 @@ The [pseudo elements](#pseudo-elements) for the old an new image can have multip
 
 ## Usage
 
-[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node module with `npm install astro-vtbot`.
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
 
 The `<VtBotDebug>` component should be inserted as early as possible in the `<head>` of the page you want to investigate. As it only works for pages with view transitions, it is a good idea to place it just before the `<ViewTransitions />` component.
 

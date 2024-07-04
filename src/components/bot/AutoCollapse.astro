@@ -3,13 +3,13 @@
 ---
 
 <script>
-	import { TRANSITION_BEFORE_SWAP, isTransitionBeforeSwapEvent } from 'astro:transitions/client';
+	import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
 	import { SIDEBAR_CONTENT as STARLIGHT_SIDEBAR_CONTENT } from 'astro-vtbot/components/starlight/utils';
 
+	const initial = localStorage.getItem('vtbot-auto-collapse') === 'true';
+
 	document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
-		if (isTransitionBeforeSwapEvent(e)) {
-			e.viewTransition.finished.then(collapse);
-		}
+		e.viewTransition.finished.then(collapse).catch(() => {});
 	});
 
 	function collapse() {
@@ -34,10 +34,11 @@
 								200
 							)
 							.finished.then(() => (detail.open = false))
+							.catch(() => {})
 					);
 				}
 			});
 	}
 
-	collapse();
+	initial && collapse();
 </script>
