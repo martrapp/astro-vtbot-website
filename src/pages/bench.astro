@@ -10,6 +10,7 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="icon" type="image/svg+xml" href={url} />
 	<title></title>
+	<meta name="astro-view-transitions-enabled" content="true" />
 </head>
 <body>
 	<canvas id="canvas"></canvas>
@@ -19,7 +20,7 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 	<style is:inline>
 		:root {
 			--vtbot-panel-height: 226px;
-			--vtbot-panel-width: 188px;
+			--vtbot-panel-width: 200px;
 		}
 		#canvas {
 			position: absolute;

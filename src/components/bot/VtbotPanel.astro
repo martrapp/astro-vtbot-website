@@ -127,7 +127,7 @@ import play from './mono-play.url?raw';
 				></span
 			><span>new</span>
 		</div>
-		<ol title="Select names\n(During transition:\nClick colors to hides images)">
+		<ol title="Select names\n(During transition:\nClick colored patches to hides images)">
 			<li>Name 1</li>
 		</ol>
 		<button title="Reset selection">Reset</button>
@@ -137,32 +137,32 @@ import play from './mono-play.url?raw';
 		<ul>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-all" checked /><label for="vtbot-c-all"
-					>Show all names</label
+					><span style="color:var(--vtbot-background-accent)">█</span><span style="color:var(--vtbot-background-accent)">█</span> Show all names</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old" /><label for="vtbot-c-old"
-					>On old page</label
+					><span style="color:darkslateblue">█</span><span style="color:var(--vtbot-background-accent)">█</span> On old page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new" /><label for="vtbot-c-new"
-					>On new page</label
+					><span style="color:var(--vtbot-background-accent)">█</span><span style="color:darkolivegreen">█</span> On new page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old-only" /><label for="vtbot-c-old-only"
-					>Exit animations</label
+					><span style="color:darkslateblue">█</span><span style="color:transparent">█</span> Only on old page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new-only" /><label for="vtbot-c-new-only"
-					>Entry animations</label
+					><span style="color:transparent">█</span><span style="color:darkolivegreen">█</span> Only on new page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-both" /><label for="vtbot-c-both"
-					>Morph animations</label
+					><span style="color:darkslateblue">█</span><span style="color:darkolivegreen">█</span> On both pages</label
 				>
 			</li>
 		</ul>
@@ -467,7 +467,7 @@ import play from './mono-play.url?raw';
 		#vtbot-ui-panel {
 			flex-direction: column;
 			height: 100vh;
-			width: var(--vtbot-panel-width, 188px);
+			width: var(--vtbot-panel-width, 200px);
 		}
 		.horizontal {
 			display: none;
