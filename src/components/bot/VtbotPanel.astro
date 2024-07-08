@@ -137,32 +137,41 @@ import play from './mono-play.url?raw';
 		<ul>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-all" checked /><label for="vtbot-c-all"
-					><span style="color:var(--vtbot-background-accent)">█</span><span style="color:var(--vtbot-background-accent)">█</span> Show all names</label
+					><span style="color:var(--vtbot-background-accent)">█</span><span
+						style="color:var(--vtbot-background-accent)">█</span
+					> Show all names</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old" /><label for="vtbot-c-old"
-					><span style="color:darkslateblue">█</span><span style="color:var(--vtbot-background-accent)">█</span> On old page</label
+					><span style="color:darkslateblue">█</span><span
+						style="color:var(--vtbot-background-accent)">█</span
+					> On old page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new" /><label for="vtbot-c-new"
-					><span style="color:var(--vtbot-background-accent)">█</span><span style="color:darkolivegreen">█</span> On new page</label
+					><span style="color:var(--vtbot-background-accent)">█</span><span
+						style="color:darkolivegreen">█</span
+					> On new page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old-only" /><label for="vtbot-c-old-only"
-					><span style="color:darkslateblue">█</span><span style="color:transparent">█</span> Only on old page</label
+					><span style="color:darkslateblue">█</span><span style="color:transparent">█</span> Only on
+					old page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new-only" /><label for="vtbot-c-new-only"
-					><span style="color:transparent">█</span><span style="color:darkolivegreen">█</span> Only on new page</label
+					><span style="color:transparent">█</span><span style="color:darkolivegreen">█</span> Only on
+					new page</label
 				>
 			</li>
 			<li>
 				<input type="radio" name="vtbot-c-rg" id="vtbot-c-both" /><label for="vtbot-c-both"
-					><span style="color:darkslateblue">█</span><span style="color:darkolivegreen">█</span> On both pages</label
+					><span style="color:darkslateblue">█</span><span style="color:darkolivegreen">█</span> On both
+					pages</label
 				>
 			</li>
 		</ul>
@@ -178,12 +187,17 @@ import play from './mono-play.url?raw';
 
 	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info"></div>
 </div>
-<button id="vtbot-ui-light-dark" style="view-transition-name: vtbot-button-mode" title="Switch light/dark mode">◑</button>
-<button id="vtbot-ui-turn" title="Switch panel orientation\n(also cancels view transitions)" style="view-transition-name: vtbot-button-turn">⇲</button>
 <button
-	id="vtbot-ui-close"
-	title="Close"
-	style="view-transition-name: vtbot-button-close">🗙</button
+	id="vtbot-ui-light-dark"
+	style="view-transition-name: vtbot-button-mode"
+	title="Switch light/dark mode">◑</button
+>
+<button
+	id="vtbot-ui-turn"
+	title="Switch panel orientation\n(also cancels view transitions)"
+	style="view-transition-name: vtbot-button-turn">⇲</button
+>
+<button id="vtbot-ui-close" title="Close" style="view-transition-name: vtbot-button-close">🗙</button
 >
 <style is:inline>
 	#vtbot-ui :where(*, ::before, ::after) {
@@ -248,7 +262,7 @@ import play from './mono-play.url?raw';
 		color: white;
 		background-color: darkolivegreen;
 	}
-:root.vtbot-vt-active #vtbot-ui-panel ~ #vtbot-ui-turn {
+	:root.vtbot-vt-active #vtbot-ui-panel ~ #vtbot-ui-turn {
 		background-color: darkgoldenrod;
 	}
 	#vtbot-ui-panel ~ #vtbot-ui-close {
@@ -509,6 +523,7 @@ import play from './mono-play.url?raw';
 		position: fixed;
 		left: 0;
 		top: 0;
+		z-index: 1000;
 	}
 	:root.vtbot-vt-active h4 {
 		color: darkgoldenrod;
