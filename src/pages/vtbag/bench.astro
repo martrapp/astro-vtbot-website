@@ -1,0 +1,113 @@
+---
+import favicon from '@vtbag/inspection-chamber/assets/satchel.png?raw';
+import VtbagPanel from './VtbagPanel.astro';
+
+const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
+---
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" type="image/png" href={url} />
+	<title></title>
+	<meta name="astro-view-transitions-enabled" content="true" />
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<iframe id="vtbag-main-frame" src="/"></iframe>
+	<div id="divider" class="divider"></div>
+	<VtbagPanel />
+	<style is:inline>
+		:root {
+			--vtbag-panel-height: 226px;
+			--vtbag-panel-width: 200px;
+			--vtbag-frame-x: 0;
+			--vtbag-frame-y: 0;
+			--vtbag-panel-right: 0;
+			--vtbag-panel-bottom: 0;
+		}
+		#canvas {
+			position: absolute;
+			top: var(--vtbag-frame-y);
+			left: var(--vtbag-frame-x);
+			height: calc(100vh - var(--vtbag-panel-height));
+			width: 100vw;
+		}
+		:root.vtbag-ui-column #canvas {
+			width: calc(100vw - var(--vtbag-panel-width));
+			height: 100vh;
+		}
+
+		#vtbag-main-frame {
+			position: fixed;
+			top: var(--vtbag-frame-y);
+			left: var(--vtbag-frame-x);
+			width: 100vw;
+			height: calc(100vh - var(--vtbag-panel-height));
+			border: none;
+		}
+		#vtbag-ui-panel {
+			position: fixed;
+			right: 1px;
+			bottom: var(--vtbag-panel-bottom);
+			right: var(--vtbag-panel-right);
+		}
+		#vtbag-ui-panel,
+		#vtbag-ui-panel ~ button {
+			animation: slide-from-bottom 0.5s both;
+		}
+
+		#divider {
+			position: fixed;
+			height: 4px;
+			width: 100vw;
+			right: 0;
+			bottom: var(--vtbag-panel-height);
+		}
+
+		:root.vtbag-ui-column {
+			#divider:hover,
+			:root.dragging #divider {
+				cursor: ew-resize;
+				background-color: darkolivegreen;
+			}
+		}
+		:root:not(.vtbag-ui-column) {
+			#divider:hover,
+			:root.dragging #divider {
+				cursor: ns-resize;
+				background-color: darkolivegreen;
+			}
+		}
+
+		:root.vtbag-ui-column {
+			#vtbag-main-frame {
+				height: 100vh;
+				width: calc(100vw - var(--vtbag-panel-width));
+			}
+
+			#vtbag-ui-panel,
+			#vtbag-ui-panel ~ button {
+				animation: slide-from-right 0.5s both;
+			}
+			#divider {
+				width: 4px;
+				height: 100vh;
+				right: var(--vtbag-panel-width);
+				bottom: 0;
+			}
+		}
+
+		@keyframes slide-from-bottom {
+			from {
+				transform: translateY(var(--vtbag-panel-height));
+			}
+		}
+
+		@keyframes slide-from-right {
+			from {
+				transform: translateX(var(--vtbag-panel-width));
+			}
+		}
+	</style>
+</body>

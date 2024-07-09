@@ -7,15 +7,12 @@ import off from './mono-off.url?raw';
 import play from './mono-play.url?raw';
 ---
 
-<button id="vtbot-ui-control-play"><img style="transform: scale(1.5)" src={play} /></button>
-<div id="vtbot-ui-panel">
-	<div id="vtbot-ui-messages" style="view-transition-name: vtbot-div-messages">
+<button id="vtbag-ui-control-play"><img style="transform: scale(1.5)" src={play} /></button>
+<div id="vtbag-ui-panel">
+	<div id="vtbag-ui-messages" style="view-transition-name: vtbag-div-messages">
 		<h4>You are &hellip;</h4>
 		<p>
-			&hellip; in the <b>Engine Room</b><img
-				style="width:4em; float:right"
-				src="/node_modules/astro-vtbot/assets/bag-of-tricks.svg"
-			/> deep down at the bottom of <b>The Bag!</b>
+			&hellip; in the <b>Inspection Chamber</b> deep down at the bottom of <b>The Bag!</b>
 		</p>
 		<p>
 			<b>Select a mode</b> from <code>Bypass</code> (= no interception), <code>Slow Motion</code>, <code
@@ -23,16 +20,16 @@ import play from './mono-play.url?raw';
 			> or <code>Side-by-side Comparison</code>.
 		</p>
 		<p>
-			<b>Examine</b> the defined transitions, then <b>navigate</b> by clicking a link on your page.
+			<b>Examine</b> the defined transitions by clicking on there names or selecting the highlight toggle, then <b>navigate</b> by clicking a link on your page.
 		</p>
 		<p>
 			Selecting an element with a view transition name copies its selector to the clipboard, ready
-			for pasting into the DevTools console.
+			for pasting into the console of the browser's Developer tools.
 		</p>
 		<p>
 			Active view transitions show an <span style="color: darkgoldenrod"
 				>indicator (<img style="transform:translateY(0.4em)" src={play} />)</span
-			>. Clicking it ends the transition.
+			> in the top left corner of the viewport. Clicking it ends the transition.
 		</p>
 		<p>
 			View transitions are also canceled when the <a
@@ -42,11 +39,11 @@ import play from './mono-play.url?raw';
 		<p style="margin-bottom:0">You can resize this panel by dragging the border.</p>
 	</div>
 
-	<div id="vtbot-ui-modi" style="view-transition-name: vtbot-div-modi">
+	<div id="vtbag-ui-modi" style="view-transition-name: vtbag-div-modi">
 		<h4>Select Mode:</h4>
 		<ul>
 			<li>
-				<input type="radio" name="vtbot-m-rg" id="vtbot-m-bypass" /><label for="vtbot-m-bypass"
+				<input type="radio" name="vtbag-m-rg" id="vtbag-m-bypass" /><label for="vtbag-m-bypass"
 					><span style="display: inline-block; width:7em; padding-left: 0.7em"> Bypass</span><img
 						style="transform: scale(1.5) translateY(1px)"
 						src={off}
@@ -54,15 +51,15 @@ import play from './mono-play.url?raw';
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-m-rg" id="vtbot-m-slow-motion" /><label
-					for="vtbot-m-slow-motion"
+				<input type="radio" name="vtbag-m-rg" id="vtbag-m-slow-motion" /><label
+					for="vtbag-m-slow-motion"
 					><span style="display: inline-block; width:7em; padding-left: 0.7em">
 						Slow Motion</span
 					><img style="transform: scale(1.5)" src={snail} /></label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-m-rg" id="vtbot-m-control" /><label for="vtbot-m-control"
+				<input type="radio" name="vtbag-m-rg" id="vtbag-m-control" /><label for="vtbag-m-control"
 					><span style="display: inline-block; width:6.7em; padding-left: 0.7em">
 						Full Control</span
 					>
@@ -74,8 +71,8 @@ import play from './mono-play.url?raw';
 				>
 			</li>
 			<li>
-				<input disabled type="radio" name="vtbot-m-rg" id="vtbot-m-compare" /><label
-					for="vtbot-m-compare"
+				<input disabled type="radio" name="vtbag-m-rg" id="vtbag-m-compare" /><label
+					for="vtbag-m-compare"
 					><span
 						title="Coming soon!"
 						style="color:#888; display: inline-block; width:7em; padding-left: 0.7em"
@@ -86,44 +83,44 @@ import play from './mono-play.url?raw';
 			</li>
 		</ul>
 	</div>
-	<div id="vtbot-ui-slow-motion" style="view-transition-name: vtbot-div-slo-mo">
-		<h4>Slow Motion:<span id="vtbot-ui-slo-mo-progress"></span></h4>
-		<label for="vtbot-ui-slo-mo">Time stretch Factor: <span id="vtbot-ui-tsf">10.0</span></label><br
+	<div id="vtbag-ui-slow-motion" style="view-transition-name: vtbag-div-slo-mo">
+		<h4>Slow Motion:<span id="vtbag-ui-slo-mo-progress"></span></h4>
+		<label for="vtbag-ui-slo-mo">Time stretch Factor: <span id="vtbag-ui-tsf">10.0</span></label><br
 		/>
 		<input
-			id="vtbot-ui-slo-mo"
-			data-vtbot-slow-motion="1.0"
+			id="vtbag-ui-slo-mo"
+			data-vtbag-slow-motion="1.0"
 			type="range"
 			min="264"
 			max="852"
 			value="692"
 		/>
-		<div style="view-transition-name: vtbot-checkbox-styled">
-			<input id="vtbot-ui-styled" type="checkbox" />
-			<label for="vtbot-ui-styled">Highlight groups</label>
+		<div style="view-transition-name: vtbag-checkbox-styled">
+			<input id="vtbag-ui-styled" type="checkbox" />
+			<label for="vtbag-ui-styled">Highlight groups</label>
 		</div>
 	</div>
-	<div id="vtbot-ui-control" style="view-transition-name: vtbot-div-control">
+	<div id="vtbag-ui-control" style="view-transition-name: vtbag-div-control">
 		<h4>Full Control:</h4>
-		<p id="vtbot-ui-control-hint">Start a transition to activate</p>
-		<p id="vtbot-ui-control-hint2">Select animations, then &hellip;</p>
-		<label for="vtbot-ui-controller2">Unselected: </label><span id="vtbot-ui-progress2">0</span> ms<br
+		<p id="vtbag-ui-control-hint">Start a transition to activate</p>
+		<p id="vtbag-ui-control-hint2">Select animations, then &hellip;</p>
+		<label for="vtbag-ui-controller2">Unselected: </label><span id="vtbag-ui-progress2">0</span> ms<br
 		/>
-		<input type="range" id="vtbot-ui-controller2" min="0" max="100" value="0" />
+		<input type="range" id="vtbag-ui-controller2" min="0" max="100" value="0" />
 		<div style="display:flex; justify-content: space-between; transform: translateY(-10px)">
-			<span>0</span><span id="vtbot-ui-controller-max">100%</span>
+			<span>0</span><span id="vtbag-ui-controller-max">100%</span>
 		</div>
-		<label for="vtbot-ui-controller">Selected:</label>
-		<span id="vtbot-ui-progress">0</span> ms<br />
-		<input type="range" id="vtbot-ui-controller" min="0" max="100" value="0" />
-		<button id="vtbot-ui-control-exit">Exit</button>
+		<label for="vtbag-ui-controller">Selected:</label>
+		<span id="vtbag-ui-progress">0</span> ms<br />
+		<input type="range" id="vtbag-ui-controller" min="0" max="100" value="0" />
+		<button id="vtbag-ui-control-exit">Exit</button>
 	</div>
-	<div id="vtbot-ui-names" style="view-transition-name: vtbot-div-names">
+	<div id="vtbag-ui-names" style="view-transition-name: vtbag-div-names">
 		<h4>Elements w/ View Transition Names</h4>
 		<div style="display:none; justify-content: space-between">
 			<span>old</span><span
-				><input id="vtbot-ui-visible-only" type="checkbox" checked /><label
-					for="vtbot-ui-visible-only">in viewport</label
+				><input id="vtbag-ui-visible-only" type="checkbox" checked /><label
+					for="vtbag-ui-visible-only">in viewport</label
 				></span
 			><span>new</span>
 		</div>
@@ -132,44 +129,44 @@ import play from './mono-play.url?raw';
 		</ol>
 		<button title="Reset selection">Reset</button>
 	</div>
-	<div id="vtbot-ui-filter" style="view-transition-name: vtbot-div-filter">
+	<div id="vtbag-ui-filter" style="view-transition-name: vtbag-div-filter">
 		<h4>Filter Names:</h4>
 		<ul>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-all" checked /><label for="vtbot-c-all"
-					><span style="color:var(--vtbot-background-accent)">█</span><span
-						style="color:var(--vtbot-background-accent)">█</span
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-all" checked /><label for="vtbag-c-all"
+					><span style="color:var(--vtbag-background-accent)">█</span><span
+						style="color:var(--vtbag-background-accent)">█</span
 					> Show all names</label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old" /><label for="vtbot-c-old"
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-old" /><label for="vtbag-c-old"
 					><span style="color:darkslateblue">█</span><span
-						style="color:var(--vtbot-background-accent)">█</span
+						style="color:var(--vtbag-background-accent)">█</span
 					> On old page</label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new" /><label for="vtbot-c-new"
-					><span style="color:var(--vtbot-background-accent)">█</span><span
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-new" /><label for="vtbag-c-new"
+					><span style="color:var(--vtbag-background-accent)">█</span><span
 						style="color:darkolivegreen">█</span
 					> On new page</label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-old-only" /><label for="vtbot-c-old-only"
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-old-only" /><label for="vtbag-c-old-only"
 					><span style="color:darkslateblue">█</span><span style="color:transparent">█</span> Only on
 					old page</label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-new-only" /><label for="vtbot-c-new-only"
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-new-only" /><label for="vtbag-c-new-only"
 					><span style="color:transparent">█</span><span style="color:darkolivegreen">█</span> Only on
 					new page</label
 				>
 			</li>
 			<li>
-				<input type="radio" name="vtbot-c-rg" id="vtbot-c-both" /><label for="vtbot-c-both"
+				<input type="radio" name="vtbag-c-rg" id="vtbag-c-both" /><label for="vtbag-c-both"
 					><span style="color:darkslateblue">█</span><span style="color:darkolivegreen">█</span> On both
 					pages</label
 				>
@@ -185,30 +182,30 @@ import play from './mono-play.url?raw';
 		<button title="Reset filters">Reset</button>
 	</div>
 
-	<div id="vtbot-ui-info" style="view-transition-name: vtbot-div-info"></div>
+	<div id="vtbag-ui-info" style="view-transition-name: vtbag-div-info"></div>
 </div>
 <button
-	id="vtbot-ui-light-dark"
-	style="view-transition-name: vtbot-button-mode"
+	id="vtbag-ui-light-dark"
+	style="view-transition-name: vtbag-button-mode"
 	title="Switch light/dark mode">◑</button
 >
 <button
-	id="vtbot-ui-turn"
+	id="vtbag-ui-turn"
 	title="Switch panel orientation\n(also cancels view transitions)"
-	style="view-transition-name: vtbot-button-turn">⇲</button
+	style="view-transition-name: vtbag-button-turn">⇲</button
 >
-<button id="vtbot-ui-close" title="Close" style="view-transition-name: vtbot-button-close">🗙</button
+<button id="vtbag-ui-close" title="Close" style="view-transition-name: vtbag-button-close">🗙</button
 >
 <style is:inline>
-	#vtbot-ui :where(*, ::before, ::after) {
+	#vtbag-ui :where(*, ::before, ::after) {
 		box-sizing: border-box;
 	}
-	#vtbot-ui * {
+	#vtbag-ui * {
 		margin: 0;
 		padding: 0;
 	}
 
-	#vtbot-ui
+	#vtbag-ui
 		:where(
 			article,
 			aside,
@@ -225,15 +222,15 @@ import play from './mono-play.url?raw';
 		) {
 		display: block;
 	}
-	#vtbot-ui :where(ol, ul) {
+	#vtbag-ui :where(ol, ul) {
 		list-style: none;
 	}
 
-	#vtbot-ui img {
+	#vtbag-ui img {
 		border-style: none;
 	}
 
-	#vtbot-ui :where(button, input, optgroup, select, textarea) {
+	#vtbag-ui :where(button, input, optgroup, select, textarea) {
 		font-family: inherit;
 		font-size: 100%;
 		line-height: 1.15;
@@ -251,10 +248,10 @@ import play from './mono-play.url?raw';
 		padding-left: 6px;
 		padding-right: 6px;
 	}
-	#vtbot-ui-panel {
-		--vtbot-name-border-width: 20px;
+	#vtbag-ui-panel {
+		--vtbag-name-border-width: 20px;
 	}
-	#vtbot-ui-panel ~ button {
+	#vtbag-ui-panel ~ button {
 		border-radius: 6px;
 		border: 0;
 		margin: 0;
@@ -262,16 +259,16 @@ import play from './mono-play.url?raw';
 		color: white;
 		background-color: darkolivegreen;
 	}
-	:root.vtbot-vt-active #vtbot-ui-panel ~ #vtbot-ui-turn {
+	:root.vtbag-vt-active #vtbag-ui-panel ~ #vtbag-ui-turn {
 		background-color: darkgoldenrod;
 	}
-	#vtbot-ui-panel ~ #vtbot-ui-close {
+	#vtbag-ui-panel ~ #vtbag-ui-close {
 		padding-bottom: 4pt;
 		cursor: pointer;
 		right: 11px;
 		background-color: darkgoldenrod;
 	}
-	#vtbot-ui-turn {
+	#vtbag-ui-turn {
 		padding-top: 4pt;
 		padding-bottom: 2pt;
 		cursor: pointer;
@@ -279,7 +276,7 @@ import play from './mono-play.url?raw';
 		color: white;
 	}
 
-	#vtbot-ui-light-dark {
+	#vtbag-ui-light-dark {
 		padding-top: 4pt;
 		padding-bottom: 2pt;
 		cursor: pointer;
@@ -287,37 +284,37 @@ import play from './mono-play.url?raw';
 		color: white;
 	}
 
-	#vtbot-ui-panel > div {
+	#vtbag-ui-panel > div {
 		padding: 8px;
 		margin: 4px;
 		border: 1px solid #888;
 		min-width: 150px;
 	}
-	#vtbot-ui-messages {
+	#vtbag-ui-messages {
 		min-height: 120px;
 		font-family: monospace;
 		hyphens: auto;
 		flex-grow: 1;
 	}
-	#vtbot-ui-messages {
+	#vtbag-ui-messages {
 		overflow-y: auto;
 	}
 
-	:root:not(.vtbot-ui-column) #vtbot-ui-panel > div {
+	:root:not(.vtbag-ui-column) #vtbag-ui-panel > div {
 		min-height: 160px;
 	}
-	#vtbot-ui-panel div.hidden {
+	#vtbag-ui-panel div.hidden {
 		display: none;
 	}
 
-	#vtbot-ui-names,
-	#vtbot-ui-filter,
-	#vtbot-ui-control {
+	#vtbag-ui-names,
+	#vtbag-ui-filter,
+	#vtbag-ui-control {
 		position: relative;
 	}
-	#vtbot-ui-control button,
-	#vtbot-ui-names button,
-	#vtbot-ui-filter button {
+	#vtbag-ui-control button,
+	#vtbag-ui-names button,
+	#vtbag-ui-filter button {
 		cursor: pointer;
 		padding-bottom: 3pt;
 		border: 1px solid #888;
@@ -327,39 +324,39 @@ import play from './mono-play.url?raw';
 		right: 0;
 		border-bottom-left-radius: 6px;
 	}
-	#vtbot-ui-control-hint {
+	#vtbag-ui-control-hint {
 		color: goldenrod;
 	}
-	#vtbot-ui-control-hint2,
-	:root.vtbot-vt-active #vtbot-ui-control-hint {
+	#vtbag-ui-control-hint2,
+	:root.vtbag-vt-active #vtbag-ui-control-hint {
 		display: none;
 	}
-	:root.vtbot-vt-active #vtbot-ui-control-hint2 {
+	:root.vtbag-vt-active #vtbag-ui-control-hint2 {
 		display: block;
 	}
-	#vtbot-ui-controller,
-	#vtbot-ui-controller2 {
+	#vtbag-ui-controller,
+	#vtbag-ui-controller2 {
 		accent-color: #888888;
 		cursor: not-allowed;
 		pointer-events: none;
 	}
-	:root.vtbot-vt-active #vtbot-ui-controller,
-	:root.vtbot-vt-active #vtbot-ui-controller2 {
+	:root.vtbag-vt-active #vtbag-ui-controller,
+	:root.vtbag-vt-active #vtbag-ui-controller2 {
 		cursor: unset;
 		pointer-events: unset;
 		accent-color: unset;
 	}
 
-	#vtbot-ui-messages ol {
+	#vtbag-ui-messages ol {
 		padding-left: 16pt;
 	}
 
-	#vtbot-ui-names {
+	#vtbag-ui-names {
 		display: flex;
 		flex-direction: column;
 	}
 
-	#vtbot-ui-names ol {
+	#vtbag-ui-names ol {
 		border: 1pt dashed grey;
 		padding-right: 0px;
 		padding-left: 0px;
@@ -369,21 +366,21 @@ import play from './mono-play.url?raw';
 		flex-grow: 1;
 		list-style-type: none;
 	}
-	#vtbot-ui-names ol li {
+	#vtbag-ui-names ol li {
 		cursor: pointer;
 		padding: 2pt 8pt;
-		border-left: var(--vtbot-name-border-width) solid transparent;
-		border-right: var(--vtbot-name-border-width) solid transparent;
+		border-left: var(--vtbag-name-border-width) solid transparent;
+		border-right: var(--vtbag-name-border-width) solid transparent;
 	}
-	#vtbot-ui-names ol li.old {
-		border-left: var(--vtbot-name-border-width) solid darkslateblue;
+	#vtbag-ui-names ol li.old {
+		border-left: var(--vtbag-name-border-width) solid darkslateblue;
 	}
-	#vtbot-ui-names li {
+	#vtbag-ui-names li {
 		position: relative;
 		margin-bottom: 1px;
 	}
 
-	#vtbot-ui-names li.old-hidden::before {
+	#vtbag-ui-names li.old-hidden::before {
 		top: 50%;
 		transform: scale(0.9) translateY(-50%);
 		left: -18px;
@@ -391,77 +388,77 @@ import play from './mono-play.url?raw';
 		content: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImRhcmtnb2xkZW5yb2QiIGQ9Ik0yIDUuMjdMMy4yOCA0TDIwIDIwLjcyTDE4LjczIDIybC0zLjA4LTMuMDhjLTEuMTUuMzgtMi4zNy41OC0zLjY1LjU4Yy01IDAtOS4yNy0zLjExLTExLTcuNWMuNjktMS43NiAxLjc5LTMuMzEgMy4xOS00LjU0ek0xMiA5YTMgMyAwIDAgMSAzIDNhMyAzIDAgMCAxLS4xNyAxTDExIDkuMTdBMyAzIDAgMCAxIDEyIDltMC00LjVjNSAwIDkuMjcgMy4xMSAxMSA3LjVhMTEuOCAxMS44IDAgMCAxLTQgNS4xOWwtMS40Mi0xLjQzQTkuODYgOS44NiAwIDAgMCAyMC44MiAxMkE5LjgyIDkuODIgMCAwIDAgMTIgNi41Yy0xLjA5IDAtMi4xNi4xOC0zLjE2LjVMNy4zIDUuNDdjMS40NC0uNjIgMy4wMy0uOTcgNC43LS45N00zLjE4IDEyQTkuODIgOS44MiAwIDAgMCAxMiAxNy41Yy42OSAwIDEuMzctLjA3IDItLjIxTDExLjcyIDE1QTMuMDY0IDMuMDY0IDAgMCAxIDkgMTIuMjhMNS42IDguODdjLS45OS44NS0xLjgyIDEuOTEtMi40MiAzLjEzIi8+PC9zdmc+');
 		position: absolute;
 	}
-	#vtbot-ui-names li.new-hidden::after {
+	#vtbag-ui-names li.new-hidden::after {
 		top: 50%;
 		transform: scale(0.9) translateY(-50%);
 		right: -18px;
 		content: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImRhcmtnb2xkZW5yb2QiIGQ9Ik0yIDUuMjdMMy4yOCA0TDIwIDIwLjcyTDE4LjczIDIybC0zLjA4LTMuMDhjLTEuMTUuMzgtMi4zNy41OC0zLjY1LjU4Yy01IDAtOS4yNy0zLjExLTExLTcuNWMuNjktMS43NiAxLjc5LTMuMzEgMy4xOS00LjU0ek0xMiA5YTMgMyAwIDAgMSAzIDNhMyAzIDAgMCAxLS4xNyAxTDExIDkuMTdBMyAzIDAgMCAxIDEyIDltMC00LjVjNSAwIDkuMjcgMy4xMSAxMSA3LjVhMTEuOCAxMS44IDAgMCAxLTQgNS4xOWwtMS40Mi0xLjQzQTkuODYgOS44NiAwIDAgMCAyMC44MiAxMkE5LjgyIDkuODIgMCAwIDAgMTIgNi41Yy0xLjA5IDAtMi4xNi4xOC0zLjE2LjVMNy4zIDUuNDdjMS40NC0uNjIgMy4wMy0uOTcgNC43LS45N00zLjE4IDEyQTkuODIgOS44MiAwIDAgMCAxMiAxNy41Yy42OSAwIDEuMzctLjA3IDItLjIxTDExLjcyIDE1QTMuMDY0IDMuMDY0IDAgMCAxIDkgMTIuMjhMNS42IDguODdjLS45OS44NS0xLjgyIDEuOTEtMi40MiAzLjEzIi8+PC9zdmc+');
 		position: absolute;
 	}
-	#vtbot-ui-names ol li.old-invisible {
-		border-left: var(--vtbot-name-border-width) solid darkgoldenrod;
+	#vtbag-ui-names ol li.old-invisible {
+		border-left: var(--vtbag-name-border-width) solid darkgoldenrod;
 	}
-	#vtbot-ui-names ol li.new {
-		border-right: var(--vtbot-name-border-width) solid darkolivegreen;
+	#vtbag-ui-names ol li.new {
+		border-right: var(--vtbag-name-border-width) solid darkolivegreen;
 	}
-	#vtbot-ui-names ol li.new-invisible {
-		border-right: var(--vtbot-name-border-width) solid darkgoldenrod;
+	#vtbag-ui-names ol li.new-invisible {
+		border-right: var(--vtbag-name-border-width) solid darkgoldenrod;
 	}
 
-	#vtbot-ui-names ol li.selected {
-		background-color: var(--vtbot-background-accent);
+	#vtbag-ui-names ol li.selected {
+		background-color: var(--vtbag-background-accent);
 	}
-	:root.vtbot-vt-active #vtbot-ui-names li.invisible {
+	:root.vtbag-vt-active #vtbag-ui-names li.invisible {
 		color: #888;
 	}
 
-	:root.vtbot-vt-active #vtbot-ui-names:has(input:checked) li.invisible {
+	:root.vtbag-vt-active #vtbag-ui-names:has(input:checked) li.invisible {
 		border-top: 1pt dotted grey;
 		font-size: 0;
 		padding: 0;
 	}
-	#vtbot-ui-filter ul {
+	#vtbag-ui-filter ul {
 		list-style-type: none;
 		margin: 8px 0 8px 0;
 		padding-left: 0;
 	}
-	#vtbot-ui-filter ul label {
+	#vtbag-ui-filter ul label {
 		margin-left: 8px;
 		margin-right: 8px;
 	}
-	#vtbot-ui-filter > label {
+	#vtbag-ui-filter > label {
 		margin-left: 5px;
 	}
-	#vtbot-ui-filter input[type='text'] {
+	#vtbag-ui-filter input[type='text'] {
 		margin-top: 5px;
 		width: 10em;
 	}
-	#vtbot-ui-filter input[type='text']:not(:placeholder-shown) {
+	#vtbag-ui-filter input[type='text']:not(:placeholder-shown) {
 		border: 1pt solid darkgoldenrod;
 	}
 
-	#vtbot-ui-panel > div > *:first-child {
+	#vtbag-ui-panel > div > *:first-child {
 		margin-top: 0;
 	}
 
-	#vtbot-ui-modi {
+	#vtbag-ui-modi {
 		display: flex;
 		flex-direction: column;
 	}
-	#vtbot-ui-modi ul {
+	#vtbag-ui-modi ul {
 		padding-right: 8px;
 		padding-left: 0px;
 		margin: 8px 0 8px 0;
 		list-style-type: none;
 	}
-	#vtbot-ui-modi li {
+	#vtbag-ui-modi li {
 		margin-bottom: 8px;
 	}
-	:root:not(.vtbot-ui-column) #vtbot-ui-panel ~ button {
-		/*	bottom: calc(var(--vtbot-panel-height, 226px) - 14px);*/
+	:root:not(.vtbag-ui-column) #vtbag-ui-panel ~ button {
+		/*	bottom: calc(var(--vtbag-panel-height, 226px) - 14px);*/
 		bottom: 6px;
 	}
-	#vtbot-ui-panel {
+	#vtbag-ui-panel {
 		background-color: #4861;
 		accent-color: darkolivegreen;
 		scrollbar-gutter: stable;
@@ -470,36 +467,36 @@ import play from './mono-play.url?raw';
 		font-family: sans-serif;
 		font-size: 12px;
 		width: 100vw;
-		height: var(--vtbot-panel-height, 226px);
+		height: var(--vtbag-panel-height, 226px);
 		margin: 0px;
 		min-height: fit-content;
 		border: 0px solid red;
 		overflow: auto;
 		box-sizing: border-box;
 	}
-	:root.vtbot-ui-column {
-		#vtbot-ui-panel {
+	:root.vtbag-ui-column {
+		#vtbag-ui-panel {
 			flex-direction: column;
 			height: 100vh;
-			width: var(--vtbot-panel-width, 200px);
+			width: var(--vtbag-panel-width, 200px);
 		}
 		.horizontal {
 			display: none;
 		}
 	}
-	:root:not(.vtbot-ui-column) {
+	:root:not(.vtbag-ui-column) {
 		.vertical {
 			display: none;
 		}
 	}
 
-	#vtbot-ui-info:empty {
+	#vtbag-ui-info:empty {
 		display: none;
 	}
-	:root:not([data-vtbot-modus='slow-motion']) #vtbot-ui-slow-motion {
+	:root:not([data-vtbag-modus='slow-motion']) #vtbag-ui-slow-motion {
 		display: none;
 	}
-	:root:not([data-vtbot-modus='control']) #vtbot-ui-control {
+	:root:not([data-vtbag-modus='control']) #vtbag-ui-control {
 		display: none;
 	}
 
@@ -511,25 +508,25 @@ import play from './mono-play.url?raw';
 	h4 {
 		margin-bottom: 8pt;
 	}
-	#vtbot-ui-control-play {
+	#vtbag-ui-control-play {
 		display: none;
 	}
-	:root.vtbot-vt-active #vtbot-ui-control-exit {
+	:root.vtbag-vt-active #vtbag-ui-control-exit {
 		background-color: darkgoldenrod;
 		color: white;
 	}
-	:root.vtbot-vt-active #vtbot-ui-control-play {
+	:root.vtbag-vt-active #vtbag-ui-control-play {
 		display: block;
 		position: fixed;
 		left: 0;
 		top: 0;
 		z-index: 1000;
 	}
-	:root.vtbot-vt-active h4 {
+	:root.vtbag-vt-active h4 {
 		color: darkgoldenrod;
 	}
 
-	.vtbot-highlight:hover {
+	.vtbag-highlight:hover {
 		background-color: #859b5f66;
 	}
 </style>
