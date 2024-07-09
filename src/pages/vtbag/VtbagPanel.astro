@@ -262,10 +262,12 @@ import play from './mono-play.url?raw';
 	:root.vtbag-vt-active #vtbag-ui-panel ~ #vtbag-ui-turn {
 		background-color: darkgoldenrod;
 	}
-	#vtbag-ui-panel ~ #vtbag-ui-close {
+	#vtbag-ui-close {
 		padding-bottom: 4pt;
 		cursor: pointer;
 		right: 11px;
+	}
+	#vtbag-ui-panel ~ #vtbag-ui-close {
 		background-color: darkgoldenrod;
 	}
 	#vtbag-ui-turn {
@@ -282,6 +284,18 @@ import play from './mono-play.url?raw';
 		cursor: pointer;
 		right: 67px;
 		color: white;
+	}
+	:root.vtbag-ui-tl:not(.vtbag-ui-column) #vtbag-ui-panel ~ button {
+		bottom: calc(100vh - var(--vtbag-panel-height) - 6px);
+	}
+	:root.vtbag-ui-tl.vtbag-ui-column  #vtbag-ui-close {
+		right: calc(100vw - var(--vtbag-panel-width) - 11px);
+	}
+	:root.vtbag-ui-tl.vtbag-ui-column #vtbag-ui-turn {
+		right: calc(100vw - var(--vtbag-panel-width) + 18px);
+	}
+	:root.vtbag-ui-tl.vtbag-ui-column  #vtbag-ui-light-dark {
+		right: calc(100vw - var(--vtbag-panel-width) + 45px);
 	}
 
 	#vtbag-ui-panel > div {

@@ -1,15 +1,12 @@
 ---
-import favicon from '@vtbag/inspection-chamber/assets/satchel.png?raw';
 import VtbagPanel from './VtbagPanel.astro';
-
-const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 ---
 
+<html class="">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="icon" type="image/png" href={url} />
-	<title></title>
+	<link rel="icon"/><title></title>
 	<meta name="astro-view-transitions-enabled" content="true" />
 </head>
 <body>
@@ -21,15 +18,11 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 		:root {
 			--vtbag-panel-height: 226px;
 			--vtbag-panel-width: 200px;
-			--vtbag-frame-x: 0;
-			--vtbag-frame-y: 0;
-			--vtbag-panel-right: 0;
-			--vtbag-panel-bottom: 0;
 		}
 		#canvas {
 			position: absolute;
-			top: var(--vtbag-frame-y);
-			left: var(--vtbag-frame-x);
+			top: 0;
+			left: 0;
 			height: calc(100vh - var(--vtbag-panel-height));
 			width: 100vw;
 		}
@@ -37,24 +30,41 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 			width: calc(100vw - var(--vtbag-panel-width));
 			height: 100vh;
 		}
+		:root.vtbag-ui-tl #canvas {
+			left: 0;
+			top: var(--vtbag-panel-height);
+		}
+		:root.vtbag-ui-tl :root.vtbag-ui-column #canvas {
+			left: var(--vtbag-panel-width);
+			top: 0;
+		}
 
 		#vtbag-main-frame {
 			position: fixed;
-			top: var(--vtbag-frame-y);
-			left: var(--vtbag-frame-x);
+			top: 0;
+			left: 0;
 			width: 100vw;
 			height: calc(100vh - var(--vtbag-panel-height));
 			border: none;
 		}
+
+		:root.vtbag-ui-tl #vtbag-main-frame {
+			top: var(--vtbag-panel-height);
+		}
 		#vtbag-ui-panel {
 			position: fixed;
-			right: 1px;
-			bottom: var(--vtbag-panel-bottom);
-			right: var(--vtbag-panel-right);
+			bottom: 0;
+			right: 0;
+		}
+		:root.vtbag-ui-tl #vtbag-ui-panel {
+			bottom: calc(100vh - var(--vtbag-panel-height));
 		}
 		#vtbag-ui-panel,
 		#vtbag-ui-panel ~ button {
 			animation: slide-from-bottom 0.5s both;
+		}
+		:root.vtbag-ui-tl :is(#vtbag-ui-panel, #vtbag-ui-panel ~ button) {
+			animation: slide-from-top 0.5s both;
 		}
 
 		#divider {
@@ -64,19 +74,19 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 			right: 0;
 			bottom: var(--vtbag-panel-height);
 		}
+		#divider:hover,
+		:root.dragging #divider {
+			cursor: ns-resize;
+			background-color: darkolivegreen;
+		}
 
+		:root.vtbag-ui-tl #divider {
+			bottom: calc(100vh - var(--vtbag-panel-height) - 4px);
+		}
 		:root.vtbag-ui-column {
 			#divider:hover,
 			:root.dragging #divider {
 				cursor: ew-resize;
-				background-color: darkolivegreen;
-			}
-		}
-		:root:not(.vtbag-ui-column) {
-			#divider:hover,
-			:root.dragging #divider {
-				cursor: ns-resize;
-				background-color: darkolivegreen;
 			}
 		}
 
@@ -85,7 +95,6 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 				height: 100vh;
 				width: calc(100vw - var(--vtbag-panel-width));
 			}
-
 			#vtbag-ui-panel,
 			#vtbag-ui-panel ~ button {
 				animation: slide-from-right 0.5s both;
@@ -97,17 +106,42 @@ const url = 'data:image/svg+xml,' + encodeURIComponent(favicon);
 				bottom: 0;
 			}
 		}
-
+		:root.vtbag-ui-tl.vtbag-ui-column {
+			#vtbag-ui-panel {
+				right: calc(100vw - var(--vtbag-panel-width) - 18px);
+				bottom: 0;
+			}
+			#vtbag-main-frame {
+				top: 0;
+				left: var(--vtbag-panel-width);
+			}
+			:is(#vtbag-ui-panel, #vtbag-ui-panel ~ button) {
+				animation: slide-from-left 0.5s both;
+			}
+			#divider {
+				right: calc(100vw - var(--vtbag-panel-width) - 20px);
+			}
+		}
 		@keyframes slide-from-bottom {
 			from {
 				transform: translateY(var(--vtbag-panel-height));
 			}
 		}
-
 		@keyframes slide-from-right {
 			from {
 				transform: translateX(var(--vtbag-panel-width));
 			}
 		}
+		@keyframes slide-from-top {
+			from {
+				transform: translateY(calc(var(--vtbag-panel-height) * -1));
+			}
+		}
+		@keyframes slide-from-left {
+			from {
+				transform: translateX(calc(var(--vtbag-panel-width) * -1));
+			}
+		}
 	</style>
 </body>
+</html>
