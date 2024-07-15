@@ -38,7 +38,7 @@
     "astro-d2": "^0.3.0",
     "astro-expressive-code": "latest",
     "astro-feelback": "latest",
-    "astro-vtbot": "^1.7.26",
+    "astro-vtbot": "^1.7.27",
     "html2canvas": "^1.4.1",
     "nanostores": "^0.10.3",
     "prettier": "^3.3.2",
