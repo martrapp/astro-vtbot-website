@@ -41,7 +41,7 @@
     "astro-vtbot": "^1.7.26",
     "html2canvas": "^1.4.1",
     "nanostores": "^0.10.3",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-external-links": "^3.0.0",
