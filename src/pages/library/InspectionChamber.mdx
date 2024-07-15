@@ -1,0 +1,53 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: InspectionChamber
+overview: /components/
+vtn: chamber-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: chamber-1"><span style="display:inline-block; view-transition-name:chamber-2;">🔬 </span>The Inspection Chamber</h1>
+
+
+With the `<InspectionChamber />` component, you can put your view transitions through their paces.
+
+## Contents
+
+## Why should I use this component?
+
+Even with your browser's development tools, examining and evaluating the details of your view transition animations can be challenging. The inspection chamber provides all the buttons and sliders you need to pinpoint and solve any issues.
+
+## How Does it Work?
+The Inspection Chamber wraps around your page and adds a control panel that you can use to examine your view transition animations. The Inspection Chamber of the <Logo/> Bag of Tricks is the Astro version of the `@vtbag/InspectionChamber`. Please see the [documentation there](https://vtbag.pages.dev/InspectionChamber) for further information.
+
+The `@vtbag/InspectionChamber` features a [demo that works with pure CSS](https://vtbag.pages.dev/inspection-chamber-demo/first-page/) view transitions. Here is the [same demo using Astro's &lt;ViewTranisions />](/inspection-chamber-demo/first-page/)
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+If you have selected the integration, you can open the inspection chamber with the Astro DevToolbar. If you have installed the package directly without the integration, you need to place the `<InspectionChamber />` component on the pages where you want to examine the view transitions. For cross-document transitions, the component must be present on both the old and the new page. It’s best to insert the component in your basic layout after the `<ViewTransitions />` component.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import InspectionChamber from 'astro-vtbot/components/InspectionChamber.astro';
+---
+<html>
+  <head>
+    <ViewTransitions />
+    <InspectionChamber />
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component has no properties.
+

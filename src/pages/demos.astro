@@ -13,6 +13,14 @@ import Content from 'src/mdx/demos.mdx';
 	<Content />
 	<ul role="list" class="link-card-grid" transition:name="bot">
 		<Card
+			what="@vtbag/inspection-chamber"
+			href="/inspection-chamber-demo/first-page/"
+			title="The Inspection Chamber"
+			icon="🔬"
+			body="Put your view transitions through their paces!"
+			reload
+		/>
+		<Card
 			what="astro-vtbot/animation"
 			href="/animations/one/"
 			title="More than fade & slide"
@@ -25,7 +33,7 @@ import Content from 'src/mdx/demos.mdx';
 			title="Image Gallery"
 			icon="🍱"
 			body="Declaratively assign view transition names to selected elements"
-			what="astro:before-preparation"
+			what="astro-vtbot/AutoNameSelected"
 			reload
 		/>
 		<Card

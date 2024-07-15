@@ -18,6 +18,7 @@ import '../../styles/ec.s8bdm.css';
 import AutoCollapseToggle from '../bot/AutoCollapseToggle.astro';
 import AutoCollapse from '../bot/AutoCollapse.astro';
 import EagerImageLoading from '../EagerImageLoading.astro';
+import InspectionChamber from 'astro-vtbot/components/InspectionChamber.astro';
 ---
 
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
@@ -30,6 +31,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 		}
 	</script>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+	<InspectionChamber />
 </VtbotStarlight>
 
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />
