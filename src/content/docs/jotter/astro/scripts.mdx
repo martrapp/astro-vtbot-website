@@ -456,7 +456,7 @@ But you can also delegate the `querySelectorAll()` call to GSAP:
 	init();
 </script>
 ```
-In this simple case, you don't need to explicitly query for images on the page. Set `gsap.config({ nullTargetWarn: false })` to prevent errors in the browser console if the selector selects the an empty set.
+In this simple case, you don't need to explicitly query for images on the page. Set `gsap.config({ nullTargetWarn: false })` to prevent errors in the browser console if the selector selects an empty set.
 
 If you use a library that accepts selectors as parameters, make sure that they are freshly evaluated each time and not cached from a previous call, as we want to [omit long-lived pointers from scripts to the DOM](/jotter/astro/scripts/#references-into-the-dom).
 
