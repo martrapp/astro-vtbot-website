@@ -8,6 +8,12 @@ import AnimateImages from "/src/components/AnimateImages.astro"
 
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
+:::tip[Breaking news:]
+Starting from version 0.26.0, Starlight persists the state of the sidebar across navigation.
+
+If you happen to use the [replaceSidebarContent option](#replace-the-sidebar-content) you should update vtbot to 0.18.5 to benefit from this huge improvement!
+:::
+
 :::note[Benefits of adding view Transitions to Starlight]
 
 * *Looks like a Single Page Application:* No full page reloads anymore
@@ -22,10 +28,9 @@ Don't be afraid that this will turn your beautiful website into a blinking jukeb
 
 The [introduction page on The Bag's view transition support for Starlight](/jotter/starlight/#will-the-bag-offer-support-for-starlight) defines three categories of features for The Bag's view transition support. This guide currently covers level 1, the mandatory features.
 
-I'm currently working on making the optional features available as reusable components as well and will then extend this guide.
 
 :::note[A short note]
-The Bag's support of view transition for Starlight is still young and has not yet been extensively tested in the wild. Enjoy being on the bleeding edge of technology with your Starlight site, but also be prepared that things might break when updating to a newer version or The Bag. Or that not everything you expect will be possible right from the start. I'm happy to improve and expand the initial support over time!
+The Bag's support of view transition for Starlight is now in the wild for a couple of month. It is rather complete and mostly mature. Nevertheless, be prepared that things might break when updating to a newer version of Starlight or The Bag. I'm happy to improve and expand the support over time!
 :::
 <style>{`
 .starlight-aside--note {
