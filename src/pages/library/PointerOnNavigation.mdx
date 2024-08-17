@@ -1,0 +1,44 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Show Pointer Cursor during View Transitions
+overview: /components/
+vtn: pointer-3
+---
+
+<h1 style="display: inline-block; view-transition-name: pointer-1"><span style="display:inline-block; view-transition-name:pointer-2">👆</span>Show Pointer Cursor during View Transitions</h1>
+
+A small component that prevents the cursor from switching when you start a view transition via the navigation bar.
+
+## Contents
+
+## Why would I use this component?
+
+Yes, navbars are a primary use case. More broadly: The element that initiates the view transition has a `cursor: pointer` CSS property, and on the new page, there is also an element with `cursor: pointer` at the same position in the viewport. While the view transition is animating, browsers display the default arrow cursor. It's only after the animation completes that they apply your CSS for the new element and switch the cursor back to pointer.
+
+The component is used here on the [Jotter](/jotter/), if you want to take a look. But it works independent of Starlight. You can use it on any project.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
+
+
+
+Place the `<Pointer />` component in the `<head>` of a page near Astro's `<ViewTransitions/>`. Done.
+
+```astro title="MyPage.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions';
+import PointerOnNavigation from 'astro-vtbot/components/PointerOnNavigation.astro';
+---
+<html>
+  <head>
+		<ViewTransitions/>
+		<PointerOnNavigation/>
+		...
+	<head/>
+	...
+</html>
+```
+
+There are no parameters to configure.
+
