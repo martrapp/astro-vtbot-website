@@ -73,12 +73,20 @@ interface ViewTransition {
   skipTransition(): void;
 }
 // Not really part of the View Transition API, but closely related:
+
 // There are also two events that are raised during cross-document navigation:
+
 "pageswap"   // An event that is raised while the old document is still present.
              // This happens right before the screenshot and the swap
+
 "pagereveal" // An event that happens after the swap right before the new page is
              // shown for the first time
-// The browser also triggers these events independently of view transitions. However, if they are triggered during a cross-document view transition, the `viewTransition` property of the event contain the current view transition object. In addition, the `pageswap` event also has an `activation` property that describes the type of navigation including source and target URLs.
+
+// The browser also triggers these events independently of view transitions.
+// However, if they are triggered during a cross-document view transition,
+// the `viewTransition` property of the event contain the current view transition object.
+// In addition, the `pageswap` event also has an `activation` property
+// that describes the type of navigation including source and target URLs.
 ```
 
 On the CSS side, the pseudo-elements are unchanged, but now you can also use view transition classes to select animations in addition to `*` and view transition names.
@@ -94,6 +102,14 @@ Level 2 also defines two CSS pseudo-classes on the document that can be used to 
 :root:active-view-transition,
 :root:active-view-transition-type(backward, slide-out) { /* at least one must match */
 
+}
+```
+
+Also new in level 2 is the ability to make one transition group a child of another transition group setting the `view-transition-group` property:
+```css title="assign a parent to a transition group"
+main {
+	view-transition-name: main;
+	view-transition-group: clipper;
 }
 ```
 
