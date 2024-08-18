@@ -404,6 +404,14 @@ import { Content } from 'src/mdx/components.mdx';
 	::view-transition-old(root) {
 		animation: none;
 	}
+	::view-transition-old(dtb) {
+		animation: to-bottom 1s both
+	}
+	@keyframes to-bottom {
+		to {
+			transform: translateY(100%);
+		}
+	}
 	html body {
 		max-width: 90%;
 	}

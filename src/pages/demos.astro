@@ -152,6 +152,16 @@ import Content from 'src/mdx/demos.mdx';
 	::view-transition-group(root) {
 		animation-duration: 1s;
 	}
+
+	::view-transition-old(dtb) {
+		animation: to-bottom 1s both
+	}
+	@keyframes to-bottom {
+		to {
+			transform: translateY(100%);
+		}
+	}
+
 	:root {
 		--accent: 135, 206, 235;
 		--accent-gradient: linear-gradient(330deg, #000, rgb(135, 206, 235));
