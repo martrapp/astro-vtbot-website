@@ -1,0 +1,19 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import NoScroll from 'astro-vtbot/components/PointerOnNavigation.astro';
+import Mini from './Mini.astro';
+---
+
+<html>
+	<head>
+		<ViewTransitions />
+		<PointerOnNavigation />
+	</head>
+	<body>
+		<main transition:name="main">
+			<h1>Heading</h1>
+			<a href="/">Link</a>
+			<Mini />
+		</main>
+	</body>
+</html>

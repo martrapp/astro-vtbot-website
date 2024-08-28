@@ -12,9 +12,10 @@ import MarkTitle from '../bot/MarkTitle.astro';
 import SwapSound from 'astro-vtbot/components/SwapSound.astro';
 import PagefindToTextFragments from './PagefindToTextFragments.astro';
 import SidebarSelect from './SidebarSelect.astro';
+import PointerOnNavigation from 'astro-vtbot/components/PointerOnNavigation.astro';
 
 import '../../styles/vt.css';
-import '../../styles/ec.s8bdm.css';
+//import '../../styles/ec.s8bdm.css';
 import AutoCollapseToggle from '../bot/AutoCollapseToggle.astro';
 import AutoCollapse from '../bot/AutoCollapse.astro';
 import EagerImageLoading from '../EagerImageLoading.astro';
@@ -36,6 +37,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 
 <PageOffset name="main" />
 <PageOrder />
+<PointerOnNavigation/>
 
 <AutoNameSelected
 	selector='head:has(link[rel="canonical"][href*="/jotter/"]) + body main :is(h1, h2, h3, h4, h5, h6)'

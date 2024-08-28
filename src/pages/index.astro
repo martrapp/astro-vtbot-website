@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Layout from 'src/layouts/Layout.astro';
 import fi from 'src/assets/fi.png';
 import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
+import dtb from 'src/assets/devToolbar.png';
 ---
 
 <Layout title="Bag of Tricks for Astro's View Transitions">
@@ -33,6 +34,7 @@ import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 	/>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
+	<Image id="dtb" src={dtb} alt="devToolbar" transition:name="dtb" />
 	<h1 class="massive">
 		Welcome to the <br />
 		<span class="bang"
@@ -103,6 +105,15 @@ import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 	::view-transition-old(root) {
 		animation-duration: 0.5s;
 	}
+	::view-transition-new(dtb) {
+		animation:  1s ease-out both from-bottom;
+	}
+	@keyframes from-bottom {
+		from {
+			transform: translateY(100%);
+		}
+	}
+
 </style>
 
 <style>
@@ -180,6 +191,14 @@ import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 		vertical-align: text-top;
 	}
 
+	#dtb {
+		position: fixed;
+		width: 300px;
+		height: auto;
+		bottom: 0px;
+		right: 50vw;
+		transform: translateX(150px);
+	}
 	.massive {
 		color: #abc;
 		padding: 1ex 1.5ex;

@@ -1,18 +1,24 @@
 ---
 title: History of Changes
+description: A change log for the astro-vtbot website
 ---
 
 import BoT from "/src/components/BoT.astro"
+import { Image } from "astro:assets"
+import toolbar from "./toolbar.png"
 
 If you want to know what has changed in the <BoT/>, go [to the CHANGELOG](https://github.com/martrapp/astro-vtbot/blob/main/CHANGELOG.md).
 
-If you want to know what updates I've made to the Jotter, you've come to the right place.
+If you want to know what updates I've made to the Jotter or this website in general, you've come to the right place.
 
 This history starts when the Jotter first leveraged Starlight on 2024-04-01.
 The most important changes since the first release relate to the Starlight Guide. The changes are mainly based on user feedback and the fact that I have learned more about things.
 
 |When|What|Where|
 |----|-----|----|
+|2024-07-20|v1.8.2 of [`astro-vtbot`](https://www.npmjs.com/package/astro-vtbot) is out! And it comes with the brand new `<InspectionChamber />` component and DevToolbar integration!<Image style="height: 4rem; width: auto; display:inline; vertical-align:top" src={toolbar} alt="devToolbar image" />|[`<InspectionChamber />`](/library/InspectionChamber/)<br/><br/>[Install as integration for DevToolbar app](/library/Installation/)
+|2024-07-11|Exciting news: vtbot got a little sister! |[@vtbag](https://vtbag.pages.dev)|
+|2024-07-06|Added Bramus' article on cross-document view transitions| [References](/jotter/api/references/#introduction-by-example)|
 |2024-05-29|About to pull two new components out of The Bag: `BorderControl` and `SwapSound`. Both originated in the Starlight support but are usable independent of Starlight as well|
 |2024-05-25|HiDeoo's starlight-blog is the most recent entry on the friendly neighbor list.|[Compatible with](/jotter/starlight/guide/#friendly-neighbor)|
 |2024-05-23|We have a new component that initially emerged from a fun experiment, but could also prove useful on its own| [`<AutoNameSelected />`](/library/AutoNameSelected/)|

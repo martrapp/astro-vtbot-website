@@ -39,15 +39,13 @@ import BorderControl from 'astro-vtbot/components/BorderControl.astro';
 {/* Make animation direction based on the order of the pages in the sidebar */}
 <PageOrder />
 
-{
-	/* Without further configuration, make headings stand out during view transitions.
-    Can be used to declaratively add view transition names which open a door to all kinds of funny thing. */
-}
+{/* Without further configuration, make headings stand out during view transitions.*/}
+{/* Can be used to declaratively add view transition names,*/}
+{/* which opens a door to all kinds of funny thing. */}
 <AutoNameSelected />
 
-{
-	/* If you have other pages in this project, protect the starlight part from incoming view transitions */
-}
+{/* If you have other pages in this project,*/}
+{/* protect the starlight part from incoming view transitions */}
 <BorderControl fence={{ inside: ['/jotter/', '/blog/'] }} />
 
 {/* If you want to swap the sound of the page transition */}

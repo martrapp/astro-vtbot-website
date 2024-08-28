@@ -19,7 +19,7 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
-	prefetch: true,
+	prefetch: process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
 			behavior: "wrap"
