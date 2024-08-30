@@ -11,10 +11,18 @@ This guide describes what has to be done to add view transitions to an existing 
 :::tip[Breaking news:]
 Starting from version 0.26.0, Starlight persists the state of the sidebar across navigation.
 
-If you happen to use the [replaceSidebarContent option](#replace-the-sidebar-content) you should update `astro-vtbot` to 1.18.5 or higher to benefit from this huge improvement!
+This already gives Starlight a lot of that SPA look and feel!
+
+If you're satisfied with having the view transition effect work only in Chromium-based browsers (such as Chrome, Edge, and Opera) and can do without it in Firefox, Safari, and other browsers that don't yet support the cross-document features of the View Transition API, you can enable browser view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
+
+```
+@view-transition {navigation: auto}
+```
 :::
 
-:::note[Benefits of adding view Transitions to Starlight]
+Otherwise stay tuned for how to add Astro's `<ViewTransitions>` support to Starlight and enjoy view transitions **on all browsers** including Safari and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
+
+:::note[Benefits of adding Astro's View Transition Support to Starlight]
 
 * *Looks like a Single Page Application:* No full page reloads anymore
 * *Behaves like a Single Page Application:* Search terms, sidebar scroll position and collapsed category states are retained across navigation (No wild animations or automatic closing by default if you are worried when looking at this site's sidebar ;-D )
