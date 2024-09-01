@@ -9,7 +9,6 @@ import { Content } from 'src/mdx/components.mdx';
 		<Content />
 	</div>
 	<ul role="list" class="link-card-grid">
-
 		<Card
 			href="/library/InspectionChamber/"
 			title="InspectionChamber"
@@ -18,7 +17,12 @@ import { Content } from 'src/mdx/components.mdx';
 			name="chamber"
 		>
 			<p>
-				The <code>Inspection Chamber</code> lets you <mark>examine all the visual details</mark> of the view transitions of your pages.</p><p>Check what's going on in slow motion or <mark>move to specific time frames</mark> in your animations. During analysis, <mark>switch the pseudo elements on and off</mark> to get a better glance at the details.
+				The <code>Inspection Chamber</code> lets you <mark>examine all the visual details</mark> of the
+				view transitions of your pages.
+			</p><p>
+				Check what's going on in slow motion or <mark>move to specific time frames</mark> in your animations.
+				During analysis, <mark>switch the pseudo elements on and off</mark> to get a better glance at
+				the details.
 			</p>
 
 			<h3>Status</h3><p>Brand new, bleeding edge, MVP. Expect bugs and limitations.</p>
@@ -26,22 +30,50 @@ import { Content } from 'src/mdx/components.mdx';
 				<li>Fix bugs and extend functionality</li>
 			</ul>
 		</Card>
-		<Card
-		href="/library/PointerOnNavigation/"
-		title="Pointer"
-		icon="👆"
-		what="Styling / ~0.1k Brotli bytes"
-		name="pointer"
-	>
-		<p>
-			Do you use a navigation bar with view transitions and find it frustrat</mark>ing when the cursor changes from pointer to default during navigation? <mark>Take back control of your cursor!</mark>
-		</p>
 
-		<h3>Status</h3><p>Brand new, but (mostly) harmless.</p>
-		<h3>Future direction</h3><ul>
-			<li>May add some configuration</li>
-		</ul>
-	</Card>
+		<Card
+			href="/library/ElementCrossing/"
+			title="ElementCrossing"
+			icon="🚸"
+			what="Styling / ~0.3k Brotli bytes"
+			name="crossing"
+		>
+			<p>
+				For Astro projects that use CSS-only cross-document view transitions instead of <code>&lt;ViewTransitions /&gt;</code>.
+				Transfer selected element state <mark>across cross-document view transitions</mark> for a <mark>really smooth</mark> look and feel.</p>
+				<p>This is the Astro component that integrates <code>@vtbag/element-crossing.</code>
+			</p>
+
+			<h3>Status</h3><p>Brand new</p>
+			<h3>Future direction</h3><ul>
+				<li>Fix bugs and extend functionality</li>
+			</ul>
+		</Card>
+		<Card
+			href="/library/LoadingIndicator/"
+			title="LoadingIndicator"
+			icon="⏳"
+			what="Feature / ~ 0.4k Brotli bytes"
+			name="loading"
+		>
+			<p>
+				Have you often wondered if the app has noticed the click in apps that use view transitions?
+				Or have you ever been annoyed and clicked on a link several times because nothing seemed to
+				happen?
+			</p><p>
+				Then you need an indicator that gives you <mark
+					>visual feedback that the app has responded</mark
+				>: The loading indicator!
+			</p>
+			<h3>Status</h3><p>Base functionality and default behavior released.</p>
+			<h3>Future direction</h3>
+			<ul>
+				<li>
+					Offer "Custom loading indicators" to support different styles and as examples for further
+					custom contributions
+				</li>
+			</ul>
+		</Card>
 		<Card
 			href="/library/VtBotDebug/"
 			title="VtBotDebug"
@@ -50,7 +82,8 @@ import { Content } from 'src/mdx/components.mdx';
 			name="vtbotdebug"
 		>
 			<p>
-				<code>VtBotDebug</code> is a component that <mark>helps to understand transition events</mark
+				<code>VtBotDebug</code> is a component that <mark
+					>helps to understand transition events</mark
 				>. It logs the events, their properties, and the overall timing during the processing to the
 				browser console.
 			</p>
@@ -82,28 +115,22 @@ import { Content } from 'src/mdx/components.mdx';
 		</Card>
 
 		<Card
-			href="/library/LoadingIndicator/"
-			title="LoadingIndicator"
-			icon="⏳"
-			what="Feature / ~ 0.4k Brotli bytes"
-			name="loading"
+			href="/library/PointerOnNavigation/"
+			title="Pointer"
+			icon="👆"
+			what="Styling / ~0.1k Brotli bytes"
+			name="pointer"
 		>
 			<p>
-				Have you often wondered if the app has noticed the click in apps that use view transitions?
-				Or have you ever been annoyed and clicked on a link several times because nothing seemed to
-				happen?
-			</p><p>
-				Then you need an indicator that gives you <mark
-					>visual feedback that the app has responded</mark
-				>: The loading indicator!
+				Do you use a navigation bar with view transitions and find it frustrating when the cursor
+				changes from pointer to default during navigation? <mark
+					>Take back control of your cursor!</mark
+				>
 			</p>
-			<h3>Status</h3><p>Base functionality and default behavior released.</p>
-			<h3>Future direction</h3>
-			<ul>
-				<li>
-					Offer "Custom loading indicators" to support different styles and as examples for further
-					custom contributions
-				</li>
+
+			<h3>Status</h3><p>Brand new, but (mostly) harmless.</p>
+			<h3>Future direction</h3><ul>
+				<li>May add some configuration</li>
 			</ul>
 		</Card>
 
@@ -405,7 +432,7 @@ import { Content } from 'src/mdx/components.mdx';
 		animation: none;
 	}
 	::view-transition-old(dtb) {
-		animation: to-bottom 1s both
+		animation: to-bottom 1s both;
 	}
 	@keyframes to-bottom {
 		to {

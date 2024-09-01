@@ -1,0 +1,57 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: ElementCrossing
+overview: /components/
+vtn: crossing-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: crossing-1"><span style="display:inline-block; view-transition-name:crossing-2;">🚸 </span>The Element Crossing</h1>
+
+
+With the `<ElementCrossing />` component, you can transfer selected element states across cross-document view transitions.
+
+**This component is intended to be used with CSS-only cross-document view transitions as defined in level 2 of the View Transition API. If you use Astro's [`<ViewTransitions />`](https://docs.astro.build/en/guides/view-transitions/#adding-view-transitions-to-a-page) component, you do not need the `<ElementCrossing />` component because you would use [`transition:persist`](https://docs.astro.build/en/guides/view-transitions/#maintaining-state) to persist DOM trees on navigation.**
+
+## Contents
+
+## Why should I use this component?
+
+Cross-document view transitions is all about giving multi page applications the smooth look and feel of single page applications. While users interact with the elements on a page, they change their internal state. This includes scrollbars, form input, toggle states to name a few. If the next page is loaded, those changes are lost. this might lead to rather un-smooth vie transitions. With the ElementCrossing component, you can carry over state that is important for the look and feel of your application.
+
+## How Does it Work?
+The Element Crossing reads your annotations at HTML elements and transfers part of the state to the next page. The Element Crossing of the <Logo/> Bag of Tricks is the Astro version of the `@vtbag/ElementCrossing`. Please see the [documentation there](https://vtbag.pages.dev/element-crossing) for further information and demos of the effects.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+You need to place the `<ElementCrossing />` component on the pages where you want to retrieve or restore HTML element state. For cross-document transitions, the component must be present on both the old and the new page. It's best to insert the component in your basic layout inside the `<head>` element.
+
+```astro title="MyLayout.astro" {3,8}
+---
+import ElementCrossing from 'astro-vtbot/components/ElementCrossing.astro';
+---
+<html>
+  <head>
+    <ElementCrossing />
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component has a single property called experimentalFeatures. Use it like this
+```astro
+<ElementCrossing experimentalFeatures />
+```
+to switch on the [experimental over-the-top flavor](https://vtbag.pages.dev/http:/tools/element-crossing/#element-crossing-experimental-over-the-top) of the Element Crossing.
+
+Visit the [documentation on how to annotate HTML elements](https://vtbag.pages.dev/http:/tools/element-crossing/#configuration) for info about configuration and real word examples.
+
