@@ -31,7 +31,7 @@
     "@changesets/cli": "^2.27.7",
     "@expressive-code/plugin-collapsible-sections": "^0.36.1",
     "@expressive-code/plugin-line-numbers": "^0.36.1",
-    "@pagefind/default-ui": "^1.0.4",
+    "@pagefind/default-ui": "^1.1.1",
     "@types/dom-view-transitions": "^1.0.5",
     "@types/node": "^22.5.1",
     "astro": "^4.15.1",
