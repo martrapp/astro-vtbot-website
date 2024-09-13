@@ -13,7 +13,7 @@ title: vtbot integration
 
 ## Installing as an Astro integration
 
-Installing `astro-vtbot` as an Astro integration will install the package and in addition it will by default add `vtbot`'s [`<LoadingIndicator />` component](../LoadingIndicator/) and [`<Linter />` component](../Linter/) to all pages that use Astro's `<ViewTransitions />`.
+Installing `astro-vtbot` as an Astro integration will install the package and in addition it will by default add `vtbot`'s [`<LoadingIndicator />` component](../LoadingIndicator/) and [`<Linter />` component](../Linter/) to all pages that use Astro's `<ViewTransitions />`. However, there are also options to selectively opt out of either feature, as detailed below.
 
 To install `astro-vtbot` as an Astro integration, run the `astro add` command in your project directory ...
 
@@ -56,8 +56,7 @@ export default defineConfig({
 
 When you start Astro in DEV mode, e.g. `npm run dev`, this will automatically add `vtbot`'s [`<Linter />` component](../Linter/) to all pages that use Astro's `<ViewTransitions />`. This will **only happen in DEV mode**. When you build for production, the `<Linter />` component will not be included.
 
-You can temporarily disable these functions without having to remove the integration by setting the `loadingIndicator` option and/or the `autoLint` option of `vtbot` in your `astro.config` file to `false` (the default is `true`):
-
+You can disable automatic linting and the loading-indicator without having to remove the integration by setting the `loadingIndicator` option and/or the `autoLint` option of `vtbot` in your `astro.config` file to `false` (the default is `true`):
 
 ```js title="astro.config.mjs" {5}
 import { defineConfig } from "astro/config";
@@ -68,6 +67,8 @@ export default defineConfig({
 	})],
 });
 ```
+
+After disabling the loadingIndicator, as an alternative, you could also add the [<ProgressBar />`](/library/ProgrssBar/) component to your Layout.astro.
 
 If you have Astro's DevToolbar enabled, The Bag will show up as a new app there and will give you access to the InspectionChamber on every page without any further modification of your project.
 

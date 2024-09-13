@@ -7,7 +7,9 @@ vtn: loading-3
 
 <h1 style="display: inline-block; view-transition-name: loading-1"><span style="display:inline-block; view-transition-name:loading-2;">⏳</span> The Loading Indicator</h1>
 
-The `<LoadingIndicator />` component adds a loading indicator to your view transitions. <a data-astro-reload href="/loading/one/">See it in action</a>
+The `<ProgressBar />` and `<LoadingIndicator />` components offer loading indicators for your view transitions. To see them in action, visit the <a data-astro-reload href="/loading/progress-bar/one/">ProgressBar page</a> or the <a data-astro-reload href="/loading/one/">	LoadingIndicator page</a> and press the "Go to page two" link.
+
+There is also a demo for a crazily styled `<ProgressBar />` <a data-astro-reload href="/loading/progress-bar/colorful1/">here</a>, which can be started by pressing on "Showtime".
 
 ## Contents
 
@@ -59,12 +61,12 @@ or
 </div>
 ```
 
-### Alternative 2: Use the &lt;LoadingIndicator /> component
+### Alternative 2: Use the &lt;LoadingIndicator /> or the &lt;ProgressBar /> component
 
 If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component should be put inside the `<head>` element **behind the `<ViewTransitions/>` component**.
 
 
-```astro title="YourComponent.astro" {3,8}
+```astro title="YourLayout.astro" {3,8}
 ---
 import { ViewTransitions } from 'astro:transitions'
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro'
@@ -101,7 +103,38 @@ The `src` attribute is a href, the position strings are values for the correspon
 ```
 As long as you include the `<LoadingIndicator />` component behind the `<ViewTransitions />` in the `<head>` its attributes will override the defaults of the `<LoadingIndicator />` component that is installed by the Astro integration. So it is ok to have the default via integration on most pages and override it on some pages with an explicit `<LoadingIndicator>` element.
 
-### Styling with CSS
+The `<ProgressBar />` is used the same way.
+```astro title="YourLayout.astro" {3,8}
+---
+import { ViewTransitions } from 'astro:transitions'
+import ProgressBar from 'astro-vtbot/components/ProgressBar.astro'
+---
+<html>
+  <head>
+    <ViewTransitions />
+		<ProgressBar />
+		...
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+There are no properties yet to control the behavior of the `<ProgressBar />`. But you can style its appearance wih CSS.
+
+### Styling the &lt;ProgressBar /> with CSS
+The `<ProgressBar />` component is implemented using Swup's progress bar plugin.
+Thus styling is straight forward:
+```css
+{/* You can style the progress bar by defining the swup-progress-bar class */}
+<style is:global>
+  .swup-progress-bar {
+    background-color: rgb(64, 128, 192);
+  }
+</style>
+```
+
+### Styling the &lt;LoadingIndicator /> with CSS
 As soon as the user clicks the link, the CSS class `loading` is added to the body element of the page. Once the target page is loaded completely and the view transition is about to begin, the `loading` CSS class is removed again. This allows you to customize the loading indicator via CSS.
 
 The default CSS covers positioning, sizing, and pulsing of the indicator.
