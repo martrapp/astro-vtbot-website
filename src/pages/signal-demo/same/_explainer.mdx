@@ -1,0 +1,31 @@
+<h1>Same Same!</h1>
+
+
+
+The [previous demo](/signal-demo/forcedTraversal/blog/) and Astro's `transition:animate` in general only knows about _backward_ and _forward_, but the `<TurnSignal />` also understands the concept of neither backward nor forward.
+
+
+1. To have a distinct animation for staying on the same page we need to [reconfigure the default](/library/TurnSignal/#properties) a bit:
+```astro title="BaseHead.astro"
+<TurnSignal directionAttribute="data-astro-transition, back, same, forward" selector="nav .internal-links a" forceTraversal />
+```
+
+
+
+2. And of course we need some additional CSS for the animation
+```css
+	main {view-transition-class: main}
+
+	[data-astro-transition='same']::view-transition-old(.main),
+	[data-astro-transition='same']::view-transition-new(.main) {
+		animation:  0.25s same;
+	}
+	@keyframes same {50% {transform: scale(0)}}
+```
+
+Click the the **Blog** link in the header. Seen the difference?
+
+This example uses view-transition-groups to address images of the `<main>` elements of all three pages at once. See the [the @vtbag pages]() for more examples and on how to use  `:active-view-transition-type(<type>)` for sites that do not need the compatibility to `transition:animate`.
+
+"That's all folks!" ([return to the overview](/signal-demo/)).
+

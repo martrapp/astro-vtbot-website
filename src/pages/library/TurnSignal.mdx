@@ -1,0 +1,63 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Turn-Signal
+overview: /components/
+vtn: signal-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: signal1"><span style="display:inline-block; view-transition-name:signal-2;">🔙 </span>The Turn-Signal</h1>
+
+
+The `<TurnSignal />` component makes directional transition work with native cross-document view transitions! Continue to use `transition:animate` directives to define your animations or use the `:active-view-transition-type(backward){}` to support different view transition animations for the same page!
+
+[Visit the examples](/signal-demo/) on how to use this component.
+
+## Contents
+
+## Why should I use this component?
+
+Love Astro's built-in slide animation and Astro's support for custom animation with different animations for forward and backward navigation? When you replace `<ViewTransitions />` with `@view-transition{navigation: auto}` to enable the browser's native cross-document view transition all transitions will be 'forward'. The `<TurnSignal />` re-enables the backward animations supported by `transition:animate`.
+
+The component also automatically sets view transition types for **forward**, **same**, and **backward** and allows you to select among multiple view transition animations for the same page using `:active-view-transition-type(<direction>){}`.
+
+If you have a concept of a next and previous page for your site, you can tell the `<TurnSignal />` about the order of your pages and it will automatically generate directional view transitions for you.
+
+
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+You need to place the `<TurnSignal />` in the `<head>` of all the pages that you want to navigate with native cross-document view transitions. It's best to insert the component in your basic layout inside the `<head>` element.
+
+```astro title="MyLayout.astro" ins={2,6}
+---
+import TurnSignal from 'astro-vtbot/components/TurnSignal.astro';
+---
+<html>
+  <head>
+    <TurnSignal />
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component supports three properties which are all optional. You need to set the `selector` property if you want support for _previous_ and _next_ page navigation, and you can force page visits to be replaced with history traversals for pages visited earlier.
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| selector | a CSS selector | If you want to tell `<TurnSignal />` about your _previous_ and _next_ page relation for automatically generation of according transition directions, select `<a href=...>` elements that tell the component about your site's pages  and their order. For example, if you have a navigation bar with a `<nav>` element that contains links to all pages, a possible selector could be `selector="nav a"`. You can select arbitrary elements as long as they have a `href` attribute. If your page does not have the required information in a ready to use way, you can add it in a non obstructive way, e.g. inside a `<template>` element or as `<link>` elements with some made up `rel` attribute.|
+| forcedTraversal | boolean | This one is a bit debatable as you mess with the users browser history. But the effect may come handy in some situations: Add this attribute and all navigation to pages visited earlier will be replaced by forward or backward history traversals to that page. The users history will never contain a page more than once.|
+|directionTypes|backward-value, same-value, forward-value| With this property you can specify how the `<TurnSignal />` should signal the direction with view transition types for your CSS to react on. Empty values will be ignored. The default is "backward, same, forward". As an alternative example you could set `directionTypes="reverse,,"` to only set the `reverse` type and only for backward navigation.
+|directionAttribute|attribute-name, backward-value, same-value, forward-value| With this property you can specify how the `<TurnSignal />` should signal the direction with an HTML attribute for your CSS to react on. Empty values will be ignored. The attribute is set on the document's `<html>` element. If defined, the attribute is used in addition to the view transition types. The default is `directionAttribute="data-astro-transition, back, , forward"` as this mirrors the behavior of Astro's `<ViewTransition>` component and is required for the use with `transition:animate` directives. You can disable the use of the attribute with `directionAttribute=""`
+
+
+

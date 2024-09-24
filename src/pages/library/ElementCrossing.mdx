@@ -32,7 +32,7 @@ The Element Crossing reads your annotations at HTML elements and transfers part 
 
 You need to place the `<ElementCrossing />` component on the pages where you want to retrieve or restore HTML element state. For cross-document transitions, the component must be present on both the old and the new page. It's best to insert the component in your basic layout inside the `<head>` element.
 
-```astro title="MyLayout.astro" {3,8}
+```astro title="MyLayout.astro" ins={2,6}
 ---
 import ElementCrossing from 'astro-vtbot/components/ElementCrossing.astro';
 ---
@@ -47,11 +47,11 @@ import ElementCrossing from 'astro-vtbot/components/ElementCrossing.astro';
 
 ### Properties
 
-The component has a single property called experimentalFeatures. Use it like this
+The component has a single property called `experimentalFeatures`. Use it like this
 ```astro
 <ElementCrossing experimentalFeatures />
 ```
 to switch on the [experimental over-the-top flavor](https://vtbag.pages.dev/http:/tools/element-crossing/#element-crossing-experimental-over-the-top) of the Element Crossing.
 
-Visit the [documentation on how to annotate HTML elements](https://vtbag.pages.dev/http:/tools/element-crossing/#configuration) for info about configuration and real word examples.
+Visit the [documentation on how to annotate HTML elements](https://vtbag.pages.dev/tools/element-crossing/#configuration) for info about configuration and real word examples.
 
