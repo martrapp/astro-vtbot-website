@@ -717,7 +717,7 @@ As a consequence, external module scripts will not be re-executed during soft lo
 
 ### Behavior with View Transitions
 
-On navigation to another page using Astro's `<ViewTransition />` component, loading and execution of scripts is handled differently. Do to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
+On navigation to another page using Astro's `<ViewTransition />` component, loading and execution of scripts is handled differently. Due to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
 
 Astro might execute all scripts that it finds on the target page. But there are exemptions given by these two rules:
 1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. This is a consequence of technically staying on the same page when doing a soft load.
