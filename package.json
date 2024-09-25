@@ -38,7 +38,7 @@
     "astro-d2": "^0.5.1",
     "astro-expressive-code": "^0.37.0",
     "astro-feelback": "latest",
-    "astro-vtbot": "^1.10.1",
+    "astro-vtbot": "^1.10.2",
     "html2canvas": "^1.4.1",
     "nanostores": "^0.11.3",
     "prettier": "^3.3.3",
@@ -50,7 +50,7 @@
     "remark-toc": "^9.0.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "sharp": "^0.33.5",
-    "starlight-blog": "^0.12.0",
+    "starlight-blog": "^0.13.0",
     "starlight-image-zoom": "^0.8.0",
     "typescript": "^5.6.2"
   },
