@@ -17,6 +17,6 @@ What got changed?
 }
 </style>
 ```
-Click on the **Home**, **Blog**, or **About** links in the header of this page. You'll see the content slide in smoothly from the right, even when using the browser's back button. No matter what, Astro's default backward animation won't activate.
+Click on the **Home**, **Blog**, or **About** links in the header of this page. You'll see the content slide in smoothly from the right, **even when using the browser's back button**. No matter what, Astro's default backward animation won't activate.
 
 Let's improve this in the [next demo](/signal-demo/multipleDirections/blog/) (or [return to the overview](/signal-demo/)).
