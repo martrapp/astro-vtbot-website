@@ -53,7 +53,7 @@ You can use `transition:animate` with [predefined animation functions](https://d
 Ever asked yourself how Astro's `fade` differs from the browser`s default animation?
 Well,
 * it works for browsers without native view transition support,
-* it does define entry and exit animations but [no group / morph animation](/basics/default-animations/#morphing-animation-details) and
+* it does define entry and exit animations but [no group / morph animation](https://vtbag.pages.dev/basics/default-animations/#morphing-animation-details) and
 * it is with 180ms about 30% faster than the browser's 250ms fade and has a steep, kind of `ease-in-out` timing-function instead of the default `ease`.
 
 Each `transition:animate` directive (with a value other than "none" or "initial") generates a stylesheet with animations for the HTML element to which it is added. Astro directly supports the definition of _exit animations_ for old images and _entry animations_ for new images. Since Astro's fallback simulation cannot support morph animations, no CSS is generated for them. As a result, browsers with native support for view transitions show the default morph animation and other browsers only show the exit and entry animations, but no morph animation.
