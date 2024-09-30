@@ -33,7 +33,7 @@
     "@expressive-code/plugin-line-numbers": "^0.37.0",
     "@pagefind/default-ui": "^1.0.4",
     "@types/dom-view-transitions": "^1.0.5",
-    "@types/node": "^22.7.0",
+    "@types/node": "^22.7.4",
     "astro": "^4.15.9",
     "astro-d2": "^0.5.1",
     "astro-expressive-code": "^0.37.0",
