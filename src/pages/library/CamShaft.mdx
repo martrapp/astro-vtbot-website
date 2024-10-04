@@ -1,0 +1,59 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Cam-Shaft
+overview: /components/
+vtn: shaft-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: shaft-1"><span style="display:inline-block; view-transition-name:shaft-2;">🐫 </span>The Cam-Shaft</h1>
+
+
+The `<CamShaft />` eliminates unexpected pseudo-smooth-scrolling that the default group animation of the View Transition API introduces when changing vertical scroll position on **browser-native cross-document view transitions** with `::view-transition-groups` larger than the viewport.
+
+
+<span style="display: inline-block; font-size: 1.5rem; border-radius: 8px; padding: 1rem; margin: 1rem; background: linear-gradient(45deg, #000, #80659548, #cc5de844); box-shadow: 0 4px 6px #8888;">Sounds complicate? Better see the [demo of the pseudo-smooth-scrolling effect](https://vtbag.pages.dev/shaft-demo/1/) and how the [CamShaft avoids this effect](https://vtbag.pages.dev/shaft-demo2/1/).</span>
+
+This component is to be used with **browser-native cross-document view transitions**.
+
+If you are using **Astro's `<ViewTransitions />` component for view transitions** and want to eliminate pseudo-smooth-scrolling, please use the [`<PageOffset />` component](/library/PageOffset/).
+
+## Contents
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+You need to place the `<CamShaft />` in the `<head>` of all the pages where you want to eliminate the pseudo-smooth-scroll effect. It's best to insert the component in your basic layout inside the `<head>` element.
+
+```astro title="MyLayout.astro" ins={2,6}
+---
+import CamShaft from 'astro-vtbot/components/CamShaft.astro';
+---
+<html>
+  <head>
+    <CamShaft />
+    ...
+  </head>
+  ...
+</html>
+```
+
+### Properties
+
+The component supports a single property that you can use to tell for which `::view-transition-group` you want to eliminate pseud-smooth-scrolling. By default `<CamShaft />` targets `::view-transition-groups(main)` if such a group exists. But you can point it to any other `view-transition-name`,  even to multiple names, if you separate them by spaces.
+
+|   Property | Type | Effect |
+|------------|------|--------|
+| viewTransitionNames | space separated list of view-transition-name value | The names of the view transition groups to fix.
+
+For example, if you want to eliminate pseudo-smooth-scrolling for both, the `::view-transition-group(content)` and `::view-transition-group(aside)`, use the CamShaft like this:
+```astro
+<CamShaft viewTransitionNames="content aside" />
+```
+
+
