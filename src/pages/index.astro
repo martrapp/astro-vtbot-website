@@ -6,18 +6,33 @@ import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 import dtb from 'src/assets/devToolbar.png';
 ---
 
-<Layout title="Bag of Tricks for Astro's View Transitions">
+<Layout title="Welcome to the Bag of Tricks for Astro's View Transitions">
+	<script slot="head" type="application/ld+json" data-vtbot-linter="ignore" is:inline>
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "Bag of Tricks for Astro's View Transitions",
+			"alternateName": ["Bag of Tricks", "Bag of Tricks for Astro's View Transitions"],
+			"url": "https://events-3bg.pages.dev/"
+		}
+	</script>
+
+	<meta
+		slot="head"
+		property="og:site_name"
+		content="Bag of Tricks for Astro's View Transitions"
+	/>
+	<meta
+		slot="head"
+		property="og:title"
+		content="Welcome to the Bag of Tricks for Astro's View Transitions"
+	/>
 	<meta
 		slot="head"
 		name="description"
 		content="Reusable components, tech demos, and a wealth of in-depth information on Astro's view transitions"
 	/>
 	<meta slot="head" name="robots" content="index, follow" />
-	<meta
-		slot="head"
-		property="og:title"
-		content="astro-vtbot | Bag of Tricks for Astro's View Transitions"
-	/>
 	<meta slot="head" property="og:type" content="website" />
 	<meta slot="head" property="og:image" content="https://events-3bg.pages.dev/social.png" />
 	<meta slot="head" property="og:url" content="https://events-3bg.pages.dev/" />
@@ -27,11 +42,6 @@ import dtb from 'src/assets/devToolbar.png';
 		content="Reusable components, tech demos, and a wealth of in-depth information on Astro's view transitions"
 	/>
 	<meta slot="head" property="og:locale" content="en_US" />
-	<meta
-		slot="head"
-		property="og:site_name"
-		content="astro-vtbot | Bag of Tricks for View Transition"
-	/>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
 	<Image id="dtb" src={dtb} alt="devToolbar" transition:name="dtb" />
@@ -107,14 +117,13 @@ import dtb from 'src/assets/devToolbar.png';
 		animation-duration: 0.5s;
 	}
 	::view-transition-new(dtb) {
-		animation:  1s ease-out both from-bottom;
+		animation: 1s ease-out both from-bottom;
 	}
 	@keyframes from-bottom {
 		from {
 			transform: translateY(100%);
 		}
 	}
-
 </style>
 
 <style>
