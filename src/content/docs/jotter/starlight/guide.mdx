@@ -8,12 +8,19 @@ import AnimateImages from "/src/components/AnimateImages.astro"
 
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
-:::tip[Breaking news:]
+:::note[Starlight on browser-native cross-document view transitions]
+As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ViewTransitions />` component) is completely running on &hellip; you guess it &hellip; **browser-native cross-document view transitions**!
+
+As I did for the current site before, I will share the necessary knowledge and components over there during the next months.
+
+:::
+
+:::tip
 Starting from version 0.26.0, Starlight persists the state of the sidebar across navigation.
 
 This already gives Starlight a lot of that SPA look and feel!
 
-If you're satisfied with having the view transition effect work only in Chromium-based browsers (such as Chrome, Edge, and Opera) and can do without it in Firefox, Safari, and other browsers that don't yet support the cross-document features of the View Transition API, you can enable browser view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
+If you're satisfied with having the view transition effect work only in Chromium-based browsers (such as Chrome, Edge, and Opera) and can do without it in Firefox, and other browsers that don't yet support the cross-document features of the View Transition API, you can enable browser view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
 
 ```
 @view-transition {navigation: auto}
