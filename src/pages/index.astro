@@ -56,14 +56,13 @@ import dtb from 'src/assets/devToolbar.png';
 </Layout>
 <div id="outer">
 	<div id="new">
-		<style is:inline>#later {display: none}</style>
-		<script>setTimeout(()=>document.getElementById("later")!.style.display="inline",2000)</script>
-		<a  href="https://www.npmjs.com/package/astro-vtbot"
-			>Install from npm!<br /><img id="later"
+		<script>setTimeout(()=>document.getElementById("later")!.insertAdjacentHTML("beforeend",`<img id="later"
 				alt="npm"
 				id="badge"
 				src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5)"
-			/>
+			/>`),5000)</script>
+		<a id="later" href="https://www.npmjs.com/package/astro-vtbot"
+			>Install from npm!<br />
 		</a>
 	</div>
 </div>
