@@ -23,7 +23,7 @@ The `<TurnSignal />` component makes directional transition work with native cro
 
 Love Astro's built-in slide animation and Astro's support for custom animation with different animations for forward and backward navigation? When you replace `<ViewTransitions />` with `@view-transition{navigation: auto}` to enable the browser's native cross-document view transition all transitions will be 'forward'. The `<TurnSignal />` re-enables the backward animations supported by `transition:animate`.
 
-The component also automatically sets view transition types for **forward**, **same**, and **backward** and allows you to select among multiple view transition animations for the same page using `:active-view-transition-type(<direction>){}`.
+The component also automatically sets _view transition types_ for **forward**, **same**, and **backward** and allows you to select among multiple view transition animations for the same page using `:active-view-transition-type(<direction>){}`. See the [decription on @vtbag](https://vtbag.pages.dev/tools/turn-signal/#css-for-reverse-animation) for more details.
 
 If you have a concept of a next and previous page for your site, you can tell the `<TurnSignal />` about the order of your pages and it will automatically generate directional view transitions for you.
 
