@@ -12,7 +12,7 @@ import starlightImageZoom from 'starlight-image-zoom';
 import starlightUtils from "@lorenzo_lewis/starlight-utils";
 import { visualizer } from "rollup-plugin-visualizer";
 
-//import starlightBlog from 'starlight-blog'
+import starlightBlog from 'starlight-blog'
 
 import react from "@astrojs/react";
 
@@ -37,7 +37,7 @@ export default defineConfig({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
 	}), vtbot({}), starlight({
 		plugins: [starlightImageZoom(),
-		//starlightBlog(),
+		starlightBlog(), // TODO
 		starlightUtils({
 			multiSidebar: {
 				switcherStyle: 'horizontalList'
@@ -55,7 +55,8 @@ export default defineConfig({
 		components: {
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
-			Pagination: "./src/components/starlight/FeelBack.astro"
+			Pagination: "./src/components/starlight/FeelBack.astro",
+      MarkdownContent: "./src/components/MarkdownContent.astro"
 		},
 		title: "Bag of Tricks",
 		head: [{
