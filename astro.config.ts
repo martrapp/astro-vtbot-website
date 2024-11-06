@@ -88,7 +88,7 @@ export default defineConfig({
 		}, {
 			label: "leading",
 			items: [{
-				label: "Components",
+				label: "Reuse",
 				link: "/components/"
 			}, {
 				label: "Demos",
