@@ -14,7 +14,7 @@ const firstPublished = new Date(
 				cwd: dirname(file),
 				encoding: 'utf-8',
 			}
-		).stdout.trim() + '000'
+		).stdout?.trim() + '000'
 	)
 );
 ---
