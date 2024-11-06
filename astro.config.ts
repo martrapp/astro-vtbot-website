@@ -89,10 +89,10 @@ export default defineConfig({
 		}, {
 			label: "leading",
 			items: [{
-				label: "Use",
+				label: "[C]",
 				link: "/components/"
 			}, {
-				label: "Dem",
+				label: "[D]",
 				link: "/demos/"
 			}]
 		}]
