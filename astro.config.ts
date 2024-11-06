@@ -74,7 +74,8 @@ export default defineConfig({
 			src: "/node_modules/astro-vtbot/assets/bag-of-tricks.svg"
 		},
 		social: {
-			github: "https://github.com/martrapp/astro-vtbot"
+			github: "https://github.com/martrapp/astro-vtbot",
+      blueSky:'https://bsky.app/profile/martr.app'
 		},
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
@@ -88,10 +89,10 @@ export default defineConfig({
 		}, {
 			label: "leading",
 			items: [{
-				label: "Reuse",
+				label: "Use",
 				link: "/components/"
 			}, {
-				label: "Demos",
+				label: "Dem",
 				link: "/demos/"
 			}]
 		}]
