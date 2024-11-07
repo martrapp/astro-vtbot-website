@@ -12,7 +12,7 @@ import starlightImageZoom from 'starlight-image-zoom';
 import starlightUtils from "@lorenzo_lewis/starlight-utils";
 import { visualizer } from "rollup-plugin-visualizer";
 
-import starlightBlog from 'starlight-blog'
+//import starlightBlog from 'starlight-blog';
 
 import react from "@astrojs/react";
 
@@ -36,18 +36,16 @@ export default defineConfig({
 	integrations: [d2({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
 	}), vtbot({}), starlight({
-		plugins: [starlightImageZoom(),
-		starlightBlog(), // TODO
+		plugins: [//starlightBlog(),
+			starlightImageZoom(),
 		starlightUtils({
 			multiSidebar: {
-				switcherStyle: 'horizontalList'
-			},
-			navLinks: {
-				leading: {
-					useSidebarLabelled: 'leading'
-				}
+				switcherStyle: "horizontalList",
+			}, navLinks: {
+				leading: { useSidebarLabelled: "leading" },
 			}
-		})],
+		}),
+		],
 		tableOfContents: {
 			minHeadingLevel: 2,
 			maxHeadingLevel: 4
@@ -56,7 +54,7 @@ export default defineConfig({
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
 			Pagination: "./src/components/starlight/FeelBack.astro",
-      MarkdownContent: "./src/components/MarkdownContent.astro"
+			//MarkdownContent: "./src/components/MarkdownContent.astro"
 		},
 		title: "Bag of Tricks",
 		head: [{
@@ -75,7 +73,7 @@ export default defineConfig({
 		},
 		social: {
 			github: "https://github.com/martrapp/astro-vtbot",
-      blueSky:'https://bsky.app/profile/martr.app'
+			blueSky: 'https://bsky.app/profile/martr.app'
 		},
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
