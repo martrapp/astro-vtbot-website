@@ -32,6 +32,8 @@ import dtb from 'src/assets/devToolbar.png';
 		name="description"
 		content="Reusable components, tech demos, and a wealth of in-depth information on Astro's view transitions"
 	/>
+	<meta slot="head" property="twitter:card" content="summary_large_image" />
+
 	<meta slot="head" name="robots" content="index, follow" />
 	<meta slot="head" property="og:type" content="website" />
 	<meta slot="head" property="og:image" content="https://events-3bg.pages.dev/social.png" />
@@ -42,7 +44,6 @@ import dtb from 'src/assets/devToolbar.png';
 		content="Reusable components, tech demos, and a wealth of in-depth information on Astro's view transitions"
 	/>
 	<meta slot="head" property="og:locale" content="en_US" />
-	<meta property="twitter:card" content="summary_large_image" />
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
 	<Image id="dtb" src={dtb} alt="devToolbar" transition:name="dtb" />
