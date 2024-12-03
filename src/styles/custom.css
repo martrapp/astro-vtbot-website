@@ -141,5 +141,4 @@ li a[aria-current='page'] {
 
 html, body {
   overscroll-behavior: none;
-  touch-action: none;
 }
