@@ -53,6 +53,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 	import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
 	import '@feelback/js/auto';
 	document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
+	addEventListener("popstate", (e)=>e.hasUAVisualTransition && location.reload());
 </script>
 
 {
