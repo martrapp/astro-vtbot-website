@@ -138,3 +138,7 @@ li a[aria-current='page'] {
 	background-color: var(--sl-color-gray-5);
 	color: var(--sl-color-gray-2);
 }
+
+html, body {
+	overscroll-behavior-x: none;
+}
