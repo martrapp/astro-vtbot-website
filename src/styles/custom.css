@@ -140,5 +140,6 @@ li a[aria-current='page'] {
 }
 
 html, body {
-	overscroll-behavior-x: none;
+  overscroll-behavior: none;
+  touch-action: none;
 }
