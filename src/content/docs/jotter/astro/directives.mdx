@@ -80,7 +80,7 @@ To enable animations during view transitions even for browsers that do not suppo
 
 In the stylesheet above, the first line is the one introduced in the last section for `transition:name`. The CSS in the Astro layer defines entry and exit animations that are triggered when the view transition pseudo-elements are inserted into the DOM. During view transitions, Astro also sets the `data-astro-transition` attribute on the `<html>` document element. In this way, it is possible to give the browser back navigation a styling that differs from the forward animation. Browsers without native view transition support will ignore these declarations all together as they do not recognize the `::view-transition` pseudo elements.
 
-The lines in the lower part of the style sheet are for browsers that do not natively support view transitions. Astro's client-side router recognizes those browsers and if the `<ViewTransitions/>` _fallback option_ isn't switched off, it inserts the `data-astro-transition-fallback` attribute for them to trigger the animation. As this does not happen in browsers with native support for view transitions, the two parts of the stylesheet are mutually exclusive.
+The lines in the lower part of the style sheet are for browsers that do not natively support view transitions. Astro's client-side router recognizes those browsers and if the `<ViewTransitions />` _fallback option_ isn't switched off, it inserts the `data-astro-transition-fallback` attribute for them to trigger the animation. As this does not happen in browsers with native support for view transitions, the two parts of the stylesheet are mutually exclusive.
 
 In Astro's fallback simulation, the exit and entry animations do not run in parallel but one after the other:
 

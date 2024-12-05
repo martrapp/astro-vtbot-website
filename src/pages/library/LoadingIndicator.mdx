@@ -32,7 +32,7 @@ In good Astro tradition this component works out of the box without any configur
 
 ### Alternative 1: Use it as an Astro integration
 
-The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all  pages that use the `<ViewTransitions/>` component.
+The easiest way to enjoy the loading indicator is to [install astro-vtbot as an Astro integration](/library/Installation/). This will automatically add the `<LoadingIndicator />` component to all  pages that use the `<ViewTransitions />` component.
 
 If you want to keep the integration, e.g. for the automatic linter support, but want to (temporarily) disable the loading indicator, set loadingIndicator to false in the configuration:
 
@@ -63,7 +63,7 @@ or
 
 ### Alternative 2: Use the &lt;LoadingIndicator /> or the &lt;ProgressBar /> component
 
-If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component should be put inside the `<head>` element **behind the `<ViewTransitions/>` component**.
+If you do not install `astro-vtbot` as an Astro integration, or if you set `loadingIndicator` to false in your Astro configuration, you can still install the `<LoadingIndicator />` component directly on your page. The `<LoadingIndicator />` component should be put inside the `<head>` element **behind the `<ViewTransitions />` component**.
 
 
 ```astro title="YourLayout.astro" {3,8}

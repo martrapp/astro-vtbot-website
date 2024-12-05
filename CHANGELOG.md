@@ -36,7 +36,7 @@
 
 - 42b417e: Provides the initial version of the Portal component
 - 99f7b20: Provides tech demo and reusable components for new animation types
-- e07a615: Enables installation as an Astro integration with `npx astro add astro-vtbot`. This automatically adds the `<Linter/>` component to all your `<ViewTransition/>` pages!
+- e07a615: Enables installation as an Astro integration with `npx astro add astro-vtbot`. This automatically adds the `<Linter/>` component to all your `<ViewTransitions />` pages!
 - fd48b93: Updates the Practitioners' Guide
 - e6b62ce: Adds documentation about installation and for the new components: Zoom, Swing, AnimationStyle, Portal
 - 8b28dc8: Linter now also checks the `type` property of `<script>` elements for suspicious values

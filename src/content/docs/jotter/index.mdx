@@ -16,25 +16,25 @@ So this is all about view transitions: A kind of animation in the browser, where
 
 If a website consists of several pages, you often get annoying effects when the next page is loaded. You will typically see short flashes, half-loaded pages and jumping elements. The main advantage of view transitions is that they replace these loading artifacts with a smooth visual transition. While transitions between pages is the main use case for view transitions, it is worth noting that at their core, they are used to transition between different versions of the same document.
 
-At the time of writing, the world is split in two: Chromium-based browsers (Chrome, Edge, Opera, ...) have native support for view transitions, all others do not. Safari added support for view transitions with the Technology Preview 192. Check out the capabilities of your current browser [on the test page](/jotter/api/test-page/)!
+At the time of writing, the world is split in two: Chromium-based browsers (Chrome, Edge, Opera, ...) have native support for view transitions, all others do not. Safari added support for level 1 view transitions with the Technology Preview 192. Check out the capabilities of your current browser [on the test page](/jotter/api/test-page/)!
 
 
 
  In the Astro framework, you can use native view transitions on browsers that natively support them, and you get an emulation of the main effects on browsers that don't support them.
 
 
-In this Jotter, you'll find lots of tips on how to use the view transitions built into Astro. But you may also get a deep insight into the View Transition API independently of Astro.
+In this Jotter, you'll find lots of tips on how to use the view transitions built into Astro. But you may also get a deep insight into the View Transition API independently of Astro. If you want to learn more about the View Transition API beyond Astro, please visit astro-vtbot's framework independent sister [vtbag.dev](https://vtbag.dev).
 
 So how can you gain initial experience with view transition?
 
 ### Automatically on Each Navigation
 
-You can switch on the `#view-transition-on-navigation` flag for some Chromium browsers. That works at least for current Chrome and Opera browsers. After that it is easy to enable view transitions on all navigation within your site: Paste the following line into all your .html files, and the browser will begin to transition pages as you navigate your site. As the name suggests, this works as long as your pages all have the same origin, i.e. URLs are the same up to the first '/'.
+Automatic view transitions between all pages of a multi page application are available on most modern browsers now. You can activate the View Transition API with a simple CSS at-rule. Put the following line on all your HTML pages and you are ready to go. If the browser finds this rule on the old and the new page, and both pages have the same origin (the URLs are the same up to the first "/"), it will start view transitions on the navigation from the old page to the new page.
 
-```html Chromium.html {3}
+```html page.html {3}
 <html>
   <head>
-    <meta name="view-transition" content="same-origin" />
+    <style>@view-transition {navigation: auto}</style>
     ...
   </head>
   <body>
@@ -42,21 +42,10 @@ You can switch on the `#view-transition-on-navigation` flag for some Chromium br
   </body>
 </html>
 ```
-> **Note:** [Level 2 of the View Transition API](/jotter/api/references/#w3c-drafts) defines a pure CSS way to enable cross-document view transitions.
-
-If the `#view-transition-on-navigation` flag is not set, either because your browser does not have it or you have not enabled it, browsers simply ignore this line.
-
-:::tip
-To enable `#view-transition-on-navigation` flag on a Chromium browser do the following:
-1. Open a new tab in the browser
-2. Copy & paste `chrome://flags/#view-transition-on-navigation` to the address bar and press Enter.
-3. Set the option to `Enabled`.
-:::
-
 
 ### Support for All Browsers
 
-The Astro framework offers the `<ViewTransition/>` component, which accomplishes something comparable to `<meta name="view-transition" content="same-origin" />` for all browsers:
+The Astro framework offers the `<ViewTransitions />` component, which accomplishes something comparable to `@view-transition {navigation: auto}` for all browsers:
 
 ```astro Layout.astro {2,7}
 ---
@@ -71,8 +60,11 @@ import { ViewTransitions } from "astro:transitions"
     ...
 </html>
 ```
+:::note
+With version 5.0, Astro's `<ViewTransition />` component was renamed to `<ClientRouter />`. `<ViewTransitions />` is still supported but deprecated. This Jotter still uses the old `<ViewTransitions />` terminology until it is migrated to Astro 5.0 Starlight.
+:::
 
-If you now switch from one page to the next, you will also see a fading effect as the page changes. And this even works with browsers that don't yet have native support for view transitions, such as Firefox and Safari.
+If you now switch from one page to the next, you will also see a fading effect as the page changes. And this even works with browsers that don't yet have native support for view transitions, such as Firefox.
 
 It is impossible to completely emulate view transitions without native browser support.
 Behind the scenes, Astro emulates the most important aspects of native view transitions for browsers without native support.  Of course, there are some [differences and limitations](/jotter/astro/differences/), but the main impression is quite similar.

@@ -10,9 +10,9 @@ This section describes how The Bag's Starlight support hooks into the Starlight 
 
 Visit the [corresponding section in the overview](/jotter/starlight/inner-workings/#hook-into-starlight) to see where we are in  the big picture of The Bag's Starlight support.
 
-The way to enable view transitions on an Astro site is to add Astro's `<ViewTransition/>` component into the `<head>` of every page. Starlight has a dedicated mechanism to insert elements into the `<head>`. But that works for HTML elements, only. It can't be used to insert an Astro component.
+The way to enable view transitions on an Astro site is to add Astro's `<ViewTransitions />` component into the `<head>` of every page. Starlight has a dedicated mechanism to insert elements into the `<head>`. But that works for HTML elements, only. It can't be used to insert an Astro component.
 
-So we need to get access to an Astro component that can render the `<ViewTransitions/>` component into the `<head>`. A good entry pont for that search is Starlight's `<Page>` component. Looking at the relevant part of that component  see that the `<head>` tag is inserted by the `<Page>` component itself, but the children of the `<head>` are rendered by a special `<Head>` component provided by Starlight.
+So we need to get access to an Astro component that can render the `<ViewTransitions />` component into the `<head>`. A good entry pont for that search is Starlight's `<Page>` component. Looking at the relevant part of that component  see that the `<head>` tag is inserted by the `<Page>` component itself, but the children of the `<head>` are rendered by a special `<Head>` component provided by Starlight.
 
 ```astro title="Page.astro" showLineNumbers=false
   ...
@@ -46,7 +46,7 @@ Now that the <BoT/> provides more components for Starlight, this file is also a 
 
 ## Structure of the Base Component
 
-You might already have guessed, what `astro-vtbot/components/starlight/Base.astro` might look like. It has to use `<ViewTransitions/>` and it must render its `<slot/>` to insert the contents of the original `Head` component.
+You might already have guessed, what `astro-vtbot/components/starlight/Base.astro` might look like. It has to use `<ViewTransitions />` and it must render its `<slot/>` to insert the contents of the original `Head` component.
 
 ```astro title="astro-vtbot/components/starlight/Base.astro" {15,19} collapse={1-12}
 ---
@@ -83,7 +83,7 @@ The `<StarlightConnector>` is a component that only contains a single script.
 ?&nbsp;&nbsp;"Why is this an extra component?"\
 ?&nbsp;&nbsp;"Why isn't that script simply at the end of the Base component?"</summary>
 
-> Important question, you asked there! Scripts in the `Base` component would be executed before the scripts in the embedded components. Thus embedding the script into its own StarlightConnector component and putting that at the end of the component list ensures that the connector code only runs after the `<ViewTransitions/>` and `<ReplacementSwap/>` scripts are loaded. \
+> Important question, you asked there! Scripts in the `Base` component would be executed before the scripts in the embedded components. Thus embedding the script into its own StarlightConnector component and putting that at the end of the component list ensures that the connector code only runs after the `<ViewTransitions />` and `<ReplacementSwap/>` scripts are loaded. \
 \
 This in turn ensures that the event listeners are called in the intended order and that in turn determines the execution order of the callbacks ;-)
 </details>

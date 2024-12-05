@@ -27,7 +27,7 @@ If you're satisfied with having the view transition effect work only in Chromium
 ```
 :::
 
-Otherwise stay tuned for how to add Astro's `<ViewTransitions>` support to Starlight and enjoy view transitions **on all browsers** including Safari and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
+Otherwise stay tuned for how to add Astro's `<ViewTransitions>` support to Starlight and enjoy view transitions **on all browsers** and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
 
 :::note[Benefits of adding Astro's View Transition Support to Starlight]
 
@@ -164,7 +164,7 @@ If you want to add further styling to the transition group, you can explicitly n
 ### Fallback Control
 What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from `none`, `swap` or `animate`. Use the `viewTransitionFallback` attribute of the `<VtbotStarlight>` component to tell The Bag what you have chosen:
 
-```astro title="How to specify the fallback option of <ViewTransitions/>"
+```astro title="How to specify the fallback option of <ViewTransitions />"
 <VtbotStarlight {...Astro.props} viewTransitionsFallback="animate">
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
