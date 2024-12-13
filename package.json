@@ -25,16 +25,17 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^3.1.9",
-    "@astrojs/starlight": "^0.28.6",
+    "@astrojs/mdx": "^4.0.2",
+    "@astrojs/starlight": "^0.30.0",
     "@changesets/changelog-github": "0.5.0",
     "@changesets/cli": "^2.27.9",
     "@expressive-code/plugin-collapsible-sections": "^0.38.2",
     "@expressive-code/plugin-line-numbers": "^0.38.2",
+    "@lorenzo_lewis/starlight-utils": "^0.2.0",
     "@pagefind/default-ui": "^1.2.0",
     "@types/dom-view-transitions": "^1.0.5",
     "@types/node": "^22.9.0",
-    "astro": "^4.16.10",
+    "astro": "^5.0.5",
     "astro-d2": "^0.6.0",
     "astro-expressive-code": "^0.38.2",
     "astro-feelback": "latest",
@@ -50,21 +51,12 @@
     "remark-toc": "^9.0.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "sharp": "^0.33.5",
-    "starlight-blog": "^0.14.1",
+    "starlight-blog": "^0.15.0",
     "starlight-image-zoom": "^0.9.0",
     "typescript": "^5.6.3"
   },
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/martrapp"
-  },
-  "dependencies": {
-    "@astrojs/react": "^3.6.2",
-    "@astrojs/starlight-docsearch": "^0.2.0",
-    "@lorenzo_lewis/starlight-utils": "^0.2.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
   }
 }

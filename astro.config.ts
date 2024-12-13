@@ -14,8 +14,6 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 //import starlightBlog from 'starlight-blog';
 
-import react from "@astrojs/react";
-
 // https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
@@ -94,7 +92,7 @@ export default defineConfig({
 				link: "/demos/"
 			}]
 		}]
-	}), react()],
+	})],
 	vite: {
 		build: {
 			rollupOptions: {
