@@ -27,7 +27,7 @@ I played with Astro's view transitions from the day they were first supported as
 ...@../../../common
 ```
 </div><div>
-## Stage 1: Proof of Concept
+## Level 1: Proof of Concept
 With all gray theories, at some point it becomes necessary to try things out in the real world. On October 30th, the first version of the [fish pond demo](https://events-3bg.pages.dev/fish-pond/center/) saw the light of day! Its purpose was to test drive the new event architecture.
 
 Not only did it play with different directions. It was also able to log the events and show the values of their properties. The first version logged to an overlay. But soon the information grew to an extend that won't fit on the screen any more.
@@ -50,7 +50,7 @@ Most of these had been motivated by the [original discussions](https://github.co
 ...@../../../common
 ```
 </div><div>
-## Stage 2: Reusable Components
+## Level 2: Reusable Components
 
 Starting in December, I extracted the core mechanics of some tech demos to make reusable components. There was also a lot of input from the Discord `#support` channels.
 
@@ -79,5 +79,17 @@ From the beginning, the 👜 box of tricks ✨ contained some information for de
 
 This also seems to be the beginning of a [Starlight era](/jotter/starlight/).
 
-</div></div></div>
+</div></div><div class="item"><div class="not-content">
+```d2 width=200 pad=16 sketch title="@vtbag"
+"@".style.font-size: 60
+...@../../../common
+```
+</div><div>
+
+## Level 4: @vtbag
+
+Now that most browsers have native support for view transitions, you can use them in Astro projects independent of the `<ViewTransitions />` component. To better reflect this, `<ViewTransitions />` was renamed `<ClientRouter />` in Astro 5.0. And this site got a sister project at https://vtbag.dev that is dedicated to the use of the View Transition API independent of any given framework.
+</div></div>
+
+</div>
 
