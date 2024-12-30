@@ -103,4 +103,3 @@ An easy way to ensure consistence is to define the part that is common to all pa
 
 The `<ReplacementSwap />`component completely overwrites the `swap()` function, i.e. without ever calling the built-in implementation of `swap()`. The consequence of this, however, is that the [chaining pattern of `swap()` implementations](/jotter/astro/loader-swap/#extending-swap) is interrupted. It is therefore important that the ReplacementSwap component is the first to be added to the list of event listeners for astro:before-swap. To do this, it is sufficient to import the component as early as possible. This can also be done independently of any later use of the component.
 
-Translated with www.DeepL.com/Translator (free version)

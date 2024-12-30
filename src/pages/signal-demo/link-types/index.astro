@@ -1,5 +1,5 @@
 ---
-import BaseHead from '../_components/BaseHead.astro';
+import BaseHead from './_BaseHead.astro';
 import Header from './_Header.astro';
 import Footer from '../_components/Footer.astro';
 import { SITE_DESCRIPTION } from '../_consts';
@@ -12,8 +12,9 @@ import { SITE_DESCRIPTION } from '../_consts';
 	</head>
 	<body>
 		<Header />
-		<main transition:animate="slide">
+		<main>
 			<h4 style="margin-bottom:3rem; color:darkred">Click the [Blog] tab above for information about this demo</h4>
+			<h3 style="margin-bottom:3rem; color:darkgreen">Click this <a href="/signal-demo/link-types/about/" data-vtbag-link-types="flip/turn">very special link</a> to the About page.
 			<h1>🧑‍🚀 Hello, Astronaut!</h1>
 			<p>
 				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This

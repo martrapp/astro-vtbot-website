@@ -1,0 +1,52 @@
+---
+title: Astro-Specific vs. Web Standard View Transitions
+description: When should you choose Astro's support for view transitions and when should you choose the API for view transitions?
+---
+
+This website is mainly dedicated to Astro's view transitions as you can see from [its history](/jotter/history/). But today browsers also natively support cross-document view transitions. This page might help you to decide between those two alternatives.
+
+### Astro Set the Stage
+
+In mid-2023, Astro revolutionized the web experience by enabling smooth page transitions for static websites, making them feel like dynamic single-page applications (SPAs). At the time, this was groundbreaking. While Chrome had plans for native cross-document view transitions, Astro was the first tool offering such functionality out of the box, months ahead of broader browser support.
+
+### Making an Educated Decision
+
+Fast forward to late 2024, and the scenario has evolved significantly. Native cross-document view transitions are now supported by nearly all modern browsers. While Firefox has yet to release Level 1 of the View Transition API, it is at least actively being developed.
+
+
+Astro's `<ViewTransitions />` component has been a reliable solution for implementing seamless transitions in Astro projects. However, with native browser support becoming more robust, developers now face a choice between using Astro's built-in component and the emerging web standard.
+
+
+
+## Key Considerations
+
+In the following, I outline some background information that may help you decide between the two options.
+
+### Progressive Enhancement
+Cross-document view transitions don’t alter the core functionality of a multi-page application (MPA); they simply add polished animations. If the browser does not support them, the application will still function, albeit without the visual flair. However, for complex setups with multiple transition groups, the absence of native support can make animations appear less cohesive.
+
+
+### Browser Support
+Astro's solution works across a wide range of browsers, including those without native view transition support. That said, the fallback animations differ from what browsers with full support offer. While Chrome, Edge, and Safari now support both Level 1 and Level 2 of the View Transition API, backward compatibility concerns might still arise, especially with older browser versions.
+
+Additionally, advanced animations, such as differentiating transitions for forward and backward history traversals, require the Navigation API. Developers should evaluate how widely both APIs are supported within their user base.
+
+### Web Standards
+Astro's `<ViewTransitions />` component was intended as a bridge to the widespread adoption of native browser transitions. The component transforms MPAs into SPAs, affecting script behavior and application state. This might inadvertently introduce challenges like [handling global states or third-party scripts](/jotter/astro/scripts/)	 that expect full page reloads. This approach required a learning curve, particularly for developers adapting existing scripts or using Astro lifecycle events.
+
+In contrast, the View Transition API maintains the traditional MPA architecture. Pages, DOM, scripts, and state remain unaffected by transitions unless explicitly altered using events like `pagereveal` or `pageswap`.
+
+While Astro focused early on simplifying cross-document view transitions, the web standard now provides knobs and levers for handling more advanced use cases: view transition classes, types, and nested transition groups. Using these features with Astro naturally paves the way for browser-native view transitions.
+
+## Recommendations
+
+### For New Projects
+If you're starting a new project, it's safe to assume users will have reasonably up-to-date browsers. With over 75% global support for the View Transition API and Navigation API, native transitions are a solid choice. Starting with basic effects like cross-fades and morphs ensures a smooth implementation.
+
+### For Existing Projects
+Consider migrating from `<ViewTransitions />` to native cross-document transitions during ongoing development. While some Astro lifecycle events may require explicit migration, the effort is usually manageable. For example, tasks like reestablishing click handlers often become redundant with native MPAs.
+
+For developers already using `astro-vtbot`, many tools now have native script equivalents available on [vtbag.dev](https://vtbag.dev). These scripts seamlessly integrate with native cross-document view transitions, making them a great option for modern Astro projects.
+
+By embracing the web standard, you are future-proofing your application.\
+Happy transitioning!

@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from 'src/layouts/Layout.astro';
 import fi from 'src/assets/big-fi.png';
+import ch from 'src/assets/ch.png';
 import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 import dtb from 'src/assets/devToolbar.png';
 ---
@@ -17,11 +18,7 @@ import dtb from 'src/assets/devToolbar.png';
 		}
 	</script>
 
-	<meta
-		slot="head"
-		property="og:site_name"
-		content="Bag of Tricks for Astro's View Transitions"
-	/>
+	<meta slot="head" property="og:site_name" content="Bag of Tricks for Astro's View Transitions" />
 	<meta
 		slot="head"
 		property="og:title"
@@ -53,25 +50,40 @@ import dtb from 'src/assets/devToolbar.png';
 			><Image transition:name="bot" id="bot" src={bot} alt="A bag of tricks" />
 			<span class="grad">Bag of Tricks</span>
 		</span>
-		<br /> for Astro's <s>View Tran&shy;si&shy;tions</s><u>ClientRouter</u>
+		<br /> for Astro's <s>View Tran&shy;si&shy;tions</s>
+		<a href="/jotter/history/#level-4-browser-native-cross-document">Client<Image id="ch" src={ch} alt="Click Here" transition:name="ch" />Router</a
+		>
 	</h1>
 </Layout>
 <div id="outer">
 	<div id="new">
-		<script>setTimeout(()=>document.getElementById("later")!.insertAdjacentHTML("beforeend",`<img id="later"
+		<script>
+			setTimeout(
+				() =>
+					document.getElementById('later')?.insertAdjacentHTML(
+						'beforeend',
+						`<img id="later"
 				alt="npm"
 				id="badge"
 				src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5)"
-			/>`),5000)</script>
-		<a id="later" href="https://www.npmjs.com/package/astro-vtbot"
-			>Install from npm!<br />
-		</a>
+			/>`
+					),
+				1000
+			);
+		</script>
+		<a id="later" href="https://www.npmjs.com/package/astro-vtbot">Install from npm!<br /> </a>
 	</div>
 </div>
 <a href="/components/" transition:name="reuse">Reusable Components</a>
 <a href="/demos/" transition:name="demos">Tech Demos</a><br />
 <a href="/jotter/" data-astro-reload transition:name="jotter">The Jotter</a>
-<a href="https://vtbag.pages.dev"><div style="display: inline-block; width: 35%">@vtbag</div><div style="font-size:min(2vh,2vw); width:65%; display: inline-block">View Transition Tricks<br> independent of Astro</div></a>
+<a id="vtbag" href="https://vtbag.pages.dev"
+	><div style="display: inline-block; width: 35%">@vtbag</div><div
+		style="font-size:min(2vh,2vw); width:65%; display: inline-block"
+	>
+		View Transition Tricks<br /> independent of Astro
+	</div></a
+>
 
 <div class="fancy">&nbsp;</div>
 <div
@@ -104,6 +116,9 @@ import dtb from 'src/assets/devToolbar.png';
 		text-shadow:
 			1px 1px 1px #000c,
 			2px 2px 2px rgba(255, 127, 80, 0.5);
+	}
+	#vtbag {
+		background: linear-gradient(330deg, #6fa61080, rgba(127, 255, 80, 0.5));
 	}
 	html {
 		background: linear-gradient(330deg, #000, rgb(22, 54, 66));
@@ -161,6 +176,9 @@ import dtb from 'src/assets/devToolbar.png';
 		border: dotted 7px rgba(256, 165, 0, 0.5);
 	}
 
+	h1 a {
+		color: #abc;
+	}
 	#new a {
 		color: #cff;
 		text-decoration: dotted underline;
@@ -197,6 +215,15 @@ import dtb from 'src/assets/devToolbar.png';
 		transform: rotateY(0deg);
 		transition: all 0.5s ease-in-out;
 	}
+
+	#ch {
+		z-index: -1;
+		position: absolute;
+		width: min(15vh, 15vw);
+		height: auto;
+		transform: translate(-190%, -50%) rotateZ(30deg);
+		transition: all 0.5s ease-in-out;
+	}
 	#bot {
 		height: 2.5ex;
 		width: auto;
@@ -218,8 +245,7 @@ import dtb from 'src/assets/devToolbar.png';
 		font-size: min(7vh, 7vw);
 		font-weight: bold;
 		font-family: Arial, Helvetica, sans-serif;
-		text-shadow: -0.05em -0.05em -0.05em rgba(255, 255, 255, 0.2);
-		text-shadow: 0.1em 0.1em 0.1em rgba(0, 0, 0, 0.2);
+		text-shadow: 0.1ex 0.1em 0.1em rgba(0, 0, 0, 0.7);
 	}
 	html .bang {
 		padding: 0.5ex 0;
@@ -234,6 +260,7 @@ import dtb from 'src/assets/devToolbar.png';
 		background-image: linear-gradient(45deg, coral, #8f6810 30%, coral 90%);
 		background-size: 10%;
 		background-repeat: repeat;
+		text-shadow: 0.1ex 0.1em 0.1em rgba(0, 0, 0, 0.2);
 	}
 	@media screen and (min-aspect-ratio: 1/1.1) {
 		#fi {

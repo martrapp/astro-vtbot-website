@@ -1,0 +1,147 @@
+---
+import TurnSignal from 'astro-vtbot/components/TurnSignal.astro';
+
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../_styles/global.css';
+import CamShaft from 'astro-vtbot/components/CamShaft.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<TurnSignal selector="nav .internal-links a"/>
+<CamShaft />
+
+<style is:global>
+	:root {
+		color-scheme: light;
+	}
+	@view-transition {
+		navigation: auto;
+	}
+	html body main {
+		view-transition-name: main;
+	}
+
+	:active-view-transition-type(forward) {
+		&::view-transition-old(main) {
+			animation: 0.25s both slide-out-to-left;
+		}
+		&::view-transition-new(main) {
+			animation: 0.25s both slide-in-from-right;
+		}
+	}
+	:active-view-transition-type(backward) {
+		&::view-transition-old(main) {
+			animation: 0.25s both slide-out-to-right;
+		}
+		&::view-transition-new(main) {
+			animation: 0.25s both slide-in-from-left;
+		}
+	}
+	:active-view-transition-type(same)::view-transition-image-pair(main) {
+		animation: 0.25s same;
+	}
+	:active-view-transition-type(turn) {
+		&::view-transition-old(main) {
+			transform-origin: top;
+			animation: 0.5s both turn-out;
+		}
+		&::view-transition-new(main) {
+			transform-origin: top;
+			animation: 0.5s 0.5s both turn-in;
+		}
+	}
+	:active-view-transition-type(flip) {
+		&::view-transition-old(main) {
+			animation: 0.25s both flip-out;
+		}
+		&::view-transition-new(main) {
+			animation: 0.25s 0.25s both flip-in;
+		}
+	}
+
+	@keyframes slide-out-to-left {
+		to {
+			transform: translateX(-100%);
+		}
+	}
+	@keyframes slide-out-to-right {
+		to {
+			transform: translateX(100%);
+		}
+	}
+	@keyframes slide-in-from-left {
+		from {
+			transform: translateX(-100%);
+		}
+	}
+	@keyframes slide-in-from-right {
+		from {
+			transform: translateX(100%);
+		}
+	}
+
+	@keyframes turn-out {
+		to {
+			transform: rotateX(90deg);
+		}
+	}
+	@keyframes turn-in {
+		from {
+			transform: rotateX(90deg);
+		}
+	}
+	@keyframes flip-out {
+		to {
+			transform: rotateY(90deg);
+		}
+	}
+	@keyframes flip-in {
+		from {
+			transform: rotateY(90deg);
+		}
+	}
+
+	@keyframes same {
+		50% {
+			transform: scale(0);
+		}
+	}
+</style>

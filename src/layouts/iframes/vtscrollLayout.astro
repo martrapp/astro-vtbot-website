@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions, slide } from 'astro:transitions';
+import { ClientRouter, slide } from 'astro:transitions';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 export interface Props {
 	theme: 'light' | 'dark';
@@ -14,7 +14,7 @@ const none = duration.startsWith('0');
 <html style="view-transition-name: none" data-theme={theme}>
 	<head>
 		<meta charset="utf-8" />
-		<ViewTransitions />
+		<ClientRouter />
 		{opt && <PageOffset name="main" />}
 	</head>
 	<body>

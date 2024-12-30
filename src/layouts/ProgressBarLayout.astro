@@ -13,7 +13,7 @@ import MdxLayout from './MdxLayout.astro';
 	<ProgressBar />
 
 	{/* To observe the effect it is necessary to simulate a 2000ms loading time */}
-	<BrakePad production duration={2000} />
+	<BrakePad slot="head" production duration={2000} />
 
 	<slot />
 </MdxLayout>

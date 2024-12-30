@@ -1,7 +1,7 @@
 ---
 import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 import { getImage } from 'astro:assets';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import outback from 'src/assets/outback.png';
 
 const optimizedBackground = await getImage({ src: outback });
@@ -18,7 +18,7 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 		<title>Ken Guru | Bag of Tricks</title>
 
 		<VtBotDebug production />
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 	<body>
 		<a href="" transition:name="Ken Guru">🦘</a>

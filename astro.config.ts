@@ -17,6 +17,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
+	devToolbar: { enabled: false },
 	prefetch: process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
@@ -33,7 +34,7 @@ export default defineConfig({
 	trailingSlash: 'ignore',
 	integrations: [d2({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
-	}), vtbot({}), starlight({
+	}), vtbot({ loadingIndicator: true, autoLint: false}), starlight({
 		plugins: [//starlightBlog(),
 			starlightImageZoom(),
 		starlightUtils({
@@ -115,6 +116,9 @@ function sidebar1() {
 		items: [{
 			label: "A Brief History of The Bag",
 			link: "/jotter/history/"
+		}, {
+			label: "Which View Transitions to Use?",
+			link: "/jotter/astro-view-transitions/"
 		}, {
 			label: "Tech-Demos",
 			link: "/jotter/demos/"
