@@ -17,7 +17,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
-	devToolbar: { enabled: false },
+	devToolbar: { enabled: true },
 	prefetch: process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {

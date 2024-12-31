@@ -62,7 +62,7 @@ import dtb from 'src/assets/devToolbar.png';
 				() =>
 					document.getElementById('later')?.insertAdjacentHTML(
 						'beforeend',
-						`<img id="later"
+						`<img
 				alt="npm"
 				id="badge"
 				src="https://img.shields.io/npm/v/astro-vtbot?style=plastic&logo=npm&label=astro-vtbot&color=rgba(0%2C200%2C200%2C0.5)"
@@ -144,12 +144,12 @@ import dtb from 'src/assets/devToolbar.png';
 	}
 </style>
 
-<style>
+<style is:global>
 	h1 {
 		margin: 0;
 	}
 	#badge {
-		height: min(5vh, 5vw);
+		height: min(4vh, 4vw);
 		margin: 0.5rem 0;
 	}
 	#outer {
@@ -269,7 +269,7 @@ import dtb from 'src/assets/devToolbar.png';
 			transform: rotateY(180deg);
 		}
 		#outer {
-			left: 65vw;
+			left: 70vw;
 			transform: rotateZ(5deg) translateX(0);
 		}
 	}
