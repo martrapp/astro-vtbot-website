@@ -23,28 +23,45 @@ Astro's `<ViewTransitions />` component has been a reliable solution for impleme
 In the following, I outline some background information that may help you decide between the two options.
 
 ### Progressive Enhancement
-Cross-document view transitions don’t alter the core functionality of a multi-page application (MPA); they simply add polished animations. If the browser does not support them, the application will still function, albeit without the visual flair. However, for complex setups with multiple transition groups, the absence of native support can make animations appear less cohesive.
+View transitions are a progressive enhancement. If the browser does not support them, the application will still function, albeit without the visual flair. However, for setups that use the animations to add context or even use them as part of the story telling, the absence of animations on non supporting browsers can make navigation appear less cohesive.
+
+So you can hardly make things worse when adding simple, fast view transitions as an afterthought to an existing MPA site.
+But when you design a site where view transitions  are an important part of the concept, you should have a feel for how well they are supported in the user base.
 
 
 ### Browser Support
-Astro's solution works across a wide range of browsers, including those without native view transition support. That said, the fallback animations differ from what browsers with full support offer. While Chrome, Edge, and Safari now support both Level 1 and Level 2 of the View Transition API, backward compatibility concerns might still arise, especially with older browser versions.
+Astro's `<ClientRouter />` works across a wide range of browsers, including those without native view transition support. That said, the [fallback simulation differs](/jotter/astro/differences/) from what browsers with full support offer.
 
-Additionally, advanced animations, such as differentiating transitions for forward and backward history traversals, require the Navigation API. Developers should evaluate how widely both APIs are supported within their user base.
+While Chrome, Edge, and Safari now natively support Level 2 of the View Transition API, backward compatibility concerns might still arise, especially if you assume that many users still use older browser versions.
 
-### Web Standards
-Astro's `<ViewTransitions />` component was intended as a bridge to the widespread adoption of native browser transitions. The component transforms MPAs into SPAs, affecting script behavior and application state. This might inadvertently introduce challenges like [handling global states or third-party scripts](/jotter/astro/scripts/)	 that expect full page reloads. This approach required a learning curve, particularly for developers adapting existing scripts or using Astro lifecycle events.
+For best results with native view transitions, you might be in need of additional APIs like the Navigation API. And you will find out that prefetching or even pre-rendering with Speculation Rules make a huge difference when using native cross-document view transitions.
 
-In contrast, the View Transition API maintains the traditional MPA architecture. Pages, DOM, scripts, and state remain unaffected by transitions unless explicitly altered using events like `pagereveal` or `pageswap`.
+So it mainly comes down to the question how things look without native support and how many users are affected. You should have some idea how widely the new APIs are supported within the user base.
 
-While Astro focused early on simplifying cross-document view transitions, the web standard now provides knobs and levers for handling more advanced use cases: view transition classes, types, and nested transition groups. Using these features with Astro naturally paves the way for browser-native view transitions.
+[Native Cross-document view transitions](https://caniuse.com/mdn-css_at-rules_view-transition)\
+[Navigation API](https://caniuse.com/mdn-api_navigation)\
+[Speculation Rules](https://caniuse.com/mdn-html_elements_script_type_speculationrules_prerender)
+
+### DX and Development Model
+Browser-native cross-document view transitions don't alter the core functionality of a multi-page application (MPA). They simply add animations.
+
+Astro's `<ClientRouter />` component, f.k.a. `<ViewTransitions />`, was introduced way back in Astro v2.9.0. It was intended as a bridge to the widespread adoption of native view transitions. It really transforms your MPA into a SPA. If your site comes with no JavaScript, adding the `<ClientRouter />` will just replace disruptive full page loads with smooth transitions.
+
+If you use JavaScript on your site, you have to be aware of the fact that pages aren't reloaded during navigation but that scripts and DOM are altered on the existing page. This might inadvertently introduce challenges. If you use third party libraries that expect page loads during navigation, your have to convince them to reinitialize on navigation. So you typically end up with some additional scripts that [fix state after navigation](/jotter/astro/scripts/). This approach requires a learning curve, particularly for developers adapting existing scripts and using Astro lifecycle events.
+
+Astro focused early on simplifying cross-document view transitions. It provides special `transition:*` directives to be used in the templates of `.astro`files. From those it generates all required CSS for the predefined fade and slide animations. It also offers an API to define custom forward and backward animations with JavaScript. And it defines lifecycle events that allow user code to hook into Astro's view transition implementation and to access the browsers underlying viewTransition API.
+
+In contrast, browser native cross-document view transitions are pure CSS plus an JavaScript API and two new events to programmatically craft dynamic effects. These events are similar but not identical to the browser native events.
+
+Compared to Astro's approach, the View Transition API now provides additional knobs and levers for handling more advanced use cases: view transition classes, types, and nested transition groups. You can use these features in combination with Astro's `<ClientRouter />` if you write your own CSS and directly interact with the browser API if required. This would naturally pave the way for a migration to browser-native view transitions.
 
 ## Recommendations
 
 ### For New Projects
-If you're starting a new project, it's safe to assume users will have reasonably up-to-date browsers. With over 75% global support for the View Transition API and Navigation API, native transitions are a solid choice. Starting with basic effects like cross-fades and morphs ensures a smooth implementation.
+If you're starting a new project and it might be safe to assume users will have reasonably up-to-date browsers. With over 75% global support for the View Transition API and Navigation API, native transitions are a solid choice. Starting with basic effects like CSS only cross-fades and morphs ensures that missing native support on some browsers won't feel disruptive there.
 
 ### For Existing Projects
-Consider migrating from `<ViewTransitions />` to native cross-document transitions during ongoing development. While some Astro lifecycle events may require explicit migration, the effort is usually manageable. For example, tasks like reestablishing click handlers often become redundant with native MPAs.
+Consider migrating from `<ViewTransitions />` to native cross-document transitions during ongoing development. While some Astro lifecycle events may require explicit migration, the effort is usually manageable. For example, tasks like reestablishing click handlers often become redundant when switching back to MPAs. If you want to and are ready: The Bag also offers some thoughts on how to do that.
 
 For developers already using `astro-vtbot`, many tools now have native script equivalents available on [vtbag.dev](https://vtbag.dev). These scripts seamlessly integrate with native cross-document view transitions, making them a great option for modern Astro projects.
 
