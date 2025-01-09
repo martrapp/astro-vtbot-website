@@ -1,0 +1,114 @@
+---
+title: "ClientRouter or @view-transition? A Feature Comparison"
+description: What functionality to gain or lose when switching from Astro's ClientRouter to @view-transition
+---
+
+
+Before you dive into a possible migration, you probably want to better understand what features you will lose and what benefits you can gain.
+
+
+Switching from Astro's `<ClientRouter />`[^1] to native cross-document view transitions offers a major advantage: you're moving from a frame-work specific solution to a web standard. Astro always tried to keep that gap as small as possible. However, it's important to consider the trade-offs. The `<ClientRouter />` provides functionality that native cross-document view transitions lack. Some of these features will not be important to you, others need to be replaced with custom solutions or third-party tools. Some may not be achievable at all with full-load navigation.
+
+[^1]: Interpret "`<ClientRouter />`" as "`<ClientRouter />` or `<ViewTransitions />`", depending on your Astro version.
+
+Here's a breakdown of the features you'll gain and lose when migrating from Astro's `<ClientRouter />` to native cross-document view transitions:
+
+
+|#|Topic|Loss|Gain|
+|--|--|--|--|
+|1|[Fallback Simulation](#fallback-simulation)|Some simplified animation effects even on Firefox|-|
+|2|[Page Load](#page-load)|Whole page is available before transition starts|Does not have to wait for the  page to be loaded before the transition starts|
+|3|[Render Freeze](#render-freeze)|Minimal by design|Minimal with pre-render|
+|4|[transition:persist](#transitionpersist)|Keeping elements and their state from page to page| - |
+|5|[SPA State](#spa-state) | Shared state across pages| Clean page load semantics|
+|6|[Directional Animations](#directional-animations)|Browser back button slides the other way|-|
+|7|[Reduced Motion](#reduced-motion)|Automatically disables all animations|Planned: automatically disables motion of default animations|
+|8|[Event Listeners](#event-listeners)|Hook into preparation and swapping| Hook in directly before and after the page changes|
+|9|[Source Element](#source-element)|Know which element triggered the transition|Only with Navigation API (e.g. not on Safari yet)|
+|10|[Generated Names](#generated-names)|Work cross-document|-|
+|11|[Data Attributes](data-attributes)|Control link and script behavior|-|
+
+Some of these points might have a bigger or smaller impact than they initially seem. Let me explain in more detail:
+
+## Fallback Simulation
+In the early days, when only Chrome supported view transitions (and even then, only behind a flag) providing a fallback for browsers without native support was a thing. Today, this primarily affects Firefox, but now its days without view transitions support hopefully are numbered. While not all users have the latest browser versions the importance of the fallback solution continues to diminish.
+
+It's worth noting that the View Transition API [can not be polyfilled](/jotter/astro/differences/). The fallback simulation can mimic some effects, but it is not a true replacement. Depending on your needs, you might find the differences negligible or frustrating. If you used `<ClientRouter />` with `fallback="swap"` or  `fallback="none"`, you will not miss any animations on Firefox.
+
+## Page Load
+Browsers typically begin rendering a webpage's content as soon as the first bytes are received. With browser-native cross-document view transitions, the browser attempts to ensure the content above the fold is ready before the transition starts. However, its heuristics aren't perfect, and broken animations can occur. To avoid this, you should take control by specifying which parts of the page should [load before rendering begins](https://vtbag.dev/basics/pseudos/#delaying-cross-document-transitions).
+
+In contrast, Astro's `<ClientRouter />` initiates view transitions only after the new page has fully loaded. This approach avoids broken animations but delays content visibility, which can take a while for slower-loading pages.
+
+Takeaway: With the `<ClientRouter />` it can take longer until content is displayed but it avoids broken animations out of the box. Browser-native cross-document view transitions may need some tuning but also provide finer control.
+
+## Render Freeze
+View transitions have a phase where the browser's renderer is paused. This occurs between the  moment the API captures snapshots of the old DOM and when the `viewTransition.ready` promise resolves. During this time, the browser executes the code that replaces the old DOM with the new DOM and processes lifecycle events.
+
+Astro's default actions are to tweak the attributes of the `<html>` element and the children of the old `<head>` to resemble those of the new DOM and to replace the body element. This is fast.
+
+Browser-native cross-document view transitions, on the other hand, must establish an entirely new page context and have to at least load a initial part of the page.  Browsers optimize for speed, up to the point of pre-loading and pre-rendering the new page if guided by speculation rules. However, some effort from the author's side is required to make the pause as small as Astro's.
+
+## transition:persist
+Because the `<ClientRouter/>` technically turns a multi-page site into a single-page app, DOM elements can persist across navigations, moving from the old DOM to the new DOM while retaining their state and event handlers. This behavior is not replicable with full-page loads.
+
+However, you can use tools like the Bag's [`@vtbag/element-crossing`](https://vtbag.dev/tools/element-crossing/) to transfer HTML element properties across navigations. While it can't replicate internal state and handlers, it enables additional features like continuing CSS animations across navigations. That would normally reset to the start state when using `transition:persist`.
+
+## SPA State
+Sharing state between pages isn't limited to `transition:persist`. With the `<ClientRouter />`, both your scripts and state managers like Nano can handle it. The window object, the `<html>` element, the `<head>` element, the module loader, and the global object are not reset during navigation.
+
+This has its advantages: sharing state between pages is straightforward. But it also comes with a downside: since the browser state isn't reset, one of the biggest challenges when using `<ClientRouter />` on multi-page sites is [properly reinitializing scripts](/jotter/astro/scripts/) after navigation.
+
+In contrast, browser-native cross-document view transitions clear all script state during navigation. If you need to share state, you’ll have to persist it manually, such as by using sessionStorage. The bright side of this approach is that each page starts with a clean window object and a fresh module loader, following the standard behavior of traditional navigation.
+
+
+## Directional Animations
+
+With `<ClientRouter />`, each view transition has a direction: `forward` or `back`. While this doesn't affect default cross-fade animations, it's crucial for slide animations. For example, when navigating forward, pages slide out to the left and in from the right. When navigating backward (e.g., using the browser’s back button), they slide out to right and in from the left.
+
+The View Transition API supports view transition types that can be used to differentiate forward and backward animations. However, the View Transition API doesn’t automatically assign any types. With browser-native cross-document view transitions, slides will always [originate from the same direction](/signal-demo/forwardOnly/blog/), regardless of whether you're navigating forward or backward.
+
+But don't worry, the Bag has your back!
+
+## Reduced Motion
+
+When using `<ClientRouter />` all view transition animations are disabled if the browser's `prefer-reduced-motion`  setting is enabled. This value is typically inherited from a similar setting on the operating system.
+
+Disabling motion (though not necessarily cross-fade effects) for users who prefer it is a good practice. Currently, the View Transition API does not handle this automatically. However, from discussions I expect that the API will soon respect `prefers-reduced-motion` by disabling the default morph animation from the dynamic user-agent stylesheet. For custom animations, though, it's up to you to honor the user's preferences. We’ll explore how to do this later.
+
+## Event Listeners
+
+With the View Transition API, two new events where introduced: `pageswap` and `pagereveal`. Additionally, the Navigation API provides the navigate event.
+
+In comparison, the `<ClientRouter />` offers five events: `astro:before-preparation`, `astro:after-preparation`, `astro:before-swap`, `astro:after-swap`, and `astro:page-load`.
+
+The `*-preparation` events are somewhat comparable to the `navigate` event, while the `*-swap` events align with the `page*` events. The `astro:page-load` is similar to the standard `load` event.  However, there is no one-to-one correspondence between those groups of events.
+
+
+
+## Source Element
+
+With the `<ClientRouter />` the `sourceElement` property of `astro:before-preparation` and `astro:before-swap` events points to the anchor or form that was clicked to initiated the view transition. This allows you to create logic based on what triggered the transition.
+
+
+The NavigationEvent of the Navigation API also provides this property. However, not all browsers that support cross-document view transitions have implemented the Navigation API yet. Looking at you, Safari 👀.
+
+## Generated Names
+
+You can set view transition names for the `<ClientRouter />` using `transition:name`. If you don't set them, Astro automatically invents some for you. It won't tell you the names, but ensures that they are unique on each page. If you use the same structure on different pages, e.g. using a global Layout, chances are good that matching elements on two pages are assigned the same random name, giving you morph animations on corresponding elements.
+
+The View Transition API also supports auto-assigned view transition names:
+
+```css
+view-transition-name: auto;
+```
+These are also random and unique on each page. Sadly, they are even unique across all pages. This means elements from the old page never automatically match those on the new page, resulting in exit and entry animations rather than morph animations.
+
+As we'll see later, you can either retain Astro's names or address this limitation using JavaScript.
+
+
+## Data Attributes
+
+When you set an `data-astro-reload` attribute on a link, you opt in for a full page load instead of Astro's view transitions. As browser-native cross-document view transitions always do a full page reload, you won't miss that one.
+
+When you set an `data-astro-rerun` attribute on a script, the client router will execute it no matter if it was on the last page or not. As browser-native cross-document view transitions always execute all scripts during load, you won't miss that one.

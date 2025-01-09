@@ -52,24 +52,26 @@ The level 2 spec adds a new property and extends the signature of the `startView
 // As of level 1 plus the following
 
 // The view-transition-class CSS property
+// and view-transition-group CSS property
 interface CSSStyleDeclaration {
   viewTransitionClass: string;
+	viewTransitionGroup: string;
 }
 
 // Extended signature for startViewTransition()
 type StartViewTransitionOptions = {
 	update?: UpdateCallback,
-	types?: sting[]
+	types?: sting[] | Set<string>
 }
 interface Document {
-  startViewTransition(param: UpdateCallback | StartViewTransitionOptions): ViewTransition;
+  startViewTransition(param?: UpdateCallback | StartViewTransitionOptions): ViewTransition;
 }
 // The result type of calling startViewTransition() also got types added
 interface ViewTransition {
   finished: Promise<void>;
   ready: Promise<void>;
   updateCallbackDone: Promise<void>;
-	types: string[];
+	types: Set<string>;
   skipTransition(): void;
 }
 // Not really part of the View Transition API, but closely related:

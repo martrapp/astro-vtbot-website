@@ -17,6 +17,9 @@ import { visualizer } from "rollup-plugin-visualizer";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
+	experimental: {
+		svg: true,
+	},
 	devToolbar: { enabled: true },
 	prefetch: process.env.NODE_ENV === "production",
 	markdown: {
@@ -34,16 +37,16 @@ export default defineConfig({
 	trailingSlash: 'ignore',
 	integrations: [d2({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
-	}), vtbot({ loadingIndicator: true, autoLint: false}), starlight({
+	}), vtbot({ loadingIndicator: true, autoLint: false }), starlight({
 		plugins: [//starlightBlog(),
 			starlightImageZoom(),
-		starlightUtils({
-			multiSidebar: {
-				switcherStyle: "horizontalList",
-			}, navLinks: {
-				leading: { useSidebarLabelled: "leading" },
-			}
-		}),
+			starlightUtils({
+				multiSidebar: {
+					switcherStyle: "horizontalList",
+				}, navLinks: {
+					leading: { useSidebarLabelled: "leading" },
+				}
+			}),
 		],
 		tableOfContents: {
 			minHeadingLevel: 2,
@@ -117,8 +120,17 @@ function sidebar1() {
 			label: "A Brief History of The Bag",
 			link: "/jotter/history/"
 		}, {
-			label: "Which View Transitions to Use?",
-			link: "/jotter/astro-view-transitions/"
+			label: "ClientRouter Migration?",
+			items: [{
+				label: "High Level Considerations",
+				link: "/jotter/astro-view-transitions/"
+			},{
+				label: "Feature Comparison",
+				link: "/jotter/feature-comparison/"
+			},{
+				label: "Migration Path",
+				link: "/jotter/migrate/"
+			}]
 		}, {
 			label: "Tech-Demos",
 			link: "/jotter/demos/"
@@ -128,6 +140,9 @@ function sidebar1() {
 		}, {
 			label: "The Jotter",
 			link: "/jotter/"
+		}, {
+			label: "Migration to @view-transitions?",
+			link: "/jotter/migrate/"
 		}, {
 			label: "Recent Changes",
 			link: "/jotter/history-of-changes/",

@@ -138,3 +138,22 @@ li a[aria-current='page'] {
 	background-color: var(--sl-color-gray-5);
 	color: var(--sl-color-gray-2);
 }
+
+text {
+	fill: var(--sl-color-text);
+}
+.node {
+	ellipse,
+	path {
+		stroke: var(--sl-color-accent);
+		fill: var(--vtbot-bg-color);
+		filter: drop-shadow(1px 1px 3px rgba(128, 128, 128, 1));
+	}
+}
+.edge {
+	path {
+		stroke: var(--sl-color-accent);
+
+		filter: drop-shadow(0 0 2px rgba(128, 128, 128, 1));
+	}
+}

@@ -1,0 +1,231 @@
+---
+title: "ClientRouter to @view-transition: Migration Path"
+description: How to migrate from Astro's ViewTransitions / ClientRouter to the browser-native cross-document transitions of the View Transition API?
+---
+
+import Migration from "src/assets/svgs/migration.svg"
+
+Curious about what it takes to migrate from Astro's `<ClientRouter />` to the browser-native cross-document transitions of the View Transition API? Keep reading!
+
+Here is a sketch of what we'll do.
+
+<span id="graph"><Migration/></span>
+<style>{`#graph svg {margin-inline: auto}`}</style>
+
+## Remove `<ClientRouter />`
+Start by identifying where you've used `<ClientRouter />`. If you have included `<ClientRouter />` in your global Layout.astro, remove both the component and its import. If it appears in multiple places, do the same for each instance.
+
+If you have other imports from `astro:transitions` or `astro:transitions/client`, we will address them [in a  later step](#lifecycle-events).
+
+:::note
+
+If your pages do not rely on JavaScript or `transition:persist`, feel free to take a shortcut and [skip the next step](#check-mpa-functionality)!
+
+:::
+
+## Replace SPA State
+
+The `<ClientRouter />` makes shared state seamless across pages by keeping the same document element and JavaScript runtime during navigation. Without it, you need to explicitly persist state across navigation. This is the general pattern: persist state (serialize and save) when it changes, or at the latest, before leaving the old page. Restore state (load and deserialize) when the new page loads, or at the latest before the state is accessed.
+
+If you manage state yourself and want to persist and restore on navigation, use a `pageswap` listener to persist the state and a `pagereveal` listener to restore it. See the [notes at vtbag.dev](https://vtbag.dev/basics/javascript/) for how to call JavaScript during cross-document view transitions. Be aware of non-serializable values like DOM elements and event listeners.
+
+If you use state management libraries like Nano, consider versions that store state in persistent storage (e.g., sessionStorage).
+
+### transition:persist
+
+Astro's `transition:persist` enables DOM elements to move between pages during soft navigation. This is not directly possible with cross-document transitions since the DOM is entirely replaced by the full page load.
+
+Instead, use [@vtbag/element-crossing](https://vtbag.dev/tools/element-crossing/). It can replicate most use cases of `transition:persist` by preserving and restoring properties of DOM elements. Examples include maintaining media playback, scroll positions, or animation states.
+
+### Scripts
+
+With `<ClientRouter />`, **external module scripts** are executed only once, on the initial page load. The browser won't re-execute them  during soft navigation. The same is true for **inline scripts** that are placed on all pages: The `<ClientRouter />` prevents re-execution of scripts already present when navigating to a new page, unless you set the `data-astro-rerun` attribute for the script tag.
+
+
+After you remove the `<ClientRouter />` component, scripts will reload on each navigation. So if you had code that relied on being executed only once, you have to take care of that.
+
+In the context of Astro's view transitions, scripts are often used to add event listeners for the `astro:*` lifecycle events. Those listeners can often be moved into regular scripts or be assigned to other events, see the next section.
+
+
+### Lifecycle Events
+
+The `astro:before-preparation` and `astro:after-preparation` events are often used for last minute manipulations of the old page, changing the current DOM including view transition properties or determining direction for the upcoming view transition. These uses could best be migrated to the `pageswap` event, maybe with some help of the navigate event.
+
+Other typical uses of listeners for `astro:before-preparation` are intercepting loading and manipulating the DOM of the new page. Those tricks have no direct equivalent when using cross-document view transitions, as all manipulation would get lost during the full page load. That said, most scenarios where these tricks are employed involve adjusting conditions for Astro's swap function, such as ensuring a dynamically generated stylesheet persists in the new DOM. The good news? When you move from the client router to browser-native cross-document view transitions, many of these challenges disappear entirely, when new page are fully loaded and initialized on navigation.
+
+The `astro:before-swap` event serves a similar purpose, allowing you to redefine the swap function and control how elements transition between the old and new DOM.  However, some advanced effects enabled by redefining the swap function aren't possible with browser-native cross-document view transitions,  like selectively preserving parts of the old DOM while replacing others, as the Bag's `<ReplacementSwap />` component does. However, many of these scenarios can be effectively handled using the persist/page-load/restore pattern, offering a robust alternative for maintaining state and continuity during transitions.
+
+Finally, the `astro:after-swap` and `astro:page-load` listeners can often be replaced by inline scrips in the `<head>` or listeners for the `pagereveal`, `DOMContentLoaded` or `load` events.
+
+## Check MPA Functionality
+After removing the `<ClientRouter />` and implementing solutions for previously shared state, the next step is to test your multi-page site in this updated state. This will show how your site behaves on browsers without view transition support. Verify that all core functionality works as expected, especially navigation and scripts.
+
+If removing the `<ClientRouter >` caused issues, take another look at [state and event handling](#replace-spa-state) to address any gaps.
+
+Once everything except view transitions is functioning to your liking, you're ready to move on to the next step:
+
+## Enable Cross-Document View-Transitions
+
+To enable browser-native cross-document view transitions, you'll need to use the `@view-transition` at-rule. This rule must appear on both the old and new pages of a navigation. The simplest approach is to add it to your global layout, ensuring it applies site-wide.
+
+To align with Astro's default behavior, wrap the `@view-transition` at-rule in a media query. This respects users who prefer reduced motion by disabling view transitions for them.
+
+Of course, you could also enable view transitions unconditionally or selectively disable certain animations using media queries to guard their definitions.
+
+
+One quick way to enable view transitions on your site is by adding a `<style is:global>` element directly to your global layout.
+
+
+
+```css title="src/layout/Layout.astro"
+---
+---
+...
+<style is:global>
+@media not (prefers-reduced-motion) {
+  @view-transition {
+	  navigation: auto;
+  }
+}
+<style>
+...
+```
+
+However, I recommend using a dedicated `view-transition.css` file that you import into your global layout.
+
+```css title="src/styles/view-transition.css"
+@media not (prefers-reduced-motion) {
+  @view-transition {
+	  navigation: auto;
+  }
+}
+```
+```astro title="src/layouts/Layout.astro"
+---
+import "../styles/view-transition.css"
+---
+<html ...
+...
+```
+
+This approach provides flexibility as the file can grow over time, accommodating other truly global view transition definitions for your site.
+
+Embedding view transition styles directly within your components might feel like a more organized approach. However, because view transition styling spans across documents, this method only works reliably for components that appear on every page.
+
+Keep in mind that styles for view transition pseudo-elements must be  present [on the destination page](https://vtbag.dev/tips/css/).
+
+
+## Keep Generated CSS?
+
+Now that you have enabled cross-document view transitions, it's time to decide how to style your transitions.
+The good news: if you are familiar with using `transition:animate` and `transition:name`, you can stick with those. This is a decent option when transitioning to native view transitions.
+
+However, there's a limitation and a drawback to be aware of:
+
+- **No directional awareness:** Browser-native view transitions don't account for navigation direction. Backward animations look identical to forward animations. This isn't an issue for the typical morph, cross-fade, or shrink/grow animations. Those look the same regardless of navigation direction. But it is problematic for your sliding animations or others that depend on directional context. These will always appear as forward animations now.
+
+
+
+
+- **Unnecessary CSS:**
+Astro generates a significant amount of CSS to support fallback simulation. Now that you've switched to browser-native view transitions, this extra CSS becomes unnecessary. While it won’t cause any harm, it adds dead weight to your pages.
+
+
+:::note
+If your animations don't need to differentiate based on navigation direction and you're not concerned about the extra CSS, you're all set! [Jump down](#done) to the last paragraph!.
+:::
+
+
+## Add Direction Detection
+
+While native view transitions don't inherently recognize backward or forward navigation, you can use JavaScript to analyze the browser history and determine the direction. By setting Astro's `data-astro-transition` attribute on the document’s root element to either `back` or `forward`, you can reactivate directional animations for Astro's auto-generated CSS. Although the Navigation API might seem like a convenient way to determine direction, keep in mind that not all browsers supporting the View Transition API also support the Navigation API.
+
+The easiest way to implement Astro-compatible direction detection is to add the [`<TurnSignal />` component](/library/TurnSignal/) to the `<head>` element of your pages. The Bag has already handled the heavy lifting for you.
+
+If you want direction detection but have opted not to use Astro’s generated view transition styles, check out [@vtbag/turn-signal](vtbag.dev/tools/turn-signal/). This package offers various ways to set view transition types, including automatic direction detection.
+
+
+
+## Replace Auto-Generated CSS
+
+Creating your own custom styling for view transitions not only results in more compact CSS but also unlocks additional possibilities beyond what Astro's `transition:animate` generates. For instance, you can reuse keyframes from the user agent stylesheet and leverage view transition classes and types to easily implement effects beyond just `back` and `forward`. To [explore this whole new world](https://vtbag.dev/basics/styling/), check out vtbag.dev.
+
+When replacing `transition:name` directives, keep in mind that Astro automatically applies `transition:animate="fade"` to any `transition:name` directives that are not explicitly paired with an `transition:animate` directive.
+
+### View Transition Names
+To define a view transition name for a morph transition without specifying explicit entry or exit animations, simply set the view-transition-name property on an HTML element
+
+```css
+selector {
+	view-transition-name: a-name;
+}
+```
+
+Alternatively, you can apply it directly to the element using the style attribute:
+
+```html
+<div style="view-transition-name: a-name">...
+```
+
+Unlike Astro, where omitting the `transition:name`  directive allows Astro to generate a name for you, setting `view-transition-name` typically[^1] requires you to pick a unique name for the entire page.
+
+
+[^1]: `view-transition-name: auto` assigns some random name, but as you don't know that name, you can not associate further styling with it.
+
+Defining this name automatically enables entry and exit fades for the element and creates a smooth morph animation to a corresponding element with the same name on the next page.
+
+
+### Basic Astro Animations
+
+The default fade effect of the View Transition API is a bit slower than Astro's version.  To replicate Astro's fade effect for a view transition named `fade-name`, you can redefine the animations for `::view-transition-old(fade-name)` and `::view-transition-new(fade-name)`, adjusting the duration from `250ms` to `180ms` and replacing the `ease` timing function with a custom one:
+
+```css
+::view-transition-old(fade-name),
+::view-transition-new(fade-name) {
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	/* do not redefine animation-name. */
+}
+```
+Adding Astro's slide animation for a view transition named `slide-name` is a bit more involved:
+```css
+::view-transition-old(slide-name) {
+	animation-duration: 90ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-name: -ua-view-transition-fade-out, astroSlideToLeft;
+}
+::view-transition-new(slide-name) {
+	animation-duration: 210ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-delay: 30ms;
+	animation-name: -ua-view-transition-fade-in, astroSlideFromRight;
+}
+[data-astro-transition='back']::view-transition-old(slide-name) {
+	animation-name: -ua-view-transition-fade-out, astroSlideToRight;
+}
+[data-astro-transition='back']::view-transition-new(slide-name) {
+	animation-name: -ua-view-transition-fade-in, astroSlideFromLeft;
+}
+```
+Instead of repeating the same animations for different view transition names, you can assign a `view-transition-class: slide` in addition to the unique `view-transition-name`.  Then define the animation once using the view transition class name:
+```css
+::view-transition-old(.slide) {...}
+::view-transition-new(.slide) {...}
+[data-astro-transition='back']::view-transition-old(.slide) {...}
+[data-astro-transition='back']::view-transition-new(.slide) {...}
+```
+Here are the required keyframe definitions:
+```css
+@keyframes astroSlideFromRight {0% {transform: translate( 100%)}}
+@keyframes astroSlideFromLeft  {0% {transform: translate(-100%)}}
+@keyframes astroSlideToRight   {to {transform: translate( 100%)}}
+@keyframes astroSlideToLeft    {to {transform: translate(-100%)}}
+
+```
+
+## Done
+Congratulations! You have migrated your site from Astro's `<ClientRouter/>` to browser-native cross-document view transitions and can now take full advantage of the View Transition API's shiny new features!
+
+For more background information, styling tips, and tricks please visit [vtbag.dev](https://vtbag.dev)!
+
+If there's anything I missed or you'd like to discuss further, please [don’t hesitate to reach out](https://bsky.app/intent/compose?text=Hi%20%40martr.app%2C%20I'm%20migrating%20my%20Astro%20site%20from%20ClientRouter%20to%20browser-native%20cross-document%20view%20transitions%20and%20wanted%20to%20discuss%2Fask%20...)!
