@@ -11,7 +11,7 @@ Visit the [corresponding section in the overview](/jotter/starlight/inner-workin
 
 ## The Tightly Coupled approach
 
-As you know from the section on [updating script state](/jotter/astro/scripts/) adding the `<ViewTransitions />` component is the simpler part. Ensuring that script state is  up to date might be more of a challenge. From what you saw there, it is best practice to use the lifecycle events to update the state of your scripts.
+As you know from the section on [updating script state](/jotter/astro/scripts/) adding the `<ClientRouter />` component is the simpler part. Ensuring that script state is  up to date might be more of a challenge. From what you saw there, it is best practice to use the lifecycle events to update the state of your scripts.
 
 
 Using lifecycle events assumes that you add them to your own code. Or at least code you can control.  I have no idea about the details of the scripts running inside Starlight. And I definitively do not want to change them. It would be possible to deeply integrate support for view transitions into Starlight, but that would be a pretty tight coupling. This could be a burden for both projects, especially since the <BoT/> is still young and not very stable yet.

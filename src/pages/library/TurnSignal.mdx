@@ -21,7 +21,7 @@ The `<TurnSignal />` component makes directional transition work with native cro
 
 ## Why should I use this component?
 
-Love Astro's built-in slide animation and Astro's support for custom animation with different animations for forward and backward navigation? When you replace `<ViewTransitions />` with `@view-transition{navigation: auto}` to enable the browser's native cross-document view transition all transitions will be 'forward'. The `<TurnSignal />` re-enables the backward animations supported by `transition:animate`.
+Love Astro's built-in slide animation and Astro's support for custom animation with different animations for forward and backward navigation? When you replace the `<ClientRouter />` with `@view-transition{navigation: auto}` to enable the browser's native cross-document view transition all transitions will be 'forward'. The `<TurnSignal />` re-enables the backward animations supported by `transition:animate`.
 
 The component also automatically sets _view transition types_ for **forward**, **same**, and **backward** and allows you to select among multiple view transition animations for the same page using `:active-view-transition-type(<direction>){}`. See the [description on @vtbag](https://vtbag.pages.dev/tools/turn-signal/#css-for-reverse-animation) for more details.
 

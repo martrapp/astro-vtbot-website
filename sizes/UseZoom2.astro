@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { customZoom } from 'astro-vtbot/animations/zoom';
 import Mini from './Mini.astro';
 const scope = customZoom('zoom', {});
@@ -7,7 +7,7 @@ const scope = customZoom('zoom', {});
 
 <html>
 	<head>
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 	<body>
 		<main transition:name="main">

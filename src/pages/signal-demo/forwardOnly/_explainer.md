@@ -8,7 +8,7 @@ These pages might look familiar to you, seasoned astronaut! It's because they ar
 What got changed?
 1. Obviously, the demo content got replaced.
 1. All `<main>` tags include a `transition:animate="slide"` directive, generating Astro's default CSS for sliding view transition animations.
-1. This demo **does not use the `<ViewTransitions />`** component. To activate native cross-document view transitions, the following code was added to the end of `BaseHead.astro`.
+1. This demo **does not use the `<ClientRouter />`** component. To activate native cross-document view transitions, the following code was added to the end of `BaseHead.astro`.
 
 ```astro
 <style is:global>

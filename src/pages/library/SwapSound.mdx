@@ -22,16 +22,16 @@ The sound file is played from the start of the [Preparation phase](jotter/astro/
 
 [Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
 
-The recommended way is to place the `<SwapSound />` component in your basic layout after the `<ViewTransitions />` component.
+The recommended way is to place the `<SwapSound />` component in your basic layout after the `<ClientRouter />` component.
 
 ```astro title="MyLayout.astro" {3,8}
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import SwapSound from 'astro-vtbot/components/SwapSound.astro';
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
     <SwapSound src="/my-sound-file.mp3"/>
     ...
   </head>

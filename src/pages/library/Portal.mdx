@@ -27,23 +27,23 @@ When the user clicks a link, submits a form or uses the browser's back and forwa
 
 [Install astro-vtbot](../Installation/) in your project running `npx astro add astro-vtbot` or `npm install astro-vtbot`.
 
-The `<Portal>` component can be put in the `<head>` of those pages that have a `<ViewTransitions />` component. If you want a transition from A to B got through the portal page, you must place the `<Portal>`component on A. The portal page is not automatically used in the reverse direction. If you also want to see the portal page on links from B to A - or when navigating back through the browser history - you must also insert the `<Portal>` component on page B.
+The `<Portal>` component can be put in the `<head>` of those pages that have a `<ClientRouter />` component. If you want a transition from A to B got through the portal page, you must place the `<Portal>`component on A. The portal page is not automatically used in the reverse direction. If you also want to see the portal page on links from B to A - or when navigating back through the browser history - you must also insert the `<Portal>` component on page B.
 
 ```astro title="MyLayout.astro"
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import Portal from 'astro-vtbot/components/Portal.astro';
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 		<Portal page="/portal/page">
 		...
 	</head>
 	...
 </html>
 ```
-The component has a single property `page` that specifies the URL of the portal page. The portal page must have a `<ViewTransitions />` component in its `<head>` as well. If you want to support transition groups and persisted elements, you must also include them on the portal page. The portal page from the [demo](/portal/one/), which has been stripped of its styling, could serve as an example here:
+The component has a single property `page` that specifies the URL of the portal page. The portal page must have a `<ClientRouter />` component in its `<head>` as well. If you want to support transition groups and persisted elements, you must also include them on the portal page. The portal page from the [demo](/portal/one/), which has been stripped of its styling, could serve as an example here:
 
 ```astro title="/portal/page.astro"
 ---

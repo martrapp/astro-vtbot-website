@@ -18,8 +18,8 @@ This incantation is interesting on many levels!
 
 It solves the problem that **you want to run some code on each page load**.
 
-It works **with** Astro's `<ViewTransitions />` if you use them.\
-And it works **without** `<ViewTransitions />` if you don't use them.
+It works **with** Astro's `<ClientRouter />` if you use it.\
+And it works **without** `<ClientRouter />` if you don't use it.
 
 This looks quite innocent or incomprehensible.\
 Let me explain it briefly so you can see and enjoy how ingenious Fryuni's approach is.
@@ -47,7 +47,7 @@ addEventListener("load", onPageLoad);
 ```
 This ensure that each `load` event will also trigger an `astro:page-load` event.
 
-Now not only pages with a `<ViewTransitions />` component trigger `astro:page-load`, but also our current page, even if we do not use `<ViewTransitions />` at all.
+Now not only pages with a `<ClientRouter />` component trigger `astro:page-load`, but also our current page, even if we do not use `<ClientRouter />` at all.
 
 ### Can the first event be lost?
 
@@ -56,7 +56,7 @@ Are you perhaps worried that there is a race condition here and the browser has 
 That reasoning is important. It would be a valid point e.g. for the `DOMContentLoaded` event. But the `load` event won't be raised before the page is loaded **and** the contained scripts ran. So this is save.
 
 ### Did this import cause view transitions to be enabled?
-No. Astro only performs view transitions between pages that both have the `<ViewTransitions>` component (or a `<meta name="astro-view-transitions-enabled" content="true">`) in their `<head>`. If you do not have this, all navigation will be normal full page loads.
+No. Astro only performs view transitions between pages that both have the `<ClientRouter>` component (or a `<meta name="astro-view-transitions-enabled" content="true">`) in their `<head>`. If you do not have this, all navigation will be normal full page loads.
 
 But it is worth noting that in case you do not use view transitions, loading the module has also some minor disadvantages: Besides unnecessarily loading 3k-10k that can't be tree shaken, it also establishes additional event listeners that the view transition module uses to observe history navigation and scrolling.
 

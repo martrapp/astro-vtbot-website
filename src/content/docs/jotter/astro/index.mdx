@@ -9,7 +9,7 @@ import Logo from "/src/components/Logo.astro"
 Astro makes it easy to add view transitions to your website. You start with a website that loads individual pages when you click on a link. Then add Astro's support for view transitions and the site looks like a single-page application with smooth transitions between views.
 
 ## Adding View Transitions
-Adding support for view transitions can be as simple as adding `<ViewTransitions />` to the `<head>` of your base layout. But typically it also involves using Astro's lifecycle events to run scripts after transitioning to a new page. You can choose from different animations or define your own. You can even persist elements from one page to the next, such as a running video player.
+Adding support for view transitions can be as simple as adding `<ClientRouter />` to the `<head>` of your base layout. But typically it also involves using Astro's lifecycle events to run scripts after transitioning to a new page. You can choose from different animations or define your own. You can even persist elements from one page to the next, such as a running video player.
 
 Best of all, this also works on browsers that do not have native support for view transitions as Astro emulates important features of the API for those browsers.
 

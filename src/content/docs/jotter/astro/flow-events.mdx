@@ -11,7 +11,7 @@ Astro's view transition support is described in the [Astro Docs](https://docs.as
 
 Astro's view transition feature provides cross document transitions. It replace the full page load of normal browser navigation with a smooth animation while changing pages. Then it updates the browser history and the window's scroll position. In the end, it works like _normal_ navigation, but it feels more like the slick transitions within a single page app.
 
-Astro's `<ViewTransitions />` use the [View Transition API](/jotter/api/) for browsers that support it natively. For other browsers, Astro provides a [simulation](/jotter/astro/differences/).
+Astro's `<ClientRouter />` use the [View Transition API](/jotter/api/) for browsers that support it natively. For other browsers, Astro provides a [simulation](/jotter/astro/differences/).
 
 ## Soft Load
 When Astro introduced cross document view transitions, only Chrome supported real cross document view transitions and only after this experimental feature was explicitly enabled by the user. Support for cross document view transitions as defined in the [Level 2 View Transition API](/jotter/api/) is still in its infancy.

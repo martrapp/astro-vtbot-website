@@ -9,7 +9,7 @@ import AnimateImages from "/src/components/AnimateImages.astro"
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
 :::note[Starlight on browser-native cross-document view transitions]
-As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ViewTransitions />` component) is completely running on &hellip; you guess it &hellip; **browser-native cross-document view transitions**!
+As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ClientRouter />` component) is completely running on &hellip; you guess it &hellip; **browser-native cross-document view transitions**!
 
 As I did for the current site before, I will share the necessary knowledge and components over there during the next months.
 
@@ -27,7 +27,7 @@ If you're satisfied with having the view transition effect work only in Chromium
 ```
 :::
 
-Otherwise stay tuned for how to add Astro's `<ViewTransitions>` support to Starlight and enjoy view transitions **on all browsers** and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
+Otherwise stay tuned for how to add Astro's `<ClientRouter>` support to Starlight and enjoy view transitions **on all browsers** and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
 
 :::note[Benefits of adding Astro's View Transition Support to Starlight]
 
@@ -164,7 +164,7 @@ If you want to add further styling to the transition group, you can explicitly n
 ### Fallback Control
 What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from `none`, `swap` or `animate`. Use the `viewTransitionFallback` attribute of the `<VtbotStarlight>` component to tell The Bag what you have chosen:
 
-```astro title="How to specify the fallback option of <ViewTransitions />"
+```astro title="How to specify the fallback option of <ClientRouter />"
 <VtbotStarlight {...Astro.props} viewTransitionsFallback="animate">
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>

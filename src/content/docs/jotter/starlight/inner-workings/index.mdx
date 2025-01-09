@@ -12,7 +12,7 @@ This part of the Jotter tells the story behind The Bag's Starlight support. You 
 Starlight doesn't support view transitions out of the box. If you want to enable them you have to make changes to the defaults. Some changes are non-negotiable. Read here what needs to be done to turn on view transitions on a Starlight site and what support is needed to make it work properly.
 
 ### Hook into Starlight
-The minimum change a Starlight site needs in order to feature view transitions is the insertion of Astro's   `<ViewTransitions />` component on all pages. We do this by [overriding Starlight's `<Head>` component](/jotter/starlight/inner-workings/integration/).
+The minimum change a Starlight site needs in order to feature view transitions is the insertion of Astro's   `<ClientRouter />` component on all pages. We do this by [overriding Starlight's `<Head>` component](/jotter/starlight/inner-workings/integration/).
 
 ### Keep App State Up to Date
 Next, we need a plan how to keep the app state up to date across navigation. Typically you would use Astro's lifecycle events to re-initialize dark mode, search, etc. after the swap.

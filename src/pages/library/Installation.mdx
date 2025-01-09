@@ -62,7 +62,7 @@ If you have Astro's DevToolbar enabled, The Bag will show up as a new app there 
 
 ### Changes introduced with astro-vtbot 2.0
 
-Installing astro-vtbot as an integration used to add `vtbot`'s [`<LoadingIndicator />` component](../LoadingIndicator/) and [`<Linter />` component](../Linter/) to all pages that use Astro's `<ViewTransitions />`. This behavior was changes in 2.0: None of these features will be added automatically anymore.
+Installing astro-vtbot as an integration used to add `vtbot`'s [`<LoadingIndicator />` component](../LoadingIndicator/) and [`<Linter />` component](../Linter/) to all pages that use Astro's `<ClientRouter />`. This behavior was changes in 2.0: None of these features will be added automatically anymore.
 
  You can still get the former behavior by explicitly setting  the `loadingIndicator` option and/or the `autoLint` option of `vtbot` in your `astro.config` file to `true` (the default is now `false`):
 

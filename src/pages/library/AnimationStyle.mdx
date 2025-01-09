@@ -49,7 +49,7 @@ You can use the `styleSheet` function from `animation-style.ts` to generate both
 
 ```astro title="MyComponent.astro" {6,7,12,17}
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { setStyles, styleSheet } from 'astro-vtbot/animations/animation-style';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
 
@@ -59,7 +59,7 @@ setStyles("superFade", styles);
 ---
 <html>
   <head>
-		<ViewTransitions />
+		<ClientRouter />
 		<AnimationStyle name="superFade">
 		...
 	</head>

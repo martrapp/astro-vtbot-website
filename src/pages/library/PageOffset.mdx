@@ -27,16 +27,16 @@ The Jotter has a whole section [explaining the problem and the solution](/jotter
 
 [Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
 
-The recommended way is to place the `<PageOffset>` component in your basic layout after the `<ViewTransitions />` component.
+The recommended way is to place the `<PageOffset>` component in your basic layout after the `<ClientRouter />` component.
 
 ```astro title="MyLayout.astro" {3,8}
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import PageOffset from 'astro-vtbot/components/PageOffset.astro';
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
     <PageOffset name="myMain" />
     ...
   </head>

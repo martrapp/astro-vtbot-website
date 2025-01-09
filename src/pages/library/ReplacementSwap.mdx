@@ -25,7 +25,7 @@ If you use **`transition:persist`** for **iframes or elements with CSS animation
 * Iframes are reloaded on transitions and lose their content
 * CSS animations are interrupted during transitions and start from the beginning.
 
-This is because the standard `swap()` action of `<ViewTransitions />` replaces the entire `<body>` of your page with the body of the new page. Even if they are only copied: for the current DOM, it looks as if frames and elements with CSS animations have just been recreated.
+This is because the standard `swap()` action of the `<ClientRouter />` replaces the entire `<body>` of your page with the body of the new page. Even if they are only copied: for the current DOM, it looks as if frames and elements with CSS animations have just been recreated.
 
 
 
@@ -33,7 +33,7 @@ This is because the standard `swap()` action of `<ViewTransitions />` replaces t
 
 [Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
 
-Include the `<ReplacementSwap/>` component directly after the `<ViewTransitions />` tag in the `<head>` of your page.
+Include the `<ReplacementSwap/>` component directly after the `<ClientRouter />` tag in the `<head>` of your page.
 
 Unlike the standard `swap()` action of the Astro view transitions, `<ReplacementSwap>` requires some configuration to work.  You need to tell the component what content to copy from the new page and where to paste it into the current page. Both places are defined by setting the appropriate HTML elements with the `data-vtbot-replace` property. Without such a configuration, `<ReplacementSwap/>` simply falls back to Astro's default behavior.
 
@@ -42,12 +42,12 @@ This works best if your pages have a common layout, e.g. with fixed header, foot
 
 ```astro title="Layout.astro" {3, 8, 13}
 ---
-import ViewTransitions from 'astro:transitions';
+import ClientRouter from 'astro:transitions';
 import ReplacementSwap from 'astro-vtbot/components/ReplacementSwap.astro';
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 		<ReplacementSwap />
 		...
 	</head>
@@ -81,7 +81,7 @@ The default swap removes the current attributes of the root element and replaces
 ```astro title="Layout.astro" {4}
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 		<ReplacementSwap rootAttributesToPreserve="data-theme, lang"/>
 		...
 ```

@@ -28,16 +28,16 @@ There might also be use cases where you want to simulate a slow loading page for
 
 ### Usage
 
-Place the `<BrakePad/>` component in the `<head>` of a page near Astro's `<ViewTransitions />`. Now when you leave that page using a view transition, the page will simulate a slow loading time of 2000ms. By default, the delay is only active in DEV mode and not if you build for production.
+Place the `<BrakePad/>` component in the `<head>` of a page near Astro's `<ClientRouter />`. Now when you leave that page using a view transition, the page will simulate a slow loading time of 2000ms. By default, the delay is only active in DEV mode and not if you build for production.
 
 ```astro title="YourDevelopmentPage.astro" {8}
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import BrakePad from 'astro-vtbot/components/BrakePad.astro'
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 		<BrakePad />
 		...
   </head>
@@ -60,12 +60,12 @@ Use them like this:
 
 ```astro title="YourDevelopmentPage.astro" {8}
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import { BrakePad } from 'astro-vtbot/components/BrakePad.astro'
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 		<BrakePad duration={3000} production />
 		...
   </head>

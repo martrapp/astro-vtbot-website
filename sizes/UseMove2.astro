@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { customMove } from 'astro-vtbot/animations/move';
 import Mini from './Mini.astro';
 const scope = customMove('swing', {});
@@ -7,7 +7,7 @@ const scope = customMove('swing', {});
 
 <html>
 	<head>
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 	<body>
 		<main transition:name="main">

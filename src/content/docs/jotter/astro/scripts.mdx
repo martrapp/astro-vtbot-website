@@ -7,7 +7,7 @@ import VtbotEye from "/src/components/VtbotEye.astro"
 import { Card, Steps } from '@astrojs/starlight/components';
 
 Adding view transitions to an existing Astro project that uses some JavaScript usually consists of two parts:
-1. Add `<ViewTransitions />` to the `<head>`.
+1. Add `<ClientRouter />` to the `<head>`.
 2. Trying to get the scripts working again.
 
 
@@ -240,12 +240,12 @@ The `window.document` object itself stays the same during view transitions. Only
 
 ```astro title="MyBasicLayout"
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 ---
 
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
 	</head>
 	<body>
 	  ...
@@ -279,18 +279,18 @@ Sometime you also see examples, where the init code is triggered by the `astro:p
 
 The `astro:page-load` and `astro:after-swap` both have in common that
 - `window.document` already holds the new DOM when they fire
-- both fire only if `<ViewTransitions />` are enabled
+- both fire only if `<ClientRouter />` are enabled
 - both are standard `Event` objects without any additional properties
 
 The example form above, implemented with an `astro:page-load` listener, looks quite the same.
 
 ```astro title="MyBasicLayout"
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 ---
 
 <html>
-  <head><ViewTransitions /></head>
+  <head><ClientRouter /></head>
 	...
 </html>
 <script>
@@ -300,7 +300,7 @@ import { ViewTransitions } from 'astro:transitions'
 	document.addEventListener('astro:page-load', init);
 </script>
 ```
-If you use `<ViewTransitions />` the `astro:page-load` event does not only fire during view transitions, but also on the initial page load. Therefore we removed the explicit call to `init()` at the end of the script.
+If you use `<ClientRouter />` the `astro:page-load` event does not only fire during view transitions, but also on the initial page load. Therefore we removed the explicit call to `init()` at the end of the script.
 
 Now you might ask yourself wether those two events are interchangeable, and as you guess, they differ in some aspects.
 
@@ -316,10 +316,10 @@ The most important part here is that your listener should be fast when using `as
 
 The pattern with `astro:page-load` might be a bit more compact as you do not need to explicitly call `init()` on the initial page load and you even do not need an explicit `init()` function as you could write the callback as a function expression when calling `addEventListener()`.
 
-But what looks like an advantage at first glance, namely that the function is automatically executed during the initial load and during view transitions, turns out to be a disadvantage if you want to build components that work with and without view transitions: If `<ViewTransitions />` aren't enabled, the `init()` function will never be called!
+But what looks like an advantage at first glance, namely that the function is automatically executed during the initial load and during view transitions, turns out to be a disadvantage if you want to build components that work with and without view transitions: If the `<ClientRouter />` isn't enabled, the `init()` function will never be called!
 
 :::note
-While the pattern with `astro:page-load` only works if `<ViewTransitions />` are enabled, the pattern using `astro:after-swap` works fine with and without `<ViewTransitions />`.
+While the pattern with `astro:page-load` only works if the `<ClientRouter />` is enabled, the pattern using `astro:after-swap` works fine with and without the `<ClientRouter />`.
 :::
 
 So if you are interested in building reusable components that can be used with and without view transitions, I would recommend the pattern using `astro:after-swap`.
@@ -491,11 +491,11 @@ Often it is more efficient to use global listeners on the `window` or `document`
 
 ```astro title="MyBasicLayout"
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 ---
 
 <html>
-  <head><ViewTransitions /></head>
+  <head><ClientRouter /></head>
 	  ...
 </html>
 <script>
@@ -527,7 +527,7 @@ If you persist elements with [`transition:persist`] (/jotter/astro/directives/#t
 ### Updates with Classic or Inline Scripts
 So this title is a bit unwieldy. What I meant to say is: how to use scripts that are not external module scripts. That also wouldn't have been shorter or simpler in the title.
 
-> If you are used to inline scripts and simply add `<ViewTransitions />` to your website, you will likely be disappointed. Combined with some sloppy attempts to solve the problem by changing the attributes of the script tag with trial and error, you may well be doomed to failure.
+> If you are used to inline scripts and simply add the `<ClientRouter />` to your website, you will likely be disappointed. Combined with some sloppy attempts to solve the problem by changing the attributes of the script tag with trial and error, you may well be doomed to failure.
 
 When setting up event handlers for [our example](/jotter/astro/scripts/#common-example), the first naive approach could look like this:
 
@@ -541,7 +541,7 @@ When setting up event handlers for [our example](/jotter/astro/scripts/#common-e
 	});
 </script>
 ```
-We put this script on a page right before the closing `</body>` tag. The script works fine with and without `<ViewTransitions />`:
+We put this script on a page right before the closing `</body>` tag. The script works fine with and without the `<ClientRouter />`:
 
 <Steps>
 1. In a first step, the script determines all headings. For each heading, it adds a click handler. This handler cancels further processing of the event by calling `preventDefault()` and then scrolls the heading to the start of the viewport.
@@ -717,7 +717,7 @@ As a consequence, external module scripts will not be re-executed during soft lo
 
 ### Behavior with View Transitions
 
-On navigation to another page using Astro's `<ViewTransitions />` component, loading and execution of scripts is handled differently. Due to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
+On navigation to another page using Astro's `<ClientRouter />` component, loading and execution of scripts is handled differently. Due to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
 
 Astro might execute all scripts that it finds on the target page. But there are exemptions given by these two rules:
 1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. This is a consequence of technically staying on the same page when doing a soft load.

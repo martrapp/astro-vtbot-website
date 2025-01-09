@@ -22,16 +22,16 @@ You can see this component in action in the <a data-astro-reload href="/no-scrol
 
 
 
-Place the `<NoScroll/>` component in the `<head>` of a page near Astro's `<ViewTransitions />`. That will prevent scrolling for all view transitions that leave this page to other pages that also have the `<NoScroll/>` in their head.
+Place the `<NoScroll/>` component in the `<head>` of a page near Astro's `<ClientRouter />`. That will prevent scrolling for all view transitions that leave this page to other pages that also have the `<NoScroll/>` in their head.
 
 ```astro title="MyPage.astro" {3,8}
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
 ---
 <html>
   <head>
-		<ViewTransitions />
+		<ClientRouter />
 		<NoScroll/>
 		...
 	<head/>
