@@ -19,14 +19,16 @@ Here's a breakdown of the features you'll gain and lose when migrating from Astr
 |1|[Fallback Simulation](#fallback-simulation)|Some simplified animation effects even on Firefox|-|
 |2|[Page Load](#page-load)|Whole page is available before transition starts|Does not have to wait for the  page to be loaded before the transition starts|
 |3|[Render Freeze](#render-freeze)|Minimal by design|Minimal with pre-render|
-|4|[transition:persist](#transitionpersist)|Keeping elements and their state from page to page| - |
+|4|[transition:persist](#transitionpersist)|Keeping elements and their state from page to page| _[has bit of a workaround]_ |
 |5|[SPA State](#spa-state) | Shared state across pages| Clean page load semantics|
-|6|[Directional Animations](#directional-animations)|Browser back button slides the other way|-|
+|6|[Directional Animations](#directional-animations)|Browser back button slides the other way|_[has workaround]_|
 |7|[Reduced Motion](#reduced-motion)|Automatically disables all animations|Planned: automatically disables motion of default animations|
 |8|[Event Listeners](#event-listeners)|Hook into preparation and swapping| Hook in directly before and after the page changes|
 |9|[Source Element](#source-element)|Know which element triggered the transition|Only with Navigation API (e.g. not on Safari yet)|
-|10|[Generated Names](#generated-names)|Work cross-document|-|
-|11|[Data Attributes](data-attributes)|Control link and script behavior|-|
+|10|[Generated Names](#generated-names)|Works cross-document| - |
+|11|[Data Attributes](data-attributes)|Control link and script behavior|_[not needed]_|
+|12|[Route Announcement](#route-announcement)|Support for assistive technology|Standard support for assistive technology|
+|13|[Programmatic Navigation](#programmatic-navigation)|`navigate()`|`location.assign(), location.replace()`|
 
 Some of these points might have a bigger or smaller impact than they initially seem. Let me explain in more detail:
 
@@ -112,3 +114,11 @@ As we'll see later, you can either retain Astro's names or address this limitati
 When you set an `data-astro-reload` attribute on a link, you opt in for a full page load instead of Astro's view transitions. As browser-native cross-document view transitions always do a full page reload, you won't miss that one.
 
 When you set an `data-astro-rerun` attribute on a script, the client router will execute it no matter if it was on the last page or not. As browser-native cross-document view transitions always execute all scripts during load, you won't miss that one.
+
+## Route Announcement
+
+The `<ClientRouter />` has built-in support assistive technology to announce the page's title on soft navigation. With the full page loads of browser-native cross-document view transitions this is the standard behavior and does not need special treatment anymore.
+
+## Programmatic Navigation
+
+The `<ClientRouter />` provides the `navigate()` function to navigate to another page with view transitions. With `@view-transition`,  you can call `location.assign()` or `location.replace()` to navigate to another page with browser-native cross-document view transitions.

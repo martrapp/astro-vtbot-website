@@ -110,10 +110,18 @@ import "../styles/view-transition.css"
 
 This approach provides flexibility as the file can grow over time, accommodating other truly global view transition definitions for your site.
 
-Embedding view transition styles directly within your components might feel like a more organized approach. However, because view transition styling spans across documents, this method only works reliably for components that appear on every page.
+Embedding view transition styles directly within your components might feel like a more organized approach. However, because view transition styling spans across documents, this method only works reliably for components that appear on every page. Keep in mind that styles for view transition pseudo-elements must be present [on the destination page](https://vtbag.dev/tips/css/).
 
-Keep in mind that styles for view transition pseudo-elements must be  present [on the destination page](https://vtbag.dev/tips/css/).
+With the `<ClientRouter />`, view transitions won't begin until [the target page is fully loaded](/jotter/feature-comparison/#page-load). To replicate that behavior with browser-native cross-document view transitions, add the following line to all your `<head>` elements:
 
+```html
+<head>
+	<link rel="expect" href="#the_unexpected" blocking="render" />
+<head>
+```
+Curious about how this spell works? Find the explanation [here](https://vtbag.dev/basics/pseudos/#delaying-cross-document-transitions).
+
+If you'd rather not wait for the entire page to load before starting the view transition, you can skip this step. Alternatively, fine-tune it by replacing `#the_unexpected` with the fragment-id of an element that ends just below the fold. But be aware that without awaiting the full page, some of your view transition groups might be missing when the transition starts.
 
 ## Keep Generated CSS?
 
