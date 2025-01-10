@@ -9,7 +9,7 @@ while true; do
 		if [ ! -f $old ] || ! diff -q $i $old; then
 			echo "generating $out"
 			cat $i | sed  -e 's|include(\([^)]*\))|include(\`src/assets/gv/\1'"'"')|'|\
-			tee x | m4 | dot -Tsvg | svgo - >$tmp && cp $i $old
+			m4 | dot -Tsvg | svgo - >$tmp && cp $i $old
 			cp $tmp $out
 		else
 			echo "$out is up to date"

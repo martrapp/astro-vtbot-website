@@ -6,20 +6,21 @@ digraph {
 	// splines=ortho
 	node [fontsize=12]
 	rem [label="Remove <ClientRouter /> from all pages" href="#remove-clientrouter-"]
-	state [label="Replace SPA state\n e.g. transition:persist and\nshared state management" href="#replace-spa-state"]
-	mpa [label="Check site's MPA functionality" href="#check-mpa-functionality"]
+	state [label="Replace SPA state\n e.g. transition:persist and\nshared state management", href="#replace-spa-state"]
+	mpa [label="Check site's MPA functionality", href="#check-mpa-functionality"]
+	rem -> mpa [penwidth=2]
 	rem -> state -> mpa
-	rem -> mpa
 	at [label="Add @transition {navigation: auto}" href="#enable-cross-document-view-transitions"]
-	mpa -> at
-	dirs [label="Keep transition:animate\nand transition:name?", href="#keep-generated-css" shape=diamond]
-  at -> dirs
-	dirs -> Done [xlabel="yes,\rand I have\rno special\rbackward\ranimations\r" class="rj"]
+	mpa -> at [penwidth=2]
+	dirs [label="Keep transition:animate\nand transition:name?", href="#keep-generated-css", shape=diamond]
+  at -> dirs [penwidth=2]
+	dirs -> Done [xlabel="yes,\rand I have\rno special\rbackward\ranimations\r" class="rj", penwidth=2]
 	turnSignal [label="Add direction\ndetection" href="#add-direction-detection"]
-	dirs -> turnSignal [xlabel="yes, with\nbackward\nanimations", minlen=3]
-	animate [label="Replace with CSS\nfor\nview transition names\nand pseudo-elements" href="#replace-auto-generated-css"]
+	dirs -> turnSignal [xlabel="yes, with\nbackward\nanimations"]
+	animate [label="Replace with\nCSS for\nview transition names\nand\npseudo-elements" href="#replace-auto-generated-css"]
 	turnSignal -> Done
+	animate -> turnSignal
 	dirs -> animate [xlabel=" no" minlen=2]
 	animate -> Done
-	Done [href="#done"]
-}n
+	Done [label="Done" href="#done"]
+}
