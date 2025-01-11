@@ -99,6 +99,7 @@ export default defineConfig({
 	})],
 	vite: {
 		build: {
+			assetsInlineLimit: 0,
 			rollupOptions: {
 				external: ["/z.ts"]
 			}
@@ -120,14 +121,14 @@ function sidebar1() {
 			label: "A Brief History of The Bag",
 			link: "/jotter/history/"
 		}, {
-			label: "ClientRouter Migration?",
+			label: "ClientRouter Migration?", collapsed: true,
 			items: [{
 				label: "High Level Considerations",
 				link: "/jotter/astro-view-transitions/"
-			},{
+			}, {
 				label: "Feature Comparison",
 				link: "/jotter/feature-comparison/"
-			},{
+			}, {
 				label: "Migration Path",
 				link: "/jotter/migrate/"
 			}]
@@ -140,9 +141,6 @@ function sidebar1() {
 		}, {
 			label: "The Jotter",
 			link: "/jotter/"
-		}, {
-			label: "Migration to @view-transitions?",
-			link: "/jotter/migrate/"
 		}, {
 			label: "Recent Changes",
 			link: "/jotter/history-of-changes/",
