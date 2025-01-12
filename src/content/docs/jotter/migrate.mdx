@@ -73,7 +73,7 @@ To align with Astro's default behavior, wrap the `@view-transition` at-rule in a
 Of course, you could also enable view transitions unconditionally or selectively disable certain animations using media queries to guard their definitions.
 
 
-One quick way to enable view transitions on your site is by adding a `<style is:global>` element directly to your global layout.
+One quick way to enable view transitions on your site is by adding a `<style is:global>` element directly to your global layout. Don't forget the "`is:global`" directive. Astro's default scoped styles won't work with view transition pseudo-elements.
 
 
 
