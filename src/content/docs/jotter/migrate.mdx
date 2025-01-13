@@ -183,6 +183,15 @@ Unlike Astro, where omitting the `transition:name`  directive allows Astro to ge
 Defining this name automatically enables entry and exit fades for the element and creates a smooth morph animation to a corresponding element with the same name on the next page.
 
 
+:::caution
+The view-transition-name is a [custom-ident](https://developer.mozilla.org/de/docs/Web/CSS/custom-ident). Do not use quotes and ensure proper escaping of special characters.
+
+Note, that not all strings you used with `transition:name` will work as `view-transition-names`. Astro automatically escaped them for you.
+
+The simplest, most portable approach is to just use upper and lower case letters from A to Z, digits from 0 to 9, an underscore `_` or a hyphen `-`. But don't start the name with a digit.
+:::
+
+
 ### Basic Astro Animations
 
 The default fade effect of the View Transition API is a bit slower than Astro's version.  To replicate Astro's fade effect for a view transition named `fade-name`, you can redefine the animations for `::view-transition-old(fade-name)` and `::view-transition-new(fade-name)`, adjusting the duration from `250ms` to `180ms` and replacing the `ease` timing function with a custom one:
