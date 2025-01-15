@@ -28,7 +28,8 @@ Here's a breakdown of the features you'll gain and lose when migrating from Astr
 |10|[Generated Names](#generated-names)|Works cross-document| - |
 |11|[Data Attributes](data-attributes)|Control link and script behavior|_[not needed]_|
 |12|[Route Announcement](#route-announcement)|Support for assistive technology|Standard support for assistive technology|
-|13|[Programmatic Navigation](#programmatic-navigation)|`navigate()`|`location.assign(), location.replace()`|
+|13|[Programmatic Navigation](#programmatic-navigation)|`navigate()`|`location.assign()`, `location.replace()`|
+|14|[Popstate hasUAVisualTransition](#popstate-hasuavisualtransition)|Cancel view transitions if the browser uses its own transitions for traversals|-|
 
 Some of these points might have a bigger or smaller impact than they initially seem. Let me explain in more detail:
 
@@ -122,3 +123,15 @@ The `<ClientRouter />` has built-in support assistive technology to announce the
 ## Programmatic Navigation
 
 The `<ClientRouter />` provides the `navigate()` function to navigate to another page with view transitions. With `@view-transition`,  you can call `location.assign()` or `location.replace()` to navigate to another page with browser-native cross-document view transitions.
+
+## Popstate hasUAVisualTransition
+
+If you want, you can add the following incantation to your Astro site:
+```html title="Layout.astro"
+<script>
+  addEventListener('popstate', (e) => e.hasUAVisualTransition && location.reload());
+</script>
+```
+When a browser, like iOS Safari, has its own visual transition as you swipe the screen back and forth, it would look bad to follow that with additional view transitions. The line above cancels the client routers view transition in that case. Try it right now on this site!
+
+`Popstate` does not fire on browser-native cross-document view transitions, and so there is currently no similar detection for `hasUAVisualTransition` when migrating away from the `<ClientRouter/>`.
