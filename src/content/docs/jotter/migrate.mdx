@@ -82,7 +82,7 @@ One quick way to enable view transitions on your site is by adding a `<style is:
 ---
 ...
 <style is:global>
-@media not (prefers-reduced-motion) {
+@media (prefers-reduced-motion: no-preference) {
   @view-transition {
 	  navigation: auto;
   }
@@ -94,7 +94,7 @@ One quick way to enable view transitions on your site is by adding a `<style is:
 However, I recommend using a dedicated `view-transition.css` file that you import into your global layout.
 
 ```css title="src/styles/view-transition.css"
-@media not (prefers-reduced-motion) {
+@media (prefers-reduced-motion: no-preference) {
   @view-transition {
 	  navigation: auto;
   }
