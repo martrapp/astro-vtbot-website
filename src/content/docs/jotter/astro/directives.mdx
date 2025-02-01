@@ -25,7 +25,7 @@ Astro uses a mechanism similar to scoped styles to set the `view-transition-name
 ```astro title=Component.astro
 <p transition:name="myName">...</p>
 ```
-&hellip; into this&hellip;
+&hellip;into this&hellip;
 ```astro title=Component.astro
 <p data-astro-transition-scope="astro-fgupyhpc-2">...</p>
 
@@ -33,7 +33,7 @@ Astro uses a mechanism similar to scoped styles to set the `view-transition-name
   [data-astro-transition-scope="astro-fgupyhpc-2"] { view-transition-name: myName; }
 </style>
 ```
-&hellip; setting a data attribute on the element and adding the `view-transition-name` using a CSS rule.
+&hellip;setting a data attribute on the element and adding the `view-transition-name` using a CSS rule.
 
 The main reason for setting the CSS property with a data attribute is that this attribute can be used as a fallback for the CSS property on browsers without native view transition support. The next section shows how this works.
 

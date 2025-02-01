@@ -306,9 +306,9 @@ Now you might ask yourself wether those two events are interchangeable, and as y
 
 |astro:page-load fires&hellip;|astro:after-swap fires&hellip;|
 |-|-|
-|&hellip; on initial load and during view transitions |&hellip; during view transitions only|
-|&hellip; after animations started |&hellip; while the renderer is still frozen and before the animations start[^5]|
-|&hellip; after all new scripts are executed |&hellip; before any new scripts are executed|
+|&hellip;on initial load and during view transitions |&hellip; during view transitions only|
+|&hellip;after animations started |&hellip;while the renderer is still frozen and before the animations start[^5]|
+|&hellip;after all new scripts are executed |&hellip;before any new scripts are executed|
 
 [^5]: True for native view transitions. In the simulation, the exit animations have already been completed, but the entry animation is still pending.
 
@@ -400,7 +400,7 @@ To further increase encapsulation, you might have the listeners in several scrip
 	init();
 </script>
 ```
-&hellip; which specially makes sense if you link with the `src` attribute to some external script. Just make no assumptions about the order in which the scripts are executed.
+&hellip;which specially makes sense if you link with the `src` attribute to some external script. Just make no assumptions about the order in which the scripts are executed.
 
 ```astro title="MyLayout4.astro"
 ...
