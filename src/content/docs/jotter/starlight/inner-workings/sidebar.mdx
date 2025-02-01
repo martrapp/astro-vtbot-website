@@ -82,7 +82,7 @@ I was a little confused.
 
 I've been thinking about this: people who want the status of categories saved are much more common than authors who want to change the sidebar content. I could just delete the last 6 lines of updateSidebar() and be done.
 
-On the other hand: Starlight will provide a built-in solution to maintain the state of the sidebar during navigation, regardless of view transitions. For this to work, the current version of `updateSidebar()` could be much more robust, but who knows. And then there would be the use case of authors changing the sidebar content depending on the current page &hellip;
+On the other hand: Starlight will provide a built-in solution to maintain the state of the sidebar during navigation, regardless of view transitions. For this to work, the current version of `updateSidebar()` could be much more robust, but who knows. And then there would be the use case of authors changing the sidebar content depending on the current page&hellip;
 
 If you don't know what to do, make it someone else's problem. I add a switch that defaults to the "only update the current page marker" version and in this case, skips replacing existing sidebar content in `updateSidebar()`. Authors can set it to what fits best for their site.
 

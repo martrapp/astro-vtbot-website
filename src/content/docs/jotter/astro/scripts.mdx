@@ -304,11 +304,11 @@ If you use `<ClientRouter />` the `astro:page-load` event does not only fire dur
 
 Now you might ask yourself wether those two events are interchangeable, and as you guess, they differ in some aspects.
 
-|astro:page-load fires &hellip;|astro:after-swap fires &hellip;|
+|astro:page-load fires&hellip;|astro:after-swap fires&hellip;|
 |-|-|
-| &hellip; on initial load and during view transitions | &hellip; during view transitions only|
-| &hellip; after animations started | &hellip; while the renderer is still frozen and before the animations start[^5]|
-| &hellip; after all new scripts are executed | &hellip; before any new scripts are executed|
+|&hellip; on initial load and during view transitions |&hellip; during view transitions only|
+|&hellip; after animations started |&hellip; while the renderer is still frozen and before the animations start[^5]|
+|&hellip; after all new scripts are executed |&hellip; before any new scripts are executed|
 
 [^5]: True for native view transitions. In the simulation, the exit animations have already been completed, but the entry animation is still pending.
 
@@ -378,7 +378,7 @@ You do not have to merge the initialization for all elements into the same event
 	imageGalleryInit()
 </script>
 ```
-To further increase encapsulation, you might have the listeners in several scripts &hellip;
+To further increase encapsulation, you might have the listeners in several scripts&hellip;
 
 ```astro title="MyLayout3.astro"
 ...

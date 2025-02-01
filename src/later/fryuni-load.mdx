@@ -35,7 +35,7 @@ Even if you do not want to use view transitions, you can still import the module
 ```js
   import { navigate } from 'astro:transitions/client';
 ```
-to get access to the `navigate()` function. But a) we don't need this function if we don't use view transitions and b) the above import imports &hellip; *nothing*?
+to get access to the `navigate()` function. But a) we don't need this function if we don't use view transitions and b) the above import imports&hellip; *nothing*?
 
 Correct, nothing is imported, but code is still executed:
 The script that is loaded here is [essentially this](https://github.com/withastro/astro/blob/dfdf6b3a0b50e14754abdbcc62fd714f80bf0666/packages/astro/src/transitions/router.ts)

@@ -49,7 +49,7 @@ The component has properties that you can use to target it on what elements to n
 |------------|------|--------|--------|
 | selector | string | 'h1, h2, h3, h4, h5, h6'|Instructs the `<AutoNameSelected>` component to give `view-transition-names` to all elements identified by this CSS selector. The selector must not be the empty string.|
 |force|boolean| true | By default `view-transition-names` are given to all selected elements. If you set `force={false}`, elements that already have a `style.viewTransitionName` are exempt.|
-|prefix|string|'vtbot-hx'|This value is used to construct the names. The names are created by adding a dash and a number to the prefix. With the default, the component generates names `vtbot-hx-0`, `vtbot-hx-1`, &hellip; An exception are the empty string and the value 'none', which will be used without adding anything. Do only use characters from this set: `A-Za-z-_` |
+|prefix|string|'vtbot-hx'|This value is used to construct the names. The names are created by adding a dash and a number to the prefix. With the default, the component generates names `vtbot-hx-0`, `vtbot-hx-1`,&hellip; An exception are the empty string and the value 'none', which will be used without adding anything. Do only use characters from this set: `A-Za-z-_` |
 |shuffle|boolean|false|If this property is set to true, `AutoNameSelected` will name the selected elements in some random order. Otherwise they are named in the order returned by `querySelectorAll()` which is depth-first pre-order.
 
 You can use this component to clear view transition names if you explicitly set the prefix to the empty string.

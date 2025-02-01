@@ -20,12 +20,12 @@ There are also _custom data attributes_ that influence the way view transitions 
 
 You use `transition:name` to explicitly set the `view-transition-name` CSS property of an element. A cool thing about `transition:name="xxx"` is that you can use any Unicode characters and Astro will automatically do the necessary encoding for you.
 
-Astro uses a mechanism similar to scoped styles to set the `view-transition-name`. It converts this &hellip;
+Astro uses a mechanism similar to scoped styles to set the `view-transition-name`. It converts this&hellip;
 
 ```astro title=Component.astro
 <p transition:name="myName">...</p>
 ```
-&hellip; into this &hellip;
+&hellip; into this&hellip;
 ```astro title=Component.astro
 <p data-astro-transition-scope="astro-fgupyhpc-2">...</p>
 

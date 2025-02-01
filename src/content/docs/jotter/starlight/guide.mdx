@@ -9,7 +9,7 @@ import AnimateImages from "/src/components/AnimateImages.astro"
 This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
 
 :::note[Starlight on browser-native cross-document view transitions]
-As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ClientRouter />` component) is completely running on &hellip; you guess it &hellip; **browser-native cross-document view transitions**!
+As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ClientRouter />` component) is completely running on&hellip; you guess it&hellip; **browser-native cross-document view transitions**!
 
 As I did for the current site before, I will share the necessary knowledge and components over there during the next months.
 
@@ -297,7 +297,7 @@ All Astro animations support forward and backward out of the box. But what, if y
 
  <details>
 
- <summary>If you want to add a special animation for your the _stay_ direction, &hellip;</summary>
+ <summary>If you want to add a special animation for your the _stay_ direction,&hellip;</summary>
 
 &hellip; you can do so by adding CSS for it:
 ```astro title="/src/components/starlight/Head.astro"
@@ -333,7 +333,7 @@ Refrain from merging rules with pseudo-elements with rules without pseudo-elemen
 
 Now it's getting funny! I made a component that I could use to make the headings of the pages stand out during view transitions. It is called [`AutoNameSelected`](/library/AutoNameSelected/).
 
-Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`, &hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph--group-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
+Without any parameters it selects all headings on all pages and assigns the view transition names `vtbot-hx-0`, `vtbot-hx-1`,&hellip;. This has the effect that the n-th heading on the current page and the n-th heading on the next page from a [view-transition-group](/jotter/api/#morph--group-animations). The headings are cut out of the page context and the old heading morphs into the new heading when navigating.
 
 You see this effect on the Jotter pages.
 
