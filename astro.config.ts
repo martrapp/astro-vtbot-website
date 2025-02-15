@@ -56,7 +56,6 @@ export default defineConfig({
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
 			Pagination: "./src/components/starlight/FeelBack.astro",
-			//MarkdownContent: "./src/components/MarkdownContent.astro"
 		},
 		title: "Bag of Tricks",
 		head: [{
@@ -86,7 +85,8 @@ export default defineConfig({
 		}, {
 			label: "General",
 			items: sidebar2()
-		}, {
+		},
+/*		{
 			label: "leading",
 			items: [{
 				label: "[C]",
@@ -95,7 +95,9 @@ export default defineConfig({
 				label: "[D]",
 				link: "/demos/"
 			}]
-		}]
+		}
+		*/
+	]
 	})],
 	vite: {
 		build: {
