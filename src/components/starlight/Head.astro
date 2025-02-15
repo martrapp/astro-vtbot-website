@@ -1,5 +1,4 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import BorderControl from 'astro-vtbot/components/BorderControl.astro';
@@ -21,8 +20,8 @@ import AutoCollapse from '../bot/AutoCollapse.astro';
 import EagerImageLoading from '../EagerImageLoading.astro';
 ---
 
-<VtbotStarlight {...Astro.props} retainCurrentPageMarker>
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+<VtbotStarlight retainCurrentPageMarker>
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 
 <LoadingIndicator top="80px" right="16px" src="/favicon.svg" />

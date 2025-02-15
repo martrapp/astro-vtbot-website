@@ -20,7 +20,7 @@ Starting from version 0.26.0, Starlight persists the state of the sidebar across
 
 This already gives Starlight a lot of that SPA look and feel!
 
-If you're satisfied with having the view transition effect work only in Chromium-based browsers (such as Chrome, Edge, and Opera) and can do without it in Firefox, and other browsers that don't yet support the cross-document features of the View Transition API, you can enable browser view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
+If you're satisfied with having the view transition effect work in most browsers but Firefox, you can enable browser-native view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
 
 ```
 @view-transition {navigation: auto}
@@ -80,17 +80,30 @@ Make sure that you have the latest version installed.
 ### Step 2: Create a Head Component
 Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
 
+**This is for Starlight versions >= 0.32.**
+```astro title="./src/components/starlight/Head.astro"
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+---
+
+<VtbotStarlight>
+	<StarlightHead><slot /></StarlightHead>
+</VtbotStarlight>
+```
+**And this is for Starlight versions < 0.32:**
 ```astro title="./src/components/starlight/Head.astro"
 ---
 import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
-import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base-pre-0.32.astro';
 ---
 
 <VtbotStarlight {...Astro.props}>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 ```
+
 
 ### Step 3: Use the New Head Component
 
@@ -152,17 +165,19 @@ You can configure several aspects of the view transition effect in your new `Hea
 
 ### Animating the Main Section
 
-You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight>` component. The Bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.
+You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight>` component. The Bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.[^remove]
 
 ```astro title="How to add animations to the main area"
 <VtbotStarlight {...Astro.props} transition:animate="fade">
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 ```
+[^remove]: Remove `{...Astro.props}` if you are using a Starlight version >= 0.32.
+
 If you want to add further styling to the transition group, you can explicitly name it by accompanying `transition:animate` with `transition:name="..."`. This way you replace the random name that Astro automatically gereted for you with a chosen name that you can use in CSS rules, see the [extended configuration example](#extended-configuration-example) below.
 
 ### Fallback Control
-What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from `none`, `swap` or `animate`. Use the `viewTransitionFallback` attribute of the `<VtbotStarlight>` component to tell The Bag what you have chosen:
+What [behavior](https://docs.astro.build/en/guides/view-transitions/#fallback-control) do you want for browsers that do not support view transitions natively? Choose from `none`, `swap` or `animate`. Use the `viewTransitionFallback` attribute of the `<VtbotStarlight>` component to tell The Bag what you have chosen:[^remove]
 
 ```astro title="How to specify the fallback option of <ClientRouter />"
 <VtbotStarlight {...Astro.props} viewTransitionsFallback="animate">
@@ -184,8 +199,9 @@ You can also add a `<style is:global>` section to the file to style the `::view-
 
 Let's revisit our `Head` component and see how it looks with the extensions described above:
 
-```astro title="./src/components/starlight/Head.astro"
+```astro title="./src/components/starlight/Head.astro" {3,16,19}
 ---
+// For Starlight version >= 0.32 remove the marked lines defining and using Astro.props
 import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
@@ -201,7 +217,9 @@ import { slide } from 'astro:transitions';
 <VtbotStarlight
 	{...Astro.props}
 	transition:name="main" transition:animate={slide({ duration: 150 })}>
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+	<StarlightHead
+	{...Astro.props}
+	><slot /></StarlightHead>
 </VtbotStarlight>
 
 {/* update this one to whatever image you want to show as a loading indicator */}
@@ -353,7 +371,7 @@ Event though this component was crafted as part of The Bag's Stalivht support, i
 In case you want to change the [default behavior of the sidebar](#sidebar-behavior), the <BoT/> offers some switches and utility functions.
 
 #### Replace the Sidebar Content
-You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component).
+You can have the content of the sidebar replaced on each navigation. To do this, add the `replaceSidebarContent` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component).[^remove]
 ```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} replaceSidebarContent>
 ```
@@ -361,7 +379,7 @@ This will swap in the sidebar content from the next page when you navigate. This
 
 #### Retain the Current Page Marker
 
-If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.
+If you want to take control over the current page marker yourself, you can switch of the default update by adding the `retainCurrentPageMarker` attribute to the `VtbotStarlight` tag in your [`Head` component](/jotter/starlight/guide/#step-2-create-a-head-component). This will also disable auto-opening and auto-scrolling to the current page marker.[^remove]
 
 ```astro title="/src/components/starlight/Head.astro"
 <VtbotStarlight {...Astro.props} retainCurrentPageMarker>
@@ -440,6 +458,9 @@ What follows is a yet more extended version of the [extended configuration examp
 
 <Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,8,9,10,11,19,20,36,37,39,40,42,43,44,45,47,48,49,51,52]}></Code>
 
+:::note
+The code above is for Starlight < 0.32. For Starlight version >= 0.32, remove the type import for `Props` and the two occurrences of `{...Astro.props}`.
+:::
 
 ## Friendly Neighbor
 

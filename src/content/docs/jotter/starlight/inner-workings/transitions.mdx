@@ -25,14 +25,13 @@ I would advise against the last point unless you find yourself in a situation wh
 
 Since we don't want to dig into the guts of Starlight, The Bag provides a special teleport functionality. Simply place your `transition:*` directives on the `<VtbotStarlight>` component in your new `<Head>` component and The Bag will beam them to the `<main>` element of Starlight's main content area.
 
-```astro title="src/components/starlight/Head.astro" showLineNumbers=false {4,5}
+```astro title="src/components/starlight/Head.astro" showLineNumbers=false {3,4}
 {/* Define a view transition animation for `<main>`*/}
 <VtbotStarlight
-	{...Astro.props}
 	transition:name="main"
 	transition:animate={slide({ duration: 300 })}
 >
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 ```
 

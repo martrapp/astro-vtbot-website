@@ -17,7 +17,7 @@ So we need to get access to an Astro component that can render the `<ClientRoute
 ```astro title="Page.astro" showLineNumbers=false
   ...
 	<head>
-		<Head {...Astro.props} />
+		<Head/>
 	...
 ```
 
@@ -30,13 +30,12 @@ It is better to [reuse the built-in component](https://starlight.astro.build/gui
 
 ```astro title="./src/components/starlight/Head.astro"
 ---
-import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 ---
 
-<VtbotStarlight {...Astro.props}>
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+<VtbotStarlight>
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 ```
 So re-using and extending the `<Head>` component is  textbook.[^1] However, the `vtbot` component wraps around the Starlight component, which enables the `vtbot` component to insert stuff before and after the original header elements.
@@ -48,26 +47,38 @@ Now that the <BoT/> provides more components for Starlight, this file is also a 
 
 You might already have guessed, what `astro-vtbot/components/starlight/Base.astro` might look like. It has to use `<ClientRouter />` and it must render its `<slot/>` to insert the contents of the original `Head` component.
 
-```astro title="astro-vtbot/components/starlight/Base.astro" {15,19} collapse={1-12}
+```astro title="astro-vtbot/components/starlight/Base.astro" {21,31} collapse={1-20}
 ---
-import type { Props as StarlightProps } from '@astrojs/starlight/props';
 import { ClientRouter } from 'astro:transitions';
 
 import ReplacementSwap from '../ReplacementSwap.astro';
 import StarlightConnector from './StarlightConnector.astro';
 
-export interface Props extends StarlightProps {
+export interface Props {
 	viewTransitionsFallback?: Parameters<typeof ClientRouter>[0]['fallback'];
+	replaceSidebarContent?: Boolean;
+	retainCurrentPageMarker?: Boolean;
 	'data-astro-transition-scope'?: string;
 }
-const { viewTransitionsFallback, 'data-astro-transition-scope': mainTransitionScope } = Astro.props;
+const {
+	viewTransitionsFallback,
+	replaceSidebarContent,
+	retainCurrentPageMarker,
+	'data-astro-transition-scope': mainTransitionScope,
+} = Astro.props;
 ---
 
 <ClientRouter fallback={viewTransitionsFallback} />
+<slot />
 <ReplacementSwap rootAttributesToPreserve="data-theme" />
 {mainTransitionScope && <meta name="vtbot-main-transition-scope" content={mainTransitionScope} />}
+{replaceSidebarContent && <meta name="vtbot-starlight-replace-sidebar-content" content="true" />}
+{
+	retainCurrentPageMarker && (
+		<meta name="vtbot-starlight-retain-current-page-marker" content="true" />
+	)
+}
 <StarlightConnector />
-<slot />
 ```
 The other parts you can see here are
 - It includes `<ReplacementSwap>` to [preserve Starlight's app state](/jotter/starlight/inner-workings/app-state/)

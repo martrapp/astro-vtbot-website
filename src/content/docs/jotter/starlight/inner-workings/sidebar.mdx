@@ -105,13 +105,12 @@ It now again runs by default. You can switch it off in favor of the "replace exi
 
 ```astro title="./src/components/starlight/Head.astro" "replaceStarlightSidebar"
 ---
-import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 ---
 
-<VtbotStarlight {...Astro.props} replaceSidebarContent>
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+<VtbotStarlight replaceSidebarContent>
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 ```
 

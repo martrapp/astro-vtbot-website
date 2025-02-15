@@ -9,7 +9,7 @@ import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
-import starlightUtils from "@lorenzo_lewis/starlight-utils";
+//import starlightUtils from "@lorenzo_lewis/starlight-utils";
 import { visualizer } from "rollup-plugin-visualizer";
 
 //import starlightBlog from 'starlight-blog';
@@ -39,14 +39,14 @@ export default defineConfig({
 		skipGeneration: process.env.GITHUB_ACTIONS === "true"
 	}), vtbot({ loadingIndicator: true, autoLint: false }), starlight({
 		plugins: [//starlightBlog(),
-			starlightImageZoom(),
+			starlightImageZoom(),/*
 			starlightUtils({
 				multiSidebar: {
 					switcherStyle: "horizontalList",
 				}, navLinks: {
 					leading: { useSidebarLabelled: "leading" },
 				}
-			}),
+			}),*/
 		],
 		tableOfContents: {
 			minHeadingLevel: 2,
