@@ -1,0 +1,197 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: Starlight Plugin
+overview: /components/
+vtn: slplug-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: slplug-1"><span style="display:inline-block; view-transition-name:slplug-2;">🌟 </span>The Starlight Plugin</h1>
+
+The Starlight Plugin from the Bag of Tricks adds view transitions to your Starlight site, bringing smooth animations and a touch of magic to every page change. If you only want standard cross-fade view transitions, do not install the plugin [but do this](#simple-alternative-just-whole-viewport-cross-fade).
+
+<span style="display: inline-block; font-size: 1.5rem; border-radius: 8px; padding: 1rem; margin: 1rem; background: linear-gradient(45deg, #000, #f0659548, #cc5de844); box-shadow: 0 4px 6px #8888;">[See what the plugin did](https://vtbot-starlight-demo.pages.dev) to the Starlight Starter!</span>
+
+## Contents
+
+## Installation
+
+:::caution[ **Heads up!**]
+The astro-vtbot Starlight Plugin requires your Starlight site to have a **Starlight version >= 0.32.**
+If you waited for a good reason to migrate to a current Starlight version, this might be it ;-)
+:::
+
+<style>{`aside{
+	border: 1px dashed grey;
+	border-radius: 1ex;
+	padding: 2ex;
+	background-color: #c844;
+}`}</style>
+
+Add view transitions to your existing Starlight site in two simple steps:
+
+### 1. Install astro-vtbot from npm
+```sh
+cd .../my-starlight-project
+npm install -D astro-vtbot
+```
+
+### 2. Add the plugin to your astro.config file.
+```ts title="astro.config.mjs" {2,7}
+import { defineConfig } from 'astro/config';
+import { viewTransitions } from "astro-vtbot/starlight-view-transitions";
+
+export default defineConfig({
+	integrations: [
+		starlight({
+			plugins: [viewTransitions()],
+			...
+		...})]
+})
+```
+<hr/>
+### Optional Steps
+
+You can customize the plugin with additional behavior. These steps are all optional:
+* enable the `renderBlocking` field in the frontmatter.
+* have an automatic fallback at the end of the markdown content if `renderBlocking` isn't specified.
+* set config strings for the included scripts
+
+#### Option 1: Enable the `renderBlocking` field for use in the frontmatter
+The Starlight Plugin provides an easy way to define [expect links]() using a frontmatter filed called `renderBlocking`. If you do not use this option, you can alternatively use Starlight's [head fields](#how-to-expect-content-without-the-plugin) to define such links.
+
+If you want to use the `renderBlocking` attribute in the markdown frontmatter to tell the browser to wait for a fragment identifier "below the fold", you need to extend Starlight's content config.
+
+```ts title="src/content.config.ts" add={1,9}
+import { defineCollection, z } from 'astro:content';
+import { docsLoader } from '@astrojs/starlight/loaders';
+import { docsSchema } from '@astrojs/starlight/schema';
+
+export const collections = {
+	docs: defineCollection({
+		loader: docsLoader(),
+		schema: docsSchema(
+			{extend: z.object({renderBlocking: z.string().optional()})}
+		)
+	}),
+};
+```
+After that, you can set the `renderBlocking` attribute in your frontmatter
+```yaml title="my-page.mdx"
+renderBlocking: my-below-the-fold-heading
+```
+and the Starlight plugin will automatically add
+```html
+<link rel="expect" href="#my-below-the-fold-heading" blocking="render" />
+```
+to the `<head>` of your page.
+
+
+
+
+#### Option 2: Automatically wait for the whole markdown section (if `renderBlocking` isn't defined)
+
+If this option is enabled, the Starlight Plugin will automatically add the `end-of-markdown` id&hellip;at the end of the markdown. If you do note enable the `renderBlocking` option above or do not define a `renderBlocking` id on a page, the plugin will automatically insert a render blocking link for you.
+
+```html
+<link rel="expect" href="#end-of-markdown" blocking="render" />
+```
+
+So view transitions will not start until the whole content of your page is loaded. This can be convenient for small pages, but might also come with some performance penalties for larger content.
+
+To enable this option, import and include the remarkEndOfMarkdown plugin:
+
+```ts title="astro.config.mjs" {2,5}
+import { defineConfig } from 'astro/config';
+import { viewTransitions, remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
+
+export default defineConfig({
+	markdown: { remarkPlugins: [remarkEndOfMarkdown] }
+	integrations: [
+		starlight({
+			plugins: [viewTransitions()],
+			...
+		...})],
+})
+```
+<hr/>
+
+#### Option 3: Set config strings for included scripts
+
+Under the hood, the Starlight Plugin installs some of the `@vtbag` scripts. Those can be configured by setting fields of the  plugin's options object:
+|Option|Package|Script|Script Option|
+|--|--|--|--|
+|allPages|turn-signal|index,debug,direction|[data-selector](https://vtbag.dev/tools/turn-signal/#data-selector)|
+|directionTypes|turn-signal|index,debug,directions|[data-direction-types](https://vtbag.dev/tools/turn-signal/#data-direction-ypes)|
+|directionAttribute|turn-signal|index,debug,directions|[data-direction-attribute](https://vtbag.dev/tools/turn-signal/#data-direction-attribute)|
+|declarativeNames|utensil-drawer|declarative-names|[data-vtbag-decl](https://vtbag.dev/tools/utensil-drawer/#configuration)|
+|camShaftNames|cam-shaft|index|[data-view-transition-names](http://localhost:4322/tools/cam-shaft/#configuration-and-usage)|
+
+For example, if you want to assign view transition names to all `<h2>` headings you would instruct the declarative-names script like so:
+```ts title="astro.config.mjs"
+starlight({
+  plugins: [viewTransitions({ declarativeNames: "h2 = heading2-" })],
+	...
+...})
+```
+<hr/>
+
+
+## Curious About the Details?
+Want to see all the magic this plugin brings? Head over to vtbag.dev for the fifth episode of _Fun With View Transitions_: [Adding View Transitions to Your Starlight Site](https://vtbag.dev/vwvt/twinkling/).
+
+
+## How to Expect Content without the Plugin
+Of course you can alternatively create the head entry independent of vtbot by using Starlight's frontmatter `head` field
+
+```yaml title="my-page.mdx"
+head:
+  - tag: link
+    attrs:
+      rel: "expect"
+      href: "#my-below-the-fold-heading"
+      blocking: "render"
+```
+or Starlight's global `head` option:
+```ts title="astro.config.mjs"
+import viewTransitions from 'astro-vtbot/starlight-view-transitions'
+export default defineConfig({
+	integrations: [
+		starlight({
+			plugins: [viewTransitions()],
+			head: [{
+				tag: "link",
+				attrs: {
+					rel: "expect",
+					href: "#below-the-fold",
+					blocking: "render"
+				}
+			}]
+			...
+		...})]})
+```
+The global head option works particularly well if you define an id for the main content area or an element below the markdown content. To do this, you have to [override Starlight components](https://starlight.astro.build/guides/overriding-components/) to set the id, for example:
+```astro title="./src/components/MarkdownContent.astro"
+---
+import Default from "@astrojs/starlight/components/MarkdownContent.astro";
+---
+<Default><slot /></Default>
+<div id="vtbag-below-the-fold" />
+```
+
+
+
+## Simple alternative: Just Whole-Viewport Cross-Fade
+
+If you just want a whole-viewport cross-fade effect on your Starlight site and none of the spiffy thrills of the plugin, you can alternatively add the following CSS to a [custom CSS](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) file and be all set.
+```css title="custom.css"
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+```
