@@ -47,7 +47,7 @@ The much better way is not to copy the frame but to leave it as is and just swap
 So the solution is to use The Bag's [`<ReplacementSwap>` component](/library/ReplacementSwap/) and just swap `div.main-frame` on view transitions.
 
 This automatically also adds some positive effects to Starlight as the app state now survives navigation.
-* If you have a long side bar thescroll position in that sidebar does not get lost on navigation
+* If you have a long side bar the scroll position in that sidebar does not get lost on navigation
 * When you revisit the search bar, it remembered your last search!
 
 ```html showLineNumbers=false
@@ -68,7 +68,7 @@ The solution that is implemented in The Bag's Starlight support is to add the `d
 ```
 **Revealed:** This reveals what [Lines 12 & 13](/jotter/starlight/inner-workings/integration/#connecting-to-starlight) of the StarlightConnector do.
 
-There is one caveat in this solution: it does not work for view transitions from outside your Starlight site. This is even true for navigation between two Starlight sites.   The reason is that `<ReplacementSwap/>` does not find an initialized app frame on the ingoing edge and falls back to Astro's built-in `swap()`. The solution would be to do a full reload on transitions to your sit from the outside. Component support coming soon.
+There is one caveat in this solution: it does not work for view transitions from outside your Starlight site. This is even true for navigation between two Starlight sites.   The reason is that `<ReplacementSwap/>` does not find an initialized app frame on the ingoing edge and falls back to Astro's built-in `swap()`. The solution would be to do a full reload on transitions to your site from the outside. If you have such a complicate setup, see [this section](jotter/starlight/guide/#re-initialize-starlight-pages) on reinitialization using the `<BorderControl />` component.
 
 ## Conclusion
 So now we have a solution to keep the app state of a Starlight site up to date across navigation, where we do not need to change any of Starlight's scripts, and we do not even need to know what they are and what they do.

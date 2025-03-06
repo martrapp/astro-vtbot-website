@@ -10,7 +10,7 @@ import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
 //import starlightUtils from "@lorenzo_lewis/starlight-utils";
-import { visualizer } from "rollup-plugin-visualizer";
+//import { visualizer } from "rollup-plugin-visualizer";
 
 //import starlightBlog from 'starlight-blog';
 
@@ -111,9 +111,6 @@ export default defineConfig({
 				allow: ['/Users/', '/home/']
 			}
 		},
-		plugins: [visualizer({
-			brotliSize: true
-		})]
 	}
 });
 function sidebar1() {
