@@ -10,11 +10,9 @@ import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightUtils from "@lorenzo_lewis/starlight-utils";
-//import { visualizer } from "rollup-plugin-visualizer";
 
 //import starlightBlog from 'starlight-blog';
 
-// https://astro.build/config
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	experimental: {
