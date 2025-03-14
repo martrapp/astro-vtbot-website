@@ -204,7 +204,7 @@ There are several occasions where the browser can call user code that we might u
 
 Option 1 is the only way that works without further requirements. The other options require a script to be executed in order to set them up: event listeners have to be added with `addEventListener`, asynchronous callbacks have to be set up using mechanisms like `setTimeout` or `then/await`, custom elements and worker/worklets must be explicitly declared using `customElements.define`, `navigator.serviceWorker.register`, `CSS.paintWorklet.addModule` or similar.
 
-Not all of these mechanisms are helpful to fix script state after view transitions. Some are not related to navigation like async callbacks triggered by `setTimeout()`. Others can not really help to limited DOM access, like for example the service workers.
+Not all of these mechanisms are helpful to fix script state after view transitions. Some are not related to navigation like async callbacks triggered by `setTimeout()`. Others can not really help due to limited DOM access, like for example the service workers.
 
 In the following sections we will look at script tags and event listeners. I'm also preparing some text on how to use the lifecycle methods of custom-components that you will find here, soon.
 
@@ -522,7 +522,7 @@ With the [built-in `swap()`](/jotter/astro/loader-swap/#swap-1), save positions 
 If you use the [`ReplacementSwap` component](/library/ReplacementSwap/), you have a larger set of safe positions: Only elements marked with `data-vtbot-replace` and their descendant are replaced during a soft load. All other elements stay untouched. Listeners set on those untouched elements will survive a soft load in the same way as the listener on `document` above.
 
 ##### transition:persist
-If you persist elements with [`transition:persist`] (/jotter/astro/directives/#transitionpersist), these elements also retain their listeners. Therefore, persisting elements to the next page is another good technique to keep listeners going across view transitions.
+If you persist elements with [`transition:persist`](/jotter/astro/directives/#transitionpersist), these elements also retain their listeners. Therefore, persisting elements to the next page is another good technique to keep listeners going across view transitions.
 
 ### Updates with Classic or Inline Scripts
 So this title is a bit unwieldy. What I meant to say is: how to use scripts that are not external module scripts. That also wouldn't have been shorter or simpler in the title.
@@ -721,7 +721,7 @@ On navigation to another page using Astro's `<ClientRouter />` component, loadin
 
 Astro might execute all scripts that it finds on the target page. But there are exemptions given by these two rules:
 1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. This is a consequence of technically staying on the same page when doing a soft load.
-2. **Astro excludes a script** from execution **if the same script was found on the previous page**. Two external scripts are considered to be the same if they have the same `src` attribute value. Two inline scripts are considered the same if they have the same embedded code, character for character.
+2. **Astro excludes a script** from execution if the same script **was already executed** since the last full page load (**up to 4.5.1:** if the script was **found on the previous page**). Two external scripts are considered to be the same if they have the same `src` attribute value. Two inline scripts are considered the same if they have the same embedded code, character for character.
 
 #### data-astro-rerun
 You can opt-out of the second rule by setting the `data-astro-rerun` attribute for the script. This automatically turns the script into an inline script. Therefore, you cannot use TypeScript here. But you can use imports if you add `type="module"`.
