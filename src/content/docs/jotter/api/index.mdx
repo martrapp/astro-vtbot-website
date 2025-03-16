@@ -75,10 +75,10 @@ For this to work, you define two CSS animations: One that lets the previous cont
 For a zoom effect, you override the default animations for the two images of the image pair with a scaling transition.
 
 ```css title="zoom.css"
-::view-transition-old {
+::view-transition-old(root) {
   animation: 1s normal both zoom;
 }
-::view-transition-new {
+::view-transition-new(root) {
   animation: 1s reverse both zoom;
 }
 @keyframes zoom {
