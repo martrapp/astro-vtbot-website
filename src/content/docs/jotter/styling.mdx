@@ -33,7 +33,9 @@ Maybe it is fine to skip the links for now and keep going with the rocket exampl
 
 * The `:root` of your document automatically gets a view transition **name called `root`**.
 
-* A view transition name `x` in the old view[^view] creates a **`::view-transition-old(x)`** pseudo-element that is a **screenshot** of that named element (plus some meta-data like dimensions and transforms). Similar a view transition name `x` in the new view creates a **`::view-transition-new(x)`** pseudo-element. this is no screenshot but a **live image** of the named element.
+* A view transition name `x` in the old view[^view] creates a **`::view-transition-old(x)`** pseudo-element that is a **screenshot** of that named element (plus some meta-data like dimensions and transforms). Similarly, a view transition name `x` in the new view creates a **`::view-transition-new(x)`** pseudo-element. this is no screenshot but a **live image** of the named element.
+
+* Assigning a view transition name `x` to an element in the old view[^view] creates a **::view-transition-old(x)** pseudo-element, which is a screenshot of that element (plus some metadata like dimensions and transforms). Similarly, assigning the same view transition name `x` to an element in the new view creates a **::view-transition-new(x)** pseudo-element. This is no screenshot, but a live image of the new element.
 
 * The new image is placed above the old image inside a **`::view-transition-image-pair(x)`** pseudo-element.
 
