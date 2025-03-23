@@ -1,0 +1,43 @@
+---
+import Layout from './_RocketLayout.astro';
+
+
+export async function getStaticPaths() {
+	return [
+		{ params: { kind: 'plain', outline: 'no', theme: 'light' } },
+		{ params: { kind: 'plain', outline: 'no', theme: 'dark' } },
+		{ params: { kind: 'plain', outline: 'yes', theme: 'light' } },
+		{ params: { kind: 'plain', outline: 'yes', theme: 'dark' } },
+		{ params: { kind: 'fancy', outline: 'no', theme: 'light' } },
+		{ params: { kind: 'fancy', outline: 'no', theme: 'dark' } },
+		{ params: { kind: 'fancy', outline: 'yes', theme: 'light' } },
+		{ params: { kind: 'fancy', outline: 'yes', theme: 'dark' } },
+	];
+}
+const { kind, outline, theme } = Astro.params
+// @ts-ignore
+Astro.params["pg"] = 1;
+---
+
+<Layout pg={1} {kind} {outline} {theme}>
+	<a id="rocket" style="view-transition-name: rocket" href=".">🚀</a>
+	<a style="view-transition-name: level-up" href={`/iframes/rocket-${kind}-${outline}-${theme}-2/`}>Level Up!</a>
+
+	<style>
+		#rocket {
+			display: inline-block;
+			position: fixed;
+			bottom: calc(1.625 * 13vmin);
+			left: 100px;
+			transform: rotate(-45deg) scale(1.5);
+			text-decoration: none;
+		}
+		a:not(#rocket) {
+			display: inline-block;
+			position: fixed;
+			bottom: 6vmin;
+			left: 50px;
+			background-color: light-dark(lightblue, darkblue);
+		}
+	</style>
+</Layout>

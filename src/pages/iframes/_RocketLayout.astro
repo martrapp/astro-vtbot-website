@@ -1,0 +1,61 @@
+---
+import rocketCSS from './_rocket.css?url';
+import outlineCSS from './_outline.css?url';
+const { pg, kind, outline, theme } = Astro.params;
+const duration =
+	kind === 'plain' && outline === 'no'
+		? '250ms'
+		: kind === 'fancy' && outline === 'yes'
+			? '3s'
+			: '2s';
+---
+
+<html style="view-transition-name: none" data-theme={theme} data-title={`page${pg}`} lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Page {pg}</title>
+		<style set:text=`::view-transition-group(*) {animation-duration: ${duration};}`></style>
+		{kind === 'fancy' ? <link rel="stylesheet" href={rocketCSS} /> : ''}
+		{outline === 'yes' ? <link rel="stylesheet" href={outlineCSS} /> : ''}
+		<style is:global>
+			@media (prefers-reduced-motion: no-preference) {
+				@view-transition {
+					navigation: auto;
+				}
+			}
+			section * {
+				padding: 0;
+				margin: 0;
+				font-family: fantasy;
+				font-size: 13vmin;
+			}
+			:root {
+				color-scheme: light;
+			}
+			:root[data-theme='dark'] {
+				color-scheme: dark;
+			}
+
+			@supports not (view-transition-name: a) {
+				section::before {
+					font-size: 40px;
+					color: darkred;
+					content: 'Sorry, your browser does not have support for native view transitions.';
+				}
+			}
+		</style>
+		<script is:inline>
+			addEventListener('pageswap', (e) =>
+				sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
+			);
+			addEventListener('pagereveal', (e) =>
+				sessionStorage.getItem('falseStart') === 'Y' && e.viewTransition?.types.add('falseStart')
+			)
+		</script>
+	</head>
+	<body>
+		<section>
+			<slot />
+		</section>
+	</body>
+</html>
