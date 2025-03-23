@@ -69,7 +69,7 @@ Let's put it to work!
 
 The rocket example consists of two linked pages. On the first, a rocket rests on a link labeled "Level Up!" Click it, and you’re taken to the second page, where the rocket now sits on a link that says "Back to Base..."
 
-Each element, the rocket and both links, has a view transition name: `rocket`, `level-up`, and `back`. When you click the link, the rocket smoothly moves to its new position, resizing along the way.
+Each element, the rocket, and both links, has a view transition name: `rocket`, `level-up`, and `back`. When you click the link, the rocket smoothly moves to its new position, resizing along the way.
 
 
 <div style="border: 1pt dashed grey"><VtDemo path="rocket-plain-no" width="100%"/></div>
@@ -179,10 +179,10 @@ Even though it is not visible,  the old and new rocket images also **cross-fade*
 </div>
 </div>
 
-If you click the rocket, starting a navigation to the same page, you see a 3 second animation where nothing happens, because now the rocket and the link image pairs have two images and they cross fade in place.
+If you click the rocket, starting a navigation to the same page, you see a 3 second animation where nothing happens, because now the rocket and the link image pairs have two images and they cross-fade in place.
 ## Time to Get Fancy
 
-To spice up the rather dull default effect, we'll sprinkle in some custom animations. Of course, the result might be a bit exaggerated, and the animations might be a bit much for a professional website. But the goal here is mainly to make the point and clearly demonstrate the possibilities.
+To spice up the rather dull default effect, we'll sprinkle in some custom animations. Of course, the result might be a bit exaggerated, and the animations might be a bit much for a professional website. However, the main goal here is to make the point and clearly demonstrate the possibilities.
 
 View transition animations kick in when the pseudo-image tree is inserted into the DOM. For cross-document view transitions, this happens after we have already landed on the new page. Thus, the CSS from the new page controls everything, even the [exit animations](https://vtbag.dev/tips/css/#animations) for elements from the old page.
 
@@ -201,7 +201,7 @@ import "src/styles/view-transition.css"
 
 The real magic of the View Transition API is that it lets you create pseudo-elements to display images from the previous page on the current one. This is something that is hardly achievable without special browser support. And the selectors to address the pseudo elements.
 
-But styling the pseudo-elements is no rocket science at all: All is done with pure CSS animations and and the CSS properties you already know and love.
+But styling the pseudo-elements is no rocket science at all: All is done with pure CSS animations and the CSS properties you already know and love.
 
 Thus, the important questions now are: If you know what effect you want to craft and you know how to define the keyframe for it,
 * To which pseudo-element should you attach the effect?
@@ -214,7 +214,7 @@ Let's see!
 The link on the old page should be redrawn like a launch ramp, and the link on the new page should move in to form a landing pad. And here we go!
 
 #### Overriding Exiting Animation
-We start with a simple shift exit animation for the `level-up` link. We call it `level-up-exit`. It shifts its element a whole viewport width to the left in the first half of the animation and keeps it there until the view transition ends. On that way it shrinks it to a fifth of its size:
+We start with a simple shift exit animation for the `level-up` link. We call it `level-up-exit`. It shifts its element a whole viewport width to the left in the first half of the animation and keeps it there until the view transition ends. On that way, it shrinks it to a fifth of its size:
 ```css title="src/styles/view-transition.css"
  @keyframes level-up-exit {
 	50%, 100% {
@@ -223,11 +223,11 @@ We start with a simple shift exit animation for the `level-up` link. We call it 
 }
 ```
 The candidate pseudo-elements to animate with this keyframes are:
-- `::view-transition-old(level-up)`: This is the most natural choice. This is exactly the image we want to slide out. If we override the default animation, we will opt-out of the default fade effect.
+- `::view-transition-old(level-up)`: This is the most natural choice. This is exactly the image we want to slide out. If we override the default animation, we will opt out of the default fade effect.
 - `::view-transition-image-pair(level-up)`: This is the parent or container of the old image. If we move this pseudo-element, it will also move the contained old image. Defining an animation on this element will not override default animations defined by the View Transition API as there are none. The automatically defined fade animation of the old image will not change if we assign an animation to the image pair.
-- `::view-transition-group(level-up)`: This is the grand-parent of the old image. Similar in effect to the image pair, but overriding the default animation would typically kill the morph animation, which you probably do not want as it is hard to reconstruct. On the other hand, there is no morph animation if the image-pair only has a single child. So this would also easily work for our example.
+- `::view-transition-group(level-up)`: This is the grand-parent of the old image. Similar in effect to the image pair, but overriding the default animation would typically kill the morph animation, which you probably do not want as it is hard to reconstruct. On the other hand, there is no morph animation if the image pair only has a single child. So this would also easily work for our example.
 - `::view-transition`: Well this is too coarse for the desired effect as it moves the whole view transition layer. <a id="hint"/>Maybe we will revisit this one at the end of the article.
-- `view-transition-new(level-up)`: This does only exist if we navigate from Page 2 back to Page 1. Not our business right now.
+- `view-transition-new(level-up)`: This only exists if we navigate from Page 2 back to Page 1. Not our business right now.
 
 So if we want to just slide the link without the default fade-out, the simplest solution is to target the `::view-transition-old` pseudo-element:
 
@@ -237,7 +237,7 @@ So if we want to just slide the link without the default fade-out, the simplest 
 }
 ```
 Defining the animation-name overrides the default `-ua-view-transition-fade-out` animation and replaces it with our keyframes.
-Of course, instead of `animation-name` you could have used the `animation` shortcut property that let's you set all animation properties in one go. But I recommend not to and instead explicitly change the animation properties you really care about. This way you benefit from the wisely chosen setup of the View Transition API, which for example inherits the images' `animation-duration` from the image-pair, which in turn inherits it from the group. This allow us to consistently set the duration for all animations using a single CSS rule.
+Of course, instead of `animation-name` you could have used the `animation` shortcut property that lets you set all animation properties in one go. But I recommend not to and instead explicitly change the animation properties you really care about. This way you benefit from the wisely chosen setup of the View Transition API, which for example inherits the images' `animation-duration` from the image pair, which in turn inherits it from the group. This allows us to consistently set the duration for all animations using a single CSS rule.
 ```css title="src/styles/view-transition.css"
 ::view-transition-group(*) {
 	animation-duration: 2s;
@@ -291,7 +291,7 @@ But this time, we simply revert the entry frames instead.
 
 Keep in mind that the default timing function is the asymmetrical `ease` function, and `back-exit` and reverted `back-entry` are only identical with symmetrical timing functions. But in our example, the reverted entry fits well.
 
-Since we do not want to override the default fade animations this time, we can not just set the `animation-name` on the old and new images as we did in the previous example. But we can add new animations to the old and new images _without messing with the default fade animations_ by assigning multiple animations names in a comma separated list!
+Since we do not want to override the default fade animations this time, we can not just set the `animation-name` on the old and new images as we did in the previous example. But we can add new animations to the old and new images _without messing with the default fade animations_ by assigning multiple animations names in a comma-separated list!
 ```css title="src/styles/view-transition.css"
 ::view-transition-new(back) {
 	animation-name: back-entry, -ua-view-transition-fade-in;
@@ -302,7 +302,7 @@ Since we do not want to override the default fade animations this time, we can n
 }
 ```
 
-And yes, doing this you can reuse the keyframes from the browser's user agent stylesheets. Their names are defined in the View Transition API specification and can be relied on in all browsers with native view transition support. So instead of overriding and erasing the original assignments of the View Transition API, we can reuse and augment them with our own definitions. In the second rule, the fade from the uer agent stylesheet plays normal, while the entry animation is reversed to define our exit animation for the old image.
+And yes, you can reuse the keyframes from the browser's user agent stylesheets. Their names are defined in the View Transition API specification and can be relied on in all browsers with native view transition support. So instead of overriding and erasing the original assignments of the View Transition API, we can reuse and augment them with our own definitions. In the second rule, the fade from the user agent stylesheet plays `normal`, while the entry animation is reversed to define our exit animation for the old image.
 
 Note that we didn't include `-ua-mix-blend-mode-plus-lighter` on purpose as these are pure entry and exit animations.
 
@@ -526,7 +526,7 @@ None of these should happen on false starts.
 }
 ```
 #### View Transition Classes
-To add some glow, we could assign box-shadows to the old and new images for the `level-up` and `back` link.
+To add some glow, we could assign box-shadows to the old and new images for the `level-up` and `back` links.
 
 When styling pseudo-elements across multiple groups, view transition classes help simplify the task. Although they look syntactically similar to view transition names, a single view transition class can (and typically will) be assigned to multiple elements.
 
@@ -579,10 +579,10 @@ There might be some general learnings that you might take away from the examples
 
 - Keep your CSS for exit animations global because with browser history navigation every page can be the next one.
 - You can animate any of the pseudo elements including the image pair and the root of pseudo-elements tree
-- You can reuse the browsers defined keyframes and combine them with your own.
-- You can use context information like data-attributes on the `:root` element or view transition types for finer control of your styles.
+- You can reuse the browser-defined keyframes and combine them with your own.
+- You can use context information like data attributes on the `:root` element or view transition types for finer control of your styles.
 - You can use view transition classes to style several pseudo-elements with a single rule.
-- In styling pseudo-elements, you are not limited to animation, but can use any CSS properties that you would ue on other images like z-index, outline or box-shadow.
+- In styling pseudo-elements, you are not limited to animation, but can use any CSS properties that you would use on other images like z-index, outline, or box-shadow.
 - Inheritance can be used to consistently set the duration value on all/many elements with a single definition.
 
 
