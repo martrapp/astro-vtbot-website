@@ -17,7 +17,6 @@ export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	experimental: {
 		svg: true,
-		preserveScriptOrder: true,
 	},
 	devToolbar: { enabled: true },
 	prefetch: process.env.NODE_ENV === "production",
@@ -96,7 +95,7 @@ export default defineConfig({
 			}]
 		}
 
-		]
+	]
 	})],
 	vite: {
 		build: {
@@ -167,9 +166,9 @@ function sidebar1() {
 		}, {
 			label: "Re-initialize Scripts after Transition",
 			link: "/jotter/astro/scripts/"
-		}, { label: "Extended Styling", link: "/jotter/styling/", badge: { text: "new", variant: "success" } }]
+		}]
 	}, {
-		label: "The Jotter on Starlight", collapsed: true,
+		label: "The Jotter on Starlight",
 		items: [{
 			label: "Introduction",
 			link: "/jotter/starlight/"
@@ -177,7 +176,7 @@ function sidebar1() {
 			label: "Guide: Adding View Transitions",
 			link: "/jotter/starlight/guide/"
 		}, {
-			label: "The Inner Workings", collapsed: true,
+			label: "The Inner Workings",
 			items: [{
 				label: "Overview",
 				link: "/jotter/starlight/inner-workings/"

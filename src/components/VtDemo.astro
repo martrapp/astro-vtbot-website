@@ -1,13 +1,11 @@
 ---
 export interface Props {
 	path: string;
-	height?: string;
-	width?: string;
 }
-const { path, height="20rem", width="20rem" } = Astro.props;
+const { path } = Astro.props;
 ---
 
-<div data-vtbot-iframe-path={path} style=`height: ${height}` data-height=`${height}`, data-width=`${width}`>
+<div data-vtbot-iframe-path={path} style="height: 320px;">
 	{
 		/*
 	Iframe is dynamically inserted after view transition as otherwise the new-image is distorted.
@@ -21,14 +19,13 @@ const { path, height="20rem", width="20rem" } = Astro.props;
 	import './iframe-theme';
 
 	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
-		const divs = document.querySelectorAll<HTMLDivElement>(`[data-vtbot-iframe-path]`);
-		divs.forEach((el) => {
+		document.querySelectorAll(`[data-vtbot-iframe-path]`).forEach((el) => {
 			const path = el.getAttribute('data-vtbot-iframe-path');
 			const theme = document.documentElement.getAttribute('data-theme');
 			const iframeSrc = `/iframes/${path}-${theme}/`;
 			setTimeout(
 				() =>
-					(el.innerHTML = `<iframe src="${iframeSrc}" style="border: none; margin: auto; height: ${el.dataset.height}; width: ${el.dataset.width}"></iframe>`),
+					(el.innerHTML = `<iframe src="${iframeSrc}" style="border: none; margin: auto; height: 20rem; width: 20rem"></iframe>`),
 				1500
 			);
 		});
