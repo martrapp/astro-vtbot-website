@@ -32,6 +32,24 @@ const duration =
 				});
 			})
 		</script>}
+		<script is:inline type="speculationrules">
+			{
+				"prerender": [
+					{
+						"urls": [
+						"/iframes/rocket-plain-no-dark/", "/iframes/rocket-plain-no-dark-2/"]
+						"/iframes/rocket-plain-no-light/", "/iframes/rocket-plain-no-light-2/"]
+						"/iframes/rocket-plain-yes-dark/", "/iframes/rocket-plain-yes-dark-2/"]
+						"/iframes/rocket-plain-yes-light/", "/iframes/rocket-plain-yes-light-2/"]
+						"/iframes/rocket-fancy-no-dark/", "/iframes/rocket-fancy-no-dark-2/"]
+						"/iframes/rocket-fancy-no-light/", "/iframes/rocket-fancy-no-light-2/"]
+						"/iframes/rocket-fancy-yes-dark/", "/iframes/rocket-fancy-yes-dark-2/"]
+						"/iframes/rocket-fancy-yes-light/", "/iframes/rocket-fancy-yes-light-2/"]
+						]
+					}
+				]
+			}
+		</script>
 		<style set:text=`::view-transition-group(*) {animation-duration: ${duration};}`></style>
 		{kind === 'fancy' ? <link rel="stylesheet" href={rocketCSS} /> : ''}
 		{outline === 'yes' ? <link rel="stylesheet" href={outlineCSS} /> : ''}
