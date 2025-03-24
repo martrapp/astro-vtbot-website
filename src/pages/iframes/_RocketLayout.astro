@@ -15,6 +15,7 @@ const duration =
 		<meta charset="utf-8" />
 		<title>Page {pg}</title>
 		<link rel="expect" href="#body" blocking="render" />
+		{//@ts-ignore
 		<script is:inline blocking="render">
 			addEventListener('pageswap', (e) =>
 				sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
@@ -22,7 +23,7 @@ const duration =
 			addEventListener('pagereveal', (e) =>
 				sessionStorage.getItem('falseStart') === 'Y' && e.viewTransition?.types.add('falseStart')
 			)
-		</script>
+		</script>}
 		<style set:text=`::view-transition-group(*) {animation-duration: ${duration};}`></style>
 		{kind === 'fancy' ? <link rel="stylesheet" href={rocketCSS} /> : ''}
 		{outline === 'yes' ? <link rel="stylesheet" href={outlineCSS} /> : ''}
