@@ -150,29 +150,29 @@
 /* Fixing false starts.
  * Using types this way only works if some JavaScript code that sets the type
  */
-:active-view-transition-type(falseStart)::view-transition-group(*) {
+.falseStart::view-transition-group(*) {
 	animation-duration: 0.3s;
 }
-:active-view-transition-type(falseStart)::view-transition-old(level-up),
-:active-view-transition-type(falseStart)::view-transition-new(level-up) {
+.falseStart::view-transition-old(level-up),
+.falseStart::view-transition-new(level-up) {
 	animation-name: shake;
 	transform-origin: 30%;
 	animation-iteration-count: 2;
 }
-:active-view-transition-type(falseStart)::view-transition-image-pair(back) {
+.falseStart::view-transition-image-pair(back) {
 	animation-name: shake;
 	transform-origin: 80%;
 	animation-iteration-count: 2;
 }
-:active-view-transition-type(falseStart)::view-transition-old(back),
-:active-view-transition-type(falseStart)::view-transition-new(back),
-:active-view-transition-type(falseStart)::view-transition-image-pair(rocket) {
+.falseStart::view-transition-old(back),
+.falseStart::view-transition-new(back),
+.falseStart::view-transition-image-pair(rocket) {
 	animation-name: none;
 }
-:active-view-transition-type(falseStart)::view-transition {
+.falseStart::view-transition {
 	animation: none;
 }
-:active-view-transition-type(falseStart)::view-transition-group(rocket) {
+.falseStart::view-transition-group(rocket) {
 	z-index: initial;
 }
 
