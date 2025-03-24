@@ -6,7 +6,6 @@
 	view-transition-name: level-up;
 }
 
-
 /* Shake the whole viewport */
 ::view-transition {
 	animation-name: shake;
@@ -151,34 +150,31 @@
 /* Fixing false starts.
  * Using types this way only works if some JavaScript code that sets the type
  */
-:active-view-transition-type(falseStart) {
-	&::view-transition-group(*) {
-		animation-duration: 0.3s;
-	}
-	&::view-transition-old(level-up),
-	&::view-transition-new(level-up) {
-		animation-name: shake;
-		transform-origin: 30%;
-		animation-iteration-count: 2;
-	}
-	&::view-transition-image-pair(back) {
-		animation-name: shake;
-		transform-origin: 80%;
-		animation-iteration-count: 2;
-	}
-	&::view-transition-old(back),
-	&::view-transition-new(back),
-	&::view-transition-image-pair(rocket) {
-		animation-name: none;
-	}
-	&::view-transition {
-		animation: none;
-	}
-	&::view-transition-group(rocket) {
-		z-index: initial;
-	}
+:active-view-transition-type(falseStart)::view-transition-group(*) {
+	animation-duration: 0.3s;
 }
-
+:active-view-transition-type(falseStart)::view-transition-old(level-up),
+:active-view-transition-type(falseStart)::view-transition-new(level-up) {
+	animation-name: shake;
+	transform-origin: 30%;
+	animation-iteration-count: 2;
+}
+:active-view-transition-type(falseStart)::view-transition-image-pair(back) {
+	animation-name: shake;
+	transform-origin: 80%;
+	animation-iteration-count: 2;
+}
+:active-view-transition-type(falseStart)::view-transition-old(back),
+:active-view-transition-type(falseStart)::view-transition-new(back),
+:active-view-transition-type(falseStart)::view-transition-image-pair(rocket) {
+	animation-name: none;
+}
+:active-view-transition-type(falseStart)::view-transition {
+	animation: none;
+}
+:active-view-transition-type(falseStart)::view-transition-group(rocket) {
+	z-index: initial;
+}
 
 a {
 	view-transition-class: starter;

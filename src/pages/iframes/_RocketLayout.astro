@@ -21,14 +21,10 @@ const duration =
 				sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
 			);
 			addEventListener('pagereveal', (e) => {
-				console.log("Page Reveal")
 				const fs = sessionStorage.getItem('falseStart') === 'Y';
 				fs && e.viewTransition?.types.add('falseStart');
-				fs  && console.log("False Start")
 				e.viewTransition?.ready.then(() => {
-					console.log('pagereveal2');
 					e.viewTransition.types.forEach((type) => {
-						console.log(type);
 						if (type === 'falseStart') {
 							document.documentElement.classList.add('falseStart');
 						}
