@@ -180,8 +180,11 @@
 }
 
 
-a[href^='/'] {
+a {
 	view-transition-class: starter;
+}
+#rocket {
+	view-transition-class: initial;
 }
 ::view-transition-new(.starter),
 ::view-transition-old(.starter) {
