@@ -489,6 +489,17 @@ With the view transition type in place, we can use it to override CSS properties
 }
 ```
 
+Alternatively, you can of course use data-attributes as we did before with the `data-title` attribute or CSS classes.
+For example, you could set a `falseStart` CSS class on the `:root` element and use it as in combination with the pseudo-elements, e.g.  `.falseStart::view-transition-group(*)` or even in nested CSS rules.
+
+```css title="src/styles/view-transition.css"
+.falseStart {
+	&::view-transition-group(*) {
+		...
+	}
+}
+```
+
 ## Final Touches
 
 Mission control just made some last-minute requests:
