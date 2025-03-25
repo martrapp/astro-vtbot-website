@@ -16,14 +16,14 @@ import '../styles/view-transition.css';
 		<script is:inline>
 			addEventListener('pageswap', (e) =>
 				sessionStorage.setItem(
-					'falseStart',
+					'false-start',
 					e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N'
 				)
 			);
 			addEventListener(
 				'pagereveal',
 				(e) =>
-					sessionStorage.getItem('falseStart') === 'Y' && e.viewTransition?.types.add('falseStart')
+					sessionStorage.getItem('false-start') === 'Y' && e.viewTransition?.types.add('false-start')
 			);
 		</script>
 	</head>

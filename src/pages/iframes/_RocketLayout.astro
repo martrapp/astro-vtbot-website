@@ -18,15 +18,15 @@ const duration =
 		{//@ts-ignore
 		<script is:inline>
 			addEventListener('pageswap', (e) =>
-				sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
+				sessionStorage.setItem('false-start', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
 			);
 			addEventListener('pagereveal', (e) => {
-				const fs = sessionStorage.getItem('falseStart') === 'Y';
-				fs && e.viewTransition?.types.add('falseStart');
+				const fs = sessionStorage.getItem('false-start') === 'Y';
+				fs && e.viewTransition?.types.add('false-start');
 				e.viewTransition?.ready.then(() => {
 					e.viewTransition.types.forEach((type) => {
-						if (type === 'falseStart') {
-							document.documentElement.classList.add('falseStart');
+						if (type === 'false-start') {
+							document.documentElement.classList.add('false-start');
 						}
 					});
 				});

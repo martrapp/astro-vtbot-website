@@ -18,7 +18,7 @@ import { ClientRouter } from 'astro:transitions';
 		<script>
 			document.addEventListener(
 				'astro:before-swap',
-				(e) => e.from.href === e.to.href && e.viewTransition.types.add('falseStart')
+				(e) => e.from.href === e.to.href && e.viewTransition.types.add('false-start')
 			);
 		</script>
 	</head>

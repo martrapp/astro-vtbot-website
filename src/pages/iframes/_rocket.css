@@ -149,9 +149,9 @@
 }
 
 /* Fixing false starts.
- * Using types this way only works if some JavaScript code that sets the type
+ * Using types this way only works if some JavaScript code sets the type
  */
-:active-view-transition-type(falseStart) {
+:active-view-transition-type(false-start) {
 	&::view-transition-group(*) {
 		animation-duration: 0.3s;
 	}
