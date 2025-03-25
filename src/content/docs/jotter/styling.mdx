@@ -1,0 +1,597 @@
+---
+title: Extended Styling
+description: "Step-by-Step: How to style your view transitions pseudo-elements"
+---
+
+import VtDemo from "/src/components/VtDemo.astro";
+import { Tabs, TabItem, Aside, Code } from '@astrojs/starlight/components';
+
+So, you are familiar with Astro's `<ClientRouter />` and its `transition:*` directives? Adding slide animations to pages was a breeze? You even pulled off that slick morph effect, where a blog card seamlessly expands into a full article, complete with independent animations for the title and thumbnail?
+
+🙌 Nice work!
+
+But why stop there? Time to take it up a notch. Let's explore how to style view transition animations with CSS and make them truly yours!
+
+
+
+## Prior Knowledge Required for Styling
+
+Before you dive into custom styling, it's good to understand the basics of the [View Transition API](/jotter/api/):
+
+* Which [pseudo-elements](https://vtbag.dev/basics/pseudos/) does it introduce?
+* How are they [created and painted](/jotter/api/details/#detailed-interior-view)?
+* How do the [default animations](https://vtbag.dev/basics/default-animations/) work?
+* What [default styling](https://vtbag.dev/basics/styling/) will be applied?
+
+Maybe it is fine to skip the links for now and keep going with the rocket example. You can always come back if you want more details.
+
+
+<details>
+<summary>But just in case you need a quick refresher, here is what matters on this page:</summary>
+
+* Assigning a **view transition name** to an HTML element makes the View Transition API generate several pseudo-elements for it. You can do this by setting the `view-transition-name` CSS property or via Astro's `transition:name="x"` directive.
+
+* The `:root` of your document automatically gets a view transition **name called `root`**.
+
+* A view transition name `x` in the old view[^view] creates a **`::view-transition-old(x)`** pseudo-element that is a **screenshot** of that named element (plus some meta-data like dimensions and transforms). Similarly, a view transition name `x` in the new view creates a **`::view-transition-new(x)`** pseudo-element. this is no screenshot but a **live image** of the named element.
+
+* Assigning a view transition name `x` to an element in the old view[^view] creates a **::view-transition-old(x)** pseudo-element, which is a screenshot of that element (plus some metadata like dimensions and transforms). Similarly, assigning the same view transition name `x` to an element in the new view creates a **::view-transition-new(x)** pseudo-element. This is no screenshot, but a live image of the new element.
+
+* The new image is placed above the old image inside a **`::view-transition-image-pair(x)`** pseudo-element.
+
+* A view transition name does not need to exist on both the old and new page. So, despite its name, an **image _pair_  may not always have two children**, but it will always have at least one.
+
+* The image pair is wrapped inside a **`::view-transition-group(x)`** pseudo element. If no other `::view-transition-group` is defined as a parent, the view-transition group is rooted at the **`::view-transition`** pseudo-element.
+
+* **Paint order matters.** Pseudo-elements can obscure each other, and their stacking order follows the sequence in which their names first appear in the old view and then in the new view, following a depth-first pre-order traversal.
+
+* At the start of the view transition, the pseudo-element tree is attached to the `:root` element. The pseudo-elements are placed inside the **view transition layer**,  a stacking context above all other DOM elements. During the view transition, you typically see only the pseudo-elements—not the original DOM.[^covered]
+
+- The View Transition API styles these pseudo-elements via the **user-agent stylesheet**. The default styling defines a **fade-out** animation for the old image (if it exits), a **fade-in** animation for the new image (if it exist), and a  **morph animation** for the group (if its image-pair has both images).
+
+* Old and new images inside an image pair might be completely different. The default fade-in and fade-out animation result in a **cross-fades** between them.
+
+* The **morph animation** moves the group from the old image's size, position, and transformations (from the old view) to the new image's size, position, and transformation (from the new view).
+
+
+* The **image pair** by default occupies the same space as the group, and its **images** move with the parents while  automatically **adapting to width changes**.
+
+Let's put it to work!
+
+</details>
+
+[^view]: Read _view_ as _DOM_ for same-document view transitions or as _page_ for cross-document view transitions.
+
+
+[^covered]:  Of course, you can see through pseudo elements, if they are (semi-)transparent. You can also remove the pseudo elements for the root by assigning the special view transition name `none` to `:root`. Still, the viewport is completely covered by the `::view-transition` pseudo-element, which is the root of all pseudos.
+
+## The Rocket Example
+
+The rocket example consists of two linked pages. On the first, a rocket rests on a link labeled "Level Up!" Click it, and you’re taken to the second page, where the rocket now sits on a link that says "Back to Base..."
+
+Each element, the rocket, and both links, has a view transition name: `rocket`, `level-up`, and `back`. When you click the link, the rocket smoothly moves to its new position, resizing along the way.
+
+
+<div style="border: 1pt dashed grey"><VtDemo path="rocket-plain-no" width="100%"/></div>
+
+In this article, you will discover how to take this basic example and launch it into something far more dynamic and exciting!
+
+<div style="border: 1pt dashed grey"><VtDemo path="rocket-fancy-no" width="100%"/></div>
+
+
+If you want to follow along, find below the example code in two flavors:
+
+* View Transition API
+* Astro Client Router
+
+Create a new project with `npm create astro@latest -- --template minimal -y` and then copy & paste the four files from the **View Transition API** or the **Astro Client Router**  tab.
+
+<details>
+<summary>Which variant to choose?</summary>
+As you might know by now, I'm all for using the [View Transition API directly in new projects](/jotter/astro-view-transitions/#for-new-projects) instead of Astro's `<ClientRouter />` component, unless there's a [strong reason](/jotter/feature-comparison/) not to. Since this is a fresh build, and we're not using `transition:persist` or Astro's built-in animations, the pure API is my go-to choice.
+
+But don't just take my word for it. Compare both versions and decide for yourself!  The only difference lies in how you enable cross-document view transitions and how you assign view transition names.[^note]
+[^note]:Note that assigning view transition names via CSS also works with the Client Router. The difference? `transition:name` automatically applies `transition:animate="fade"` if no `transition:animate` directive is explicitly set, quietly adding Astro's definition of _fade_ unless told otherwise.
+</details>
+
+In both cases, the source code for the rocket demo is refreshingly simple! And no matter which approach you choose, everything after this section is the same when it comes to styling: pure CSS.\
+<small>&hellip;and one little JavaScript helper to detect whether we had a false take-off 😳</small>
+
+<a id="src"/>
+<Tabs>
+  <TabItem label="View Transition API">
+
+import page1api from "src/pages/rocket-api/page1.astro?raw"
+import page2api from "src/pages/rocket-api/page2.astro?raw"
+import layoutapi from "src/pages/rocket-api/_Layout.astro?raw"
+import css from "src/styles/view-transition.css?raw"
+
+
+<Code code={layoutapi} lang="astro" wrap meta="collapse={9-14,17-27}" title="src/pages/_Layout.astro"/>
+<Code code={page1api} lang="astro" wrap meta="collapse={9-22} {7}" title="src/pages/page1.astro"/>
+<Code code={page2api} lang="astro" wrap meta="collapse={9-23} {7}" title="src/pages/page2.astro"/>
+<Code code={css} lang="css" meta="{2-4,7,10}" title="src/styles/view-transition.css"/>
+
+<Aside type="tip">
+As with every CSS property, you can set the `view-transition-name` using a CSS rule (here for the `:root` and the `#rocket` element) or by assigning to the style attribute of the HTML element, as shown for the `level-up` and `back` links.
+</Aside>
+
+	</TabItem>
+  <TabItem label="Astro Client Router">
+import page1cr from "src/pages/rocket-cr/page1.astro?raw"
+import page2cr from "src/pages/rocket-cr/page2.astro?raw"
+import layoutcr from "src/pages/rocket-cr/_Layout.astro?raw"
+
+
+<Code code={layoutcr} lang="astro" wrap meta="collapse={11-16, 19-22} {3,9}" title="src/pages/_Layout.astro"/>
+<Code code={page1cr} lang="astro" wrap  meta="collapse={9-22} {6,7}" title="src/pages/page1.astro"/>
+<Code code={page2cr} lang="astro" wrap  meta="collapse={9-23} {6,7}" title="src/pages/page2.astro"/>
+```css title="src/styles/view-transition.css"
+/* empty yet */
+```
+<Aside type="tip">
+Setting `transition:animate="initial"` [opts out](https://docs.astro.build/en/guides/view-transitions/#transition-directives	) of Astro's default fade animation, falling back to the browser's default styling.
+
+In our example, this not only slashes the amount of CSS generated by Astro but also spares us the hassle of undoing those styles when applying our own.
+</Aside>
+
+</TabItem>
+</Tabs>
+
+## Starting point: Browser Defaults
+
+The pseudo-element tree for the examples is shown below. I have also added the animations in brackets that the View Transition API assigns to the pseudo-elements.
+
+As you can see, most pseudo-elements in this example are not animated by default: `::view-transition` and `::view-transition-image-pair` never are, and a `::view-transition-group` is only animated if its image pair contains both images.
+
+Also, note that [`-ua-mix-blend-mode-plus-lighter`](https://vtbag.dev/tips/over-exposure/#set-the-correct-mix-blend-mode) is only added to cross-fades between two images, not to pure exit and entry fades of a single image.
+```c ins={3,12,16} {6,8}
+⏷::view-transition []
+  ⏷::view-transition-group(rocket)
+	    [-ua-view-transition-group-anim-rocket]
+    ⏷::view-transition-image-pair(rocket) []
+        ::view-transition-old(rocket)
+				[-ua-view-transition-fade-out, -ua-mix-blend-mode-plus-lighter]
+        ::view-transition-new(rocket)
+				[-ua-view-transition-fade-in, -ua-mix-blend-mode-plus-lighter]
+  ⏷::view-transition-group(level-up) []
+    ⏷::view-transition-image-pair(level-up) []
+        ::view-transition-old(level-up)
+				[-ua-view-transition-fade-out]
+  ⏷::view-transition-group(back) []
+    ⏷::view-transition-image-pair(back) []
+        ::view-transition-new(back)
+				[-ua-view-transition-fade-in]
+```
+The order of the group pseudo-elements is the paint order of the named elements of the first page (`rocket` and `level-up`), followed by those of the second page: `rocket` (already known) and `back`.
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px;">
+<div style="border: 1pt dashed grey"><VtDemo path="rocket-plain-yes" width="100%"/></div>
+<div style="width:100%; margin-top:0">
+
+
+The link images are the only children of their image pairs, resulting in a **fade-out exit animation** for the level-up image and a **fade-in entry animation** for the back link’s image, and vice versa when you navigate back.
+
+The rocket has both images and plays a **morph animation**, transitioning from the old image position and transform to the new.
+Since the rocket group comes first in the pseudo-element tree, it gets drawn first, so the rocket images move behind the link images.
+
+Even though it is not visible,  the old and new rocket images also **cross-fade** during the morph animation.
+</div>
+</div>
+
+If you click the rocket, starting a navigation to the same page, you see a 3 second animation where nothing happens, because now the rocket and the link image pairs have two images and they cross-fade in place.
+## Time to Get Fancy
+
+To spice up the rather dull default effect, we'll sprinkle in some custom animations. Of course, the result might be a bit exaggerated, and the animations might be a bit much for a professional website. However, the main goal here is to make the point and clearly demonstrate the possibilities.
+
+View transition animations kick in when the pseudo-image tree is inserted into the DOM. For cross-document view transitions, this happens after we have already landed on the new page. Thus, the CSS from the new page controls everything, even the [exit animations](https://vtbag.dev/tips/css/#animations) for elements from the old page.
+
+
+Since most sites offer multiple navigation paths, especially with a navbar but also with random history navigation, literally every page can be the new page after navigation. So the controlling CSS should better be  present on most pages. It is often smart to keep your view transition CSS in a global stylesheet. That way, common styles stay consistent, and only page-specific tweaks go directly into individual pages.
+
+Oh look, **that's exactly what we've already done** on Line 2 in `_Layout.astro`!
+
+```astro title="src/pages/_Layout.astro"
+---
+import "src/styles/view-transition.css"
+...
+```
+
+### Strap in for Custom Animations
+
+The real magic of the View Transition API is that it lets you create pseudo-elements to display images from the previous page on the current one. This is something that is hardly achievable without special browser support. And the selectors to address the pseudo elements.
+
+But styling the pseudo-elements is no rocket science at all: All is done with pure CSS animations and the CSS properties you already know and love.
+
+Thus, the important questions now are: If you know what effect you want to craft and you know how to define the keyframe for it,
+* To which pseudo-element should you attach the effect?
+* How can you select that element?
+* Are there any special tricks to be aware of?
+
+Let's see!
+
+### Tweaking Entry and Exit Animations
+The link on the old page should be redrawn like a launch ramp, and the link on the new page should move in to form a landing pad. And here we go!
+
+#### Overriding Exiting Animation
+We start with a simple shift exit animation for the `level-up` link. We call it `level-up-exit`. It shifts its element a whole viewport width to the left in the first half of the animation and keeps it there until the view transition ends. On that way, it shrinks it to a fifth of its size:
+```css title="src/styles/view-transition.css"
+ @keyframes level-up-exit {
+	50%, 100% {
+		transform: translate(-100vw, 0) scale(0.2);
+	}
+}
+```
+The candidate pseudo-elements to animate with this keyframes are:
+- `::view-transition-old(level-up)`: This is the most natural choice. This is exactly the image we want to slide out. If we override the default animation, we will opt out of the default fade effect.
+- `::view-transition-image-pair(level-up)`: This is the parent or container of the old image. If we move this pseudo-element, it will also move the contained old image. Defining an animation on this element will not override default animations defined by the View Transition API as there are none. The automatically defined fade animation of the old image will not change if we assign an animation to the image pair.
+- `::view-transition-group(level-up)`: This is the grand-parent of the old image. Similar in effect to the image pair, but overriding the default animation would typically kill the morph animation, which you probably do not want as it is hard to reconstruct. On the other hand, there is no morph animation if the image pair only has a single child. So this would also easily work for our example.
+- `::view-transition`: Well this is too coarse for the desired effect as it moves the whole view transition layer. <a id="hint"/>Maybe we will revisit this one at the end of the article.
+- `view-transition-new(level-up)`: This only exists if we navigate from Page 2 back to Page 1. Not our business right now.
+
+So if we want to just slide the link without the default fade-out, the simplest solution is to target the `::view-transition-old` pseudo-element:
+
+```css title="src/styles/view-transition.css"
+::view-transition-old(level-up) {
+	animation-name: level-up-exit;
+}
+```
+Defining the animation-name overrides the default `-ua-view-transition-fade-out` animation and replaces it with our keyframes.
+Of course, instead of `animation-name` you could have used the `animation` shortcut property that lets you set all animation properties in one go. But I recommend not to and instead explicitly change the animation properties you really care about. This way you benefit from the wisely chosen setup of the View Transition API, which for example inherits the images' `animation-duration` from the image pair, which in turn inherits it from the group. This allows us to consistently set the duration for all animations using a single CSS rule.
+```css title="src/styles/view-transition.css"
+::view-transition-group(*) {
+	animation-duration: 2s;
+}
+```
+If you instead use the animation shortcut property, you have to explicitly set the duration to `inherit` to get the same effect. If you omit the duration you end up with the default value of `0s`.
+
+Now, for the transition from Page 2 to Page 1 we add the complementary definition:
+```css title="src/styles/view-transition.css"
+::view-transition-new(level-up) {
+	animation-name: level-up-entry;
+}
+@keyframes level-up-entry {
+	0%, 50% {
+		transform: translateX(-100vw) scale(0.2);
+	}
+}
+```
+
+#### Extending Existing Animations
+
+For the back link, we extend this a bit. Here are the new directives:
+
+* Keep the default fade animation.
+* Make the back link fly in an `L` shape.
+
+So the `L`-shaped path starts far down to the right, outside the viewport, and then moves left first before going up.
+```css title="src/styles/view-transition.css"
+@keyframes back-entry {
+	0% {
+		transform: translate(100vw, 60vh) scale(0.2);
+	}
+	50% {
+		transform: translate(0vw, 60vh) scale(0.5);
+	}
+}
+```
+
+The corresponding `back-exit` keyframes could be defined the same way:
+```css title="src/styles/view-transition.css"
+@keyframes back-exit {
+	50% {
+		transform: translateY(60vh) scale(0.5);
+	}
+	100% {
+		transform: translate(100vw, 60vh) scale(0.2);
+	}
+}
+```
+But this time, we simply revert the entry frames instead.
+
+Keep in mind that the default timing function is the asymmetrical `ease` function, and `back-exit` and reverted `back-entry` are only identical with symmetrical timing functions. But in our example, the reverted entry fits well.
+
+Since we do not want to override the default fade animations this time, we can not just set the `animation-name` on the old and new images as we did in the previous example. But we can add new animations to the old and new images _without messing with the default fade animations_ by assigning multiple animations names in a comma-separated list!
+```css title="src/styles/view-transition.css"
+::view-transition-new(back) {
+	animation-name: back-entry, -ua-view-transition-fade-in;
+}
+::view-transition-old(back) {
+	animation-name: back-entry, -ua-view-transition-fade-out;
+	animation-direction: reverse, normal;
+}
+```
+
+And yes, you can reuse the keyframes from the browser's user agent stylesheets. Their names are defined in the View Transition API specification and can be relied on in all browsers with native view transition support. So instead of overriding and erasing the original assignments of the View Transition API, we can reuse and augment them with our own definitions. In the second rule, the fade from the user agent stylesheet plays `normal`, while the entry animation is reversed to define our exit animation for the old image.
+
+Note that we didn't include `-ua-mix-blend-mode-plus-lighter` on purpose as these are pure entry and exit animations.
+
+To convince ourselves that all works as expected, we power up the Inspection Chamber (the [Astro integration](/library/InspectionChamber/) or the [framework agnostic version](vtbag.dev/tools/inspection-chamber/)) and examine the combined effect on the animations panel for the `back` group:
+
+```txt
+⏷✅ old: back-entry
+ animation:	2s ease 0s 1 reverse forwards running back-entry
+  animates:	transform
+       0% :	translate(1266px, 623.4px) scale(0.2)
+      50% :	translate(0px, 623.4px) scale(0.5)
+     100% :	none
+⏷✅ old: -ua-view-transition-fade-out
+ animation:	2s ease 0s 1 normal forwards running -ua-view-transition-fade-out
+  animates:	opacity
+       0% :	1
+     100% :	0
+ ```
+
+### Flying Off the Beaten Path
+
+**New orders from Mission Control**: Straight lines are boring. Take a curvy detour with the rocket.
+
+Typically, we are quite happy that the View Transition API sets up an animation from the old position to the new one. Tweaking that animation can be complicated. But we do not need to change the existing keyframes to make the rocket follow a curved flight. We can simply add another animation, just like we did for the back link. If both animations move the element, their motions will combine. And with non-linear timing functions the result looks quite dynamic. Here are the keyframes.
+
+
+```css title="src/styles/view-transition.css"
+@keyframes rocket-flight-to-page-2 {
+	25% {
+		transform: rotate(90deg) translate(-20vw, -20vh);
+	}
+	75% {
+		transform: translate(0vw, 10vh);
+	}
+}
+@keyframes rocket-flight-to-page-1 {
+	0% {
+		transform: translateY(0);
+	}
+	15% {
+		transform: translate(0vw, 40vh) rotate(135deg);
+	}
+	30% {
+		transform: translate(0vw, 20vh) rotate(0deg);
+	}
+	75% {
+		transform: translate(20vw, -10vh) rotate(-60deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
+```
+And we could combine our keyframes with the original `-ua-view-transition-group-anim-rocket` animation.
+```css title="src/styles/view-transition.css"
+::view-transition-group(rocket) {
+	animation-name: rocket-flight-to-page-?, -ua-view-transition-group-anim-rocket;
+}
+```
+But we can make it even simpler: Instead of modifying the browser-generated group animation, we can animate the image pair, which is not assigned any animation by default. The image pair has the same extent and position as the group, and moving it will naturally move the rocket images inside.
+
+However, we need one more ingredient. When defining the animations for the rocket, we must determine which of the two keyframes to use. Typically, CSS has no built-in way to know where we are heading. In this example, we solve this by adding a data attribute to the `:root` element, indicating the current page in a way that CSS can evaluate.
+
+
+```css title="src/styles/view-transition.css"
+	[data-title='page1']::view-transition-image-pair(rocket) {
+		animation-name: rocket-flight-to-page-1;
+	}
+	[data-title='page2']::view-transition-image-pair(rocket) {
+		animation-name: rocket-flight-to-page-2;
+	}
+```
+Thus, `rocket-flight-to-page-2` plays when navigating to Page 2, and `rocket-flight-to-page-1` plays when navigating to Page 1.
+
+### Navigation to the Same Page
+
+When you have been following along, you will notice things work as advertised when navigating from Page 1 to Page 2 or back.
+
+Now try this: Page 1 → Page2 → Page 1, and then use the browser's history dropdown[^history] to jump two pages back.
+[^history]: Or simply click the rocket to navigate to the same page.
+
+Hold onto your seat! This is where things go haywire:
+* The level-up link flies out, only to return immediately.
+* The rocket revs up, stumbles a bit, and somehow manages a _lucky_ landing exactly where it started.
+* The back link even plays both sides, sliding in while it's sliding out.
+
+What a mess! Time to fix this chaos before it takes off again!
+
+Obviously, we shouldn't play the exit and entry animations if we loop back to the same page. There are multiple ways to detect such a false start:
+1. Either the `level-up` or the `back` image pair has both images.
+2. The URL of the old page is the URL of the new page.
+
+We definitely shouldn't even start the rocket under those conditions. Instead, let's shake the links a bit to grab the user's attention and let them know they should use them!
+
+```css title="src/styles/view-transition.css"
+@keyframes shake {
+	25%,
+	75% {
+		transform: rotate(10deg);
+	}
+	50% {
+		transform: rotate(-10deg);
+	}
+}
+```
+#### Detecting Entry/Exit with :onlyChild
+For the `level-up` link, we could directly implement option 1) from above:
+```css title="src/styles/view-transition.css"
+::view-transition-old(level-up),
+::view-transition-new(level-up) {
+	animation-name: shake;
+	transform-origin: 30%;
+	animation-iteration-count: 2;
+}
+::view-transition-old(level-up):only-child {
+	animation-name: level-up-exit;
+	animation-iteration-count: 1;
+}
+::view-transition-new(level-up):only-child {
+	animation-name: level-up-entry;
+	animation-iteration-count: 1;
+}
+```
+The trick here is to first assign the false start values on the old and new image and then override them for exit animations (where the image pair has only the old image as a child) and entry animations (where the image pair has the new image as its only child).
+
+
+
+#### Utilizing View Transition Types
+The `:onlyChild` approach works well for assigning CSS properties of old and new images. Unfortunately, we cannot use this method to detect an exit animation for the `level-up` link and then assign properties to the `level-up` group, image pair, or even the rocket group. It would be great if `:has()` or `>` worked with the view transition pseudo-elements, but they  only apply to real DOM elements.
+
+So, we take an alternative approach: when condition 2) from the options above is met, we set a view transition type called `falseStart`. This requires some JavaScript, which is already included in the layout file:
+<Tabs>
+  <TabItem label="View Transition API">
+```astro  title="src/pages/_Layout.astro"
+<script is:inline>
+	addEventListener('pageswap', (e) =>
+		sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
+	);
+	addEventListener('pagereveal', (e) =>
+		sessionStorage.getItem('falseStart') === 'Y' && e.viewTransition?.types.add('falseStart')
+	);
+</script>
+```
+The code adds the `falseStart` type to the view transitions set of types if the old and new page URLs match. It might seem a bit complicated, but this approach also works in Safari, which lacks support for the Navigation API. The condition is determined on the old page and passed to the new page via a session storage entry.
+
+	</TabItem>
+  <TabItem label="Astro Client Router">
+```astro title="src/pages/_Layout.astro"
+<script>
+	document.addEventListener('astro:before-swap',
+	 (e) => e.from.href === e.to.href && e.viewTransition.types.add('falseStart')
+	);
+</script>
+```
+The code adds the `falseStart` type to the view transitions set of types if the old and new page URLs match.
+	</TabItem>
+</Tabs>
+
+
+With the view transition type in place, we can use it to override CSS properties in case of a false start. We apply the shake animation, shorten the animation duration to 2 x 300ms = 0.6s, and stop the rocket as well as the entry/exit animations of the `back` link by setting their animations to `none`.
+
+
+```css title="src/styles/view-transition.css"
+:active-view-transition-type(falseStart) {
+	&::view-transition-group(*) {
+		animation-duration: 0.3s;
+	}
+	&::view-transition-old(level-up),
+	&::view-transition-new(level-up) {
+	  animation-name: shake;
+	  transform-origin: 30%;
+	  animation-iteration-count: 2;
+	}
+	&::view-transition-image-pair(back) {
+		animation-name: shake;
+		transform-origin: 80%;
+		animation-iteration-count: 2;
+	}
+	&::view-transition-old(back),
+	&::view-transition-new(back),
+	&::view-transition-image-pair(rocket) {
+	  animation-name: none;
+  }
+}
+```
+
+## Final Touches
+
+Mission control just made some last-minute requests:
+* When navigating to a different page,
+      * the rocket should fly in front of the links.
+      * the entire viewport should shake briefly in the middle of the view transition.
+* Give the `level-up` and `back` links a mystical glow while they are in motion.
+* Bonus: For testing, pseudo-elements should get a colorful outline
+
+
+Raising the rocket inside the view transition layer is a  good example of styling other than just setting animation properties.
+Here, we use `z-index` to elevate the rocket group in the stacking order. A word of caution: `z-index` on the images only affect their position within the group. While it can place the old image above the new image, it won't impact the stacking order between images from different groups.
+```css title="src/styles/view-transition.css"
+::view-transition-group(rocket) {
+	z-index: 1;
+}
+```
+Did I [hint](/jotter/styling/#hint:~:text=Maybe%20we%20will%20revisit%20this%20one%20at%20the%20end%20of%20the%20article) at styling the root of all view transition pseudo-elements? Here you go.
+```css title="src/styles/view-transition.css"
+::view-transition {
+	animation-name: shake;
+	animation-duration: 500ms;
+	animation-delay: 750ms;
+}
+```
+None of these should happen on false starts.
+```css title="src/styles/view-transition.css"
+:active-view-transition-type(falseStart) {
+	&::view-transition-group(rocket) {
+		z-index: initial;
+	}
+	&::view-transition {
+		animation: none;
+	}
+}
+```
+#### View Transition Classes
+To add some glow, we could assign box-shadows to the old and new images for the `level-up` and `back` links.
+
+When styling pseudo-elements across multiple groups, view transition classes help simplify the task. Although they look syntactically similar to view transition names, a single view transition class can (and typically will) be assigned to multiple elements.
+
+The glow effect now is achieved by assigning the `starter` view transition class to both links and defining a rule based on that class.
+
+```css title="src/styles/view-transition.css"
+a[href^='/'] {
+	view-transition-class: starter;
+}
+::view-transition-new(.starter),
+::view-transition-old(.starter) {
+	box-shadow: 0px 0px 16px 8px rgba(255, 128, 128, 1);
+}
+```
+
+The view transition class `.starter` works similarly to `*` in other rules. However, while `*` selects all groups, the starter class allows explicit control over its members.
+
+Here, `a[href^='/']` selects all links with an `href` that starts with `/`, which includes `level-up` and `back`. `#rocket` is not part of the class since its `href` is `.`.
+
+
+#### Outlines for Testing
+And the outlines? Here, please:
+```css title="src/styles/view-transition.css"
+::view-transition {
+	outline: 1vmin solid darkred;
+}
+::view-transition-group(*) {
+	outline: 1vmin dotted darkgoldenrod;
+}
+::view-transition-image-pair(*) {
+	outline: 1vmin dotted darkgray;
+}
+::view-transition-old(*) {
+	outline: 1vmin dashed darkslateblue;
+}
+::view-transition-new(*) {
+	outline: 1vmin dashed darkolivegreen;
+}
+```
+
+
+
+
+Here is the final result with additional outlines of the view transition pseudo-elements:
+<div style="border: 1pt dashed grey"><VtDemo path="rocket-fancy-yes" width="100%"/></div>
+
+## Lessons Learned
+
+There might be some general learnings that you might take away from the examples above.
+
+- Keep your CSS for exit animations global because with browser history navigation every page can be the next one.
+- You can animate any of the pseudo elements including the image pair and the root of pseudo-elements tree
+- You can reuse the browser-defined keyframes and combine them with your own.
+- You can use context information like data attributes on the `:root` element or view transition types for finer control of your styles.
+- You can use view transition classes to style several pseudo-elements with a single rule.
+- In styling pseudo-elements, you are not limited to animation, but can use any CSS properties that you would use on other images like z-index, outline, or box-shadow.
+- Inheritance can be used to consistently set the duration value on all/many elements with a single definition.
+
+
+
+
+
+
+
+
+
+
+

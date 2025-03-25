@@ -1,0 +1,30 @@
+---
+import '../styles/view-transition.css';
+import { ClientRouter } from 'astro:transitions';
+---
+
+<html transition:name="none" transition:animate="initial">
+	<head>
+		<meta charset="utf-8" />
+		<ClientRouter />
+		<style is:global>
+			section * {
+				padding: 0;
+				margin: 0;
+				font-family: sans-serif;
+				font-size: 13vmin;
+			}
+		</style>
+		<script>
+			document.addEventListener(
+				'astro:before-swap',
+				(e) => e.from.href === e.to.href && e.viewTransition.types.add('falseStart')
+			);
+		</script>
+	</head>
+	<body>
+		<section>
+			<slot />
+		</section>
+	</body>
+</html>

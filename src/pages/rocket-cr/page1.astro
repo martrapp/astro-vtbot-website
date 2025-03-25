@@ -1,0 +1,25 @@
+---
+import Layout from './_Layout.astro';
+---
+
+<Layout>
+	<a transition:name="rocket" transition:animate="initial" id="rocket" href=".">🚀</a>
+	<a transition:name="level-up" transition:animate="initial" href="../page2/">Level Up!</a>
+	<style>
+		#rocket {
+			display: inline-block;
+			position: fixed;
+			bottom: calc(1.625 * 13vmin);
+			left: 100px;
+			transform: rotate(-45deg) scale(1.5);
+			text-decoration: none;
+		}
+		a:not(#rocket) {
+			display: inline-block;
+			position: fixed;
+			bottom: 6vmin;
+			left: 50px;
+			background-color: light-dark(lightblue, darkblue);
+		}
+	</style>
+</Layout>

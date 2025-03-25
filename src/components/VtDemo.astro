@@ -1,11 +1,13 @@
 ---
 export interface Props {
 	path: string;
+	height?: string;
+	width?: string;
 }
-const { path } = Astro.props;
+const { path, height="20rem", width="20rem" } = Astro.props;
 ---
 
-<div data-vtbot-iframe-path={path} style="height: 320px;">
+<div data-vtbot-iframe-path={path} style=`height: ${height}` data-height=`${height}`, data-width=`${width}`>
 	{
 		/*
 	Iframe is dynamically inserted after view transition as otherwise the new-image is distorted.
@@ -13,19 +15,23 @@ const { path } = Astro.props;
 	<!--iframe src={`/iframes/${path}/`} style="border: none; margin: auto; height: 20rem; width: 20rem"></iframe-->*/
 	}
 </div>
+<div>If your browser has problems starting view transitions inside an iframe, <a target="_blank">view the demo in a new tab</a></div>
 
 <script>
 	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
 	import './iframe-theme';
 
 	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
-		document.querySelectorAll(`[data-vtbot-iframe-path]`).forEach((el) => {
+		const divs = document.querySelectorAll<HTMLDivElement>(`[data-vtbot-iframe-path]`);
+		divs.forEach((el) => {
 			const path = el.getAttribute('data-vtbot-iframe-path');
 			const theme = document.documentElement.getAttribute('data-theme');
 			const iframeSrc = `/iframes/${path}-${theme}/`;
+
+			el.nextElementSibling! .querySelector<HTMLAnchorElement>('a')!.href = iframeSrc;
 			setTimeout(
 				() =>
-					(el.innerHTML = `<iframe src="${iframeSrc}" style="border: none; margin: auto; height: 20rem; width: 20rem"></iframe>`),
+					(el.innerHTML = `<iframe src="${iframeSrc}" style="border: none; margin: auto; height: ${el.dataset.height}; width: ${el.dataset.width}"></iframe>`),
 				1500
 			);
 		});

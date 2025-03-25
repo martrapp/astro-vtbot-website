@@ -1,0 +1,89 @@
+---
+import rocketCSS from './_rocket.css?url';
+import outlineCSS from './_outline.css?url';
+const { pg, kind, outline, theme } = Astro.params;
+const duration =
+	kind === 'plain' && outline === 'no'
+		? '250ms'
+		: kind === 'fancy' && outline === 'yes'
+			? '3s'
+			: '2s';
+---
+
+<html style="view-transition-name: none" data-theme={theme} data-title={`page${pg}`} lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Page {pg}</title>
+		<link rel="expect" href="#body" blocking="render" />
+		{//@ts-ignore
+		<script is:inline>
+			addEventListener('pageswap', (e) =>
+				sessionStorage.setItem('falseStart', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
+			);
+			addEventListener('pagereveal', (e) => {
+				const fs = sessionStorage.getItem('falseStart') === 'Y';
+				fs && e.viewTransition?.types.add('falseStart');
+				e.viewTransition?.ready.then(() => {
+					e.viewTransition.types.forEach((type) => {
+						if (type === 'falseStart') {
+							document.documentElement.classList.add('falseStart');
+						}
+					});
+				});
+			})
+		</script>}
+		<script is:inline type="speculationrules">
+			{
+				"prerender": [
+					{
+						"urls": [
+						"/iframes/rocket-plain-no-dark/", "/iframes/rocket-plain-no-dark-2/",
+						"/iframes/rocket-plain-no-light/", "/iframes/rocket-plain-no-light-2/",
+						"/iframes/rocket-plain-yes-dark/", "/iframes/rocket-plain-yes-dark-2/",
+						"/iframes/rocket-plain-yes-light/", "/iframes/rocket-plain-yes-light-2/",
+						"/iframes/rocket-fancy-no-dark/", "/iframes/rocket-fancy-no-dark-2/",
+						"/iframes/rocket-fancy-no-light/", "/iframes/rocket-fancy-no-light-2/",
+						"/iframes/rocket-fancy-yes-dark/", "/iframes/rocket-fancy-yes-dark-2/",
+						"/iframes/rocket-fancy-yes-light/", "/iframes/rocket-fancy-yes-light-2/"
+						]
+					}
+				]
+			}
+		</script>
+		<style set:text=`::view-transition-group(*) {animation-duration: ${duration};}`></style>
+		{kind === 'fancy' ? <link rel="stylesheet" href={rocketCSS} /> : ''}
+		{outline === 'yes' ? <link rel="stylesheet" href={outlineCSS} /> : ''}
+		<style is:global>
+			@media (prefers-reduced-motion: no-preference) {
+				@view-transition {
+					navigation: auto;
+				}
+			}
+			section * {
+				padding: 0;
+				margin: 0;
+				font-family: sans-serif;
+				font-size: 13vmin;
+			}
+			:root {
+				color-scheme: light;
+			}
+			:root[data-theme='dark'] {
+				color-scheme: dark;
+			}
+
+			@supports not (view-transition-name: a) {
+				section::before {
+					font-size: 40px;
+					color: darkred;
+					content: 'Sorry, your browser does not have support for native view transitions.';
+				}
+			}
+		</style>
+	</head>
+	<body id="body">
+		<section>
+			<slot />
+		</section>
+	</body>
+</html>
