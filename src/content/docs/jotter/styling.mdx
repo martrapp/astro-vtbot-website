@@ -541,11 +541,16 @@ To add some glow, we could assign box-shadows to the old and new images for the 
 
 When styling pseudo-elements across multiple groups, view transition classes help simplify the task. Although they look syntactically similar to view transition names, a single view transition class can (and typically will) be assigned to multiple elements.
 
-The glow effect now is achieved by assigning the `starter` view transition class to both links and defining a rule based on that class.
+The glow effect now is achieved by assigning the `starter` view transition class to both links (i.e. all anchors but the rocket) and defining a rule based on that class.
 
 ```css title="src/styles/view-transition.css"
-a[href^='/'] {
+a {
+	/* all anchor elements including #rocket */
 	view-transition-class: starter;
+}
+#rocket {
+	/* exclude the rocket from the `starter` view transition class */
+	view-transition-class: initial;
 }
 ::view-transition-new(.starter),
 ::view-transition-old(.starter) {
@@ -555,7 +560,8 @@ a[href^='/'] {
 
 The view transition class `.starter` works similarly to `*` in other rules. However, while `*` selects all groups, the starter class allows explicit control over its members.
 
-Here, `a[href^='/']` selects all links with an `href` that starts with `/`, which includes `level-up` and `back`. `#rocket` is not part of the class since its `href` is `.`.
+Here, `a` selects all links, which includes `level-up`, `back` and `#rocket`.
+Resetting `#rocket`'s view transition class to its initial value ensures that `#rocket` is not part of the class a anymore.
 
 
 #### Outlines for Testing
