@@ -20,7 +20,7 @@ export default defineConfig({
 		preserveScriptOrder: true,
 	},
 	devToolbar: { enabled: true },
-	prefetch: process.env.NODE_ENV === "roduction",
+	prefetch: false && process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
 			behavior: "wrap"
