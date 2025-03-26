@@ -14,40 +14,22 @@ const duration =
 	<head>
 		<meta charset="utf-8" />
 		<title>Page {pg}</title>
-		{//@ts-ignore
+		<link rel="expect" href="#late" blocking="render" />
+
 		<script is:inline>
 			addEventListener('pageswap', (e) =>
-				sessionStorage.setItem('false-start', e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N')
+				sessionStorage.setItem(
+					'false-start',
+					e.activation?.from?.url === e.activation?.entry?.url ? 'Y' : 'N'
+				)
 			);
-			addEventListener('pagereveal', (e) => {
-				const fs = sessionStorage.getItem('false-start') === 'Y';
-				fs && e.viewTransition?.types.add('false-start');
-				e.viewTransition?.ready.then(() => {
-					e.viewTransition.types.forEach((type) => {
-						if (type === 'false-start') {
-							document.documentElement.classList.add('false-start');
-						}
-					});
-				});
-			})
-		</script>}
-		<script is:inline type="speculationrules">
-			{
-				"prerender": [
-					{
-						"urls": [
-						"/iframes/rocket-plain-no-dark/", "/iframes/rocket-plain-no-dark-2/",
-						"/iframes/rocket-plain-no-light/", "/iframes/rocket-plain-no-light-2/",
-						"/iframes/rocket-plain-yes-dark/", "/iframes/rocket-plain-yes-dark-2/",
-						"/iframes/rocket-plain-yes-light/", "/iframes/rocket-plain-yes-light-2/",
-						"/iframes/rocket-fancy-no-dark/", "/iframes/rocket-fancy-no-dark-2/",
-						"/iframes/rocket-fancy-no-light/", "/iframes/rocket-fancy-no-light-2/",
-						"/iframes/rocket-fancy-yes-dark/", "/iframes/rocket-fancy-yes-dark-2/",
-						"/iframes/rocket-fancy-yes-light/", "/iframes/rocket-fancy-yes-light-2/"
-						]
-					}
-				]
-			}
+			addEventListener(
+				'pagereveal',
+				(e) =>
+					sessionStorage.getItem('false-start') === 'Y' &&
+					(e.viewTransition?.types.add('false-start') ,
+					document.documentElement.classList.add('false-start'))
+			);
 		</script>
 		<style set:text=`::view-transition-group(*) {animation-duration: ${duration};}`></style>
 		{kind === 'fancy' ? <link rel="stylesheet" href={rocketCSS} /> : ''}
