@@ -71,10 +71,10 @@ export default defineConfig({
 		logo: {
 			src: "/node_modules/astro-vtbot/assets/bag-of-tricks.svg"
 		},
-		social: {
-			github: "https://github.com/martrapp/astro-vtbot",
-			blueSky: 'https://bsky.app/profile/martr.app'
-		},
+		social: [
+			{ icon: 'github', label: 'GitHub', href: "https://github.com/martrapp/astro-vtbot" },
+			{ icon: 'blueSky', label: 'BlueSky', href: 'https://bsky.app/profile/martr.app' }
+		],
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
 		},
