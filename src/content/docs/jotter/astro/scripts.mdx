@@ -206,7 +206,7 @@ Option 1 is the only way that works without further requirements. The other opti
 
 Not all of these mechanisms are helpful to fix script state after view transitions. Some are not related to navigation like async callbacks triggered by `setTimeout()`. Others can not really help due to limited DOM access, like for example the service workers.
 
-In the following sections we will look at script tags and event listeners. I'm also preparing some text on how to use the lifecycle methods of custom-components that you will find here, soon.
+In the following sections we will look at script tags and event listeners.
 
 ### Common Example
 
@@ -228,11 +228,13 @@ The code parts will be discussed in the sections to come.
 
 <a id="the-best-way-to-execute-your-code-after-view-transitions"/>
 
-### Updates with External Module Scripts
-On transition, the newly swapped in DOM elements need to get their event listeners to add interactivity. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update the relation between the DOM and the scripts appropriately. This works perfect in combination with external module scripts in your basic `Layout` component.
+### Using Astro's Lifecycle Events
+On transition, the newly swapped in DOM elements need to get their event listeners to add interactivity. The astro way of supporting this re-initialization is to offer events on the document object that can be used to update the relation between the DOM and the scripts appropriately. This works perfect in combination with scripts in your basic `Layout` component.
 
 #### Set Listeners on New Elements
-Sounds complicated but isn't: An _external module script_ is what you get automatically if [Astro processes a script tag with no further attributes](/jotter/astro/scripts/#astros-script-processing).  The browser only loads them once and [keeps _external module scripts_ until the next full page load](/jotter/astro/scripts/#behavior-with-view-transitions). I.e. they do not get removed or updated  while you navigate using view transitions. If you want to [refresh you knowledge about `<script>` elements](#script-element-basics) you'll find some details further down this page.
+During view transitions, soft loads will ignore scripts executed since the last full page load. A full page load will wipe out Astro's memories of what it saw before. Therefore Astro executes scripts only once on first sight during view transitions. This is true for Astro versions >= 5.4.2.
+
+Astro before 5.4.2 could potentially execute scripts multiple times during soft loads. A save approach for older versions of Astro is to use _external module script_ as the browser is guaranteed to only execute them once and [keeps _external module scripts_ until the next full page load](#external-module-scripts). is what you get automatically if [Astro processes a script tag with no further attributes](#astros-script-processing).  The browser only loads I.e. they do not get removed or updated  while you navigate using view transitions.
 
 The `window.document` object itself stays the same during view transitions. Only attributes and children of `document.documentElement` are updated[^4]. Therefore event listeners for `astro:page-load` or `astro:after-swap` on the document object will survive a view transitions navigation and their code will regularly be called after each view transition navigation to allow for state updates. Here is the basic pattern applied to our [example from above](#common-example):
 
@@ -486,7 +488,7 @@ handlers. You could evaluate your condition there and reuse the result in the `a
 	init()
 </script>
 ```
-#### Set Listeners on Safe Elements
+###	 Set Listeners on Persistent Elements
 Often it is more efficient to use global listeners on the `window` or `document` object instead of separate listeners on each element. Here is the modified code for our example:
 
 ```astro title="MyBasicLayout"
@@ -512,14 +514,14 @@ import { ClientRouter } from 'astro:transitions'
 Now this is a really robust solution. As `window.document` will not be changed by a swap, the click listener will survive a view transition. Note that [not holding long-lived references into the DOM](/jotter/astro/scripts/#references-into-the-dom) is a prerequisite for this approach to work. The listener does not hold pointers into the DOM. It just looks up the tree for the closest heading and if there is one, it scrolls to it. This approach continues to work, even if the DOM is replaced with a soft load. No need to use Astro's view transition lifecycle events here.
 
 ##### Built-in Swap
-With the [built-in `swap()`](/jotter/astro/loader-swap/#swap-1), save positions for listeners to survive a soft load are:
+With the [built-in `swap()`](/jotter/astro/loader-swap/#swap-1), persistent positions for listeners to survive a soft load are:
 - `window`
 - `window.document`
 - `window.document.documentElement` and
 - `window.document.documentElement.head`
 
 ##### ReplacementSwap
-If you use the [`ReplacementSwap` component](/library/ReplacementSwap/), you have a larger set of safe positions: Only elements marked with `data-vtbot-replace` and their descendant are replaced during a soft load. All other elements stay untouched. Listeners set on those untouched elements will survive a soft load in the same way as the listener on `document` above.
+If you use the [`ReplacementSwap` component](/library/ReplacementSwap/), you have a larger set of persistent positions: Only elements marked with `data-vtbot-replace` and their descendant are replaced during a soft load. All other elements stay untouched. Listeners set on those untouched elements will survive a soft load in the same way as the listener on `document` above.
 
 ##### transition:persist
 If you persist elements with [`transition:persist`](/jotter/astro/directives/#transitionpersist), these elements also retain their listeners. Therefore, persisting elements to the next page is another good technique to keep listeners going across view transitions.
@@ -597,18 +599,20 @@ In this simple case we can just eliminate it by calling forEach on the result of
 </script>
 ```
 ##### Pitfall 2: Ignored Scripts
-If you want to have this **inline script on every page** you can add it to your common Layout component or provide it by an Astro component that you put on every page. In both cases, **the script will not run at all** on view transitions, **unless you set the `data-astro-rerun` attribute** on the `<script>` tag as shown in the code above. The reason is that [Astro ignores scripts that it already has seen on the previous page](/jotter/astro/scripts/#behavior-with-view-transitions). Setting `data-astro-rerun` is the way to opt out of this rule.
+If you want to have this **inline script on every page** you can add it to your common Layout component or provide it by an Astro component that you put on every page. In both cases, **the script will not run at all** on view transitions, **unless you set the `data-astro-rerun` attribute** on the `<script>` tag as shown in the code above. The reason is that [Astro ignores known scripts](/jotter/astro/scripts/#behavior-with-view-transitions) on soft reloads. Setting [`data-astro-rerun`](#data-astro-rerun) is the way to opt out of this rule.
 
-If your page has a link to itself &mdash; or more likely, your navigation bar has a link to visit the current page &mdash; clicking that link will do a soft load of your current page. All scripts will be recognized as "known from the previous page".  This is probably not what you intended. Spo better disable those links or use `data-astro-rerun` attributes as appropriate.
+If your page has a link to itself &mdash; or more likely, your navigation bar has a link to visit the current page &mdash; clicking that link will do a soft load of your current page. All scripts will be recognized as "known from the previous page".  This is probably not what you intended. So better disable those links or use `data-astro-rerun` attributes as appropriate.
 
 
 
 ##### Pitfall 3: Running too Early
 
-If you place the above script anywhere in your HTML page other than directly before the closing `<body>` tag, it will probably not work. Inline scripts
+If you place the above script anywhere in your HTML page other than directly before the closing `<body>` tag, it will probably not work. Classic inline scripts without `defer` or `async` attributes are executed when the browser sees them. They can not access those parts of the DOM that are defined by elements following after the script in the HTML document.
 
 ##### Pitfall 4: Adding Listeners Twice
-Do not use Astro's view transition lifecycle event listeners careless in inline scripts or non-module, external scripts. Those scripts might be executed several times and care has to be taken to not set listeners on the document object multiple times. This can severely degrade your users' experience with your site and those situations are hard to debug.
+*Only before Astro 5.4.2*: Do not use Astro's view transition lifecycle event listeners careless in inline scripts or non-module, external scripts. Those scripts might be executed several times and care has to be taken to not set listeners on the document object multiple times. This can severely degrade your users' experience with your site and those situations are hard to debug.
+
+*Since Astro 5.4.2*: Scripts are only executed on first encounter during soft loads, but see also [`astro-data-rerun`](#data-astro-rerun)
 
 ##### Pitfall 5: No Astro Processing
 This is pretty obvious: If you add an attribute other than `src=` to your script tag, you opt out of Astro's script processing. You cannot use the TypeScript and you cannot import node modules.
@@ -661,7 +665,7 @@ Web Component: {
 Even though there is only a single HTML element for scripts, scripts come in many different flavors.
 
 ### Astro's Script Processing
-Be aware that Astro processes the script tags. That might be a bit confusing if you are not yet used to it.
+Be aware that Astro processes the script tags. That might be a bit confusing if you are not yet used to it. Also be aware that script processing changed with Astro 5.0. The following table describes the behavior for Astro before 5.0.
 
 |N<sup><u>o</u></sup>|In your .astro file|In the generated HTML|Remark|
 |---|---------------|--------------------------|------|
@@ -682,10 +686,13 @@ Be aware that Astro processes the script tags. That might be a bit confusing if 
 [^1]: If a `src` attribute is given, there should be no inline content as it is ignored.
 [^2]: This may require an entry for the URL in you `astro.config` file under `vite.build.rollupOptions.external`.
 
+:::note
+What changed with Astro 5.0 is that small scripts automatically get inlined. This is even true for scripts marked as `external module scripts` in the [table above](#astros-script-processing). You can control this behavior by defining `vite.build.assetsInlineLimit` in your `astro.config.mjs` file, but that also affects the inlining of images and other resources.
+:::
 
 ### Script Behavior on Initial Load
 
-> In memory of arsh who has been a knowledgeable teacher: [older but still good](https://v8.dev/features/modules#defer)
+> Thanks to arsh,	 who has been a knowledgeable teacher: [older but still good](https://v8.dev/features/modules#defer)
 
 The first distinction is between inline scripts and external scripts.
 * **Inline scripts** embed the code directly between the opening and the closing script tag.
@@ -712,19 +719,17 @@ A script where you set `type="module"` is automatically loaded asynchronously an
 The type attribute can take other values as well. Besides "module" you could use `type="text/javascript"`. But this is also default if you do not have a `type` attribute or use the empty string as type. So you never need to specify `type="text/javascript"`. You might also use any other mime type here, like `<script type="application/ld+json">` or `<script type="text/partytown">` but then the browser will ignore the script and not try to execute it.
 
 #### External module scripts
-External module scripts are special. These are scripts of the form `<script type="module" src="..."/>`. As all other scripts, they are processed as soon as they are parsed. But the browser's module loader keeps track of the resources it has loaded *since the last full page load*. If a module with the same `src` attribute value was already seen before, it would not be loaded and executed again.
+External module scripts are special. These are scripts that have the form `<script type="module" src="..."/>` in the HTML document. As all other scripts, they are dealt with as soon as they are parsed. But the browser's module loader keeps track of the resources it has loaded *since the last full page load*. If a module with the same `src` attribute value was already seen before, it would not be loaded and executed again. This is a browser / JavaScript feature and it is completely independent of the Astro version you use.  You can not even override this behavior using [`data-astro-rerun`](#data-astro-rerun)
 As a consequence, external module scripts will not be re-executed during soft loads.
 
 ### Behavior with View Transitions
 
-On navigation to another page using Astro's `<ClientRouter />` component, loading and execution of scripts is handled differently. Due to the soft load approach, view transitions do not do a full page load, but they change the current page to resemble the new one.
+On navigation to another page using Astro's `<ClientRouter />` component, loading and execution of scripts is handled differently compared to normal full page loads. Due to the soft load approach, view transitions do only change the current DOM to resemble the one for the new page.
 
 Astro might execute all scripts that it finds on the target page. But there are exemptions given by these two rules:
-1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. This is a consequence of technically staying on the same page when doing a soft load.
-2. **Astro excludes a script** from execution if the same script **was already executed** since the last full page load (**before Astro 5.4.2:** if the script was **found on the previous page**). Two external scripts are considered to be the same if they have the same `src` attribute value. Two inline scripts are considered the same if they have the same embedded code, character for character.
+1. **External module scripts** for which the value of the `src` attribute is already known to the browser's module loader **are not executed again**. True for all versions of Astro, see the [section above](#external-module-scripts).
+2. **Astro excludes a script** from execution if the same script **was already executed** since the last full page load (**before Astro 5.4.2:** if the script was found **on the previous page**). Two external scripts are considered to be the same if they have the same `src` attribute value. Two inline scripts are considered the same if they have the same embedded code, character for character.
 
-#### data-astro-rerun
-You can opt-out of the second rule by setting the `data-astro-rerun` attribute for the script. This automatically turns the script into an inline script. Therefore, you cannot use TypeScript here. But you can use imports if you add `type="module"`.
 
 :::tip
 You can use the Bag's [VtBotDebug](/library/VtBotDebug/) component to inspect the list of scripts that will or will not run on a view transition. Typically `VtBotDebug` is only active in DEV mode. Add the `production` attribute and use `<VtBotDebug production />` in combination with `astro build` and `astro preview` to see which scripts are executed when built for production.
@@ -733,5 +738,7 @@ You can use the Bag's [VtBotDebug](/library/VtBotDebug/) component to inspect th
 During soft loads, the `async` and `defer` attributes of script tags are ignored. Independent of those attributes, loading and execution of scripts will only start after the whole target page was parsed and the new DOM was swapped in. The scripts that are not exempt by the two rules above are loaded and executed in their textual order one after the other at the [start of the completion phase](/jotter/astro/flow-events/#processing-flow) after the `astro:after-swap` event and before the `astro:page-load` event.
 
 
+#### data-astro-rerun
+You can opt-out of the second rule in the [list above](#behavior-with-view-transitions) by setting the `data-astro-rerun` attribute for the script. This automatically turns the script into an inline script. Therefore, you cannot use TypeScript here. But you can use imports if you add `type="module"`.
 
 

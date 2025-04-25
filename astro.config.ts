@@ -16,7 +16,6 @@ import starlightUtils from "@lorenzo_lewis/starlight-utils";
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	experimental: {
-		svg: true,
 		preserveScriptOrder: true,
 	},
 	devToolbar: { enabled: true },
