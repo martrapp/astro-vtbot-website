@@ -18,6 +18,11 @@ const { title, background = '', pageFindIgnore = false } = Astro.props;
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, viewport-fit=cover" />
 		<link rel="icon" href="/favicon.svg" />
 		<title>{title + ' | Bag of Tricks'}</title>
+		<style is:global is:inline>
+			.sl-anchor-link {
+				display: none;
+			}
+		</style>
 		<slot name="head2" />
 	</head>
 	<body data-pagefind-body={!pageFindIgnore} style={background ? `background: ${background}` : ''}>
