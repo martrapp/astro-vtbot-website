@@ -1,33 +1,33 @@
-  ---
-  title: Same-Document View Transition
-  description: "How to use same-document view transitions with startViewTransition() on a Astro site."
-  ---
+---
+title: "Same-Document View Transition"
+description: "How to use same-document view transitions on a Astro site."
+---
 
-  import Form from "/src/components/ExampleForm.astro"
+import Form from "/src/components/ExampleForm.astro"
 
-  When you use Astro for a multi page site, you might have used cross-document view transitions for smooth navigation between the pages of your site.
+When you use Astro for a multi page site, you might have used cross-document view transitions for smooth navigation between the pages of your site.
 
-  This article focuses on use cases for view transitions while staying on the same page. And it will help you to avoid headaches you might otherwise suffer from combining cross-document and same-document transitions on the same page.
+This article focuses on use cases for view transitions while staying on the same page. And it will help you to avoid headaches you might otherwise suffer from combining cross-document and same-document transitions on the same page.
 
-  ## Why should I care
+## Why should I care
 
-  View transitions can be used to animate _any_ DOM changes. This is not just spielerei zum selbstzweck, but can help your users to better understand what your app does, reduce their mental load, or least help your site to not look like fresh from the 90s.
+View transitions can be used to animate _any_ DOM changes. This is not just spielerei zum selbstzweck, but can help your users to better understand what your app does, reduce their mental load, or least help your site to not look like fresh from the 90s.
 
-  Applying view transitions to a DOM change is not much effort and the result is often very rewarding compared to hat effort.
+Applying view transitions to a DOM change is not much effort and the result is often very rewarding compared to hat effort.
 
-  Just don't exaggerate: You do not need to animate everything. In this sense the following example is a tech demo, not a ernstgemeinte suggestion what to do with your own forms.
+Just don't exaggerate: You do not need to animate everything. In this sense the following example is a tech demo, not a ernstgemeinte suggestion what to do with your own forms.
 
-  Besides avoiding distractions you should also avoid lowing down your users while using your page: while you awe at your transitions taking 3 seconds, your users might probably prefer faster moves ;-)
+Besides avoiding distractions you should also avoid lowing down your users while using your page: while you awe at your transitions taking 3 seconds, your users might probably prefer faster moves ;-)
 
-  ###  Where to Apply
+###Where to Apply
 
-  Content heavy websites are often very static and you might ask yourself where your users might benefit from animations. Typically, you could use them
-  - to draw attention to parts of the page,
-  - um strukturelle zusammenhänge hinter veränderungen zu verdeutlichen (this thing here now moves over there)
-  - to make change look mor interesting and raise the engagement of you users with your site
+Content heavy websites are often very static and you might ask yourself where your users might benefit from animations. Typically, you could use them
+- to draw attention to parts of the page,
+- um strukturelle zusammenhänge hinter veränderungen zu verdeutlichen (this thing here now moves over there)
+- to make change look mor interesting and raise the engagement of you users with your site
 
-  ###
-  <Form />
+###
+<Form />
 
 
 
