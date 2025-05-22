@@ -1,0 +1,221 @@
+---
+
+---
+
+<form class="not-content user-data-form">
+	<label>
+		Occupation:
+		<div id="occupation-radio-group">
+			<label><input type="radio" name="occupation" value="student" required /> Student</label>
+			<label><input type="radio" name="occupation" value="employed" required /> Employed</label>
+			<label><input type="radio" name="occupation" value="other" required /> Other</label>
+		</div>
+	</label>
+	<div id="student-fields" style="display:none;">
+		<label>
+			Field of Study:
+			<input type="text" name="field" required />
+		</label><br />
+		<label>
+			Expected Graduation Date:
+			<input type="date" name="date" required />
+		</label><br /><label id="school">
+			Affiliation / University / College:
+			<input type="text" name="school" required />
+		</label>
+	</div>
+	<div id="employed-fields" style="display:none;">
+		<label>
+			Job Title:
+			<input type="text" name="job_title" required />
+		</label>
+		<br />
+		<label id="company">
+			Affiliation / Company:
+			<input type="text" name="company" required />
+		</label>
+	</div>
+	<div id="other-fields" style="display:none;">
+		<label>
+			Please specify:
+			<input type="text" name="other_occupation" required />
+		</label>
+	</div>
+	<label id="nickname-label">
+		Nickname:
+		<input type="text" name="nickname" required />
+	</label>
+</form>
+
+<script>
+	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+	document.addEventListener('astro:page-load', () => {
+		const occupation = document.getElementById('occupation-radio-group') as HTMLDivElement;
+		if (!occupation) return;
+		const studentFields = document.getElementById('student-fields')!;
+		const employedFields = document.getElementById('employed-fields')!;
+		const otherFields = document.getElementById('other-fields')!;
+		occupation.addEventListener('change', () => {
+			document.documentElement.classList.add('form-active');
+			mayStartViewTransition(() => {
+				const selectedOccupation = (
+					document.querySelector('input[name="occupation"]:checked') as HTMLInputElement
+				).value;
+				studentFields.style.display = selectedOccupation === 'student' ? 'block' : 'none';
+				employedFields.style.display = selectedOccupation === 'employed' ? 'block' : 'none';
+				otherFields.style.display = selectedOccupation === 'other' ? 'block' : 'none';
+			}).ready.then(() => {
+				document.documentElement.classList.remove('form-active');
+			});
+		});
+	});
+</script>
+<style is:global>
+	:root.form-active {
+		*:not(.user-data-form *) {
+			view-transition-name: none !important;
+		}
+		#nickname-label {
+			view-transition-name: nickname;
+		}
+		#school,
+		#company {
+			view-transition-name: affiliation;
+		}
+		#student-fields,
+		#employed-fields,
+		#other-fields {
+			view-transition-name: dynamic;
+		}
+	}
+	::view-transition-old(dynamic) {
+		animation-name: fadeOut;
+		animation-timing-function: ease-in-out;
+	}
+	::view-transition-new(dynamic) {
+		animation-name: fadeIn;
+		animation-timing-function: ease-in-out;
+	}
+	@keyframes fadeOut {
+		0% {
+			opacity: 1;
+			height: 100%;
+			transform: translateY(0);
+		}
+		50%,
+		100% {
+			transform: translateY(50%);
+			opacity: 0;
+			height: 0%;
+		}
+	}
+	@keyframes fadeIn {
+		0%,
+		50% {
+			opacity: 0;
+			height: 0%;
+			transform: translateY(50%);
+		}
+		100% {
+			opacity: 1;
+			height: 100%;
+			transform: translateY(0);
+		}
+	}
+
+	::view-transition-image-pair(affiliation) {
+		animation-name: slide;
+		animation-timing-function: ease-in-out;
+	}
+	@keyframes slide {
+		50% {
+			transform: translateX(10%);
+			opacity: 0.8;
+		}
+	}
+	form {
+		max-width: 420px;
+		margin: 3rem auto;
+		padding: 2.5rem 2rem;
+		background: linear-gradient(135deg, #232526 0%, #414345 100%);
+		border-radius: 1.5rem;
+		box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+		color: #fff;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+		position: relative;
+		overflow: hidden;
+	}
+
+	form::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(circle at 80% 20%, #ffb34755 0%, transparent 70%);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 1.2rem;
+		font-size: 1.1rem;
+		position: relative;
+		z-index: 1;
+	}
+
+	form div {
+		margin-top: 1em;
+	}
+	input[type='text'],
+	input[type='date'],
+	select {
+		width: 100%;
+		padding: 0.4rem 0.8rem;
+		margin-top: 0.5rem;
+		border: none;
+		border-radius: 0.8rem;
+		background-image: rgba(255, 255, 255, 0.07);
+		color: light-dark(#000, #fff);
+		font-size: 1rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		transition:
+			background-image 0.2s,
+			box-shadow 0.2s;
+		outline: none;
+	}
+
+	input[type='text']:focus,
+	input[type='date']:focus,
+	select:focus {
+		background-image: rgba(255, 255, 255, 0.15);
+		box-shadow: 0 0 0 2px #ffb34755;
+	}
+
+	#student-fields,
+	#employed-fields,
+	#other-fields {
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 1rem;
+		padding: 1rem 1rem 0.5rem 1rem;
+		margin-bottom: 1.2rem;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	}
+
+	#occupation-radio-group {
+		display: flex;
+		gap: 2rem;
+		align-items: center;
+		margin-top: 0.5rem;
+		margin-bottom: 1.2rem;
+	}
+	#occupation-radio-group label {
+		margin-bottom: 0;
+		font-weight: 500;
+		font-size: 1rem;
+	}
+
+	input[type='text']::placeholder {
+		color: #fff8;
+		font-style: italic;
+	}
+</style>
