@@ -62,7 +62,14 @@ export default defineConfig({
 				property: "og:image",
 				content: "https://events-3bg.pages.dev/social.png"
 			}
-		}],
+		}, {
+			tag: "meta",
+			attrs: {
+				name: "viewport",
+				content: "width=device-width, initial-scale=1.0, minimum-scale=1.0"
+
+			}
+		}	],
 		customCss: ["./src/styles/custom.css"],
 		description: "The Jotter of the Bag of Tricks for Astro's View Transitions",
 		lastUpdated: true,
