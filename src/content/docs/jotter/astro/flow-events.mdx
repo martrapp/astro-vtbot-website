@@ -127,7 +127,7 @@ Most of the properties of the `astro:before-swap` event are identical to those o
 
 - `direction` is `readonly` in `astro:before-swap`
 - `formData` and `loader` are not defined in `astro:before-swap`
-- the `astro:before-swap`event offers two additional properties:
+- the `astro:before-swap` event offers two additional properties:
 
 ``` ts
 swap: () => void // Initially, Astro's built-in implementation of the swap() operation. The task of the swap operation is to update the current DOM, typically to reflect the contents of event.newDocument.
