@@ -178,7 +178,7 @@ function sidebar1() {
 			link: "/jotter/styling/",
 		}, {
 			label: "Same-Document View Transitions",
-			link: "/jotter/styling/",
+			link: "/jotter/same-doc/",
 			badge: { text: "new", variant: "success" }
 		}
 		]
