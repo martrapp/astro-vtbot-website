@@ -1,0 +1,10 @@
+---
+import './form.css';
+interface Props extends astroHTML.JSX.InputHTMLAttributes {
+	label?: string;
+}
+
+const { label, ...props } = Astro.props as Props;
+---
+
+<label>{label} <input {...props} type="text" /><span class="proxy"></span></label>

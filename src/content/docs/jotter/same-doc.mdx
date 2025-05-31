@@ -3,31 +3,302 @@ title: "Same-Document View Transition"
 description: "How to use same-document view transitions on a Astro site."
 ---
 
-import Form from "/src/components/ExampleForm.astro"
+import ExampleCarsel from "/src/components/ExampleCarsel.astro"
+import ThemeChanger1 from "/src/components/ThemeChanger1.astro"
+import ThemeChanger2 from "/src/components/ThemeChanger2.astro"
 
-When you use Astro for a multi page site, you might have used cross-document view transitions for smooth navigation between the pages of your site.
+<style>{`:root {transition: none !important;}`}</style>
 
-This article focuses on use cases for view transitions while staying on the same page. And it will help you to avoid headaches you might otherwise suffer from combining cross-document and same-document transitions on the same page.
+
+
+Astro supported cross-document view transitions long before browsers offered native support. And for multi-page sites, like most Astro projects, cross-document transitions make a lot of sense. So it is no surprise Astro became known for them.
+
+But there has been far less buzz about [same-document view transitions](https://vtbag.dev/basics/javascript/#same-document-view-transitions). That is undeserved.
+
+This jotter page focuses on view transitions that happen while staying on the same page. It will also help you avoid the headaches that can come from combining cross-document and same-document transitions in one layout.
+
+**Heads up:** The demos use Astro (this is a Starlight site, after all), but only a [few Astro-specific bits](#astro-specifics) sneak in. The main content stands on its own, no matter what framework you use.
 
 ## Why should I care
 
-View transitions can be used to animate _any_ DOM changes. This is not just spielerei zum selbstzweck, but can help your users to better understand what your app does, reduce their mental load, or least help your site to not look like fresh from the 90s.
+View transitions can animate _any_ DOM change. And that is not just flair for flair's sake, it can help users understand what your site is doing, reduce cognitive load, or at the very least, keep your site from feeling like it came straight out of the 90s.
 
-Applying view transitions to a DOM change is not much effort and the result is often very rewarding compared to hat effort.
+Applying a view transition to a DOM change usually takes little effort, and the payoff can be surprisingly high.
 
-Just don't exaggerate: You do not need to animate everything. In this sense the following example is a tech demo, not a ernstgemeinte suggestion what to do with your own forms.
-
-Besides avoiding distractions you should also avoid lowing down your users while using your page: while you awe at your transitions taking 3 seconds, your users might probably prefer faster moves ;-)
-
-###Where to Apply
-
-Content heavy websites are often very static and you might ask yourself where your users might benefit from animations. Typically, you could use them
-- to draw attention to parts of the page,
-- um strukturelle zusammenhänge hinter veränderungen zu verdeutlichen (this thing here now moves over there)
-- to make change look mor interesting and raise the engagement of you users with your site
-
-###
-<Form />
+Just do not overdo it. You do not need to animate everything. The examples below are tech demos, not a serious suggestion for how to handle your animations. Avoid distractions, and do not slow your users down. While you admire your beautiful 3-second animation, your users might prefer something that moves a little faster.
 
 
+### Typical Usage Scenarios
 
+
+Content-heavy websites are often very static, and you might wonder where in-page animations could actually help your users. In general, you might use them
+
+- to draw attention to certain parts of the page
+- to highlight structural relationships when something changes, for example, showing that one element moved from here to there
+- to make change feel more dynamic and entertaining and boost how users engage with your site
+
+Whether you use the API on navigation or for animations on your page: The View Transition API is most useful when you want to animate changes to entire subtrees in the DOM. The core benefit of the View Transition API is that it creates the things to animate. For all elements where you assign a `view-transition-name` CSS property, the API captures before-and-after snapshots of the DOM and gives you [images you can animate](https://vtbag.dev/basics/pseudos/).
+
+You get three polished [default animations](https://vtbag.dev/basics/default-animations/) out of the box: fade-in, fade-out, and morph. But you are not locked in. The animation is fully up to you. You can move, style, or reorder the captured images however you like. When the animations finish, the transition ends, and everything returns to its normal DOM flow.
+
+
+Having said that, typical use cases for the View Transition API are those where you can take advantage of the image nature of the captured content. These usually involve transformations like scaling, rotation, or translation. Filter effects also work well.
+
+What you can't do is alter the content of the captured old images themselves. For example, if you capture a block of text, you cannot change its color or font in the old image during the view transition. Teaser: You can do all that with the new image.
+
+And do not treat everything like a nail just because you now have a hammer. In many cases, simple animation effects do not need the View Transition API. If only individual elements need animation, like an image, it is often enough to use regular CSS animations or even just CSS transitions. The View Transition API really pays off when you want to animate more complex differences between before and after states of the DOM.
+
+
+
+## Demo Time
+
+This section showcases two demos of same-document use of the View Transition API in an Astro project. Both make great use of animating the difference between the before and after states of a DOM change.
+
+### Theme Switcher
+
+First, the classic case: just one old image and one new image, both covering all the HTML elements of the entire viewport, and a very simple DOM change:
+```js
+document.documentElement.classList.toggle('dark');
+```
+No need to explicitly add view transition names in this case. The API automatically assigns the name `root` to the `document.documentElement` if no name is set. The snapshots of the `<html>` element are special as they are the size of the viewport, not the whole page.
+
+Now that the View Transition API hands you the light and dark images, you can do some fun stuff with them: while the old screen stumbles backward and drops out of view, we quickly smooth in the new background, and just like that, everything is ready and interactive again! Click the orb below to trigger the theme switcher demo.
+
+<div class="grid-row not-content"><ThemeChanger2 /></div>
+
+<style>{`
+.grid-row {
+  display: grid;
+  grid-template-columns: max-content;
+  justify-content: space-around;
+}
+
+`}</style>
+
+There is no way to capture images of the entire viewport this easily in JavaScript without the View Transition API. You would either have to rely on external libraries like `html2canvas`[^1]  or explicitly ask users for permission to capture their screen.
+
+[^1]: Ping me if you know a good one.
+
+
+
+We ignore or override all default animations. Here are our custom animations&hellip;
+```css
+::view-transition-group(root) {
+	animation-name: none;
+}
+::view-transition-old(root) {
+	animation-name: tumble;
+	z-index: 1;
+}::view-transition-new(root) {
+	animation-name: grow;
+	border-radius: 0;
+	filter: url(#smoothing);
+}
+
+```
+The View Transition API stacks the new image on top of the old one. In our example, this means the new image would completely obscure the old one, making the tumbling effect invisible. Setting the old image's `z-index` to 1 brings it above the new one.
+
+And these are the keyframe definitions:
+```css
+@keyframes grow {
+	from {transform: scale(0.8);}
+	to {transform: scale(1);}
+}
+@keyframes tumble {
+	10% {transform: scale(0.8) rotateX(72deg);}
+	15% {transform: scale(0.6) rotate(5deg) translateX(20vw) rotateX(108deg);}
+	60% {transform: scale(0.5) rotate(-10deg) translateX(0vw) rotateX(360deg);}
+	80% {transform: scale(0.5) rotate(5deg) translateX(20vw) rotateX(360deg);}
+	100% {transform: scale(1) rotate(0deg) translateY(100vh) rotateX(360deg);}
+}
+```
+
+
+The smoothing effect is achieved using an SVG filter:
+```html
+<svg width="0" height="0">
+	<filter id="smoothing" x="-50%" y="-50%" width="200%" height="200%">
+		<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" result="turbulence"></feTurbulence>
+		<feDisplacementMap id="displacement" in="SourceGraphic" in2="turbulence" xChannelSelector="R" yChannelSelector="G">
+			<animate attributeName="scale" from="20" to="1" dur="2s"></animate>
+		</feDisplacementMap>
+	</filter>
+</svg>
+```
+Actually, the current code does not use the SVG animation element but instead relies on a JavaScript function to animate the `scale` during the view transition:
+```js
+const animate = () => {
+	const position = Date.now() - start;
+	if (position < DURATION_MS) {
+		displacement?.setAttribute('scale', `${30 - (position / DURATION_MS) * 30}`);
+		requestAnimationFrame(animate);
+		}
+}
+```
+
+### The Card Deck
+
+The card deck demo always displays three cards from a deck. You can move forward and backward through the deck using the buttons. To see how unintuitive the card deck feels without view transitions, use the dropdown at the bottom to turn them off.
+
+<ExampleCarsel />
+
+The basic strategy here is to give all cards a `view-transition-name` and rely on the View Transition API's group animation to move the cards around. The cards themselves look the same before and after the click, so we can drop the cross-fade animations:
+```css
+::view-transition-old(*),
+::view-transition-new(*) {
+	animation-name: none;
+}
+```
+There are some minor tweaks that add a bit of dynamic by starting the cards with a little relative delay:
+```css
+::view-transition-group(*) {
+	animation-delay: 50ms;
+}
+::view-transition-group(carsel-0),
+::view-transition-group(carsel-3) {
+	animation-delay: 30ms;
+}
+::view-transition-group(carsel-2) {
+	animation-delay: 0ms;
+}
+```
+And finally, the cards get a big larger or smaller as they move:
+```css
+:active-view-transition-type(up)::view-transition-image-pair(carsel-0) {
+	animation-delay: 0ms; animation-name: mini;}
+
+:active-view-transition-type(down)::view-transition-image-pair(carsel-1) {
+	animation-delay: 20ms; animation-name: maxi;}
+
+::view-transition-image-pair(carsel-2) {
+	animation-delay: 40ms; animation-name: maxi;}
+
+:active-view-transition-type(down)::view-transition-image-pair(carsel-3) {
+	animation-delay: 60ms; animation-name: mini;}
+
+:active-view-transition-type(up)::view-transition-image-pair(carsel-6) {
+	animation-delay: 80ms; animation-name: maxi;}
+
+@keyframes maxi {33%,66% {transform: translateX(15px) scale(1.1);}}
+@keyframes mini {10%,90% {transform: translateX(-80px) scale(0.75); opacity:0.5;}}
+```
+The rest of the styling are timing settings and a bit of `z-index` shuffling like we did with the theme switcher above.
+
+## Whatever it Takes on a Real Page
+
+With the tips above, you are now well equipped to envision some vivid same-page view transitions. But doing a demo on Codepen and integrating the same component on a real web site are two different things, especially when you want to have several component on the same page or when you also use cross-document view transitions and do not want all those thing interfere.
+
+Here is what we will look into:
+- starting same-page view transitions
+- blocking cross-document animations
+- scoping view transitions
+- retaining the page interactive
+
+### Starting
+
+[Starting a view transition](https://vtbag.dev/basics/javascript/#startviewtransition) is as simple as calling `document.startViewTransition(callback)` with a function that updates the DOM from its current state to the next.
+
+Of course, you will want to check whether the browser actually supports this function. Otherwise, your code could crash.
+
+It is also a good idea to check whether users prefer reduced motion, and to respect that preference by disabling or toning down animations.
+
+At least in the same-document case we do not have to think about render blocking.
+
+It is not a lot to handle, but still, some convenience would not hurt: \
+The Bag’s `mayStartViewTransition()` function takes care of all the above and more. It also lets you automatically chain closely timed calls into a single transition.
+
+Here is how to access it in an Astro file after installing the package with `npm i @vtbag/utensil-drawer`.
+
+Just keep in mind: [it is still a bit experimental](https://vtbag.dev/tools/utensil-drawer/#maystartviewtransition).
+
+
+
+```html
+<script>
+  import {mayStartViewTransition} from '@vtbag/utensil-drawer/mayStartViewTransition'
+
+  mayStartViewTransition(...)
+```
+
+### Scoping
+If you are using cross-document animations on your site (through the browser's `@view-transition { navigation: auto }` or Astro’s `<ClientRouter />`), calling `startViewTransition()` could well open the gates to visual mayhem.
+
+Until [_scoped_ view transitions](https://vtbag.dev/basics/javascript/#scoped-view-transitions) become widely supported, view transitions apply to the entire document. Calling `startViewTransition()` generates images for all elements with a view transition name and triggers  animations on all of them.
+
+It does not matter whether you assign view transition names to the cards in your Card Deck, the `:root` element for your Theme Switcher, or your `<main>` element for a smooth slide animation on cross-document navigation. When the view transition starts, every element with a view transition name activates simultaneously.
+
+
+This happens regardless of whether the view transition is triggered by navigation or by pressing a button that calls `startViewTransition()`. So navigating to a page with cross-document view transitions will also immediately run all same-document animations that have view transition names set up.
+
+
+What we really want is a view transition confined to a single component. Let’s see how to put the chaos back in its box(es).
+
+#### Guard Your Definitions
+
+**One way** to keep your different view transition use cases from interfering with each other is to make sure that view transition names only exist when the API is actually looking for them. As you already need browser-side JavaScript to start the view transition, you could as well add the view transition names just before you call `startViewTransition()` and remove them after the new images are captured. Cleanup can be done in a finally clause for the view transitions ready promise:
+```js
+setViewTransitionNamesForOldImages();
+const transition = document.startViewTransition(() => {
+	update();
+	setViewTransitionNamesForNewImages();
+});
+transition.ready.finally(removeViewTransitionNames)
+```
+If you want `setViewTransitionNamesForNewImages` can also remove names for old images. Alternatively you might be able to set all names, both old and new, before the view transition starts. In that case, you can simply skip using something like `setViewTransitionNamesForNewImages`.
+
+**What will also work** is to add a class, e.g. `.card-deck`, to the `:root` element while your Card Deck view transition component is active. Like above you set this before you call `startViewTransition()` and you reset it in the finally clause of the view transition's `finished` promise. You can than use `:root.card-deck` to guard all view transition definitions, especially the definitions of view transition names. This will guarantee that those names do only exist while the `.card-deck` class is set on the `:root` element.
+
+
+```astro
+<style is:global>
+	:root.card-deck {
+		button.next {
+			view-transition-name: next-button;
+		}
+		&::view-transition-group(root) {
+			animation-duration: 180ms;
+		}
+	}
+```
+By not clearing the class before `finished` resolves, you can even assign different definitions to the same view transition pseudo-elements in different contexts. Note that the use of & is mandatory here, as we want to address `:root.card-deck::view-transition-group(root)` (without a space) and not `.root.card-deck ::view-transition-group(root)` with a space.
+
+
+
+#### Erase Other View Transition Names
+Guarding the `:root` with a class can also be used to temporarily disable all globally defined, unguarded view transition names so they do not interfere with your current same-document transition:
+```astro
+<style is:global>
+	:root.card-deck {
+		*:not(div.card-deck-root *) {
+			view-transition-name: none !important;
+		}
+		view-transition-name: none !important;
+	}
+	...
+```
+Here `div.card-deck-root` is the root element of our card deck. The CSS rule erases view transition names on all elements that are not part of the card deck. Note that `!important` rules can not only override rules in stylesheets but even names set using a `style` attribute on an element.
+
+### Restoring Interactivity
+The `::view-transition` pseudo-element covers the entire viewport. You might view this pseudo simply as the root where all the `::view-transition-group` pseudos are attached, but it also [acts like a glass pane](https://vtbag.dev/basics/pseudos/#rendering-pseudo-elements), blocking  all mouse clicks from reaching the page underneath.
+
+So even if you can see the button for moving through the Card Deck, you can not click then.
+
+The [fix](https://vtbag.dev/tips/interactivity/#how-to-retain-interactivity) is simple. In most cases letting the pointer through is all it needs:
+```css
+::view-transition {
+  pointer-events: none;
+}
+```
+That way you can interact with section of your page that are not obscured by pseudo-elements.
+
+
+## Astro Specifics
+As I hinted in the introduction, most of what we covered here is not specific to Astro.
+Just the usual suspects and a few framework-specific lines here and there.
+
+- If you are using Astro's `<ClientRouter />` for view transitions, you need to attach your event handlers using Astro's lifecycle events, just like you normally would.
+- Astro’s scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
+- Astro automatically turns plain `<script>` tags into `<script type="module">`. That means you can use import statements directly, e.g. for `mayStartViewTransition`. If you are not using Astro, make sure to add `type="module"` yourself so import statements work as expected.
+
+
+Happy transitioning!

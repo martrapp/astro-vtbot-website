@@ -69,7 +69,7 @@ export default defineConfig({
 				content: "width=device-width, initial-scale=1.0, minimum-scale=1.0"
 
 			}
-		}	],
+		}],
 		customCss: ["./src/styles/custom.css"],
 		description: "The Jotter of the Bag of Tricks for Astro's View Transitions",
 		lastUpdated: true,
@@ -156,7 +156,7 @@ function sidebar1() {
 	}, {
 		label: "Astro View Transitions",
 		items: [{
-			label: "<View Transitions />",
+			label: "Overview",
 			link: "/jotter/astro/"
 		}, {
 			label: "Transition Directives",
@@ -173,7 +173,15 @@ function sidebar1() {
 		}, {
 			label: "Re-initialize Scripts after Transition",
 			link: "/jotter/astro/scripts/"
-		}, { label: "Extended Styling", link: "/jotter/styling/", badge: { text: "new", variant: "success" } }]
+		}, {
+			label: "Extended Styling",
+			link: "/jotter/styling/",
+		}, {
+			label: "Same-Document View Transitions",
+			link: "/jotter/styling/",
+			badge: { text: "new", variant: "success" }
+		}
+		]
 	}, {
 		label: "The Jotter on Starlight", collapsed: true,
 		items: [{

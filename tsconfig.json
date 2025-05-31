@@ -9,6 +9,7 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] },
     "jsxImportSource": "react"
   },
   "include": [

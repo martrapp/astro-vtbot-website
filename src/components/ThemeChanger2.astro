@@ -1,0 +1,128 @@
+---
+
+---
+
+<div id="hole2"></div>
+
+<svg width="0" height="0">
+	<filter id="eff" x="-50%" y="-50%" width="200%" height="200%">
+		<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" result="turbulence"
+		></feTurbulence>
+		<feDisplacementMap
+			id="displacement"
+			in="SourceGraphic"
+			in2="turbulence"
+			xChannelSelector="R"
+			yChannelSelector="G"
+		>
+			<animate attributeName="scale" from="20" to="1" dur="2s"></animate>
+		</feDisplacementMap>
+	</filter>
+</svg>
+
+<style is:inline>
+	#hole2 {
+		width: min(360px, 15vw);
+		height: 15vh;
+		display: flex;
+		justify-content: center;
+		align-items: end;
+		padding-bottom: 0.5rem;
+		background: radial-gradient(
+			circle at 50% 50%,
+			light-dark(olivedrab, darkolivegreen) 0%,
+			transparent 80%
+		);
+		box-shadow: 0 0 10px light-dark(darkolivegreen, olivedrab);
+		border-radius: 50%;
+		cursor: crosshair;
+	}
+
+	:root.demo2 {
+		*:not(.hole) {
+			view-transition-name: none !important;
+		}
+	}
+	::view-transition-group(root) {
+		animation-timing-function: ease-in;
+		animation-duration: 1s;
+	}
+
+	:root.demo2 {
+		&::view-transition-group(root) {
+			animation-name: none;
+		}
+		&::view-transition-new(root) {
+			animation-name: grow;
+			border-radius: 0;
+			filter: url(#eff);
+		}
+		&::view-transition-old(root) {
+			animation-name: drop;
+			z-index: 1;
+		}
+	}
+
+	@keyframes grow {
+		from {
+			transform: scale(0.8);
+		}
+		to {
+			transform: scale(1);
+		}
+
+	}
+	@keyframes drop {
+		10% {
+			transform: scale(0.8) rotateX(72deg);
+		}
+		15% {
+			transform: scale(0.6) rotate(5deg) translateX(20vw) rotateX(108deg);;
+		}
+		60% {
+			transform: scale(0.5) rotate(-10deg) translateX(0vw)  rotateX(360deg);;
+		}
+		80% {
+			transform: scale(0.5) rotate(5deg) translateX(20vw) rotateX(360deg);;
+		}
+		to {
+			transform: scale(1) rotate(0deg) translateY(100vh) rotateX(360deg);;
+		}
+	}
+</style>
+<script>
+	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+
+	const DURATION_MS = 1000;
+	document.addEventListener('astro:page-load', () => {
+		const hole = document.querySelector('#hole2') as HTMLDivElement;
+		if (!hole) return;
+
+		const displacement = document.getElementById('displacement');
+		hole.addEventListener('click', () => {
+			const start = Date.now();
+			document.documentElement.classList.add('demo2');
+			const current =
+				document.documentElement.dataset.theme ||
+				(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+			const savedRootInlineVTN = document.documentElement.style.viewTransitionName;
+			document.documentElement.style.viewTransitionName = 'root';
+			const transition = mayStartViewTransition!(() => {
+				document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
+				document.documentElement.classList.toggle('dark', current === 'light');
+			});
+			const animate = () => {
+				const position = Date.now() - start;
+				if (position < DURATION_MS) {
+					displacement?.setAttribute('scale', `${30 - (position / DURATION_MS) * 30}`);
+					requestAnimationFrame(animate);
+				}
+			};
+			transition.ready.then(() => requestAnimationFrame(animate));
+			transition.finished.finally(() => {
+				document.documentElement.style.viewTransitionName = savedRootInlineVTN;
+				document.documentElement.classList.remove('demo2');
+			});
+		});
+	});
+</script>

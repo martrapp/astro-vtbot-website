@@ -1,0 +1,90 @@
+---
+
+---
+
+<div id="hole1"></div>
+
+<style is:inline>
+	#hole1 {
+		width: min(360px, 15vw);
+		height: 15vh;
+		display: flex;
+		justify-content: center;
+		align-items: end;
+		padding-bottom: 0.5rem;
+		background: radial-gradient(
+			circle at 50% 50%,
+			light-dark(darkgoldenrod, darkgoldenrod) 0%,
+			transparent 80%
+		);
+		box-shadow: 0 0 10px light-dark(gold, goldenrod);
+		border-radius: 50%;
+		cursor: crosshair;
+	}
+	:root.demo1 {
+		*:not(#hole1) {
+			view-transition-name: none !important;
+		}
+	}
+	::view-transition-group(root) {
+		animation-timing-function: ease-in;
+		animation-duration: 1s;
+	}
+	:root.demo1 {
+		&::view-transition-new(root) {
+			animation-name: rotate;
+		}
+		&::view-transition-old(root) {
+			animation-name: rotate, fade;
+			border-radius: 50%;
+			overflow: clip;
+		}
+	}
+	@keyframes rotate {
+		to {
+			transform: rotateZ(360deg);
+		}
+	}
+	@keyframes fade {
+		from {
+			opacity: 1;
+		}
+		33% {
+			opacity: 1;
+		}
+		66% {
+			opacity: 0.33;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+</style>
+<script>
+import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+
+	document.addEventListener('astro:page-load', () => {
+		const hole = document.querySelector('#hole1	') as HTMLDivElement;
+		if (!hole) return;
+		hole.addEventListener('click', () => {
+			document.documentElement.classList.add('demo1');
+			const current =
+				document.documentElement.dataset.theme ||
+				(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+			const savedRootInlineVTN = document.documentElement.style.viewTransitionName;
+			document.documentElement.style.viewTransitionName = 'root';
+			const transition = mayStartViewTransition!(() => {
+				document.documentElement.style.viewTransitionName = 'none';
+				hole.style.viewTransitionName = 'root';
+
+				document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
+				document.documentElement.classList.toggle('dark', current === 'light');
+			});
+			transition.finished.finally(() => {
+				hole.style.viewTransitionName = '';
+				document.documentElement.style.viewTransitionName = savedRootInlineVTN;
+				document.documentElement.classList.remove('demo1');
+			});
+		});
+	});
+</script>
