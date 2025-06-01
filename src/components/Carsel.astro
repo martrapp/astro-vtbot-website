@@ -76,11 +76,12 @@
 </script>
 
 <style is:inline>
+
+
 	:active-view-transition-type(carsel) {
-		*:not(div.carsel *) {
+		*:not(div.carsel *), & {
 			view-transition-name: none !important;
 		}
-		view-transition-name: none !important;
 
 		&::view-transition-group(*) {
 			animation-duration: 0.25s;

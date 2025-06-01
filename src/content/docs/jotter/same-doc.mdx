@@ -298,16 +298,19 @@ Guarding the `:root` with a class or a view transition type can also be used to 
 ```astro
 <style is:global>
 	:active-view-transition-type(card-deck) {
-		*:not(div.card-deck-root *) {
+		*:not(div.card-deck-root *), & {
 			view-transition-name: none !important;
 		}
-		view-transition-name: none !important;
 	}
 	...
 ```
 Here `div.card-deck-root` is the root element of our card deck. The CSS rule erases view transition names on all elements that are not part of the card deck. Note that `!important` rules can not only override rules in stylesheets but even names set using a `style` attribute on an element.
 
 Removing all other view transition names also clears the effects of any other view transitions defined on this page, as well as those from cross-document view transitions, again assuming that names do not overlap.
+
+This solution is general and quick to write, but it can be a performance burden. If possible, make sure all other view transition names are set within guards, and try to use a more specific selector to clear any remaining view transition names.
+
+
 
 ### Restoring Interactivity
 The `::view-transition` pseudo-element covers the entire viewport. You might view this pseudo simply as the root where all the `::view-transition-group` pseudos are attached, but it also [acts like a glass pane](https://vtbag.dev/basics/pseudos/#rendering-pseudo-elements), blocking  all mouse clicks from reaching the page underneath.
