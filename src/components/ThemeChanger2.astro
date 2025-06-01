@@ -38,26 +38,21 @@
 		cursor: crosshair;
 	}
 
-	:root.demo2 {
+	:active-view-transition-type(theme-changer-2) {
 		*:not(.hole) {
 			view-transition-name: none !important;
 		}
-	}
-	::view-transition-group(root) {
-		animation-timing-function: ease-in;
-		animation-duration: 1s;
-	}
-
-	:root.demo2 {
-		&::view-transition-group(root) {
+		view-transition-name: viewport !important;
+		&::view-transition-group(viewport) {
+			animation-timing-function: ease-in;
+			animation-duration: 1s;
 			animation-name: none;
 		}
-		&::view-transition-new(root) {
+		&::view-transition-new(viewport) {
 			animation-name: grow;
-			border-radius: 0;
 			filter: url(#eff);
 		}
-		&::view-transition-old(root) {
+		&::view-transition-old(viewport) {
 			animation-name: drop;
 			z-index: 1;
 		}
@@ -70,23 +65,22 @@
 		to {
 			transform: scale(1);
 		}
-
 	}
 	@keyframes drop {
 		10% {
 			transform: scale(0.8) rotateX(72deg);
 		}
 		15% {
-			transform: scale(0.6) rotate(5deg) translateX(20vw) rotateX(108deg);;
+			transform: scale(0.6) rotate(5deg) translateX(20vw) rotateX(108deg);
 		}
 		60% {
-			transform: scale(0.5) rotate(-10deg) translateX(0vw)  rotateX(360deg);;
+			transform: scale(0.5) rotate(-10deg) translateX(0vw) rotateX(360deg);
 		}
 		80% {
-			transform: scale(0.5) rotate(5deg) translateX(20vw) rotateX(360deg);;
+			transform: scale(0.5) rotate(5deg) translateX(20vw) rotateX(360deg);
 		}
 		to {
-			transform: scale(1) rotate(0deg) translateY(100vh) rotateX(360deg);;
+			transform: scale(1) rotate(0deg) translateY(100vh) rotateX(360deg);
 		}
 	}
 </style>
@@ -101,15 +95,15 @@
 		const displacement = document.getElementById('displacement');
 		hole.addEventListener('click', () => {
 			const start = Date.now();
-			document.documentElement.classList.add('demo2');
 			const current =
 				document.documentElement.dataset.theme ||
 				(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-			const savedRootInlineVTN = document.documentElement.style.viewTransitionName;
-			document.documentElement.style.viewTransitionName = 'root';
-			const transition = mayStartViewTransition!(() => {
-				document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
-				document.documentElement.classList.toggle('dark', current === 'light');
+			const transition = mayStartViewTransition!({
+				update: () => {
+					document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
+					document.documentElement.classList.toggle('dark', current === 'light');
+				},
+				types: ['theme-changer-2'],
 			});
 			const animate = () => {
 				const position = Date.now() - start;
@@ -119,10 +113,6 @@
 				}
 			};
 			transition.ready.then(() => requestAnimationFrame(animate));
-			transition.finished.finally(() => {
-				document.documentElement.style.viewTransitionName = savedRootInlineVTN;
-				document.documentElement.classList.remove('demo2');
-			});
 		});
 	});
 </script>

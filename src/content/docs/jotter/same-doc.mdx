@@ -190,7 +190,6 @@ With the tips above, you are now well equipped to envision some vivid same-page 
 
 Here is what we will look into:
 - starting same-page view transitions
-- blocking cross-document animations
 - scoping view transitions
 - retaining the page interactive
 
@@ -235,7 +234,12 @@ What we really want is a view transition confined to a single component. Let’s
 
 #### Guard Your Definitions
 
-**One way** to keep your different view transition use cases from interfering with each other is to make sure that view transition names only exist when the API is actually looking for them. As you already need browser-side JavaScript to start the view transition, you could as well add the view transition names just before you call `startViewTransition()` and remove them after the new images are captured. Cleanup can be done in a finally clause for the view transitions ready promise:
+There are at least three alternative approaches to make sure that definitions do not interfere:
+- dynamic, just in time creation of view transition names with JavaScript
+- conditional definitions guarded by CSS classes
+- conditional definition guarded by view transition types
+
+**Temporary View Transition Names:** With this approach, you make sure that view transition names only exist when the API is actually looking for them. As you already need browser-side JavaScript to start the view transition, you could as well add the view transition names just before you call `startViewTransition()` and remove them after the new images are captured. Cleanup can be done in a finally clause for the view transitions ready promise:
 ```js
 setViewTransitionNamesForOldImages();
 const transition = document.startViewTransition(() => {
@@ -246,8 +250,9 @@ transition.ready.finally(removeViewTransitionNames)
 ```
 If you want `setViewTransitionNamesForNewImages` can also remove names for old images. Alternatively you might be able to set all names, both old and new, before the view transition starts. In that case, you can simply skip using something like `setViewTransitionNamesForNewImages`.
 
-**What will also work** is to add a class, e.g. `.card-deck`, to the `:root` element while your Card Deck view transition component is active. Like above you set this before you call `startViewTransition()` and you reset it in the finally clause of the view transition's `finished` promise. You can than use `:root.card-deck` to guard all view transition definitions, especially the definitions of view transition names. This will guarantee that those names do only exist while the `.card-deck` class is set on the `:root` element.
+To make this work, make sure the view transition names in your different use cases do not overlap. This avoids  conflicts in pseudo-element styling and removes the need for extra logic to conditionally apply styles. If a view transition name does not exist, the API won't generate pseudo-elements for it, so any associated styles  will have no effect.
 
+**CSS Classes as Guards:** Alternatively, you can add a class, e.g. `.card-deck`, to the `:root` element while your Card Deck view transition component is active. Like with temporary set view transition names, you set this before you call `startViewTransition()` and you reset it in the finally clause of the view transition's `finished` promise. You can than use `:root.card-deck` to guard all view transition definitions, especially the definitions of view transition names. This will guarantee that those names do only exist while the `.card-deck` class is set on the `:root` element.
 
 ```astro
 <style is:global>
@@ -259,16 +264,40 @@ If you want `setViewTransitionNamesForNewImages` can also remove names for old i
 			animation-duration: 180ms;
 		}
 	}
+	...
 ```
 By not clearing the class before `finished` resolves, you can even assign different definitions to the same view transition pseudo-elements in different contexts. Note that the use of & is mandatory here, as we want to address `:root.card-deck::view-transition-group(root)` (without a space) and not `.root.card-deck ::view-transition-group(root)` with a space.
 
 
+**View Transition Types as Guards:** Timing the addition and removal of a guarding CSS class can be a bit tricky. You might have already noticed that using a CSS class like this is similar to how [view transition types](https://vtbag.dev/basics/styling/#with-types) work. And yes, while view transition types are a relatively new addition to the View Transition API and might not yet be fully supported in all browsers, they offer some strong advantages.
 
-#### Erase Other View Transition Names
-Guarding the `:root` with a class can also be used to temporarily disable all globally defined, unguarded view transition names so they do not interfere with your current same-document transition:
+Types are available as soon as `startViewTransition()` is called, so you can use them to guard view transition names during the capture of old and new images. They also remain active until just after the finished promise resolves, which means you can use them to guard pseudo-element styling throughout the animation. As a bonus, the type is automatically removed once the transition ends. No manual cleanup needed.
+
+You define the types when calling `startViewTransition()`:
+```js
+document.startViewTransition({update, types: ['card-deck','up']});
+```
+And you use them much like the CSS class approach:
 ```astro
 <style is:global>
-	:root.card-deck {
+	:active-view-transition-type(card-deck) {
+		button.next {
+			view-transition-name: next-button;
+		}
+		&::view-transition-group(root) {
+			animation-duration: 180ms;
+		}
+	}
+	...
+```
+This works because `:active-view-transition-type(...)` _matches the document element_ if any of the listed types is active during the current view transition. Thus `:active-view-transition-type(card-deck) { button {` is effectively the same as `:root button {`, which in turn is just the same as `button {`, aside from differences in specificity.
+
+
+#### Erase Other View Transition Names
+Guarding the `:root` with a class or a view transition type can also be used to temporarily disable all globally defined, unguarded view transition names so they do not interfere with your current same-document transition:
+```astro
+<style is:global>
+	:active-view-transition-type(card-deck) {
 		*:not(div.card-deck-root *) {
 			view-transition-name: none !important;
 		}
@@ -277,6 +306,8 @@ Guarding the `:root` with a class can also be used to temporarily disable all gl
 	...
 ```
 Here `div.card-deck-root` is the root element of our card deck. The CSS rule erases view transition names on all elements that are not part of the card deck. Note that `!important` rules can not only override rules in stylesheets but even names set using a `style` attribute on an element.
+
+Removing all other view transition names also clears the effects of any other view transitions defined on this page, as well as those from cross-document view transitions, again assuming that names do not overlap.
 
 ### Restoring Interactivity
 The `::view-transition` pseudo-element covers the entire viewport. You might view this pseudo simply as the root where all the `::view-transition-group` pseudos are attached, but it also [acts like a glass pane](https://vtbag.dev/basics/pseudos/#rendering-pseudo-elements), blocking  all mouse clicks from reaching the page underneath.
@@ -296,7 +327,14 @@ That way you can interact with section of your page that are not obscured by pse
 As I hinted in the introduction, most of what we covered here is not specific to Astro.
 Just the usual suspects and a few framework-specific lines here and there.
 
-- If you are using Astro's `<ClientRouter />` for view transitions, you need to attach your event handlers using Astro's lifecycle events, just like you normally would.
+- If you are using Astro's `<ClientRouter />` for view transitions, you need to attach your event handlers using Astro's lifecycle events, just like you normally would. As the handler runs on every navigation, you should check if there is something to do on the current page:
+```js
+document.addEventListener('astro:page-load', () => {
+	const carsel = document.querySelector('div.carsel');
+	if (!carsel) return;
+	...
+});
+```
 - Astro’s scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
 - Astro automatically turns plain `<script>` tags into `<script type="module">`. That means you can use import statements directly, e.g. for `mayStartViewTransition`. If you are not using Astro, make sure to add `type="module"` yourself so import statements work as expected.
 
