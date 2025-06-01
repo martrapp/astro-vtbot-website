@@ -52,7 +52,6 @@
 
 			['click'].forEach((e) =>
 				prevButton.addEventListener(e, () => {
-					console.log('prev');
 					setContext();
 					assignNames([...tilesWrapper.children] as HTMLElement[]);
 					mayStartViewTransition(
@@ -101,7 +100,7 @@
 		});
 	</script>
 
-	<style is:global>
+	<style is:inline>
 		:root.carsel {
 			*:not(div.carsel *) {
 				view-transition-name: none !important;
