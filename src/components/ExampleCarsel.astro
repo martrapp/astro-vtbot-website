@@ -6,6 +6,7 @@ import Carsel from './Carsel.astro';
 	:active-view-transition-type(carsel) {
 		&::view-transition-group(*) {
 			animation-timing-function: ease-in-out;
+			perspective: 50cm;
 		}
 
 		&:active-view-transition-type(up)::view-transition-image-pair(carsel-0) {
@@ -14,36 +15,36 @@ import Carsel from './Carsel.astro';
 		}
 
 		&:active-view-transition-type(down)::view-transition-image-pair(carsel-1) {
-			animation-delay: 20ms;
+			animation-delay: calc(80ms * var(--vtbag-slow-down));
 			animation-name: maxi;
 		}
 
 		&::view-transition-image-pair(carsel-2) {
-			animation-delay: 40ms;
+			animation-delay: calc(40ms * var(--vtbag-slow-down));
 			animation-name: maxi;
 		}
 
 		&:active-view-transition-type(down)::view-transition-image-pair(carsel-3) {
-			animation-delay: 60ms;
+			animation-delay: calc(0ms * var(--vtbag-slow-down));
 			animation-name: mini;
 		}
 
 		&:active-view-transition-type(up)::view-transition-image-pair(carsel-6) {
-			animation-delay: 80ms;
+			animation-delay: calc(80ms * var(--vtbag-slow-down));
 			animation-name: maxi;
 		}
 	}
 	@keyframes maxi {
 		33%,
 		66% {
-			transform: translateX(15px) scale(1.1);
+			transform: translateX(15px) translateZ(7.5cm);
 		}
 	}
 
 	@keyframes mini {
 		10%,
 		90% {
-			transform: translateX(-80px) scale(0.75);
+			transform: translateX(-200px) translateZ(-7.5cm);
 			opacity: 0.5;
 		}
 	}

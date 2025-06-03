@@ -8,10 +8,22 @@
 	document.addEventListener('astro:page-load', () => {
 		const carsel = document.querySelector('div.carsel');
 		if (!carsel) return;
-		const tilesWrapper = carsel.querySelector('.tiles-wrapper')!;
+		const tilesWrapper = carsel.querySelector('.tiles-wrapper') as HTMLDivElement;
 		const prevButton = carsel.querySelector('.prev-button')!;
 		const nextButton = carsel.querySelector('.next-button')!;
 		const options = carsel.querySelector('.options') as HTMLSelectElement;
+
+		options.addEventListener('change', () => {
+			tilesWrapper.style.viewTransitionName = 'tiles-mapper';
+			mayStartViewTransition({
+				update: () => {
+					tilesWrapper.classList.toggle('vt3d', options.value === '3d');
+				},
+				types: ['vt3d'],
+			}).ready.finally(() => {
+				tilesWrapper.style.viewTransitionName = 'tiles-mapper';
+			});
+		});
 
 		[...tilesWrapper.children].forEach(
 			(t, idx) => ((t as HTMLElement).style.transform = `translate(${idx * 2}px, ${idx * 2}px)`)
@@ -65,7 +77,7 @@
 						collisionBehavior: options.value === 'off' ? 'never' : 'chaining',
 						speedUpWhenChained: 1.5,
 					}
-				).ready.finally(() => {
+				).finished.finally(() => {
 					[...tilesWrapper.children].forEach(
 						(t) => ((t as HTMLElement).style.viewTransitionClass = '')
 					);
@@ -76,15 +88,26 @@
 </script>
 
 <style is:inline>
-
-
+	::view-transition {
+		--vtbag-slow-down: 1;
+	}
+	:active-view-transition-type(vt3d) {
+		*:not(div.tiles-wrapper),
+		& {
+			view-transition-name: none !important;
+		}
+	}
 	:active-view-transition-type(carsel) {
-		*:not(div.carsel *), & {
+		*:not(div.carsel *),
+		& {
 			view-transition-name: none !important;
 		}
 
+		&:has(.tiles-wrapper.vt3d)::view-transition {
+			--vtbag-slow-down: 10;
+		}
 		&::view-transition-group(*) {
-			animation-duration: 0.25s;
+			animation-duration: calc(0.25s * var(--vtbag-slow-down));
 			animation-timing-function: ease-in;
 		}
 		&::view-transition {
@@ -94,11 +117,11 @@
 			z-index: 1;
 		}
 		&::view-transition-group(*) {
-			animation-delay: 50ms;
+			animation-delay: calc(50ms * var(--vtbag-slow-down));
 		}
 		&::view-transition-group(carsel-0),
 		&::view-transition-group(carsel-3) {
-			animation-delay: 30ms;
+			animation-delay: calc(30ms * var(--vtbag-slow-down));
 		}
 		&::view-transition-group(carsel-2) {
 			animation-delay: 0ms;
@@ -111,6 +134,9 @@
 	}
 
 	div.carsel {
+		font-size: 0.8rem;
+		perspective: 30cm;
+		perspective-origin: -250% 50%;
 		margin-inline: auto;
 		display: flex;
 		flex-direction: column;
@@ -142,6 +168,9 @@
 		gap: 1.5rem;
 		overflow: visible;
 		width: 100%;
+		&.vt3d {
+			transform: rotateX(20deg) rotateY(10deg);
+		}
 	}
 
 	.tile {
@@ -172,7 +201,6 @@
 	}
 
 	.tile-title {
-		font-size: 1rem;
 		flex: 2;
 		font-weight: var(--font-weight-bold);
 		margin-bottom: 0.75rem;
@@ -181,7 +209,6 @@
 
 	.tile-description {
 		flex: 3;
-		font-size: 1rem;
 		color: var(--color-secondary);
 		line-height: 1.5;
 	}
@@ -214,7 +241,7 @@
 		line-height: 1;
 	}
 	select {
-		border-radius: 8px 8px 0 0;
+		border-radius: 0;
 	}
 
 	@media (max-width: 768px) {
@@ -222,13 +249,6 @@
 			font-size: 3.5rem;
 		}
 
-		.tile-title {
-			font-size: 1.25rem;
-		}
-
-		.tile-description {
-			font-size: 0.875rem;
-		}
 
 		.nav-button {
 			width: 3rem;
@@ -281,7 +301,7 @@
 		<select class="options" aria-label="Options">
 			<option value="auto">Auto</option>
 			<option value="off">Off</option>
-			<!--option value="auto">Auto</option-->
+			<option value="3d">Detailed</option>
 		</select>
 	</label>
 </div>

@@ -162,25 +162,35 @@ There are some minor tweaks that add a bit of dynamic by starting the cards with
 	animation-delay: 0ms;
 }
 ```
-And finally, the cards get a big larger or smaller as they move:
+And finally, the cards glide a big more into the foreground or into the background as they move:
 ```css
 :active-view-transition-type(up)::view-transition-image-pair(carsel-0) {
 	animation-delay: 0ms; animation-name: mini;}
 
 :active-view-transition-type(down)::view-transition-image-pair(carsel-1) {
-	animation-delay: 20ms; animation-name: maxi;}
+	animation-delay: 80ms; animation-name: maxi;}
 
 ::view-transition-image-pair(carsel-2) {
 	animation-delay: 40ms; animation-name: maxi;}
 
 :active-view-transition-type(down)::view-transition-image-pair(carsel-3) {
-	animation-delay: 60ms; animation-name: mini;}
+	animation-delay: 0ms; animation-name: mini;}
 
 :active-view-transition-type(up)::view-transition-image-pair(carsel-6) {
 	animation-delay: 80ms; animation-name: maxi;}
 
-@keyframes maxi {33%,66% {transform: translateX(15px) scale(1.1);}}
-@keyframes mini {10%,90% {transform: translateX(-80px) scale(0.75); opacity:0.5;}}
+@keyframes maxi {33%,66% {transform: translateX(15px) translateZ(7.5cm)}}
+@keyframes mini {10%,90% {transform: translateX(-200px) translateZ(-7.5cm); opacity:0.5;}}
+```
+
+If you want CSS to apply 3D effects to the image pairs, you also need to explicitly set a perspective on their parent elements:
+```
+	:active-view-transition-type(carsel) {
+		&::view-transition-group(*) {
+			perspective: 50cm;
+		}
+		...
+	}
 ```
 The rest of the styling are timing settings and a bit of `z-index` shuffling like we did with the theme switcher above.
 
