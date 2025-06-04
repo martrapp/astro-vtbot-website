@@ -21,15 +21,16 @@ Here's a breakdown of the features you'll gain and lose when migrating from Astr
 |3|[Render Freeze](#render-freeze)|Minimal by design|Minimal with pre-render|
 |4|[transition:persist](#transitionpersist)|Keeping elements and their state from page to page| _[has bit of a workaround]_ |
 |5|[SPA State](#spa-state) | Shared state across pages| Clean page load semantics|
-|6|[Directional Animations](#directional-animations)|Browser back button slides the other way|_[has workaround]_|
-|7|[Reduced Motion](#reduced-motion)|Automatically disables all animations|Planned: automatically disables motion of default animations|
-|8|[Event Listeners](#event-listeners)|Hook into preparation and swapping| Hook in directly before and after the page changes|
-|9|[Source Element](#source-element)|Know which element triggered the transition|Only with Navigation API (e.g. not on Safari yet)|
-|10|[Generated Names](#generated-names)|Works cross-document| - |
-|11|[Data Attributes](data-attributes)|Control link and script behavior|_[not needed]_|
-|12|[Route Announcement](#route-announcement)|Support for assistive technology|Standard support for assistive technology|
-|13|[Programmatic Navigation](#programmatic-navigation)|`navigate()`|`location.assign()`, `location.replace()`|
-|14|[Popstate hasUAVisualTransition](#popstate-hasuavisualtransition)|Cancel view transitions if the browser uses its own transitions for traversals|-|
+|6|[Predefined Animation](#predefined-animations)| Predefined slide and alternative fade|-|
+|7|[Directional Animations](#directional-animations)|Browser back button slides the other way|_[has workaround]_|
+|8|[Reduced Motion](#reduced-motion)|Automatically disables all animations|Planned: automatically disables motion of default animations|
+|9|[Event Listeners](#event-listeners)|Hook into preparation and swapping| Hook in directly before and after the page changes|
+|10|[Source Element](#source-element)|Know which element triggered the transition|Only with Navigation API (e.g. not on Safari yet)|
+|11|[Generated Names](#generated-names)|Works cross-document| - |
+|12|[Data Attributes](data-attributes)|Control link and script behavior|_[not needed]_|
+|13|[Route Announcement](#route-announcement)|Support for assistive technology|Standard support for assistive technology|
+|14|[Programmatic Navigation](#programmatic-navigation)|`navigate()`|`location.assign()`, `location.replace()`|
+|15|[Popstate hasUAVisualTransition](#popstate-hasuavisualtransition)|Cancel view transitions if the browser uses its own transitions for traversals|-|
 
 Some of these points might have a bigger or smaller impact than they initially seem. Let me explain in more detail:
 
@@ -64,6 +65,9 @@ This has its advantages: sharing state between pages is straightforward. But it 
 
 In contrast, browser-native cross-document view transitions clear all script state during navigation. If you need to share state, you’ll have to persist it manually, such as by using sessionStorage. The bright side of this approach is that each page starts with a clean window object and a fresh module loader, following the standard behavior of traditional navigation.
 
+## Predefined Animations
+
+In Astro, you can use `transition:animate="slide"` (or `fade`) to apply a predefined animation. You can also create some custom animations using the Astro-specific JavaScript API. If you do not use `transition:animate`, you define view transition animations declaratively as standard CSS animations.
 
 ## Directional Animations
 
@@ -89,7 +93,7 @@ The `*-preparation` events are somewhat comparable to the `navigate` event, whil
 
 
 
-## Source Element
+## Element
 
 With the `<ClientRouter />` the `sourceElement` property of `astro:before-preparation` and `astro:before-swap` events points to the anchor or form that was clicked to initiated the view transition. This allows you to create logic based on what triggered the transition.
 
