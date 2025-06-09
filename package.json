@@ -47,7 +47,7 @@
     "remark-heading-id": "^1.0.1",
     "remark-toc": "^9.0.0",
     "sharp": "^0.34.2",
-    "starlight-blog": "^0.23.2",
+    "starlight-blog": "^0.24.0",
     "starlight-image-zoom": "^0.12.0",
     "typescript": "^5.8.3"
   },
