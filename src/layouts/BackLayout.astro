@@ -1,0 +1,53 @@
+---
+import  A  from 'astro-vtbot/components/BackLink.astro';
+import '../css/back-demo.css';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title: string;
+	hrefPrev: string;
+	hrefNext: string;
+	navPrevText: string;
+	navNextText: string;
+}
+const {title, hrefNext,	hrefPrev, navNextText, navPrevText} = Astro.props
+---
+<!doctype html>
+<html lang="en" transition:animate="slide">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+    <title>{title}</title>
+		<ClientRouter />
+  </head>
+  <body>
+    <nav class="nav-buttons">
+      <A href={hrefPrev} class="nav-btn nav-prev" aria-label={ `Previous: ${navPrevText}`} >
+        <span class="nav-arrow">←</span>
+        <span class="nav-label">{navPrevText}</span>
+        <span class="nav-arrow">←</span>
+			</A>
+      <a href={hrefNext} class="nav-btn nav-next" aria-label={`Next: ${navNextText}`} >
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">{navNextText}</span>
+        <span class="nav-arrow">→</span>
+      </a>
+    </nav>
+<a href="/library/BackLink/">Back to the BackLink page</a>
+
+    <main class="main-content">
+			<slot></slot>
+		</main>
+<a href="/library/BackLink/">Back to the BackLink page</a>
+
+	</body>
+</html>
+
+<style is:global>
+h1 {
+	view-transition-name: h1;
+}
+.hero-subtitle {
+	view-transition-name: hero-subtitle;
+}
+</style>

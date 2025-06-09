@@ -1,18 +1,17 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import PointerOnNavigation from 'astro-vtbot/components/PointerOnNavigation.astro';
+import A from 'astro-vtbot/components/BackLink.astro';
 import Mini from './Mini.astro';
 ---
 
 <html>
 	<head>
 		<ClientRouter />
-		<PointerOnNavigation />
 	</head>
 	<body>
 		<main transition:name="main">
 			<h1>Heading</h1>
-			<a href="/">Link</a>
+			<A href="/">Link</A>
 			<Mini />
 		</main>
 	</body>

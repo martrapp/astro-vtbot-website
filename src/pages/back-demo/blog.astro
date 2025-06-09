@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/BackLayout.astro';
+---
+
+<Layout
+	title="Blog | Back Link Demo"
+	hrefPrev="/back-demo/"
+	hrefNext="/back-demo/about/"
+	navPrevText="Home"
+	navNextText="About"
+>
+	<header class="hero">
+		<h1>Blog</h1>
+		<p class="hero-subtitle">Thoughts, trends, and insights from our creative team</p>
+	</header>
+
+	<article class="blog-post featured">
+		<div class="post-content">
+			<h2>The Future of Web Design: Embracing Minimalism</h2>
+			<time class="post-date">March 15, 2025</time>
+			<div class="post-text">
+				<p>
+					In an era of information overload, minimalist web design has emerged as more than just a
+					trend—it's become a necessity. Clean interfaces, purposeful white space, and focused
+					content create experiences that allow users to breathe and engage meaningfully with your
+					brand.
+				</p>
+				<p>
+					The key to successful minimalist design lies not in removing elements arbitrarily, but in
+					understanding what truly matters to your users. Every element that remains must serve a
+					purpose, contribute to the user's journey, and enhance the overall experience.
+				</p>
+			</div>
+		</div>
+		<div class="post-image">
+			<img
+				src="https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&cs=tinysrgb&w=800"
+				alt="Minimalist workspace setup"
+			/>
+		</div>
+	</article>
+</Layout>

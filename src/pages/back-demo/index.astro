@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/BackLayout.astro';
+---
+
+<Layout
+	title="Home | Back Link Demo"
+	hrefPrev="/back-demo/about/"
+	hrefNext="/back-demo/blog/"
+	navPrevText="About"
+	navNextText="Blog"
+>
+	<header class="hero">
+		<h1>Back Link Demo</h1>
+		<p class="hero-subtitle">Take control over the animation direction of the client router</p>
+	</header>
+
+	<section class="content-section">
+		<div class="content-grid">
+			<div class="content-text">
+				<h2>This is the Back Link Demo</h2>
+				<p>
+					Navigate to the three pages called Home, Blog, and About using the navigation button to the left and to the right.
+				</p>
+				<p>The button to the right will trigger the normal forward animation.</p>
+				<p>The button to the left will trigger the back animation.</p>
+				<p>
+					Check out the different directions of the animations when navigating between the pages. And yes, browser history traversal matches the direction of the animation as well.
+				</p>
+			</div>
+			<div class="content-image">
+				<img
+					src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800"
+					alt="Modern workspace with design tools"
+				/>
+			</div>
+		</div>
+	</section>
+</Layout>

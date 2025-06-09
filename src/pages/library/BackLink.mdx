@@ -1,0 +1,48 @@
+---
+layout: src/layouts/LibraryMdxLayout.astro
+title: BackLink
+overview: /components/
+vtn: back-3
+---
+
+
+import BoT from "/src/components/BoT.astro"
+import Logo from "/src/components/Logo.astro"
+
+
+<h1 style="display: inline-block; view-transition-name: back-1"><span style="display:inline-block; view-transition-name:back-2;">🔙 </span>The Back Link</h1>
+
+
+The `BackLink` component lets you flip the direction of the view transition animation when using Astro's client router!
+
+<span style="display: inline-block; font-size: 1.5rem; border-radius: 8px; padding: 1rem; margin: 1rem; background: linear-gradient(45deg, #000, #f0659548, #cc5de844); box-shadow: 0 4px 6px #8888;">[Visit the Back Link Demo](/back-demo/).</span>
+
+## Contents
+
+## Why should I use this component?
+
+Astro's `ClientRouter` component support forwards and backwards animations with view transitions. This is a key feature for the built-in slide in/out animation and can also be used for custom animations like zoom in/out.
+
+You get a forward animation when you click a normal link and you get a backward animation when traversing back through the browsers history.
+
+These are great defaults but sometimes you want to have more control. You can listen to the lifecycle events and set the direction based on the from and to URLs of the `astro:before-preparation` event.
+
+Or you grab the BackLink component and be done in a few seconds.
+
+## Usage
+
+[Install astro-vtbot](../Installation/) in your project as an Astro integration with `npx astro add astro-vtbot` or as a node package with `npm install astro-vtbot`.
+
+To reverse the direction of the view transition animation for a link in an `.astro` file, import the BackLink in the frontmatter and name it just `A`:
+```astro
+---
+import  A  from 'astro-vtbot/components/BackLink.astro';
+---
+
+...
+<a href="...">I am a link that triggers forward animation</a>
+<A herf="...">I am a link that triggers backward animation</A>
+```
+Then use `<A href="...">` instead of `<a href="...">` to swap forwards with backwards animations.
+
+If you use the browser history to traverse back over an BackLink, it shows the forward animation ;-)
