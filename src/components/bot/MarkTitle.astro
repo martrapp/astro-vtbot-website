@@ -25,7 +25,6 @@
 			el.style.viewTransitionName === 'vtbot-hx' && (el.style.viewTransitionName = '');
 		});
 		const newHeading = e.newDocument.querySelector<HTMLElement>('main h1');
-	console.log(newHeading, e.to.pathname);
 		newHeading && e.to.pathname.startsWith("/jotter") && (newHeading.style.viewTransitionName = 'vtbot-hx');
 	}
 
