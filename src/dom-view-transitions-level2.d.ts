@@ -30,7 +30,7 @@ declare global {
 	}
 
 	interface ViewTransition {
-		types?: Set<string>;
+		readonly types?: Set<string>;
 	}
 	interface Window {
 		navigation?: Navigation;

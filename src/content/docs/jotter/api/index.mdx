@@ -102,10 +102,10 @@ The declaration of a view transition with the name `myName` defines a new image 
 
 You can set the `view-transition-name` CSS property&hellip;
 
--&hellip;by using the style attribute on an element\
+- &hellip;by using the style attribute on an element\
    `<div style="view-transition-name: myName">...`,
--&hellip;via a CSS rule `selector { view-transition-name: myName; }`
--&hellip;or by setting the style attribute using javascript: `el.style.viewTransitionName = "myName"`
+- &hellip;via a CSS rule `selector { view-transition-name: myName; }`
+- &hellip;or by setting the style attribute using javascript: `el.style.viewTransitionName = "myName"`
 
 View transition names can contain unicode characters but
  [some characters need to be encoded](https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident).
@@ -164,5 +164,7 @@ Each view transition name `x` adds a `::view-transition-group(x)` and a `::view-
 - `::view-transition-group(x)` has a morph animation by default.
 - `::view-transition-image-pair(x)` does not define an animation. It is merely used as a container to add CSS, e.g. the corresponding "blend mode".
 - all pseudo elements are part of a `::view-transition` tree rooted at the `<html>` document element.
+
+If you use [nested view transition groups](https://vtbag.dev/basics/pseudos/#nested-view-transition-groups), there is also `::view-transition-group-children(x)`, which serves a a container for the children.  
 
 All animations can be controlled by CSS and redefined to your liking.
