@@ -25,7 +25,7 @@
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/starlight": "^0.34.3",
     "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.4",
+    "@changesets/cli": "^2.29.5",
     "@expressive-code/plugin-collapsible-sections": "^0.41.2",
     "@expressive-code/plugin-line-numbers": "^0.41.2",
     "@lorenzo_lewis/starlight-utils": "^0.3.2",
