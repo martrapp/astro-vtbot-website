@@ -18,10 +18,10 @@ main {
 	box-shadow: var(--vtbot-glow-shadow);
 }
 
-::view-transition-old(main) {
+[data-astro-transition='forward']::view-transition-old(main) {
 	animation: swingOut 0.8s ease-in;
 }
-::view-transition-new(main) {
+[data-astro-transition='forward']::view-transition-new(main) {
 	animation: swingIn 0.8s ease-in;
 }
 [data-astro-transition='back']::view-transition-old(main) {
@@ -51,11 +51,11 @@ main {
 	scrollbar-gutter: stable;
 }
 
-[data-astro-transition-fallback='old'] main {
+[data-astro-transition-fallback='old'][data-astro-transition='forward'] main {
 	animation: swingOut 0.4s ease-in both;
 	top: var(--sl-nav-height);
 }
-[data-astro-transition-fallback='new'] main {
+[data-astro-transition-fallback='new'][data-astro-transition='forward'] main {
 	animation: swingIn 0.4s ease-in both;
 }
 [data-astro-transition-fallback='old'][data-astro-transition='back'] main {

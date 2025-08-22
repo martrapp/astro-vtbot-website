@@ -15,7 +15,7 @@
 			xChannelSelector="R"
 			yChannelSelector="G"
 		>
-			<animate attributeName="scale" from="20" to="1" dur="2s"></animate>
+			<animate attributeName="scale" from="20" to="1" dur="1s"></animate>
 		</feDisplacementMap>
 	</filter>
 </svg>
@@ -38,7 +38,7 @@
 		cursor: crosshair;
 	}
 
-	:active-view-transition-type(theme-changer-2) {
+	:root.theme-changer-2 {
 		*:not(.hole) {
 			view-transition-name: none !important;
 		}
@@ -87,7 +87,7 @@
 <script>
 	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
 
-	const DURATION_MS = 1000;
+	const DURATION_MS = 10000;
 	document.addEventListener('astro:page-load', () => {
 		const hole = document.querySelector('#hole2') as HTMLDivElement;
 		if (!hole) return;
@@ -98,12 +98,10 @@
 			const current =
 				document.documentElement.dataset.theme ||
 				(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-			const transition = mayStartViewTransition!({
-				update: () => {
-					document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
-					document.documentElement.classList.toggle('dark', current === 'light');
-				},
-				types: ['theme-changer-2'],
+			document.documentElement.classList.add('theme-changer-2');
+			const transition = mayStartViewTransition!(() => {
+				document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
+				document.documentElement.classList.toggle('dark', current === 'light');
 			});
 			const animate = () => {
 				const position = Date.now() - start;
@@ -113,6 +111,9 @@
 				}
 			};
 			transition.ready.then(() => requestAnimationFrame(animate));
+			transition.finished.then(() => {
+				document.documentElement.classList.remove('theme-changer-2');
+			});
 		});
 	});
 </script>
