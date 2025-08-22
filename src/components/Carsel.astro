@@ -50,6 +50,7 @@
 					{
 						collisionBehavior: options.value === 'off' ? 'never' : 'chaining',
 						speedUpWhenChained: 1.5,
+						useTypesPolyfill: "auto"
 					}
 				).ready.finally(() => {
 					[...tilesWrapper.children].forEach(
@@ -76,6 +77,7 @@
 					{
 						collisionBehavior: options.value === 'off' ? 'never' : 'chaining',
 						speedUpWhenChained: 1.5,
+						useTypesPolyfill: "auto"
 					}
 				).finished.finally(() => {
 					[...tilesWrapper.children].forEach(
