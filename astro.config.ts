@@ -178,18 +178,19 @@ function sidebar1() {
 			link: "/jotter/styling/",
 		}, {
 			label: "Same-Document View Transitions",
-			link: "/jotter/same-doc/",
-			badge: { text: "new", variant: "success" }
+			link: "/jotter/same-doc/"
 		}
 		]
 	}, {
 		label: "Tips & Tricks", collapsed: false,
 		items: [{
 			label: "Introduction",
-			link: "/jotter/tips/"
+			link: "/jotter/tips/",
+			badge: { text: "new", variant: "success" }
 		}, {
 			label: "Instant History Scrolling",
-			link: "/jotter/tips/instant-scrolling-history-navigation/"
+			link: "/jotter/tips/instant-scrolling-history-navigation/",
+			badge: { text: "new", variant: "success" }
 		} ]
 	}, {
 		label: "The Jotter on Starlight", collapsed: true,
