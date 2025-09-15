@@ -183,6 +183,15 @@ function sidebar1() {
 		}
 		]
 	}, {
+		label: "Tips & Tricks", collapsed: false,
+		items: [{
+			label: "Introduction",
+			link: "/jotter/tips/"
+		}, {
+			label: "Instant History Scrolling",
+			link: "/jotter/tips/instant-scrolling-history-navigation/"
+		} ]
+	}, {
 		label: "The Jotter on Starlight", collapsed: true,
 		items: [{
 			label: "Introduction",
