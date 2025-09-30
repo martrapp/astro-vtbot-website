@@ -4,6 +4,7 @@ import Layout from 'src/layouts/Layout.astro';
 import fi from 'src/assets/big-fi.png';
 import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 import dtb from 'src/assets/devToolbar.png';
+import WebringBadge from "astro-webrings/badge";
 ---
 
 <Layout title="Welcome to the Bag of Tricks for Astro's View Transitions">
@@ -40,6 +41,7 @@ import dtb from 'src/assets/devToolbar.png';
 		content="Reusable components, tech demos, and a wealth of in-depth information on Astro's view transitions"
 	/>
 	<meta slot="head" property="og:locale" content="en_US" />
+	<div class="built-with-astro"><WebringBadge site="vtbot" ring="built-with-astro" /></div>
 
 	<Image id="fi" src={fi} alt="A single fish" transition:animate="slide" transition:name="fi" />
 	<Image id="dtb" src={dtb} alt="devToolbar" transition:name="dtb" />
@@ -71,6 +73,7 @@ import dtb from 'src/assets/devToolbar.png';
 		<a id="later" href="https://www.npmjs.com/package/astro-vtbot">Install from npm!<br /> </a>
 	</div>
 </div>
+
 <a href="/components/" transition:name="reuse">Reusable Components</a>
 <a href="/demos/" transition:name="demos">Tech Demos</a><br />
 <a href="/jotter/" data-astro-reload transition:name="jotter">The Jotter</a>
@@ -93,6 +96,13 @@ import dtb from 'src/assets/devToolbar.png';
 </div>
 
 <style is:global>
+	.built-with-astro {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		padding: 0.5em;
+		z-index: 50;
+	}
 	body {
 		margin: 1.5em 2em;
 	}
