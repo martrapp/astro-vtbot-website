@@ -88,10 +88,9 @@ We ignore or override all default animations. Here are our custom animations&hel
 ::view-transition-old(root) {
 	animation-name: tumble;
 	z-index: 1;
-}::view-transition-new(root) {
+}
+::view-transition-new(root) {
 	animation-name: grow;
-	border-radius: 0;
-	filter: url(#smoothing);
 }
 
 ```
@@ -112,28 +111,6 @@ And these are the keyframe definitions:
 }
 ```
 
-
-The smoothing effect is achieved using an SVG filter:
-```html
-<svg width="0" height="0">
-	<filter id="smoothing" x="-50%" y="-50%" width="200%" height="200%">
-		<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" result="turbulence"></feTurbulence>
-		<feDisplacementMap id="displacement" in="SourceGraphic" in2="turbulence" xChannelSelector="R" yChannelSelector="G">
-			<animate attributeName="scale" from="20" to="1" dur="2s"></animate>
-		</feDisplacementMap>
-	</filter>
-</svg>
-```
-Actually, the current code does not use the SVG animation element but instead relies on a JavaScript function to animate the `scale` during the view transition:
-```js
-const animate = () => {
-	const position = Date.now() - start;
-	if (position < DURATION_MS) {
-		displacement?.setAttribute('scale', `${30 - (position / DURATION_MS) * 30}`);
-		requestAnimationFrame(animate);
-		}
-}
-```
 
 ### The Card Deck
 
