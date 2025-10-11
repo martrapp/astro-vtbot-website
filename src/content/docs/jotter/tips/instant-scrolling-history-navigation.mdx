@@ -54,7 +54,7 @@ The event that fires before the swap is called (&hellip;shuffles notes&hellip;) 
 Unlike the Navigation API, there is no `reload` value. That is because the client router, like native cross-document view transitions, never handles page reloads triggered by pressing F5 or similar.
 
 ### Where
-The last option looks promising: `event.navigationType === 'traverse'` is set when you navigate with the browser’s back and forward buttons or keyboard shortcuts. With the information from the event, you could even tell forward and backward navigation apart by also checking `event.direction`.
+The last option looks promising: `event.navigationType === 'traverse'` is set when you navigate with the browser's back and forward buttons or keyboard shortcuts. With the information from the event, you could even tell forward and backward navigation apart by also checking `event.direction`.
 
 So far we have&hellip;
 ```astro

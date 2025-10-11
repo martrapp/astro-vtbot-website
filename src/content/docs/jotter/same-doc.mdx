@@ -4,7 +4,6 @@ description: "How to use same-document view transitions on an Astro site."
 ---
 
 import ExampleCarsel from "/src/components/ExampleCarsel.astro"
-import ThemeChanger1 from "/src/components/ThemeChanger1.astro"
 import ThemeChanger2 from "/src/components/ThemeChanger2.astro"
 
 <style>{`:root {transition: none !important;}`}</style>
@@ -214,7 +213,7 @@ It is also a good idea to check whether users prefer reduced motion, and to resp
 At least in the same-document case we do not have to think about render blocking.
 
 It is not a lot to handle, but still, some convenience would not hurt: \
-The Bag’s `mayStartViewTransition()` function takes care of all the above and more. It also lets you automatically chain closely timed calls into a single transition.
+The Bag's `mayStartViewTransition()` function takes care of all the above and more. It also lets you automatically chain closely timed calls into a single transition.
 
 Here is how to access it in an Astro file after installing the package with `npm i @vtbag/utensil-drawer`.
 
@@ -230,7 +229,7 @@ Just keep in mind: [it is still a bit experimental](https://vtbag.dev/tools/uten
 ```
 
 ### Scoping
-If you are using cross-document animations on your site (through the browser's `@view-transition { navigation: auto }` or Astro’s `<ClientRouter />`), calling `startViewTransition()` could well open the gates to visual mayhem.
+If you are using cross-document animations on your site (through the browser's `@view-transition { navigation: auto }` or Astro's `<ClientRouter />`), calling `startViewTransition()` could well open the gates to visual mayhem.
 
 Until [_scoped_ view transitions](https://vtbag.dev/basics/javascript/#scoped-view-transitions) become widely supported, view transitions apply to the entire document. Calling `startViewTransition()` generates images for all elements with a view transition name and triggers  animations on all of them.
 
@@ -240,7 +239,7 @@ It does not matter whether you assign view transition names to the cards in your
 This happens regardless of whether the view transition is triggered by navigation or by pressing a button that calls `startViewTransition()`. So navigating to a page with cross-document view transitions will also immediately run all same-document animations that have view transition names set up.
 
 
-What we really want is a view transition confined to a single component. Let’s see how to put the chaos back in its box(es).
+What we really want is a view transition confined to a single component. Let's see how to put the chaos back in its box(es).
 
 #### Guard Your Definitions
 
@@ -348,7 +347,7 @@ document.addEventListener('astro:page-load', () => {
 	...
 });
 ```
-- Astro’s scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
+- Astro's scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
 - Astro automatically turns plain `<script>` tags into `<script type="module">`. That means you can use import statements directly, e.g. for `mayStartViewTransition`. If you are not using Astro, make sure to add `type="module"` yourself so import statements work as expected.
 
 

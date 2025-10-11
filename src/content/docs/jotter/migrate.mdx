@@ -136,7 +136,7 @@ However, there's a limitation and a drawback to be aware of:
 
 
 - **Unnecessary CSS:**
-Astro generates a significant amount of CSS to support fallback simulation. Now that you've switched to browser-native view transitions, this extra CSS becomes unnecessary. While it won’t cause any harm, it adds dead weight to your pages.
+Astro generates a significant amount of CSS to support fallback simulation. Now that you've switched to browser-native view transitions, this extra CSS becomes unnecessary. While it won't cause any harm, it adds dead weight to your pages.
 
 
 :::note
@@ -146,11 +146,11 @@ If your animations don't need to differentiate based on navigation direction and
 
 ## Add Direction Detection
 
-While native view transitions don't inherently recognize backward or forward navigation, you can use JavaScript to analyze the browser history and determine the direction. By setting Astro's `data-astro-transition` attribute on the document’s root element to either `back` or `forward`, you can reactivate directional animations for Astro's auto-generated CSS. Although the Navigation API might seem like a convenient way to determine direction, keep in mind that not all browsers supporting the View Transition API also support the Navigation API.
+While native view transitions don't inherently recognize backward or forward navigation, you can use JavaScript to analyze the browser history and determine the direction. By setting Astro's `data-astro-transition` attribute on the document's root element to either `back` or `forward`, you can reactivate directional animations for Astro's auto-generated CSS. Although the Navigation API might seem like a convenient way to determine direction, keep in mind that not all browsers supporting the View Transition API also support the Navigation API.
 
 The easiest way to implement Astro-compatible direction detection is to add the [`<TurnSignal />` component](/library/TurnSignal/) to the `<head>` element of your pages. The Bag has already handled the heavy lifting for you.
 
-If you want direction detection but have opted not to use Astro’s generated view transition styles, check out [@vtbag/turn-signal](vtbag.dev/tools/turn-signal/). This package offers various ways to set view transition types, including automatic direction detection.
+If you want direction detection but have opted not to use Astro's generated view transition styles, check out [@vtbag/turn-signal](vtbag.dev/tools/turn-signal/). This package offers various ways to set view transition types, including automatic direction detection.
 
 
 
@@ -245,4 +245,4 @@ Congratulations! You have migrated your site from Astro's `<ClientRouter/>` to b
 
 For more background information, styling tips, and tricks please visit [vtbag.dev](https://vtbag.dev)!
 
-If there's anything I missed or you'd like to discuss further, please [don’t hesitate to reach out](https://bsky.app/intent/compose?text=Hi%20%40martr.app%2C%20I'm%20migrating%20my%20Astro%20site%20from%20ClientRouter%20to%20browser-native%20cross-document%20view%20transitions%20and%20wanted%20to%20discuss%2Fask%20...)!
+If there's anything I missed or you'd like to discuss further, please [don't hesitate to reach out](https://bsky.app/intent/compose?text=Hi%20%40martr.app%2C%20I'm%20migrating%20my%20Astro%20site%20from%20ClientRouter%20to%20browser-native%20cross-document%20view%20transitions%20and%20wanted%20to%20discuss%2Fask%20...)!
