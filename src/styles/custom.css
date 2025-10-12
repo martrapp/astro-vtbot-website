@@ -24,6 +24,10 @@ body {
 	--sl-line-height: 1.5;
 }
 
+h1 {
+	text-wrap-style: balance;
+}
+
 /* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #3b1a00;
