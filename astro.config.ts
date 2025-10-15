@@ -18,7 +18,7 @@ export default defineConfig({
 	experimental: {
 		preserveScriptOrder: true,
 	},
-	devToolbar: { enabled: true },
+	devToolbar: { enabled: false },
 	prefetch: false && process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
