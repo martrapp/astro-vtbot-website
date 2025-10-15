@@ -179,6 +179,10 @@ function sidebar1() {
 		}, {
 			label: "Same-Document View Transitions",
 			link: "/jotter/same-doc/"
+		}, {
+			label: "Supported in all Major Browsers",
+			link: "/jotter/in-all-major-browsers/",
+			badge: { text: "new", variant: "success" }
 		}
 		]
 	}, {
@@ -186,11 +190,9 @@ function sidebar1() {
 		items: [{
 			label: "Introduction",
 			link: "/jotter/tips/",
-			badge: { text: "new", variant: "success" }
 		}, {
 			label: "Instant History Scrolling",
 			link: "/jotter/tips/instant-scrolling-history-navigation/",
-			badge: { text: "new", variant: "success" }
 		} ]
 	}, {
 		label: "The Jotter on Starlight", collapsed: true,

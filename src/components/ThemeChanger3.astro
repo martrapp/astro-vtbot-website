@@ -1,0 +1,68 @@
+<button id="orb">pressme</button>
+<script>
+	const root = document.documentElement;
+	const orb = document.querySelector('#orb') as HTMLElement;
+
+	document.addEventListener('click', async (event) => {
+		if (event.target === orb) {
+			root.classList.add('theme-toggle');
+			if (!document.startViewTransition) {
+				update();
+			} else {
+				document.startViewTransition(() => {
+					root.classList.remove('theme-toggle');
+					update();
+				});
+			}
+		}
+	});
+
+	function update() {
+		const toggled = root.style.colorScheme === 'dark' ? 'light' : 'dark';
+
+		// Tailwind-friendly
+		root.classList.toggle('dark', toggled === 'dark');
+
+		// Make starlight happy
+		root.dataset.theme = toggled;
+
+		// Make native UI use correct colors (forms, scrollbars)
+		root.style.colorScheme = toggled === 'dark' ? 'dark' : 'light';
+	}
+</script>
+<style is:global>
+	::view-transition-group(*) {
+		animation-duration: 0.5s;
+	}
+	::view-transition-group(orb) {
+		z-index: 1;
+	}
+
+	::view-transition-old(orb) {
+		animation-name: vanish;
+		animation-timing-function: ease-in;
+		overflow: clip;
+	}
+	* {
+		view-transition-name: none !important;
+	}
+	:root {
+		transition: none;
+		&.theme-toggle {
+			view-transition-name: orb !important;
+		}
+	}
+
+	@keyframes vanish {
+
+		50% {
+			border-radius: 50%;
+		}
+		to {
+			transform: scale(0);
+			opacity: 0;
+			rotate: 360deg;
+			border-radius: 50%;
+		}
+	}
+</style>
