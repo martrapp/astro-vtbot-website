@@ -81,28 +81,24 @@
 		}
 		#card-content {
 			view-transition-name: content;
+			view-transition-group: contain;
 		}
 
 		#same-address {
 			view-transition-name: same-address;
-			view-transition-group: content;
 		}
 		#cash-payer {
 			view-transition-name: cash-payer;
-			view-transition-group: content;
 		}
 
 		#shipping-section {
 			view-transition-name: shipping-section;
-			view-transition-group: content;
 		}
 		#pickup-section {
 			view-transition-name: pickup-section;
-			view-transition-group: content;
 		}
 		#billing-section {
 			view-transition-name: billing-section;
-			view-transition-group: content;
 		}
 		#billing-addr {
 			view-transition-name: billing-addr;
@@ -112,15 +108,13 @@
 		}
 		span.billing {
 			view-transition-name: billing;
-			view-transition-group: card;
 		}
 		span.shipping {
 			view-transition-name: shipping;
-			view-transition-group: card;
 		}
 
 		&::view-transition-group(*) {
-			animation-duration: .25s;
+			animation-duration: 0.25s;
 		}
 		&::view-transition {
 			pointer-events: none;
@@ -297,22 +291,22 @@
 				<option>Airport Plaza</option>
 			</select>
 		</div>
-	</div>
-	<div id="shipping-section" class="form-section">
-		<h4 id="shipping-addr"><span class="shipping">Shipping</span></h4>
-		<input type="text" placeholder="Name" />
-		<input type="text" placeholder="Street" />
-		<input type="text" placeholder="City" />
-	</div>
 
-	<div id="billing-section" class="form-section">
-		<h4 id="billing-addr"><span class="billing">Billing</span></h4>
-		<input type="text" placeholder="Name" />
-		<input type="text" placeholder="Street" />
-		<input type="text" placeholder="City" />
+		<div id="shipping-section" class="form-section">
+			<h4 id="shipping-addr"><span class="shipping">Shipping</span></h4>
+			<input type="text" placeholder="Name" />
+			<input type="text" placeholder="Street" />
+			<input type="text" placeholder="City" />
+		</div>
+
+		<div id="billing-section" class="form-section">
+			<h4 id="billing-addr"><span class="billing">Billing</span></h4>
+			<input type="text" placeholder="Name" />
+			<input type="text" placeholder="Street" />
+			<input type="text" placeholder="City" />
+		</div>
 	</div>
 </div>
-
 
 <script>
 	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
@@ -374,11 +368,7 @@
 	function animate(active: string, update: () => void) {
 		document.documentElement.classList.add('demo', active);
 		const viewTransition = mayStartViewTransition(update);
-		viewTransition.finished.then(() =>
-			document.documentElement.classList.remove('demo', active)
-		);
+		viewTransition.finished.then(() => document.documentElement.classList.remove('demo', active));
 		return viewTransition;
 	}
-
-	
 </script>
