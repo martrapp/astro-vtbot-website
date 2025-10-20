@@ -21,7 +21,7 @@
     "relocate": "./bin/relocate.sh"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "^4.3.7",
     "@astrojs/starlight": "^0.36.1",
     "@changesets/changelog-github": "^0.5.1",
