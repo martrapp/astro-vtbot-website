@@ -32,7 +32,7 @@
     "@pagefind/default-ui": "^1.4.0",
     "@types/dom-view-transitions": "^1.0.6",
     "@types/node": "^24.7.2",
-    "astro": "^5.14.5",
+    "astro": "^5.14.7",
     "astro-d2": "^0.8.0",
     "astro-expressive-code": "^0.41.3",
     "astro-feelback": "latest",
