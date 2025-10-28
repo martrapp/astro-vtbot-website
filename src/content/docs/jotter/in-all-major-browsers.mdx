@@ -1,0 +1,229 @@
+---
+title: View Transitions Supported in All Major Browsers
+description: Now that Firefox implements the View Transition API, what does that mean for your Astro project?
+---
+
+
+import FormDemo from "/src/components/FormDemo.astro"
+
+Firefox has finally joined the party! With its first release supporting the View Transition API, all major browsers are now on board.
+
+So what does that mean for your Astro project? View transitions have always been described as a progressive enhancement. You could use them in browsers with native support and skip them in others. But that is not the same as cross-browser support. If you have been waiting to explore view transitions until they are widely supported, now might be the time to dive in.
+
+
+## It's _NOT_ Cross-Document?
+
+OK, that might sound like a bit of a letdown. They said the View Transition API is part of Interop 2025 and that Firefox would support it starting with version 144.
+
+True, but the fine print always said _same-document_ view transitions. To be exact, it said [View Transition API Level 1](https://vtbag.dev/basics/levels/). And that is perfectly fine! It is the sensible first step before we get to the real fun stuff: cross-document transitions, nested groups, scoped transitions, and all that good magic yet to come.
+
+For multi-page applications, you really want to use native cross-document view transitions. With a bit of luck, cross-document view transitions will make it into Interop 2026. And of course, that does not mean it will take until the end of next year. Safari, for example, took only a few months to follow same-document view transitions with the cross-document version.
+
+But it gets even better: with Astro's client router, you already have cross-document view transitions in Firefox 144 and later.
+
+
+## The Good News: Astro's Client Router
+
+Astro's [`<ClientRouter />`](https://docs.astro.build/en/guides/view-transitions/#enabling-view-transitions-spa-mode) component, formerly known as `<ViewTransitions />`, has been around longer than native cross-document view transitions themselves. From the beginning, Astro's approach was to use the View Transition API in its purest form. Back then there simply was nothing else, and that simplicity has served it well.
+
+The result? If you use Astro's client router, you can now enjoy cross-document view transitions in Firefox starting with version 144. And no, that does not mean Astro's fallback mode, it is the real deal.
+
+```astro ins={2,7} title="Your global Layout.astro"
+---
+import { ClientRouter } from 'astro:transitions';
+---
+<html>
+  <head>
+  	...
+    <ClientRouter />
+	</head>
+	...
+</html>
+```
+
+If you already use Astro's client router to navigate between the pages of your site, [Astro's transition directives](https://docs.astro.build/en/guides/view-transitions/#transition-directives) `transition:name` and `transition:animate`  now work in Firefox just like they do in the other browsers with native view transition support. `transition:persist` and `transition:persist-props` are independent of the View Transition API and even work with the fallback simulation as long a you do not set fallback="none".  
+
+
+If you haven't used the client router yet and want to gain some first hand experience with cross-document view transitions, please see my recommendation in this [dedicated section](#recommendation-for-starters).
+
+Currently, there might be a few rough edges here and there in this first release of the View Transition API, but overall,Firefox is in very good shape when it comes to view transitions. 
+
+**Caveat**: You might expect that [React](https://vtbag.dev/basics/frameworks/#react) as a SPA framework
+would immediately benefit from Level 1 View Transitions now supported in Firefox. Unfortunately, that is not the case yet, since React's `<ViewTransition>` currently depends on Level 2 View Transition features such as view transition types.
+
+If your Astro project includes islands that use React's `<ViewTransition>`, do not expect them to work in Firefox for now.
+
+
+
+
+
+
+## Native Same-Document View Transitions
+
+
+There are plenty of cool effects that now work in Firefox, too. Just wrap your DOM updates in a callback you pass to `document.startViewTransition()`, and the browser will automatically animate the old view into the new one.
+
+The simplest way to explore the View Transition API for same-document view transitions in Astro is to install [`@vtbag/utensil-drawer`](https://vtbag.dev/tools/utensil-drawer/#maystartviewtransition) from npm (not required if you already have `astro-vtbot` installed) and then start from this example file: 
+```astro title="FirstSteps.astro"
+<button id="myButton">Let's gooooo</button>
+<script>
+	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+
+	document.addEventListener('click', (e) => {
+		if ((e.target as HTMLButtonElement)?.id === 'myButton') {
+			mayStartViewTransition(updateDOM);
+		}
+	});
+	function updateDOM() {
+		// change the DOM any way you like
+		const button = document.getElementById('myButton')!;
+		button.style.top = (innerHeight - 30) * Math.random() + 'px';
+		button.style.left = (innerWidth - 50) * Math.random() + 'px';
+	}
+</script>
+<style is:global>
+	#myButton {
+		position: fixed;
+		view-transition-name: button;
+	}
+</style>
+```
+Note the use of `is:global` in the style element. It is there [for a good reason](https://vtbag.dev/tips/view-transition-fails-and-fixes/#:~:text=Build%20tools%20rewrite%20CSS%20and%20break%20selectors).
+
+
+If you are wondering why I add the button listener to the document instead of the button itself: this way, it survives client router navigation to and from other pages without needing to be re-initialized through lifecycle hooks. 
+
+If you prefer to approach the API without 3rd party code, replace
+```js		
+	mayStartViewTransition(updateDOM);
+```
+with
+```js
+	if (
+		document.startViewTransition &&
+		window?.matchMedia?.('(prefers-reduced-motion: no-preference)').matches
+	) {
+		const transition = document.startViewTransition(updateDOM);
+		const error = (e) => console.error(e);
+		transition.updateCallbackDone.catch(error);
+		transition.ready.catch(error);
+	} else {
+		updateDOM();
+	}
+```
+Testing whether the function exists before calling it is still necessary, as there are still browser versions out there that won't have it. In that case we simply call the DOM update directly.  
+
+Checking for reduced motion preference should be included if you plan to move your experiments to production. If you use the client router, you can skip that test as it is already covered.
+
+Catching errors is highly recommended, as the API tends to swallow some hard-to-find root causes.
+
+Start experimenting! 
+
+Here is a [more elaborated demo](/iframes/sp-demo/) that uses same-document view-transitions to animate changes in a HTML form. Animations like these improve usability by showing users how the view is changing. For example, if a form needs to add a new field, sliding the existing inputs downward provides a clear visual cue. This is often far better than having elements suddenly appear or disappear while others jump around. The source is also on [CodePen](https://codepen.io/martrapp/pen/emJeNJr).
+
+
+## Tech Demos 
+
+All [tech demos](/demos/) on this site - except for the Inspection Chamber - now work in modern versions of Firefox. Happy browsing!
+
+Most of the more advanced demos at the bottom of the left navigation bar on [vtbag.dev](https://vtbag.dev) also run like a charm in Firefox. Now here is a little challenge: can you guess which ones?
+
+<div class="not-content image light:sl-hidden">
+![vtbag.dev](/src/assets/foxamples-dark.png)
+</div>
+<div class="not-content image dark:sl-hidden">
+![vtbag.dev](/src/assets/foxamples-light.png)
+</div>
+
+<style>{`.image{width: fit-content; margin-inline: auto; box-shadow: 2px 2px 8px #8882}`}</style>
+
+
+## Recommendation for Starters
+
+If you are new to cross-document view transitions in Astro, this is for you.
+
+Be aware that Astro client router and cross-document view transitions are not exactly the same thing. The main difference 
+is that the latter effectively turns your MPA into a SPA, which comes with [benefits and drawbacks](https://docs.astro.build/en/guides/view-transitions/#differences-between-browser-native-view-transitions-and-astros-clientrouter-)  regarding application state and the [re-initialization](/jotter/astro/scripts/) of event listeners.  
+
+But if you have a static site, you probably will not need to tinker with Astro's lifecycle events. In that case, the client router is a perfect way to start using cross-document view transitions in a way that can be [easily switched](https://astro.build/blog/future-of-astro-zero-js-view-transitions/) to native cross-document view transitions once they become widely available.
+
+In my opinion, if you want to start with view transitions in your Astro project right now (even though Firefox does not yet support cross-document view transitions natively), the best approach would be to directly program against the View Transition API and use Astro's client router to enable cross-document view transitions.
+
+Add the `<ClientRouter />` component to your `<head>` in your global layout and use a global CSS stylesheet to set view transition names and style your view transitions.   
+
+This way you can bridge the time until cross-document view transitions become base-line. You already learn a lot about the API and when the time comes, you replace the `<ClientRouter/>` with 
+```html
+<style>
+	@media (prefers-reduced-motion: no-preference) {
+	  @view-transition {
+	    navigation: auto;
+	  }
+	}
+<style>
+```
+to switch to native cross-document view transitions. 
+
+Basically, with the client router you get everything from [Episode 1 of _Fun with View Transitions_](https://vtbag.dev/fwvt/enabling/) for free (cross-document view transitions, respecting reduced motion preferences, awaiting page content before the animation starts). 	Have fun with the rest of the series!
+
+Refrain from using Astro's `transition:*` directives. Instead of `transition:name`, you can use the `view-transition-name` CSS property directly. Implement alternatives to the default cross-fade animation by explicitly [styling the view transition pseudo-elements](http://localhost:4321/jotter/styling/). This way, you can use the full range of the API's capabilities and are not locked into Astro-specific features.
+
+Do not rely on shared state between pages. Shared state is a huge benefit of the client router but also might introduce major migration tasks when you later want to switch to native cross-document view transition, which will do full page reloads on navigation. For the same reason, try to minimize the use of  Astro's lifecycle events as those are not identical to what the API offers for cross-document view transitions. 
+
+
+## State of Firefox View Transitions
+
+This section provides a more detailed look at what is supported starting with Firefox v144. This includes not only Level 1 of the API but also some features that were introduced with Level 2:
+* [document.startViewTransition](https://vtbag.dev/basics/javascript/#same-document-view-transitions): Call it with a DOM update callback and the API animates the old view into the new view. The Level 2 signature with the option object is not yet supported. 
+* [view-transition-name](https://vtbag.dev/basics/pseudos/#view-transition-names): The element creates a named group in the view transition pseudo-tree.
+* [match-element](https://vtbag.dev/basics/pseudos/#auto-generated-names-match-element): A special view transition name that lets the browser automatically assign names to a set of elements.
+* [view-transition-class](https://vtbag.dev/basics/styling/#with-classes): You can use view transition class names in place of group names to style several transition groups and their pseudo-elements all at once.
+* [:active-view-transition](https://vtbag.dev/basics/styling/#active-view-transition-types:~:text=pseudo%2Dclass%20that%20does%20not%20take%20type%20parameters): a pseudo class that selects the root element during an active view transition. 
+
+
+### What works
+
+#### Start View Transition
+Calling `document.startViewTransition()` with an updateCallback function is fully supported. The callback can also be an async function, as long as it doesn't take too long to complete.
+
+Fun fact: Firefox is the most patient one here. Gecko cancels view transitions only if the update callback takes longer than 10 seconds. Blink and WebKit give up after just 4 seconds.
+
+Just kidding: The renderer is blocked until the update callback resolves, so your function should better finish within a few milliseconds. 
+
+The returned ViewTransition object has the `updateCallbackDone`, `ready` and `finished` promises and also offers the `skipTransition()` function. 
+
+#### View Transition Names
+
+By giving elements on different pages the same view transition name, you enable the [morph effect](/hero-prefetch/overview/) that view transitions are famous for. Set `view-transition-name` on the element's style attribute or in your stylesheets.
+
+#### View Transition Classes
+
+Although part of Level 2 of the spec, Firefox already supports view transition classes. I.e. you can assign the same `view-transition-class` property to several elements and then style their view transition pseudo-elements with a single CSS rule, where you use `::view-transition-(.some-view-transition-class)` instead of `::view-transition-<pseudo>(some-view-transition-name)`. Note the `.` that denotes classes and is not part of the class name.
+
+#### match-element
+`match-element` is a special value that can be used as a view transition name to make the browser assign random view transition names. This might be handy if you have a large number of element for which you want to assign some view transition name, but you do not care which one, as you style them all using view transition classes.
+
+#### Active View Transition Pseudo Class
+The `:active-view-transition` pseudo class resolve to `:root` if a view transition is currently active.
+
+### What doesn't work yet
+
+Cross-document view transitions are not implemented in Firefox yet. But there are also restrictions for same-document view transitions as Level 1 does not support all features of same-document view transitions. Some newer features are defined in Level 2 of the spec and many of them are not yet implemented in Safari, not even in Edge and of course not yet in Firefox.   
+
+#### View Transition Types
+
+Firefox does not yet support the new signature where you can pass an object that has optional members for the update callback and for an array of view transition types as view transition types are defined in Level 2 of the View Transition API. Consequently, there is no `types` property in the ViewTransition object and the `:active-view-transition-type()` pseudo-classes are also not supported yet.
+
+#### Auto as View Transition Name
+In Firefox, `auto` as a reserved word is not a valid view transition name. It will not generate random names automatically. The feature is somewhat controversial anyway, so I assume it was intentionally left out in favor of `match-element`.
+
+#### The Active View Transition Property
+
+In browsers that implement `document.activeViewTransition`, it returns the current view transition, if one is active. Firefox does not support this yet.   
+
+#### Nested View Transition Groups 
+Also nested view transition groups won't work yet. 
+You can set the `view-transition-group` property in CSS but it has no effect. Consequently, it is hard in Firefox to clip view transition images. 
+
+#### Scoped View Transitions
+
+You guessed it, [scoped view transitions](https://vtbag.dev/basics/javascript/#scoped-view-transitions) are still experimental and not even part of the Level 2 spec. Also not implemented in Firefox, yet. 

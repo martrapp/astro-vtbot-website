@@ -1,0 +1,110 @@
+---
+title: "Switch Off Smooth Scrolling on History Traversals (Only)"
+description: "How to get instant history navigation with Astro's Client Router when your site's scroll behavior is set to smooth." 
+---
+
+When you move back and forth between pages, you see that scroll restoration is instant with Astro's `<ClientRouter />`. Unless your sites uses `scroll-behavior: smooth`.
+
+Let's assume that your site uses a common layout to set smooth scrolling on the `<html>` element like this on all pages:
+```css
+:root {
+  scroll-behavior: smooth;
+}
+```
+Whether you use the client router, native view transitions, or no view transitions at all, the browser will now use smooth scrolling whenever you navigate to a target position within a page. It will do this on navigation to a fragment (#hash URL), and on backward/forward navigation through the browser history. 
+
+Navigating back and forth through the browser history, watching the pages scroll every time can get dizzying. 
+
+So the question was: can the client router restore scroll position instantly for history navigation, only?
+
+
+
+## Solution
+There is no configuration option or global switch to change how the client router handles scrolling on history navigation. But you can use its lifecycle events to customize the behavior to your liking:
+
+```astro
+<script>
+	document.addEventListener('astro:before-swap', (event) => {
+		event.newDocument.documentElement.style.scrollBehavior =
+			event.navigationType === 'traverse' ? 'auto' : 'smooth';
+		event.viewTransition.updateCallbackDone.finally(() => {
+			document.documentElement.style.scrollBehavior = 'smooth';
+		});
+	});
+</script>
+```
+
+
+## Details
+
+The goal is to switch to instant scroll behavior only for history navigation, while keeping smooth scrolling everywhere else.
+
+The client router restores scroll position right after swapping in the new content, just before the  `astro:after-swap` event fires.  That means you can use `astro:after-swap` to react after scrolling to [override the default scroll position](https://docs.astro.build/en/guides/view-transitions/#astroafter-swap). For example, if you want to keep the scroll position from the previous page, this is the place to do it.
+
+But that is not our task right now. Since the initial scroll restoration and interpretation of the scroll-behavior happens before `astro:after-swap`, that event fires too late for us.
+
+
+### When
+The event that fires before the swap is called (&hellip;shuffles notes&hellip;) `astro:before-swap`. It fires early enough to let you control scroll behavior. Even better, the event includes a property called `navigationType` that tells you what kind of navigation is happening. Inspired by the Navigation API, this property can have the following values:
+
+    * `push`: A new location is navigated to, causing a new entry to be pushed onto the history list.
+    * `replace`: The current entry is replaced with a new history entry. 
+    * `traverse`: The browser moves from one existing history entry to another.
+  
+Unlike the Navigation API, there is no `reload` value. That is because the client router, like native cross-document view transitions, never handles page reloads triggered by pressing F5 or similar.
+
+### Where
+The last option looks promising: `event.navigationType === 'traverse'` is set when you navigate with the browser's back and forward buttons or keyboard shortcuts. With the information from the event, you could even tell forward and backward navigation apart by also checking `event.direction`.
+
+So far we have&hellip;
+```astro
+<script>
+  document.addEventListener('astro:before-swap', (even) => {
+		if (event.navigationType === 'traverse') // do something
+  });
+</script>
+```
+
+### What
+
+Now we want to override the `smooth` scroll behavior defined for the whole document and switch it to `auto`, which is the correct value for instant scrolling. A first naive attempt might look like this:
+```astro del={1}
+document.documentElement.style.scrollBehavior = `auto`
+```
+
+But this has no effect. Why? Because we are still before the swap. We are changing the style of the old document. The next thing the client router does is replace this old document with the new one, and then scroll it to the target position. In the new document, the browser only sees our original request for smooth scrolling. Our request for `auto` gets lost in the swap.
+
+So instead of touching the current document, we need to modify the future document that will be swapped in. Here is how:
+```astro ins={3}
+<script>
+  document.addEventListener('astro:before-swap', (event) => {
+    event.newDocument.documentElement.style.scrollBehavior =
+      event.navigationType === 'traverse' ? 'auto' : 'smooth';
+	});
+</script>
+```
+## Cleanup
+
+At this stage, we have achieved our main goal: we detect history navigation and replace smooth scrolling with instant scrolling. The only remaining task is cleanup. After a history navigation, the scroll behavior stays at `auto`, so smooth scrolling remains off until the next non-history client router navigation.
+
+To fix this, we reset the scroll behavior to `smooth` after the client router updates the page and initiates scrolling. As we [already know](#:~:text=astro%3Aafter%2Dswap), one way is to use the `astro:after-swap` event to trigger the cleanup.
+
+Another option is to let the View Transition API trigger the reset:
+```astro
+  event.viewTransition.updateCallbackDone.finally(() => {
+	  document.documentElement.style.scrollBehavior = 'smooth';
+	});
+```
+The `astro:before-swap` event gives you access to the active view transition.  This objects provides [three promises](/jotter/api/details/#:~:text=interface%20ViewTransition) that fulfil at different points during the view transition. We choose `updateCallbackDone` because it resolves right after the client router handled scrolling.
+
+
+## Life Demo
+
+Want to try it yourself and see what we have been talking about? Here is a [demo](/tips/scrolla/). 
+
+Take the tour: 
+* Click the link to scroll down to the bottom of the page. This is a normal same-page link with no view transitions. Since we set the scroll behavior to `smooth`, page scrolls smoothly.
+* Click the link that goes **to the bottom** of the next page. The new content slides in while the page scrolls smoothly. This is a non-history navigation.
+* Now use the browser history to navigate back and forth. You will move between the lower parts of the pages, without smooth scrolling.  
+
+Happy and smooth scrolling!

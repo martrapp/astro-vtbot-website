@@ -1,0 +1,374 @@
+<style is:global>
+	.card {
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		padding: 0.5rem 1rem 1rem 1rem;
+		width: 90%;
+		width: 320px;
+
+		transition: height 0.3s ease;
+	}
+
+	h4 {
+		margin-top: 1rem;
+		margin-bottom: 0.4rem;
+		text-align: center;
+		color: #888;
+	}
+
+	.options {
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 1.5rem;
+	}
+
+	label {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		cursor: pointer;
+	}
+
+	input[type='radio'],
+	input[type='checkbox'] {
+		accent-color: #888;
+	}
+
+	/* --- Animated sections --- */
+	.form-section {
+		overflow: hidden;
+		transition: height 0.3s ease;
+		opacity: 1;
+	}
+
+	.form-section.hidden {
+		display: none;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	input,
+	select {
+		padding: 0.6rem;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		font: inherit;
+	}
+
+	select {
+		width: 300px;
+	}
+
+	input[type='text'] {
+		width: 280px;
+	}
+
+	input[type='checkbox'] {
+		width: auto;
+	}
+
+	:root {
+		view-transition-name: none;
+	}
+	:root.demo {
+		.card {
+			view-transition-name: card;
+		}
+		#card-content {
+			view-transition-name: content;
+			view-transition-group: contain;
+		}
+
+		#same-address {
+			view-transition-name: same-address;
+		}
+		#cash-payer {
+			view-transition-name: cash-payer;
+		}
+
+		#shipping-section {
+			view-transition-name: shipping-section;
+		}
+		#pickup-section {
+			view-transition-name: pickup-section;
+		}
+		#billing-section {
+			view-transition-name: billing-section;
+		}
+		#billing-addr {
+			view-transition-name: billing-addr;
+		}
+		#shipping-addr {
+			view-transition-name: shipping-addr;
+		}
+		span.billing {
+			view-transition-name: billing;
+		}
+		span.shipping {
+			view-transition-name: shipping;
+		}
+
+		&::view-transition-group(*) {
+			animation-duration: 0.25s;
+		}
+		&::view-transition {
+			pointer-events: none;
+		}
+		&::view-transition-old(card) {
+			display: none;
+		}
+		&::view-transition-new(card) {
+			animation-name: none;
+			height: 100%;
+			width: 100%;
+		}
+		&::view-transition-group(content) {
+			overflow: clip;
+		}
+		&.pickup::view-transition-old(*):only-child {
+			animation-name: shift-left-out;
+		}
+		&.pickup::view-transition-new(*):only-child {
+			animation-name: shift-left-in;
+		}
+		&.shipping::view-transition-old(*):only-child {
+			animation-name: shift-right-out;
+		}
+		&.shipping::view-transition-new(*):only-child {
+			animation-name: shift-right-in;
+		}
+		&.cash-payer::view-transition-old(*):only-child {
+			transform-origin: top center;
+			animation-name: shrink;
+		}
+		&.cash-payer::view-transition-new(*):only-child {
+			transform-origin: top center;
+			animation-name: grow;
+		}
+		&.same-addr-in::view-transition-old(*):only-child {
+			animation-name: melt;
+		}
+		&.same-addr-in::view-transition-old(shipping-addr):only-child,
+		&.same-addr-in::view-transition-old(billing-addr):only-child {
+			animation-name: -ua-view-transition-fade-out;
+		}
+		&.same-addr-in::view-transition-new(shipping-addr):only-child,
+		&.same-addr-in::view-transition-new(billing-addr):only-child {
+			animation-name: -ua-view-transition-fade-in;
+		}
+		&.same-addr-out::view-transition-new(*):only-child {
+			animation-name: separate;
+		}
+		&.same-addr-in::view-transition-image-pair(billing-section) {
+			animation-name: arc-in;
+		}
+		&.same-addr-out::view-transition-image-pair(billing-section) {
+			animation-name: arc-out;
+		}
+		&::view-transition-old(billing-addr):only-child,
+		&::view-transition-old(shipping-addr):only-child {
+			animation-name: -ua-view-transition-fade-out;
+		}
+		&::view-transition-new(billing-addr):only-child,
+		&::view-transition-new(shipping-addr):only-child {
+			animation-name: -ua-view-transition-fade-in;
+		}
+	}
+
+	@keyframes shrink {
+		to {
+			opacity: 0;
+			scale: 0;
+		}
+	}
+	@keyframes grow {
+		from {
+			opacity: 0;
+			scale: 0;
+		}
+	}
+	@keyframes shift-left-out {
+		to {
+			transform: translateX(-50%) scale(0.8);
+			opacity: 0;
+		}
+	}
+	@keyframes shift-left-in {
+		from {
+			transform: translateX(50%) scale(0.8);
+			opacity: 0;
+		}
+	}
+	@keyframes shift-right-out {
+		to {
+			transform: translateX(50%) scale(0.8);
+			opacity: 0;
+		}
+	}
+	@keyframes shift-right-in {
+		from {
+			transform: translateX(-50%) scale(0.8);
+			opacity: 0;
+		}
+	}
+	@keyframes arc-in {
+		0% {
+			opacity: 1;
+		}
+		50% {
+			transform: translateX(-150px);
+		}
+		100% {
+			opacity: 0.5;
+		}
+	}
+	@keyframes arc-out {
+		0% {
+			opacity: 0.5;
+		}
+		50% {
+			transform: translateX(-150px);
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	@keyframes melt {
+		0% {
+			opacity: 1;
+			transform: translate(0px, 0px);
+		}
+		50% {
+			transform: translate(150px, -50px);
+		}
+		100% {
+			opacity: 0.5;
+			transform: translate(0px, 0px);
+		}
+	}
+
+	@keyframes separate {
+		0% {
+			opacity: 0.5;
+			transform: translate(0px, 0px);
+		}
+		50% {
+			transform: translate(150px, -50px);
+		}
+		100% {
+			opacity: 1;
+			transform: translate(0px, 0px);
+		}
+	}
+</style>
+
+<div class="card">
+	<div id="card-content">
+		<h4>Delivery method</h4>
+
+		<div class="options">
+			<label><input type="radio" name="method" value="ship" checked />🚚 Ship</label>
+			<label><input type="radio" name="method" value="pickup" />🏬 Pickup</label>
+		</div>
+
+		<div id="same-address" class="form-section">
+			<label><input type="checkbox" />Billing address is shipping address</label>
+		</div>
+		<div id="cash-payer" class="form-section hidden">
+			<label><input type="checkbox" />Will pay at pickup</label>
+		</div>
+		<div id="pickup-section" class="form-section hidden">
+			<h4 id="store-loc">Store location</h4>
+			<select>
+				<option>--- Choose a store ---</option>
+				<option>Main Street</option>
+				<option>River Mall</option>
+				<option>Airport Plaza</option>
+			</select>
+		</div>
+
+		<div id="shipping-section" class="form-section">
+			<h4 id="shipping-addr"><span class="shipping">Shipping</span></h4>
+			<input type="text" placeholder="Name" />
+			<input type="text" placeholder="Street" />
+			<input type="text" placeholder="City" />
+		</div>
+
+		<div id="billing-section" class="form-section">
+			<h4 id="billing-addr"><span class="billing">Billing</span></h4>
+			<input type="text" placeholder="Name" />
+			<input type="text" placeholder="Street" />
+			<input type="text" placeholder="City" />
+		</div>
+	</div>
+</div>
+
+<script>
+	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+
+	let cashPayerSave = false;
+	let sameAddrSave = false;
+	document.addEventListener('change', (e) => {
+		const radios = [...document.querySelectorAll<HTMLInputElement>('input[name="method"]')];
+
+		const radio = e.target as HTMLInputElement;
+		if (!radios.includes(radio)) return;
+
+		const shippingSection = document.getElementById('shipping-section')!;
+		const pickupSection = document.getElementById('pickup-section')!;
+		const billingSection = document.getElementById('billing-section')!;
+		const sameAddr = document.querySelector<HTMLInputElement>('#same-address input')!;
+		const cashPayer = document.querySelector<HTMLInputElement>('#cash-payer input')!;
+
+		const showShip = radio.value === 'ship';
+		animate(showShip ? 'shipping' : 'pickup', () => {
+			shippingSection.classList.toggle('hidden', !showShip);
+			pickupSection.classList.toggle('hidden', showShip);
+			sameAddr.parentElement!.parentElement!.classList.toggle('hidden', !showShip);
+			cashPayer.parentElement!.parentElement!.classList.toggle('hidden', showShip);
+			if (showShip) {
+				cashPayerSave = cashPayer.checked;
+				cashPayer.checked = false;
+				sameAddr.checked = sameAddrSave;
+				document.getElementById('billing-addr')!.innerHTML = sameAddrSave
+					? '<span class="shipping">Shipping</span> & <span class="billing">Billing</span>'
+					: '<span class="billing">Billing</span>';
+			} else {
+				sameAddrSave = sameAddr.checked;
+				sameAddr.checked = true;
+				cashPayer.checked = cashPayerSave;
+				document.getElementById('billing-addr')!.innerHTML = '<span class="billing">Billing</span>';
+			}
+			billingSection.classList.toggle('hidden', cashPayer.checked);
+			shippingSection.classList.toggle('hidden', sameAddr.checked);
+		});
+	});
+
+	document.addEventListener('change', (e) => {
+		const checked = (e.target as HTMLInputElement).checked;
+		e.target === document.querySelector<HTMLInputElement>('#same-address input') &&
+			animate(checked ? 'same-addr-in' : 'same-addr-out', () => {
+				document.getElementById('shipping-section')!.classList.toggle('hidden', checked);
+				document.getElementById('billing-addr')!.innerHTML = checked
+					? '<span class="shipping">Shipping</span> & <span class="billing">Billing</span>'
+					: '<span class="billing">Billing</span>';
+			});
+		e.target === document.querySelector<HTMLInputElement>('#cash-payer input') &&
+			animate('cash-payer', () => {
+				const checked = (e.target as HTMLInputElement).checked;
+				document.getElementById('billing-section')!.classList.toggle('hidden', checked);
+			});
+	});
+
+	function animate(active: string, update: () => void) {
+		document.documentElement.classList.add('demo', active);
+		const viewTransition = mayStartViewTransition(update);
+		viewTransition.finished.then(() => document.documentElement.classList.remove('demo', active));
+		return viewTransition;
+	}
+</script>

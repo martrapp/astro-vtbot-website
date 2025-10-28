@@ -1,0 +1,19 @@
+---
+import FormDemo from '../../components/FormDemo.astro';
+---
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			.grid-row {
+				display: grid;
+				grid-template-columns: max-content;
+				justify-content: space-around;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-row not-content"><FormDemo /></div>
+	</body>
+</html>

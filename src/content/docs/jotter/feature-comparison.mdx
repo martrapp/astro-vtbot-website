@@ -63,7 +63,7 @@ Sharing state between pages isn't limited to `transition:persist`. With the `<Cl
 
 This has its advantages: sharing state between pages is straightforward. But it also comes with a downside: since the browser state isn't reset, one of the biggest challenges when using `<ClientRouter />` on multi-page sites is [properly reinitializing scripts](/jotter/astro/scripts/) after navigation.
 
-In contrast, browser-native cross-document view transitions clear all script state during navigation. If you need to share state, you’ll have to persist it manually, such as by using sessionStorage. The bright side of this approach is that each page starts with a clean window object and a fresh module loader, following the standard behavior of traditional navigation.
+In contrast, browser-native cross-document view transitions clear all script state during navigation. If you need to share state, you'll have to persist it manually, such as by using sessionStorage. The bright side of this approach is that each page starts with a clean window object and a fresh module loader, following the standard behavior of traditional navigation.
 
 ## Predefined Animations
 
@@ -71,9 +71,9 @@ In Astro, you can use `transition:animate="slide"` (or `fade`) to apply a predef
 
 ## Directional Animations
 
-With `<ClientRouter />`, each view transition has a direction: `forward` or `back`. While this doesn't affect default cross-fade animations, it's crucial for slide animations. For example, when navigating forward, pages slide out to the left and in from the right. When navigating backward (e.g., using the browser’s back button), they slide out to right and in from the left.
+With `<ClientRouter />`, each view transition has a direction: `forward` or `back`. While this doesn't affect default cross-fade animations, it's crucial for slide animations. For example, when navigating forward, pages slide out to the left and in from the right. When navigating backward (e.g., using the browser's back button), they slide out to right and in from the left.
 
-The View Transition API supports view transition types that can be used to differentiate forward and backward animations. However, the View Transition API doesn’t automatically assign any types. With browser-native cross-document view transitions, slides will always [originate from the same direction](/signal-demo/forwardOnly/blog/), regardless of whether you're navigating forward or backward.
+The View Transition API supports view transition types that can be used to differentiate forward and backward animations. However, the View Transition API doesn't automatically assign any types. With browser-native cross-document view transitions, slides will always [originate from the same direction](/signal-demo/forwardOnly/blog/), regardless of whether you're navigating forward or backward.
 
 But don't worry, the Bag has your back!
 
@@ -81,7 +81,7 @@ But don't worry, the Bag has your back!
 
 When using `<ClientRouter />` all view transition animations are disabled if the browser's `prefer-reduced-motion`  setting is enabled. This value is typically inherited from a similar setting on the operating system.
 
-Disabling motion (though not necessarily cross-fade effects) for users who prefer it is a good practice. Currently, the View Transition API does not handle this automatically. However, from discussions I expect that the API will soon respect `prefers-reduced-motion` by disabling the default morph animation from the dynamic user-agent stylesheet. For custom animations, though, it's up to you to honor the user's preferences. We’ll explore how to do this later.
+Disabling motion (though not necessarily cross-fade effects) for users who prefer it is a good practice. Currently, the View Transition API does not handle this automatically. However, from discussions I expect that the API will soon respect `prefers-reduced-motion` by disabling the default morph animation from the dynamic user-agent stylesheet. For custom animations, though, it's up to you to honor the user's preferences. We'll explore how to do this later.
 
 ## Event Listeners
 

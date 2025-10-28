@@ -4,7 +4,6 @@ description: "How to use same-document view transitions on an Astro site."
 ---
 
 import ExampleCarsel from "/src/components/ExampleCarsel.astro"
-import ThemeChanger1 from "/src/components/ThemeChanger1.astro"
 import ThemeChanger2 from "/src/components/ThemeChanger2.astro"
 
 <style>{`:root {transition: none !important;}`}</style>
@@ -89,10 +88,9 @@ We ignore or override all default animations. Here are our custom animations&hel
 ::view-transition-old(root) {
 	animation-name: tumble;
 	z-index: 1;
-}::view-transition-new(root) {
+}
+::view-transition-new(root) {
 	animation-name: grow;
-	border-radius: 0;
-	filter: url(#smoothing);
 }
 
 ```
@@ -113,28 +111,6 @@ And these are the keyframe definitions:
 }
 ```
 
-
-The smoothing effect is achieved using an SVG filter:
-```html
-<svg width="0" height="0">
-	<filter id="smoothing" x="-50%" y="-50%" width="200%" height="200%">
-		<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" result="turbulence"></feTurbulence>
-		<feDisplacementMap id="displacement" in="SourceGraphic" in2="turbulence" xChannelSelector="R" yChannelSelector="G">
-			<animate attributeName="scale" from="20" to="1" dur="2s"></animate>
-		</feDisplacementMap>
-	</filter>
-</svg>
-```
-Actually, the current code does not use the SVG animation element but instead relies on a JavaScript function to animate the `scale` during the view transition:
-```js
-const animate = () => {
-	const position = Date.now() - start;
-	if (position < DURATION_MS) {
-		displacement?.setAttribute('scale', `${30 - (position / DURATION_MS) * 30}`);
-		requestAnimationFrame(animate);
-		}
-}
-```
 
 ### The Card Deck
 
@@ -214,7 +190,7 @@ It is also a good idea to check whether users prefer reduced motion, and to resp
 At least in the same-document case we do not have to think about render blocking.
 
 It is not a lot to handle, but still, some convenience would not hurt: \
-The Bag’s `mayStartViewTransition()` function takes care of all the above and more. It also lets you automatically chain closely timed calls into a single transition.
+The Bag's `mayStartViewTransition()` function takes care of all the above and more. It also lets you automatically chain closely timed calls into a single transition.
 
 Here is how to access it in an Astro file after installing the package with `npm i @vtbag/utensil-drawer`.
 
@@ -230,7 +206,7 @@ Just keep in mind: [it is still a bit experimental](https://vtbag.dev/tools/uten
 ```
 
 ### Scoping
-If you are using cross-document animations on your site (through the browser's `@view-transition { navigation: auto }` or Astro’s `<ClientRouter />`), calling `startViewTransition()` could well open the gates to visual mayhem.
+If you are using cross-document animations on your site (through the browser's `@view-transition { navigation: auto }` or Astro's `<ClientRouter />`), calling `startViewTransition()` could well open the gates to visual mayhem.
 
 Until [_scoped_ view transitions](https://vtbag.dev/basics/javascript/#scoped-view-transitions) become widely supported, view transitions apply to the entire document. Calling `startViewTransition()` generates images for all elements with a view transition name and triggers  animations on all of them.
 
@@ -240,7 +216,7 @@ It does not matter whether you assign view transition names to the cards in your
 This happens regardless of whether the view transition is triggered by navigation or by pressing a button that calls `startViewTransition()`. So navigating to a page with cross-document view transitions will also immediately run all same-document animations that have view transition names set up.
 
 
-What we really want is a view transition confined to a single component. Let’s see how to put the chaos back in its box(es).
+What we really want is a view transition confined to a single component. Let's see how to put the chaos back in its box(es).
 
 #### Guard Your Definitions
 
@@ -348,7 +324,7 @@ document.addEventListener('astro:page-load', () => {
 	...
 });
 ```
-- Astro’s scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
+- Astro's scoped styles can interfere with the CSS selectors used by the View Transition API. To avoid issues, use `<style is:global>`, `<style is:inline>`, or the `:global()` pseudo-class where needed.
 - Astro automatically turns plain `<script>` tags into `<script type="module">`. That means you can use import statements directly, e.g. for `mayStartViewTransition`. If you are not using Astro, make sure to add `type="module"` yourself so import statements work as expected.
 
 

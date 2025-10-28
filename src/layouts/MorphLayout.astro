@@ -52,4 +52,9 @@ const { title, background, pageFindIgnore } = Astro.props;
 	::view-transition-group(*) {
 		animation-duration: 1s;
 	}
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		height: 100%;
+		width: auto;
+	}
 </style>

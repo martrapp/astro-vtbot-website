@@ -67,7 +67,7 @@ Let's put it to work!
 
 ## The Rocket Example
 
-The rocket example consists of two linked pages. On the first, a rocket rests on a link labeled "Level Up!" Click it, and you’re taken to the second page, where the rocket now sits on a link that says "Back to Base..."
+The rocket example consists of two linked pages. On the first, a rocket rests on a link labeled "Level Up!" Click it, and you're taken to the second page, where the rocket now sits on a link that says "Back to Base..."
 
 Each element, the rocket, and both links, has a view transition name: `rocket`, `level-up`, and `back`. When you click the link, the rocket smoothly moves to its new position, resizing along the way.
 
@@ -170,7 +170,7 @@ The order of the group pseudo-elements is the paint order of the named elements 
 <div style="width:100%; margin-top:0">
 
 
-The link images are the only children of their image pairs, resulting in a **fade-out exit animation** for the level-up image and a **fade-in entry animation** for the back link’s image, and vice versa when you navigate back.
+The link images are the only children of their image pairs, resulting in a **fade-out exit animation** for the level-up image and a **fade-in entry animation** for the back link's image, and vice versa when you navigate back.
 
 The rocket has both images and plays a **morph animation**, transitioning from the old image position and transform to the new.
 Since the rocket group comes first in the pseudo-element tree, it gets drawn first, so the rocket images move behind the link images.

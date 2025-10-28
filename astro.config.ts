@@ -18,7 +18,7 @@ export default defineConfig({
 	experimental: {
 		preserveScriptOrder: true,
 	},
-	devToolbar: { enabled: true },
+	devToolbar: { enabled: false },
 	prefetch: false && process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
@@ -53,7 +53,7 @@ export default defineConfig({
 		components: {
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
-			Pagination: "./src/components/starlight/FeelBack.astro",
+//			Pagination: "./src/components/starlight/FeelBack.astro",
 		},
 		title: "Bag of Tricks",
 		head: [{
@@ -178,10 +178,22 @@ function sidebar1() {
 			link: "/jotter/styling/",
 		}, {
 			label: "Same-Document View Transitions",
-			link: "/jotter/same-doc/",
+			link: "/jotter/same-doc/"
+		}, {
+			label: "Supported in all Major Browsers",
+			link: "/jotter/in-all-major-browsers/",
 			badge: { text: "new", variant: "success" }
 		}
 		]
+	}, {
+		label: "Tips & Tricks", collapsed: false,
+		items: [{
+			label: "Introduction",
+			link: "/jotter/tips/",
+		}, {
+			label: "Instant History Scrolling",
+			link: "/jotter/tips/instant-scrolling-history-navigation/",
+		} ]
 	}, {
 		label: "The Jotter on Starlight", collapsed: true,
 		items: [{
