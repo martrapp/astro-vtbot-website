@@ -4,8 +4,6 @@ description: Now that Firefox implements the View Transition API, what does that
 ---
 
 
-import FormDemo from "/src/components/FormDemo.astro"
-
 Firefox has finally joined the party! With its first release supporting the View Transition API, all major browsers are now on board.
 
 So what does that mean for your Astro project? View transitions have always been described as a progressive enhancement. You could use them in browsers with native support and skip them in others. But that is not the same as cross-browser support. If you have been waiting to explore view transitions until they are widely supported, now might be the time to dive in.
@@ -211,7 +209,36 @@ Cross-document view transitions are not implemented in Firefox yet. But there ar
 
 #### View Transition Types
 
-Firefox does not yet support the new signature where you can pass an object that has optional members for the update callback and for an array of view transition types as view transition types are defined in Level 2 of the View Transition API. Consequently, there is no `types` property in the ViewTransition object and the `:active-view-transition-type()` pseudo-classes are also not supported yet.
+Firefox does not yet support the new signature where you can pass an object that has optional members for the update callback and for an array of view transition types, because view transition types are defined in Level 2 of the View Transition API. Consequently, there is no `types` property in the ViewTransition object and the `:active-view-transition-type()` pseudo-classes are also not supported yet.
+
+:::tip
+If you want to focus on view transition features that work reliably across all browsers, even in older Chromium and Safari versions, consider ignoring view transition types. They may look fancy, and you may think you should use them because someone specifically invented them. But in reality, you can easily achieve the same result for same-document view transitions yourself.
+
+Instead of using a view transition type like `my-type`, use a CSS class such as `vtt-my-type` on the document root. And instead of writing `:active-view-transition-type(my-type)`, simply use `:root.vtt-my-type`. It works exactly the same and even takes less typing. The `vtt-` prefix helps prevent conflicts with other CSS classes.
+
+All that is left is adding and removing the class. Add it right before calling `startViewTransition()` and remove it automatically when the view transition ends:
+```js title="Definition"
+	const prefixed = types.map((t) => 'vtt-' + t);
+	const classes = document.documentElement.classList;
+	classes.add(...prefixed);
+	let transition = document.startViewTransition(() => {...});
+	transition.finished.finally(() => classes.remove(...prefixed));
+```
+```css title="Usage"
+:root.vtt-test {
+	.card {
+		view-transition-name: match-element;
+		view-transition-class: card;
+	}
+	&::view-transition-group(.card) {
+		animation-duration: 300ms,
+	}
+}
+```
+This pattern will even work in the future with scoped view transitions, where you replace `:root` with the element on which you call `startViewTransition()`.
+
+If you are interested in an automatic substitute for view transition types that wraps all of the above, see [the polyfill](https://vtbag.dev/tools/utensil-drawer/#usetypespolyfill-always--auto--never) and [the PostCSS plugin](https://vtbag.dev/tools/utensil-drawer/#the-postcss-active-view-transition-type-postcss-plugin) from vtbag.dev.
+:::
 
 #### Auto as View Transition Name
 In Firefox, `auto` as a reserved word is not a valid view transition name. It will not generate random names automatically. The feature is somewhat controversial anyway, so I assume it was intentionally left out in favor of `match-element`.
