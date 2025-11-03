@@ -31,7 +31,7 @@
     "@lorenzo_lewis/starlight-utils": "^0.3.2",
     "@pagefind/default-ui": "^1.4.0",
     "@types/dom-view-transitions": "^1.0.6",
-    "@types/node": "^24.9.2",
+    "@types/node": "^24.10.0",
     "astro": "^5.15.2",
     "astro-d2": "^0.8.1",
     "astro-expressive-code": "^0.41.3",
