@@ -23,7 +23,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "^4.3.9",
-    "@astrojs/starlight": "^0.36.1",
+    "@astrojs/starlight": "^0.36.2",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@expressive-code/plugin-collapsible-sections": "^0.41.3",
