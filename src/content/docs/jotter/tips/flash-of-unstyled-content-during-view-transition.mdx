@@ -1,0 +1,78 @@
+---
+title: "Fix Flash of Unstyled Content"
+description: "Sometimes users report seeing a Flash of Unstyled Content (FOUC) during navigation when using Astro's Client Router. Here is what to check and how to fix it." 
+---
+
+Does this sound familiar? These are quotes from developers who have seen surprising style flickers when using Astro's client router:
+
+
+> Does anyone know what might have broken the view transition stuff? 
+> I get massive FOUC on page transitions, it would seem.
+
+> We noticed a flash of unstyled content between page transitions using the `<ClientRouter />`.
+
+> When navigating between pages, it seems that the page is getting a css reset or loads the css completely.
+
+Although these quotes came from three completely different projects over the course of two months, it was surprising to discover that all their Flashes of Unstyled Content (FOUC) shared the same root cause.
+
+## Solution
+
+If you are experiencing FOUC during client router navigation, inspect the DOM _in your browser_. Look at the children of the `<head>` element. You can do this using the Elements panel in your browser's DevTools. You can even check the DOM before, during, and after the swap by setting a breakpoint on the `swap()` function in `swap-functions.js`.
+
+Are all the style elements you expect present?
+
+If your `<head>` ends prematurely, check the first element in the `<body>` for elements that where pushed there from the `<head>` and dragged other element along with them, especially style elements. 
+
+If you find such relocated elements, move them explicitly into the `<body>` to prevent chaos in your styles.
+
+
+## Details
+
+If you are curious about what caused this error and why moving elements to the body solves it: here are the details.
+
+### How the Swap Works
+
+Astro's client router works like a single-page application (SPA). Instead of directing the browser to the target URL, it loads the next page into a new DOM and replaces elements in the current document with the new content.
+
+You can find details about the default implementation [in the docs](https://docs.astro.build/en/reference/modules/astro-transitions/#swapfunctions). If needed, you can also learn there how to replace the default implementation with your own.
+
+Swapping the DOMs is a bit more complex than imply replacing the current `<html>` element with the new one. In fact, both the document and the `<html>` element remain the same. Only the attributes of the `<html>` element are refreshed, some children of the `<head>` are updated, and  the `<body>` is replaced.
+
+During the swap, children common to both heads are preserved, those that were only part of the old head are removed, and new children are added.
+
+This means that common stylesheets remain untouched inside the head.
+
+### How the Browser Works
+
+When the browser loads a document, it applies best-effort fixes for some cases of invalid HTML. This also applies to `DOMParser.parseFromString()`, which the client router uses to load the new page.
+
+One of these "repairs" is automatically closing the `<head>` and opening the `<body>` as soon as an element appears  that is invalid inside the `<head>`.
+
+This is exactly what caused the issues quoted above. Interestingly, all three cases stumbled over the same element: Vercel's `<SpeedInsights />`. 
+
+So what makes this element special? Why is this different from, for example, `<ClientRouter />` in the `<head>`?    
+
+The `<SpeedInsights />` component inserts a custom element, and custom elements are not allowed inside the head.
+Vercel's documentation is clear: the `<SpeedInsights />` component should be placed in the `<body>`. Some users ran into problems by not following this guidance.  
+
+### Step by Step
+If you place `<SpeedInsights>` inside the `<head>` of your layout, the following occurs:
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+1. As defined in the layout, Astro generates HTML with a `<vercel-speed-insights>` element inside the `<head>`. 
+2. The client router reads the HTML using DOMParser, which repairs the HTML by closing the `<head>`, opening the `<body>` and inserting the `<vercel-speed-insights>` element as the first child of the body.
+3. Everything that originally followed  `<vercel-speed-insights>` inside the `<head>`, including stylesheets, now ends up in the body.
+4. When the new DOM is swapped in, all the careful handling of stylesheets inside the `<head>` is lost becausethey are no longer there.
+5. In the final step of the swap, the entire body is replaced with the new one. This replaces all stylesheets from the body and re-inserts the new ones. Even styles that belong to both the old _and_ new pages are temporarily removed until they reloaded. This is the root cause of the flash of unstyled content. 
+</Steps>
+
+
+What makes this tricky to spot is that the generated HTML looks fine. But if you inspect the DOM in DevTools, you will see that your styles and other head elements, like `og:*` properties, end up in the body.  
+
+In the end, seeing `<SpeedInsights>` in all these projects is just a funny coincidence. The issue is completely independent of Vercel's components. Losing styles to the body can happen with other elements, too. 
+
+Now that you know the pattern, you know what to look for and how to  fix it quickly. Good luck out there, Astronaut, and happy transitioning!  
+
+

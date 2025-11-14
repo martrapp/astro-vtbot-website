@@ -193,6 +193,9 @@ function sidebar1() {
 		}, {
 			label: "Instant History Scrolling",
 			link: "/jotter/tips/instant-scrolling-history-navigation/",
+		}, {
+			label: "Fix Flash of Unstyled Content",
+			link: "/jotter/tips/flash-of-unstyled-content-during-view-transition/",
 		} ]
 	}, {
 		label: "The Jotter on Starlight", collapsed: true,
