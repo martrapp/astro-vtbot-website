@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
-    "@astrojs/mdx": "^4.3.10",
+    "@astrojs/mdx": "^4.3.11",
     "@astrojs/starlight": "^0.36.2",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
@@ -31,8 +31,8 @@
     "@lorenzo_lewis/starlight-utils": "^0.3.2",
     "@pagefind/default-ui": "^1.4.0",
     "@types/dom-view-transitions": "^1.0.6",
-    "@types/node": "^24.10.0",
-    "astro": "^5.15.4",
+    "@types/node": "^24.10.1",
+    "astro": "^5.15.9",
     "astro-d2": "^0.8.1",
     "astro-expressive-code": "^0.41.3",
     "astro-feelback": "latest",
@@ -47,7 +47,7 @@
     "remark-heading-id": "^1.0.1",
     "remark-toc": "^9.0.0",
     "sharp": "^0.34.5",
-    "starlight-blog": "^0.25.0",
+    "starlight-blog": "^0.25.1",
     "starlight-image-zoom": "^0.13.2",
     "typescript": "^5.9.3"
   },
