@@ -198,7 +198,7 @@ function sidebar1() {
 			badge: { text: "new", variant: "success" }
 		} ]
 	}, {
-		label: "The Jotter on Starlight", collapsed: false,
+		label: "Starlight", collapsed: false,
 		items: [{
 			label: "Introduction",
 			link: "/jotter/starlight/",

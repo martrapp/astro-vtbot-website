@@ -8,13 +8,13 @@ import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
 import vtbag from 'src/assets/bag.webp';
 import { Image } from 'astro:assets';
 
-You have options. There are different ways to give your Starlight site a nice boost with view transitions. This page gives you a quick overview so you can pick the path that fits your project.
+There are different ways to give your Starlight site a nice boost with view transitions. Your choice are mainly whether your want to go with Astro's client router or with browser-native cross-document view transitions. This page gives you a quick overview so you can pick the path that fits you best.
 
 ## Option 1: With Astro's &lt;ClientRouter />
 
 The client router turns your Starlight site into a single page application. Your users enjoy smooth navigation without full page reloads.
 
-This is the older approach from the time when browsers had no native support for cross document view transitions.
+This is the older approach from the time when browsers had no native support for cross-document view transitions.
 
 Choose this option if you need shared state across navigation.
 
@@ -44,7 +44,7 @@ To simplify the use of Astro's client router, the Bag of Tricks offers a replace
 
 ## Option 2: Native View Transition API
 
-This approach keeps your site close to a classic multi page setup while still hiding full page loads. It uses the browser's native cross-document view transitions.
+This approach keeps your site close to a classic multi page setup while still hiding full page load by leveraging browser's native cross-document view transitions.
 
 Choose this option if you prefer the framework agnostic web standard and can accept that Firefox might need a bit more time to catch up.
 
