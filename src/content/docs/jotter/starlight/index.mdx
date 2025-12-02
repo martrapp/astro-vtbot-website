@@ -1,54 +1,126 @@
 ---
-title: The Jotter on Starlight
-description: View transition support for Starlight
+title: View Transitions for Starlight Sites
+description: Your options on how to enable view transitions on your Starlight site
 ---
 
-import BoT from "/src/components/BoT.astro"
-import Logo from "/src/components/Logo.astro"
+import { LinkCard } from '@astrojs/starlight/components';
+import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
+import vtbag from 'src/assets/bag.webp';
+import { Image } from 'astro:assets';
 
-At some point I realized that I needed to structure my bits & pieces better and make them searchable to make them useful.
+You have options. There are different ways to give your Starlight site a nice boost with view transitions. This page gives you a quick overview so you can pick the path that fits your project.
 
- The desire to add view transitions to Starlight is a logical, but not trivial venture. Others have done it before. Chapeau @Fryuni! This Jotter is also a tech demo for Starlight on View Transitions.
+## Option 1: With Astro's &lt;ClientRouter />
+
+The client router turns your Starlight site into a single page application. Your users enjoy smooth navigation without full page reloads.
+
+This is the older approach from the time when browsers had no native support for cross document view transitions.
+
+Choose this option if you need shared state across navigation.
 
 
-Starlight does a great job of supporting documentation sites. You really don't need view transitions on a documentation site to distract your audience from the content *unless you are a site about view transitions*. Starlight is an opinionated framework. It works best when you use it as it is intended and only customize what is designated to be customized.
+### What you get
 
-Supporting view transitions for Starlight is not just about cross-fade navigation. There is a wide range of design options. Everyone has different preferences.
+<div id="first">
+- SPA navigation that eliminates full page loads
+- Works in all major browsers 
+- Component state like search queries and results stay intact across navigation
+- May require extra steps to re-initialize third party scripts after navigation
+</div>
 
-## Will the Bag offer Support for Starlight?
 
-Yes, it has already started. The <BoT/> provides initial basic support for view transitions for  Starlight sites!
+### What the Bag of Tricks adds
 
-:::note
-If you're here because you, too, want to add view transitions to your Starlight site, then visit the [step-by-step guide](/jotter/starlight/guide/).
+To simplify the use of Astro's client router, the Bag of Tricks offers a replacement for Starlight's default `<Head>` component and a three step setup to get everything running. It also includes suggestions and options to help you extend and customize your setup including additional styling and loading indicators.
+
+<div class="vtbot">
+<Image src={bot} alt="bot" data-zoom-off/>
+<LinkCard
+  title="˂ClientRouter /˃ View Transitions for Starlight"
+  href="/jotter/starlight/guide/"
+  description="How to use Astro's view transition support with Starlight"
+></LinkCard>
+</div>
+
+## Option 2: Native View Transition API
+
+This approach keeps your site close to a classic multi page setup while still hiding full page loads. It uses the browser's native cross-document view transitions.
+
+Choose this option if you prefer the framework agnostic web standard and can accept that Firefox might need a bit more time to catch up.
+
+### What you get
+
+<div id="second">
+- SPA-like navigation even with full page loads
+- Works in all major browsers except Firefox for now
+- Can't share component state across navigation
+- Third party scripts behave as they did before
+</div>
+
+### What the Bag of Tricks adds
+
+The Bag of Tricks provides a Starlight plugin that enables cross-document view transitions and enhances the experience. It adjusts navigation flow, main area behavior, and page titles, adds directional animations, and polishes the overall appearance.
+
+
+<div class="vtbag">
+<Image src={vtbag} alt="vtbag" data-zoom-off/>
+<LinkCard
+  title="Native View Transitions for Starlight"
+  href="https://vtbag.pages.dev/fwvt/twinkling/"
+  description="Let your Starlight site sparkle with native view transitions"
+></LinkCard>
+</div>
+
+
+## Bonus: Most Minimalistic Approach
+A very simple variant of Option 2. 
+
+You're satisfied with the default cross-fade effect on navigation and can accept that the transitions would not yet show in Firefox? Then you can enable browser-native view transitions by simply adding the following lines to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
+
+```css
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+	  navigation: auto;
+  }
+}
+```
 :::
 
 <style>{`
-	del {
-		text-decoration-style: solid wavy;
-		text-decoration-color: #888;
+
+	:is(#first, #second) li::marker {
+		font-family: system-ui, sans-serif;
+		font-weight: 800;
+		content: "✔  ";
+		color: #2e7d32;
 	}
+#first {
+	li:nth-child(4)::marker{
+  	content: "⚠  ";
+ 		color: #ffb400;
+	}
+}
+#second {
+	li:nth-child(2)::marker{
+  	content: "⚠  ";
+ 		color: #ffb400;
+	}
+	li:nth-child(3)::marker {
+  	content: "✘  ";
+ 		color: #c62828;
+	}
+}
+
+.vtbot, .vtbag {
+	display: flex;
+	> img {
+		width: 4rem;
+		margin: 2rem 1rem 1rem 1rem;
+	}
+}
+.vtbag img {
+	width: 5rem;
+  mask-image: radial-gradient(ellipse at center, white 35%, transparent 71%);
+
+} 
 `}</style>
-
-~~In the future, in the best of all worlds, The Bag can provide small, independent gadgets that developers can combine as they wish. Keep your fingers crossed ;-) and stay tuned.~~
-The future is here, and so are the first additional components to choose from!
-
-There are a few things that need to be configured to enable view transitions in Starlight. Others are more optional. The mandatory changes are covered by the initial view transition support for Starlight sites by The Bag. Other features followed.
-
-|Kind|Option|Component|
-|-|-|-|
-|Mandatory|The basic view transition support in just three steps|[Vtbot Starlight Support](/jotter/starlight/guide/#step-1-install-astro-vtbot)|
-|Optional|Indicate that the system is processing the click|[LoadingIndicator](/jotter/starlight/guide/#loading-indicator)|
-|Optional|Eliminate the pseudo scrolling of the main area|[PageOffset](/jotter/starlight/guide/#eliminate-pseudo-scrolling)|
-|Optional|Derive the direction of view transitions from the order of pages in the sidebar|[PageOrder](/jotter/starlight/guide/#page-order-directions)|
-|Optional|Simple way to declaratively add morph transitions to elements by just defining a CSS selector|[AutoNameSelected](/jotter/starlight/guide/#additional-morph-effects)|
-|Optional|Make incoming view transitions reload instead, e.g. to properly reinitialize ReplacementSwap realms |[BorderControl](/jotter/starlight/guide/#customize-the-sidebar)|
-|Optional|Change the default handling of the sidebar|[Vtbot Starlight](/jotter/starlight/guide/#customize-the-sidebar)|
-
-Select your preferred mix from the [custom combo options](/jotter/starlight/guide/#custom-combo-options) now!
-
-Read on if you want to know [what encounters I had on my journey](/jotter/starlight/inner-workings/) to a Starlight website with view transitions.
-
-
-
-

@@ -1,5 +1,4 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
@@ -12,8 +11,8 @@ import BorderControl from 'astro-vtbot/components/BorderControl.astro';
 ---
 
 {/* Define a view transition animation for `<main>`*/}
-<VtbotStarlight {...Astro.props} transition:name="main" transition:animate="slide">
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+<VtbotStarlight transition:name="main" transition:animate="slide">
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 
 {/* Customize what image you want to show where */}

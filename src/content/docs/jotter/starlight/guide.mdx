@@ -1,35 +1,14 @@
 ---
-title: "Guide: Add View Transitions to Starlight"
-description: How to enable view transitions for your Starlight site and turn it into a SPA
+title: "Guide: <ClientRouter /> View Transitions for Starlight"
+description: How to turn your Starlight site in to a SPA and enable view transitions with Astro's <ClientRouter />.
 ---
 
 import BoT from "/src/components/BoT.astro"
 import AnimateImages from "/src/components/AnimateImages.astro"
 
-This guide describes what has to be done to add view transitions to an existing Starlight site using the Starlight support of the <BoT/>.
+If you want to get rid of visible full page loads in your Starlight site [you have different options](/jotter/starlight/). This guide describes how this can be done using Astro's `<ClientRouter />`.
 
-:::note[Starlight on browser-native cross-document view transitions]
-As of end of October 2024, my new [Starlight site about browser-native cross-document view transitions](https://vtbag.pages.dev) (i.e. View Transitions without the `<ClientRouter />` component) is completely running on&hellip;you guess it&hellip;**browser-native cross-document view transitions**!
-
-Now it is time to share the necessary knowledge and components [over there](https://vtbag.dev/fwvt/twinkling/). And even provide support as an [Starlight plugin](/library/StarlightPlugin/) so you can get the same just by adding the plugin to your own Starlight site!
-:::
-
-:::tip
-Starting from version 0.26.0, Starlight persists the state of the sidebar across navigation.
-
-This already gives Starlight a lot of that SPA look and feel!
-
-If you're satisfied with having the view transition effect work in most browsers but Firefox, you can enable browser-native view transitions by simply adding the following line to your [custom.css](https://starlight.astro.build/guides/css-and-tailwind/#custom-css-styles) and you are all set.
-
-```
-@view-transition {navigation: auto}
-```
-:::
-
-Below this line, you will find information on how to add view transitions using Astro's `<ClientRouter>` component. I do **not recommend this approach anymore in 2025**, but it might still suit you if you have a need to share state across your pages.
-
-
-In this case, stay tuned for how to add Astro's `<ClientRouter>` support to Starlight and enjoy view transitions **on all browsers** and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for the View Transition API.
+Stay tuned for how to add Astro's `<ClientRouter>` support to Starlight and enjoy view transitions **on all browsers** and thanks to Astro's simulation even on Firefox and other browsers that do not yet have native support for browser-native cross-document view transitions.
 
 :::note[Benefits of adding Astro's View Transition Support to Starlight]
 
@@ -42,9 +21,6 @@ In this case, stay tuned for how to add Astro's `<ClientRouter>` support to Star
 :::
 
 Don't be afraid that this will turn your beautiful website into a blinking jukebox. This Jotter is just an exaggerated example to show what is possible. If you follow the instructions below, you will be rewarded with a very _subtle_, SPA-like transition effect. And yes, if you want, you can of course later turn the whole thing into a ... blinking jukebox.
-
-The [introduction page on The Bag's view transition support for Starlight](/jotter/starlight/#will-the-bag-offer-support-for-starlight) defines three categories of features for The Bag's view transition support. This guide currently covers level 1, the mandatory features.
-
 
 :::note[A short note]
 The Bag's support of view transition for Starlight is now in the wild for a couple of month. It is rather complete and mostly mature. Nevertheless, be prepared that things might break when updating to a newer version of Starlight or The Bag. I'm happy to improve and expand the support over time!
@@ -82,7 +58,6 @@ Make sure that you have the latest version installed.
 ### Step 2: Create a Head Component
 Create a new component inside your project. The file name does not matter. For this example, we choose `./src/components/starlight/Head.astro`. You can copy & paste the content for this file:
 
-**This is for Starlight versions >= 0.32.**
 ```astro title="./src/components/starlight/Head.astro"
 ---
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
@@ -93,18 +68,19 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 ```
-**And this is for Starlight versions < 0.32:**
+<details>
+<summary>This is for Starlight versions < 0.32</summary>
 ```astro title="./src/components/starlight/Head.astro"
 ---
 import type { Props } from '@astrojs/starlight/props';
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base-pre-0.32.astro';
 ---
-
 <VtbotStarlight {...Astro.props}>
 	<StarlightHead {...Astro.props}><slot /></StarlightHead>
 </VtbotStarlight>
 ```
+</details>
 
 
 ### Step 3: Use the New Head Component
@@ -167,14 +143,14 @@ You can configure several aspects of the view transition effect in your new `Hea
 
 ### Animating the Main Section
 
-You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight>` component. The Bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.[^remove]
+You can add a `transition:animate=...` [directive](https://docs.astro.build/en/guides/view-transitions/#built-in-animation-directives) to the `<VtbotStarlight>` component. The Bag will teleport the directive from there to the `<main>` element of the Starlight page.  This is the way to enable view transition animations for the main content area of a Starlight site for all browsers.[^add-props]
 
 ```astro title="How to add animations to the main area"
-<VtbotStarlight {...Astro.props} transition:animate="fade">
-	<StarlightHead {...Astro.props}><slot /></StarlightHead>
+<VtbotStarlight transition:animate="fade">
+	<StarlightHead><slot /></StarlightHead>
 </VtbotStarlight>
 ```
-[^remove]: Remove `{...Astro.props}` if you are using a Starlight version >= 0.32.
+[^add-props]: Add `{...Astro.props}` to the components if you are using a Starlight version < 0.32.
 
 If you want to add further styling to the transition group, you can explicitly name it by accompanying `transition:animate` with `transition:name="..."`. This way you replace the random name that Astro automatically gereted for you with a chosen name that you can use in CSS rules, see the [extended configuration example](#extended-configuration-example) below.
 
@@ -201,10 +177,9 @@ You can also add a `<style is:global>` section to the file to style the `::view-
 
 Let's revisit our `Head` component and see how it looks with the extensions described above:
 
-```astro title="./src/components/starlight/Head.astro" {3,16,19}
+```astro title="./src/components/starlight/Head.astro"
 ---
-// For Starlight version >= 0.32 remove the marked lines defining and using Astro.props
-import type { Props } from '@astrojs/starlight/props';
+// For Starlight version < 0.32 add Astro.props as shown in Step 2 above 
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
 import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
 import LoadingIndicator from 'astro-vtbot/components/LoadingIndicator.astro';
@@ -217,10 +192,8 @@ import { slide } from 'astro:transitions';
 
 {/* Define a view transition animation for `<main>`*/}
 <VtbotStarlight
-	{...Astro.props}
 	transition:name="main" transition:animate={slide({ duration: 150 })}>
 	<StarlightHead
-	{...Astro.props}
 	><slot /></StarlightHead>
 </VtbotStarlight>
 
@@ -461,7 +434,7 @@ What follows is a yet more extended version of the [extended configuration examp
 <Code code={DemoHead3} lang="astro" title="./src/components/starlight/Head.astro" ins={[5,6,7,8,9,10,11,19,20,36,37,39,40,42,43,44,45,47,48,49,51,52]}></Code>
 
 :::note
-The code above is for Starlight < 0.32. For Starlight version >= 0.32, remove the type import for `Props` and the two occurrences of `{...Astro.props}`.
+ For Starlight version < 0.32, add `{...Astro.props}` to the components.
 :::
 
 ## Friendly Neighbor

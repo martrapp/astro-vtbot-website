@@ -182,7 +182,6 @@ function sidebar1() {
 		}, {
 			label: "Supported in all Major Browsers",
 			link: "/jotter/in-all-major-browsers/",
-			badge: { text: "new", variant: "success" }
 		}
 		]
 	}, {
@@ -196,12 +195,14 @@ function sidebar1() {
 		}, {
 			label: "Fix Flash of Unstyled Content",
 			link: "/jotter/tips/flash-of-unstyled-content-during-view-transition/",
+			badge: { text: "new", variant: "success" }
 		} ]
 	}, {
-		label: "The Jotter on Starlight", collapsed: true,
+		label: "The Jotter on Starlight", collapsed: false,
 		items: [{
 			label: "Introduction",
-			link: "/jotter/starlight/"
+			link: "/jotter/starlight/",
+			badge: { text: "new", variant: "success" }
 		}, {
 			label: "Guide: Adding View Transitions",
 			link: "/jotter/starlight/guide/"

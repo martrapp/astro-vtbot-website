@@ -28,6 +28,11 @@ h1, h2, h3, h4, h5, h6 {
 	text-wrap-style: balance;
 }
 
+hr {
+	border: none;
+	border-top: 1px solid var(--sl-color-gray-4);
+	margin: 2em 0;
+}
 /* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #3b1a00;
