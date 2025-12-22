@@ -34,7 +34,7 @@
     "@types/node": "^25.0.2",
     "astro": "^5.16.5",
     "astro-d2": "^0.8.1",
-    "astro-expressive-code": "^0.41.4",
+    "astro-expressive-code": "^0.41.5",
     "astro-feelback": "latest",
     "astro-vtbot": "^2.1.9",
     "html2canvas": "^1.4.1",
