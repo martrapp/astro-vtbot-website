@@ -27,6 +27,7 @@ Should be a bit more than 2/3 SidebarSelect duration
 
 <ReadyToFinished duration="0.333s" />
 
+<a href="https://vtbag.dev/"><div id="cta">Astro client routing here --- Native API on vtbag.dev</div></a>
 <div id="vtbot-head-last-update" data-astro-transition-scope={swingScope}>
 	<LastUpdated />
 </div>
@@ -38,6 +39,19 @@ Should be a bit more than 2/3 SidebarSelect duration
 <style is:global>
 	#vtbot-head-last-update {
 		color: gray;
+		font-size: 0.8em;
+	}
+	#cta {
+		position: fixed;
+		top: 0;
+		left:0;
+		background: linear-gradient(330deg, light-dark(#8f681080,#8f681080), rgba(255, 127, 80, 0.5));
+		color: light-dark(black,white);
+		text-decoration: none;
+		width: 100%;
+		text-align: center;
+		font-size: 0.8rem;
+		padding-block: 0.3em;
 	}
 </style>
 <style is:global>

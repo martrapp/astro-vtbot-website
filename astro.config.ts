@@ -9,7 +9,7 @@ import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
-import starlightUtils from "@lorenzo_lewis/starlight-utils";
+//import starlightUtils from "@lorenzo_lewis/starlight-utils";
 
 //import starlightBlog from 'starlight-blog';
 
@@ -38,13 +38,14 @@ export default defineConfig({
 	}), vtbot({ loadingIndicator: true, autoLint: false }), starlight({
 		plugins: [//starlightBlog(),
 			starlightImageZoom(),
+			/*
 			starlightUtils({
 				multiSidebar: {
 					switcherStyle: "horizontalList",
 				}, navLinks: {
 					leading: { useSidebarLabelled: "leading" },
 				}
-			})
+			})*/
 		],
 		tableOfContents: {
 			minHeadingLevel: 2,
@@ -84,14 +85,14 @@ export default defineConfig({
 		editLink: {
 			baseUrl: "https://github.com/martrapp/astro-vtbot-website/edit/main/"
 		},
-		sidebar: [{
+		sidebar: sidebar1(),
+		/*[{
 			label: "Astro",
 			items: sidebar1()
 		}, {
 			label: "General",
 			items: sidebar2()
-		},
-		{
+		},{
 			label: "leading",
 			items: [{
 				label: "[C]",
@@ -99,10 +100,7 @@ export default defineConfig({
 			}, {
 				label: "[D]",
 				link: "/demos/"
-			}]
-		}
-
-		]
+			}]*/
 	})],
 	vite: {
 		build: {
@@ -232,6 +230,7 @@ function sidebar1() {
 		}
 	}] as SidebarItem[]);
 }
+/*
 function sidebar2() {
 	return ([{
 		label: "Browser View Transition API",
@@ -253,3 +252,4 @@ function sidebar2() {
 		}]
 	}] as SidebarItem[]);
 }
+*/
