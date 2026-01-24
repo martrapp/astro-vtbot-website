@@ -87,26 +87,33 @@ You're satisfied with the default cross-fade effect on navigation and can accept
 
 <style>{`
 
-	:is(#first, #second) li::marker {
-		font-family: system-ui, sans-serif;
-		font-weight: 800;
-		content: "✔  ";
-		color: #2e7d32;
-	}
+:is(#first, #second) li {
+	list-style: none;
+	position: relative;
+	padding-left: 1.5em;
+}
+:is(#first, #second) li::before {
+	font-family: system-ui, sans-serif;
+	font-weight: 800;
+	content: "✔  ";
+	color: #2e7d32;
+	position: absolute;
+	left: 0;
+}
 #first {
-	li:nth-child(4)::marker{
-  	content: "⚠  ";
- 		color: #ffb400;
+	li:nth-child(4)::before{
+	content: "⚠  ";
+		color: #ffb400;
 	}
 }
 #second {
-	li:nth-child(2)::marker{
-  	content: "⚠  ";
- 		color: #ffb400;
+	li:nth-child(2)::before{
+	content: "⚠  ";
+		color: #ffb400;
 	}
-	li:nth-child(3)::marker {
-  	content: "✘  ";
- 		color: #c62828;
+	li:nth-child(3)::before {
+	content: "✘  ";
+		color: #c62828;
 	}
 }
 
