@@ -250,15 +250,12 @@ const pond = { south, north, east, west };
 	}
 </style>
 <script>
-	import {
-		TRANSITION_BEFORE_PREPARATION,
-		isTransitionBeforePreparationEvent,
-	} from 'astro:transitions/client';
+	import { TransitionBeforePreparationEvent } from 'astro:transitions/client';
 	const FISHPOND = '/fish-pond/';
-	document.addEventListener(TRANSITION_BEFORE_PREPARATION, beforePreparation);
+	document.addEventListener('astro:before-preparation', beforePreparation);
 
-	function beforePreparation(e: Event) {
-		if (isTransitionBeforePreparationEvent(e) && e.to.pathname.startsWith(FISHPOND)) {
+	function beforePreparation(e: TransitionBeforePreparationEvent) {
+		if (e.to.pathname.startsWith(FISHPOND)) {
 			let newDir = dir(e.from.pathname, e.to.pathname);
 			e.direction = newDir;
 		}

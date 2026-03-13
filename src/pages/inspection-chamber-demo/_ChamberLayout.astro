@@ -1,38 +1,38 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import InspectionChamber from "astro-vtbot/components/InspectionChamber.astro";
+import Layout from '../../layouts/Layout.astro';
+import InspectionChamber from 'astro-vtbot/components/InspectionChamber.astro';
 
 export interface Props {
-  title: string;
+	title: string;
 }
 const { title } = Astro.props;
 ---
 
 <Layout {title}>
-	<InspectionChamber slot="head"/>
-  <slot />
+	<InspectionChamber slot="head" />
+	<slot />
 </Layout>
 
 <style is:global>
-  :root,
-  body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+	:root,
+	body {
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
 
-  :root {
-    color-scheme: dark;
-    font-family: sans-serif;
-    view-transition-name: none;
-  }
-  #back {
-    display: inline-block;
-    color: black;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem;
-    background: linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8);
-    box-shadow: 0 4px 6px #8888;
-  }
+	:root {
+		color-scheme: dark;
+		font-family: sans-serif;
+		view-transition-name: none;
+	}
+	#back {
+		display: inline-block;
+		color: black;
+		border-radius: 8px;
+		padding: 1rem;
+		margin: 1rem;
+		background: linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8);
+		box-shadow: 0 4px 6px #8888;
+	}
 </style>

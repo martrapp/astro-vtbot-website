@@ -6,7 +6,6 @@
 	view-transition-name: level-up;
 }
 
-
 /* Shake the whole viewport */
 ::view-transition {
 	animation-name: shake;
@@ -178,7 +177,6 @@
 		z-index: initial;
 	}
 }
-
 
 a {
 	view-transition-class: starter;

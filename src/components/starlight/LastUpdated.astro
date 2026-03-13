@@ -12,7 +12,9 @@ const gitDate = (f: string) =>
 			encoding: 'utf-8',
 		}
 	).stdout.trim();
-const firstPublished = new Date(Number(gitDate(Astro.locals.starlightRoute.entry.filePath) + '000'));
+const firstPublished = new Date(
+	Number(gitDate(Astro.locals.starlightRoute.entry.filePath) + '000')
+);
 ---
 
 {

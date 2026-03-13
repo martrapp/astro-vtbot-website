@@ -1,7 +1,6 @@
 ---
 import Layout from './_RocketLayout.astro';
 
-
 export async function getStaticPaths() {
 	return [
 		{ params: { kind: 'plain', outline: 'no', theme: 'light' } },
@@ -14,14 +13,20 @@ export async function getStaticPaths() {
 		{ params: { kind: 'fancy', outline: 'yes', theme: 'dark' } },
 	];
 }
-const { kind, outline, theme } = Astro.params
+const { kind, outline, theme } = Astro.params;
 // @ts-ignore
-Astro.params["pg"] = 1;
+Astro.params['pg'] = 1;
 ---
 
 <Layout pg={1} {kind} {outline} {theme}>
-	<a id="rocket" style="view-transition-name: rocket" href=`/iframes/rocket-${kind}-${outline}-${theme}/`>🚀</a>
-	<a style="view-transition-name: level-up" href={`/iframes/rocket-${kind}-${outline}-${theme}-2/`}>Level Up!</a>
+	<a
+		id="rocket"
+		style="view-transition-name: rocket"
+		href=`/iframes/rocket-${kind}-${outline}-${theme}/`>🚀</a
+	>
+	<a style="view-transition-name: level-up" href={`/iframes/rocket-${kind}-${outline}-${theme}-2/`}
+		>Level Up!</a
+	>
 
 	<style>
 		#rocket {

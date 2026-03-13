@@ -31,13 +31,8 @@ import Content from 'src/mdx/hero-prefetch/overview.mdx';
 	<Content />
 </PrefetchLayout>
 <script>
-	import {
-		TRANSITION_BEFORE_PREPARATION,
-		isTransitionBeforePreparationEvent,
-	} from 'astro:transitions/client';
-
-	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (event: Event) => {
-		if (isTransitionBeforePreparationEvent(event) && event.from.href.endsWith('/overview/')) {
+	document.addEventListener('astro:before-preparation', (event) => {
+		if (event.from.href.endsWith('/overview/')) {
 			const originalLoader = event.loader;
 			event.loader = async () => {
 				await originalLoader();

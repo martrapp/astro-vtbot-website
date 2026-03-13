@@ -16,9 +16,9 @@ import starlightImageZoom from 'starlight-image-zoom';
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	experimental: {
-		preserveScriptOrder: true,
+		rustCompiler: false
 	},
-	devToolbar: { enabled: false },
+	devToolbar: { enabled: true }, 
 	prefetch: false && process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
@@ -34,7 +34,11 @@ export default defineConfig({
 	},
 	trailingSlash: 'ignore',
 	integrations: [d2({
-		skipGeneration: process.env.GITHUB_ACTIONS === "true"
+		skipGeneration: process.env.GITHUB_ACTIONS === "true",
+		theme: {
+			default: "0",
+			dark: "200"
+		}
 	}), vtbot({ loadingIndicator: true, autoLint: false }), starlight({
 		plugins: [//starlightBlog(),
 			starlightImageZoom(),
@@ -54,7 +58,7 @@ export default defineConfig({
 		components: {
 			Head: "./src/components/starlight/Head.astro",
 			PageTitle: "./src/components/starlight/PageTitle.astro",
-//			Pagination: "./src/components/starlight/FeelBack.astro",
+			//			Pagination: "./src/components/starlight/FeelBack.astro",
 		},
 		title: "Bag of Tricks",
 		head: [{
@@ -194,7 +198,7 @@ function sidebar1() {
 			label: "Fix Flash of Unstyled Content",
 			link: "/jotter/tips/flash-of-unstyled-content-during-view-transition/",
 			badge: { text: "new", variant: "success" }
-		} ]
+		}]
 	}, {
 		label: "Starlight", collapsed: false,
 		items: [{

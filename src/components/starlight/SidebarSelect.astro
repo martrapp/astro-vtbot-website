@@ -7,11 +7,7 @@ const { durationMilliseconds } = Astro.props;
 
 <meta name="vtbot-sidebar-select-animation" content={durationMilliseconds + ''} />
 <script>
-	import {
-		type TransitionBeforeSwapEvent,
-		isTransitionBeforeSwapEvent,
-		TRANSITION_BEFORE_SWAP,
-	} from 'astro:transitions/client';
+	import { type TransitionBeforeSwapEvent } from 'astro:transitions/client';
 	import {
 		sidebarEntry,
 		clearCurrentPageMarker,
@@ -118,8 +114,8 @@ const { durationMilliseconds } = Astro.props;
 		marker.style.opacity = '0';
 		document.body.appendChild(marker);
 
-		document.addEventListener(TRANSITION_BEFORE_SWAP, (e) => {
-			if (isTransitionBeforeSwapEvent(e)) {
+		document.addEventListener('astro:before-swap', (e) => {
+			if (e instanceof CustomEvent) {
 				e.viewTransition.ready
 					.then(() => {
 						moveMarker(e);

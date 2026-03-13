@@ -9,10 +9,8 @@ const { pages, index } = Astro.props;
 <meta name="vtbot-carousel" content={pages.join(':')} />
 <meta name="vtbot-carousel-index" content={'' + index} />
 <script>
-	import {
-		TRANSITION_BEFORE_PREPARATION,
-		isTransitionBeforePreparationEvent,
-	} from 'astro:transitions/client';
+	import { TransitionBeforePreparationEvent } from 'astro:transitions/client';
+
 	const meta: HTMLMetaElement | null = document.querySelector('meta[name="vtbot-carousel"]');
 	if (!!meta) {
 		const pages = meta?.content?.split(':') ?? [];
@@ -23,11 +21,11 @@ const { pages, index } = Astro.props;
 				10
 			);
 
-		document.addEventListener(TRANSITION_BEFORE_PREPARATION, beforePreparation);
-		function beforePreparation(event: Event) {
+		document.addEventListener('astro:before-preparation', beforePreparation);
+		function beforePreparation(event: TransitionBeforePreparationEvent) {
 			const enabled = () => !!document.querySelector('meta[name="vtbot-carousel"]');
 
-			if (enabled() && isTransitionBeforePreparationEvent(event)) {
+			if (enabled()) {
 				const anchor = event.sourceElement;
 				if (anchor && anchor instanceof HTMLAnchorElement) {
 					if ('carouselFirst' in anchor.dataset) {

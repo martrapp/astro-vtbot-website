@@ -7,11 +7,6 @@
 		TransitionBeforePreparationEvent,
 		TransitionBeforeSwapEvent,
 	} from 'astro:transitions/client';
-	import {
-		TRANSITION_AFTER_PREPARATION,
-		TRANSITION_BEFORE_PREPARATION,
-	} from 'astro:transitions/client';
-	import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';
 
 	function afterPreparation(e: TransitionBeforePreparationEvent) {
 		const oldHeading = document.querySelector<HTMLElement>('main h1');
@@ -25,13 +20,15 @@
 			el.style.viewTransitionName === 'vtbot-hx' && (el.style.viewTransitionName = '');
 		});
 		const newHeading = e.newDocument.querySelector<HTMLElement>('main h1');
-		newHeading && e.to.pathname.startsWith("/jotter") && (newHeading.style.viewTransitionName = 'vtbot-hx');
+		newHeading &&
+			e.to.pathname.startsWith('/jotter') &&
+			(newHeading.style.viewTransitionName = 'vtbot-hx');
 	}
 
 	let event: TransitionBeforePreparationEvent;
-	document.addEventListener(TRANSITION_BEFORE_PREPARATION, (e) => (event = e));
-	document.addEventListener(TRANSITION_AFTER_PREPARATION, () => afterPreparation(event));
-	document.addEventListener(TRANSITION_BEFORE_SWAP, beforeSwap);
+	document.addEventListener('astro:before-preparation', (e) => (event = e));
+	document.addEventListener('astro:after-preparation', () => afterPreparation(event));
+	document.addEventListener('astro:before-swap', beforeSwap);
 </script>
 <style is:global>
 	::view-transition-new(vtbot-hx),

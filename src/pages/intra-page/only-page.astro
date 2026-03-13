@@ -65,26 +65,17 @@ import Layout from 'src/layouts/Layout.astro';
 	</h2>
 </Layout>
 <script>
-	import {
-		isTransitionBeforePreparationEvent,
-		isTransitionBeforeSwapEvent,
-	} from 'astro:transitions/client';
-
 	const enabled = (p: string) => p.endsWith('/intra-page/only-page/');
 	let previousScrollY: number;
 
 	document.addEventListener('astro:before-preparation', (e) => {
-		if (
-			isTransitionBeforePreparationEvent(e) &&
-			enabled(e.from.pathname) &&
-			enabled(e.to.pathname)
-		) {
+		if (enabled(e.from.pathname) && enabled(e.to.pathname)) {
 			e.loader = async () => {};
 		}
 	});
 	document.addEventListener('astro:before-swap', (e) => {
 		previousScrollY = 0;
-		if (isTransitionBeforeSwapEvent(e) && enabled(e.from.pathname) && enabled(e.to.pathname)) {
+		if (enabled(e.from.pathname) && enabled(e.to.pathname)) {
 			e.swap = () => {
 				const style1 = document.querySelector('h1')!.style;
 				const style2 = document.querySelector('h2')!.style;

@@ -13,7 +13,7 @@ const { title, background, pageFindIgnore } = Astro.props;
 	<slot />
 </Layout>
 <script>
-	import {supportsViewTransitions} from 'astro:transitions/client';
+	import { supportsViewTransitions } from 'astro:transitions/client';
 
 	let viewTransitionName: string;
 	document.addEventListener('astro:before-preparation', (event) => {

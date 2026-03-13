@@ -8,11 +8,10 @@ const { label } = Astro.props;
 {label && <meta name="vtbot-auto-collapse-label" content={label} />}
 <script>
 	import * as STARLIGHT from 'astro-vtbot/components/starlight/utils';
-	import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
 
 	const initial = localStorage.getItem('vtbot-auto-collapse') === 'true';
 
-	document.addEventListener(TRANSITION_PAGE_LOAD, () => {
+	document.addEventListener('astro:page-load', () => {
 		const content = document.querySelector(STARLIGHT.SIDEBAR_CONTENT);
 		if (!content) return;
 		let toggle = document.querySelector('#vtbot-auto-collapse-toggle');

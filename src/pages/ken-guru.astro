@@ -34,8 +34,8 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 				</li><li style="display: none">
 					As the page is already loaded, we do not need to load it again. The loader function in the
 
-					<code>astro:before-preparation</code> event is overwritten with an empty function. Thus we
-					do not load any HTML but just keep what we have.
+					<code>astro:before-preparation</code> event is overwritten with an empty function. Thus we do
+					not load any HTML but just keep what we have.
 				</li>
 				<li style="display: none">
 					The <code>swap</code> property of the <code>astro:before-swap</code> event is also overridden.
@@ -74,18 +74,11 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 			}
 		</style>
 		<script>
-			import {
-				TRANSITION_BEFORE_PREPARATION,
-				TRANSITION_BEFORE_SWAP,
-				isTransitionBeforePreparationEvent,
-				isTransitionBeforeSwapEvent,
-			} from 'astro:transitions/client';
-
 			const enabled = () => document.querySelector('meta[name="vtbot-ken"]');
 			// We don't have to swap in a new document. We just nudge Kenny a bit around.
 			let selected = 0;
-			document.addEventListener(TRANSITION_BEFORE_SWAP, (event: Event) => {
-				if (enabled() && isTransitionBeforeSwapEvent(event)) {
+			document.addEventListener('astro:before-swap', (event) => {
+				if (enabled() && event instanceof CustomEvent) {
 					event.swap = () => {
 						++selected;
 						const kenGuru = document.querySelector('a')!;
@@ -101,8 +94,8 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 				}
 			});
 			// we can remove the default loader from processing as we manipulate the current document
-			document.addEventListener(TRANSITION_BEFORE_PREPARATION, (event: Event) => {
-				if (enabled() && isTransitionBeforePreparationEvent(event)) {
+			document.addEventListener('astro:before-preparation', (event) => {
+				if (enabled() && event instanceof CustomEvent) {
 					event.loader = () => Promise.resolve();
 				}
 			});

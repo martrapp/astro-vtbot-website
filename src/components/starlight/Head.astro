@@ -28,7 +28,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 
 <PageOffset name="main" />
 <PageOrder />
-<PointerOnNavigation/>
+<PointerOnNavigation />
 
 <AutoNameSelected
 	selector='head:has(link[rel="canonical"][href*="/jotter/"]) + body main :is(h1, h2, h3, h4, h5, h6)'
@@ -49,10 +49,7 @@ import EagerImageLoading from '../EagerImageLoading.astro';
 
 <script>
 	import '../navigate';
-	//import { TRANSITION_AFTER_SWAP } from 'astro:transitions/client';
-	//import '@feelback/js/auto';
-	// document.addEventListener(TRANSITION_AFTER_SWAP, () => window.feelback?.setupFeelback());
-	addEventListener("popstate", (e)=>e.hasUAVisualTransition && location.reload());
+	addEventListener('popstate', (e) => e.hasUAVisualTransition && location.reload());
 </script>
 
 {

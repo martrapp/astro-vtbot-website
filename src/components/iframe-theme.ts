@@ -1,5 +1,3 @@
-import { TRANSITION_PAGE_LOAD } from 'astro:transitions/client';
-
 export function theme() {
 	[...document.querySelectorAll('iframe')].forEach((iframe) => {
 		if (iframe instanceof HTMLIFrameElement && iframe.contentDocument) {
@@ -13,4 +11,4 @@ observer.observe(document.documentElement, {
 	attributes: true,
 	attributeFilter: ['data-theme'],
 });
-document.addEventListener(TRANSITION_PAGE_LOAD, () => setTimeout(theme, 100));
+document.addEventListener('astro:page-load', () => setTimeout(theme, 100));

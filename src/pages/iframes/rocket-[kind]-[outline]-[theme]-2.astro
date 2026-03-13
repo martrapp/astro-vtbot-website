@@ -15,13 +15,18 @@ export async function getStaticPaths() {
 }
 const { kind, outline, theme } = Astro.params;
 // @ts-ignore
-Astro.params["pg"] = 2;
-
+Astro.params['pg'] = 2;
 ---
 
 <Layout {kind} {outline} {theme}>
-	<a id="rocket" style="view-transition-name: rocket" href=`/iframes/rocket-${kind}-${outline}-${theme}-2/`>🚀</a>
-	<a style="view-transition-name: back" href={`/iframes/rocket-${kind}-${outline}-${theme}/`}>Back to Base...</a>
+	<a
+		id="rocket"
+		style="view-transition-name: rocket"
+		href=`/iframes/rocket-${kind}-${outline}-${theme}-2/`>🚀</a
+	>
+	<a style="view-transition-name: back" href={`/iframes/rocket-${kind}-${outline}-${theme}/`}
+		>Back to Base...</a
+	>
 
 	<style>
 		#rocket {

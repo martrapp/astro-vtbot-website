@@ -146,3 +146,8 @@ Astro's language server is now smart enough to know that a listener to `astro:be
     }
   }
 ```
+:::caution
+Starting with Astro 6, these functions are deprecated. In Astro 7, they will be removed.
+
+To prepare for the removal, use the event parameter without an explicit type and let typescript infer `TransitionBeforePreparationEvent` or `TransitionBeforeSwapEvent`.
+:::

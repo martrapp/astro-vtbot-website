@@ -4,15 +4,15 @@
 
 <meta name="vtbot-circular" content="true" />
 <script>
-	import { TRANSITION_BEFORE_SWAP, isTransitionBeforeSwapEvent } from 'astro:transitions/client';
+	import { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 
 	const enabled = () => !!document.querySelector('meta[name="vtbot-circular"]');
 
 	// Store the last click event
 	let lastClick: MouseEvent;
 
-	function beforeSwap(beforeSwapEvent: Event) {
-		if (enabled() && isTransitionBeforeSwapEvent(beforeSwapEvent)) {
+	function beforeSwap(beforeSwapEvent: TransitionBeforeSwapEvent) {
+		if (enabled()) {
 			// Get the click position, or fallback to the middle of the screen
 			const x = lastClick?.clientX ?? innerWidth / 2;
 			const y = lastClick?.clientY ?? innerHeight / 2;
@@ -41,7 +41,7 @@
 				.catch(() => {});
 		}
 	}
-	document.addEventListener(TRANSITION_BEFORE_SWAP, beforeSwap);
+	document.addEventListener('astro:before-swap', beforeSwap);
 	addEventListener('click', (event) => (lastClick = event));
 </script>
 <style is:global>
