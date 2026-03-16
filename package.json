@@ -37,7 +37,7 @@
     "astro-feelback": "latest",
     "astro-vtbot": "^2.1.12",
     "html2canvas": "^1.4.1",
-    "nanostores": "^1.1.1",
+    "nanostores": "^1.2.0",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "rehype-autolink-headings": "^7.1.0",
