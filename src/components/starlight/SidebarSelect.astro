@@ -115,13 +115,11 @@ const { durationMilliseconds } = Astro.props;
 		document.body.appendChild(marker);
 
 		document.addEventListener('astro:before-swap', (e) => {
-			if (e instanceof CustomEvent) {
-				e.viewTransition.ready
-					.then(() => {
-						moveMarker(e);
-					})
-					.catch(() => defaultBehavior(e));
-			}
+			e.viewTransition.ready
+				.then(() => {
+					moveMarker(e);
+				})
+				.catch(() => defaultBehavior(e));
 		});
 		return marker;
 	}

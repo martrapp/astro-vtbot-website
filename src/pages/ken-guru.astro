@@ -78,24 +78,24 @@ const vtbotBackgroundImage = `url(${optimizedBackground.src})`;
 			// We don't have to swap in a new document. We just nudge Kenny a bit around.
 			let selected = 0;
 			document.addEventListener('astro:before-swap', (event) => {
-				if (enabled() && event instanceof CustomEvent) {
-					event.swap = () => {
-						++selected;
-						const kenGuru = document.querySelector('a')!;
-						const x = 5 + Math.random() * 90;
-						const y = 60 + Math.random() * 20;
-						const s = 0.5 + Math.random() * 1.5;
-						kenGuru.style.transform = `translate(${x}vw,${y}vh) scale(${s})`;
-						document.querySelectorAll('li').forEach((li, idx, arr) => {
-							li.style.display = idx === selected % arr.length ? 'block' : 'none';
-						});
-						document.querySelector("[class*='astro-route-announcer']")?.remove();
-					};
+				if (enabled()) {
+				event.swap = () => {
+					++selected;
+					const kenGuru = document.querySelector('a')!;
+					const x = 5 + Math.random() * 90;
+					const y = 60 + Math.random() * 20;
+					const s = 0.5 + Math.random() * 1.5;
+					kenGuru.style.transform = `translate(${x}vw,${y}vh) scale(${s})`;
+					document.querySelectorAll('li').forEach((li, idx, arr) => {
+						li.style.display = idx === selected % arr.length ? 'block' : 'none';
+					});
+					document.querySelector("[class*='astro-route-announcer']")?.remove();
+				};
 				}
 			});
 			// we can remove the default loader from processing as we manipulate the current document
 			document.addEventListener('astro:before-preparation', (event) => {
-				if (enabled() && event instanceof CustomEvent) {
+				if (enabled()) {
 					event.loader = () => Promise.resolve();
 				}
 			});
