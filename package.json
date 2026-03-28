@@ -21,9 +21,10 @@
     "relocate": "./bin/relocate.sh"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.7",
-    "@astrojs/mdx": "^5.0.0",
-    "@astrojs/starlight": "^0.38.1",
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/compiler-rs": "^0.1.6",
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/starlight": "^0.38.2",
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.30.0",
     "@expressive-code/plugin-collapsible-sections": "^0.41.7",
@@ -31,13 +32,15 @@
     "@pagefind/default-ui": "^1.4.0",
     "@types/dom-view-transitions": "^1.0.6",
     "@types/node": "^25.5.0",
-    "astro": "^6.0.4",
+    "astro": "^6.1.1",
     "astro-d2": "^0.10.0",
     "astro-expressive-code": "^0.41.7",
     "astro-feelback": "latest",
     "astro-vtbot": "^2.1.12",
+    "astro-webrings": "^0.1.4",
     "html2canvas": "^1.4.1",
-    "nanostores": "^1.1.1",
+    "nanostores": "^1.2.0",
+    "postcss-active-view-transition-type": "^0.0.7",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "rehype-autolink-headings": "^7.1.0",
@@ -52,10 +55,5 @@
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/martrapp"
-  },
-  "dependencies": {
-    "@astrojs/compiler-rs": "^0.1.4",
-    "astro-webrings": "^0.1.3",
-    "postcss-active-view-transition-type": "^0.0.7"
   }
 }
