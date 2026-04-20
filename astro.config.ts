@@ -182,6 +182,9 @@ function sidebar1() {
 			label: "Same-Document View Transitions",
 			link: "/jotter/same-doc/"
 		}, {
+			label: "Astro Same Document Example",
+			link: "/jotter/api/example/"
+		},{
 			label: "Supported in all Major Browsers",
 			link: "/jotter/in-all-major-browsers/",
 		}
