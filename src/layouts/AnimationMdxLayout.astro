@@ -2,7 +2,7 @@
 import MdxLayout from './MdxLayout.astro';
 import AnimationStyle from 'astro-vtbot/animations/AnimationStyle.astro';
 import NoScroll from 'astro-vtbot/components/NoScroll.astro';
-import { createAnimationScope, fade, slide } from 'astro:transitions';
+import { fade } from 'astro:transitions';
 import { swing, customSwing } from 'astro-vtbot/animations/swing';
 import { zoom, customZoom } from 'astro-vtbot/animations/zoom';
 import { move, customMove } from 'astro-vtbot/animations/move';
@@ -17,6 +17,7 @@ import Zoom3 from '../mdx/animations/zoom3.mdx';
 import Move1 from '../mdx/animations/move1.mdx';
 import Move2 from '../mdx/animations/move2.mdx';
 import Move3 from '../mdx/animations/move3.mdx';
+
 
 const { scope: zoom1Scope, styles: zoom1Styles } = styleSheet({
 	transitionName: 'zoom1',
@@ -114,7 +115,7 @@ const { scope: _fadeScope, styles: fadeStyles } = styleSheet({
 	animations: extend(fade({ duration: 300 })),
 	scope: undefined,
 });
-const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide', { ...slide() });
+
 ---
 
 <AnimationStyle name="swing1" />
@@ -125,7 +126,7 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 <AnimationStyle name="move2" />
 <AnimationStyle name="move3" />
 
-<style set:text={noneStyles + fadeStyles + slideStyles + zoom1Styles + move1Styles}></style>
+<style set:text={noneStyles + fadeStyles + zoom1Styles + move1Styles}></style>
 
 <MdxLayout {...Astro.props}>
 	<NoScroll slot="head" />
@@ -145,12 +146,6 @@ const { scope: _slideScope, styles: slideStyles } = createAnimationScope('slide'
 		<button data-scope={move1Scope}>move1</button>
 		<button data-scope={move2Scope}>move2</button>
 		<button data-scope={move3Scope}>move3</button>
-		{
-			/*	<button data-scope={noneScope}>none</button>
-		<button data-scope={fadeScope}>fade</button>
-		<button data-scope={slideScope}>slide</button>
-	*/
-		}
 		<span transition:persist="clip" style="padding:1ex"
 			><input id="clip" type="checkbox" /><label for="clip"> Clip animation</label></span
 		>

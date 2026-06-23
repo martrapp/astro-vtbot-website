@@ -15,10 +15,7 @@ import starlightImageZoom from 'starlight-image-zoom';
 
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
-	experimental: {
-		rustCompiler: false
-	},
-	devToolbar: { enabled: true }, 
+	devToolbar: { enabled: true },
 	prefetch: false && process.env.NODE_ENV === "production",
 	markdown: {
 		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
@@ -184,7 +181,7 @@ function sidebar1() {
 		}, {
 			label: "Astro Same Document Example",
 			link: "/jotter/api/example/"
-		},{
+		}, {
 			label: "Supported in all Major Browsers",
 			link: "/jotter/in-all-major-browsers/",
 		}
@@ -232,9 +229,17 @@ function sidebar1() {
 		}]
 	}, {
 		label: "Lost & Found / to be Curated",
-		autogenerate: {
-			directory: "jotter/snippets"
-		}
+		items: [{
+			label: "Practitioner's Guide",
+			link: "/jotter/snippets/apg/"
+		}, {
+			label: "CSS Tricks & Pitfalls",
+			link: "/jotter/snippets/css-tricks-pitfalls/"
+		}, {
+			label: "Things to write about when I find the time to do so and there are no other more important things to do",
+			link: "/jotter/snippets/thing-to-write-about/"
+		},
+		]
 	}] as SidebarItem[]);
 }
 /*

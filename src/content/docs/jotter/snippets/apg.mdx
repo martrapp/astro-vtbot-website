@@ -1,5 +1,5 @@
 ---
-title: Practitioners' Guide
+title: Practitioner's Guide
 description: Tips and Tricks on using view transitions in Astro
 ---
  A guide for practitioners on View Transitions
@@ -63,7 +63,7 @@ The only way to run asynchronous code during transitions and wait for it to comp
 
 <dt>My event listener is not called</dt>
 
-<dd><p>Make sure that you have added the event listener to the <code>document</code> object and not to the <code>window</code> object.</p><p>Check the spelling of the event name. You might also use predefined constants (e.g. `import { TRANSITION_BEFORE_SWAP } from 'astro:transitions/client';`)</p>
+<dd><p>Make sure that you have added the event listener to the <code>document</code> object and not to the <code>window</code> object.</p><p>Check the spelling of the event name.</p>
 <p>Make sure that the handler is installed before the event is triggered: For example, if you install a handler for `astro:after-swap` in an inline script, this script will only be executed after the event has been fired. Listeners for `astro:page-load` can also be installed too late, e.g. if they are contained in a `type="text/partytown"` script, as partytown deferes the execution of scripts to web workers.</p></dd>
 
 <dt>My event listener is called too often</dt>

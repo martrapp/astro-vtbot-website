@@ -10,7 +10,7 @@ Of course, you can tweak the look & feel of the <a data-astro-reload href="/libr
 If you want to know what happens behind the scenes, here is a rough sketch of the code that is used to display a loading indicator if you use the reusable `<LoadingIndicator/>` component or the TypeScript pendant `loading-indicator.ts`:
 
 ```javascript title="loading-indicator.js"
-document.addEventListener(TRANSITION_PAGE_LOAD, doInit); // optional: dynamically setup the indicator
-document.addEventListener(TRANSITION_BEFORE_PREPARATION, doShow); // show the indicator
-document.addEventListener(TRANSITION_BEFORE_SWAP, doHide); // hide the indicator
+document.addEventListener('astro:page-load', doInit); // optional: dynamically setup the indicator
+document.addEventListener('astro:before-preparation', doShow); // show the indicator
+document.addEventListener('astro:before-swap', doHide); // hide the indicator
 ```

@@ -52,13 +52,13 @@ This is the pattern for the extension of the `loader()` function:
 <script>
   import {
     isTransitionBeforePreparationEvent,
-    TRANSITION_BEFORE_PREPARATION,
+    'astro:before-preparation',
   } from "astro:transitions/client";
 
   /*
    * Add your code before and/or after the original loader()
    */
-  document.addEventListener(TRANSITION_BEFORE_PREPARATION, augmentLoader);
+  document.addEventListener("astro:before-preparation", augmentLoader);
   function augmentLoader(event: Event) {
     if (isTransitionBeforePreparationEvent(event)) {
       const originalLoader = event.loader;
@@ -81,13 +81,13 @@ And this is the chaining pattern for extending the `swap()` function.
 <script>
   import {
     isTransitionBeforeSwapEvent,
-    TRANSITION_BEFORE_SWAP,
+    'astro:before-swap',
   } from "astro:transitions/client";
 
   /*
    * Add your code before and/or after the original swap()
    */
-  document.addEventListener(TRANSITION_BEFORE_SWAP, augmentSwap);
+  document.addEventListener("astro:before-swap", augmentSwap);
   function augmentSwap(event: Event) {
     if (isTransitionBeforeSwapEvent(event)) {
       const originalSwap = event.swap;
