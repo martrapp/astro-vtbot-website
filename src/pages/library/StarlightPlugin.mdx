@@ -109,17 +109,27 @@ So view transitions will not start until the whole content of your page is loade
 
 To enable this option, import and include the remarkEndOfMarkdown plugin:
 
+##### For Satteri (Starlight 0.41+)
 ```ts title="astro.config.mjs" {2,5}
 import { defineConfig } from 'astro/config';
-import { viewTransitions, remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
+import { remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
+
+export default defineConfig({
+	 markdown: {
+    processor: satteri({
+			mdastPlugins: [remarkEndOfMarkdown],
+		})
+	}
+})
+```
+
+##### For Starlight 0.32 - 0.40
+```ts title="astro.config.mjs" {2,5}
+import { defineConfig } from 'astro/config';
+import { remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
 
 export default defineConfig({
 	markdown: { remarkPlugins: [remarkEndOfMarkdown] }
-	integrations: [
-		starlight({
-			plugins: [viewTransitions()],
-			...
-		...})],
 })
 ```
 <hr/>
