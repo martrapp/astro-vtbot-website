@@ -1,10 +1,11 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import starlight from "@astrojs/starlight";
 import d2 from "astro-d2";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
 import remarkHeadingID from 'remark-heading-id';
+import { unified } from "@astrojs/markdown-remark";
 import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
 import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
@@ -12,22 +13,27 @@ import starlightImageZoom from 'starlight-image-zoom';
 //import starlightUtils from "@lorenzo_lewis/starlight-utils";
 
 //import starlightBlog from 'starlight-blog';
+const googleFontProvider = fontProviders.google();
 
 export default defineConfig({
 	site: "https://events-3bg.pages.dev/",
 	devToolbar: { enabled: true },
-	prefetch: false && process.env.NODE_ENV === "production",
+	prefetch: process.env.NODE_ENV === "production",
 	markdown: {
-		rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
-			behavior: "wrap"
-		}], [rehypeExternalLinks, {
-			target: "_blank",
-			content: {
-				type: "text",
-				value: "↗"
-			}
-		}]],
-		remarkPlugins: [remarkToc, remarkHeadingID]
+		processor: unified({
+			rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {
+				behavior: "wrap"
+			}], [rehypeExternalLinks, {
+				target: "_blank",
+				content: {
+					type: "text",
+					value: "↗"
+				}
+			}]],
+			remarkPlugins: [remarkToc, remarkHeadingID],
+			gfm: true,
+			smartypants: true
+		})
 	},
 	trailingSlash: 'ignore',
 	integrations: [d2({
@@ -103,6 +109,25 @@ export default defineConfig({
 				link: "/demos/"
 			}]*/
 	})],
+	// astro.config.mjs
+
+	fonts: [
+		{
+			name: 'Syne',
+			provider: googleFontProvider,
+			cssVariable: '--font-syne',
+			weights: ['800'],
+			styles: ['normal']
+		},
+		{
+			name: 'Inter',
+			provider: googleFontProvider,
+			cssVariable: '--font-inter',
+			weights: ['400', '600'],
+			styles: ['normal']
+		}
+	],
+
 	vite: {
 		build: {
 			assetsInlineLimit: 0,

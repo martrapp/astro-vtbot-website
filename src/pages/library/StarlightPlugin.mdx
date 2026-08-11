@@ -66,7 +66,7 @@ You can customize the plugin with additional behavior. These steps are all optio
 * set config strings for the included scripts
 
 #### Option 1: Enable the `renderBlocking` field for use in the frontmatter
-The Starlight Plugin provides an easy way to define [expect links]() using a frontmatter filed called `renderBlocking`. If you do not use this option, you can alternatively use Starlight's [head fields](#how-to-expect-content-without-the-plugin) to define such links.
+The Starlight Plugin provides an easy way to define [expect links](https://vtbag.dev/fwvt/twinkling/#await-page-content) using a frontmatter filed called `renderBlocking`. If you do not use this option, you can alternatively use Starlight's [head fields](#how-to-expect-content-without-the-plugin) to define such links.
 
 If you want to use the `renderBlocking` attribute in the markdown frontmatter to tell the browser to wait for a fragment identifier "below the fold", you need to extend Starlight's content config.
 
@@ -107,32 +107,61 @@ If this option is enabled, the Starlight Plugin will automatically add the `end-
 
 So view transitions will not start until the whole content of your page is loaded. This can be convenient for small pages, but might also come with some performance penalties for larger content.
 
-To enable this option, import and include the remarkEndOfMarkdown plugin:
+To enable this option, import and include the plugin that adds the end-of-markdown id. For Starlight 0.32 - 0.40, use the `remarkEndOfMarkdown` plugin. For Sätteri (Starlight 0.41+), use the `hastMarkEndOfMarkdown` plugin. 
+
 
 ##### For Sätteri (Starlight 0.41+)
-```ts title="astro.config.mjs" {2,5}
+```ts title="astro.config.mjs" {3,8}
 import { defineConfig } from 'astro/config';
-import { remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
+import { satteri } from '@astrojs/markdown-satteri';
+import { hastMarkEndOfMarkdown, viewTransitions } from "astro-vtbot/starlight-view-transitions";
 
 export default defineConfig({
 	 markdown: {
     processor: satteri({
-			mdastPlugins: [remarkEndOfMarkdown],
+			hastPlugins: [hastMarkEndOfMarkdown],
 		})
 	}
 })
 ```
-From `astro-vtbot` version 3.0.1 onwards, you can also use the alias `mdastEndOfMarkdown` if you prefer that name.
 
 ##### For Starlight 0.32 - 0.40
 ```ts title="astro.config.mjs" {2,5}
 import { defineConfig } from 'astro/config';
-import { remarkEndOfMarkdown } from "astro-vtbot/starlight-view-transitions";
+import { remarkEndOfMarkdown, viewTransitions } from "astro-vtbot/starlight-view-transitions";
 
 export default defineConfig({
 	markdown: { remarkPlugins: [remarkEndOfMarkdown] }
 })
 ```
+
+##### For Starlight 0.41+ w/o Sätteri
+If you happen to run Starlight 0.41+ without Sätteri, you probably see a warning that nudges you to use the unified processor. Here you go:
+
+```ts title="astro.config.mjs" {3,8}
+import { defineConfig } from 'astro/config';
+import { unified } from "@astrojs/markdown-remark";
+import { remarkEndOfMarkdown, viewTransitions } from "astro-vtbot/starlight-view-transitions";
+
+export default defineConfig({
+	markdown: { 
+		processor: unified({
+			remarkPlugins: [remarkEndOfMarkdown]
+		})
+	}
+})
+```
+
+##### Custom IDs
+
+If you want to replace the default id `end-of-markdown` with a custom id, both plugins accept a string parameter for the id name. For example, to use `below-the-fold` instead of `end-of-markdown`, you would do this:
+
+```ts title="astro.config.mjs"
+...
+	hastPlugins: [hastMarkEndOfMarkdown("below-the-fold")],
+...
+```	
+
 <hr/>
 
 #### Option 3: Set config strings for included scripts
