@@ -8,7 +8,7 @@ import remarkHeadingID from 'remark-heading-id';
 import { unified } from "@astrojs/markdown-remark";
 import remarkToc from 'remark-toc';
 import vtbot from 'astro-vtbot';
-import type { SidebarItem } from 'node_modules/@astrojs/starlight/schemas/sidebar';
+import type { SidebarItem } from '~/node_modules/@astrojs/starlight/schemas/sidebar';
 import starlightImageZoom from 'starlight-image-zoom';
 //import starlightUtils from "@lorenzo_lewis/starlight-utils";
 

@@ -101,10 +101,10 @@ In both cases, the source code for the rocket demo is refreshingly simple! And n
 <Tabs>
   <TabItem label="View Transition API">
 
-import page1api from "src/pages/rocket-api/page1.astro?raw"
-import page2api from "src/pages/rocket-api/page2.astro?raw"
-import layoutapi from "src/pages/rocket-api/_Layout.astro?raw"
-import css from "src/styles/view-transition.css?raw"
+import page1api from "~/src/pages/rocket-api/page1.astro?raw"
+import page2api from "~/src/pages/rocket-api/page2.astro?raw"
+import layoutapi from "~/src/pages/rocket-api/_Layout.astro?raw"
+import css from "~/src/styles/view-transition.css?raw"
 
 
 <Code code={layoutapi} lang="astro" wrap meta="collapse={9-14,17-27}" title="src/pages/_Layout.astro"/>
@@ -118,9 +118,9 @@ As with every CSS property, you can set the `view-transition-name` using a CSS r
 
 	</TabItem>
   <TabItem label="Astro Client Router">
-import page1cr from "src/pages/rocket-cr/page1.astro?raw"
-import page2cr from "src/pages/rocket-cr/page2.astro?raw"
-import layoutcr from "src/pages/rocket-cr/_Layout.astro?raw"
+import page1cr from "~/src/pages/rocket-cr/page1.astro?raw"
+import page2cr from "~/src/pages/rocket-cr/page2.astro?raw"
+import layoutcr from "~/src/pages/rocket-cr/_Layout.astro?raw"
 
 
 <Code code={layoutcr} lang="astro" wrap meta="collapse={11-16, 19-22} {3,9}" title="src/pages/_Layout.astro"/>
@@ -193,7 +193,7 @@ Oh look, **that's exactly what we've already done** on Line 2 in `_Layout.astro`
 
 ```astro title="src/pages/_Layout.astro"
 ---
-import "src/styles/view-transition.css"
+import "~/src/styles/view-transition.css"
 ...
 ```
 

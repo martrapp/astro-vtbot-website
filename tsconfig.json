@@ -6,10 +6,10 @@
     "dist"
   ],
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "allowJs": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] },
+    "paths": { "~/*": ["./*"] },
     "jsxImportSource": "react"
   },
   "include": [

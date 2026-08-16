@@ -2,7 +2,7 @@
 import VtBotDebug from 'astro-vtbot/components/VtBotDebug.astro';
 import { getImage } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
-import outback from 'src/assets/outback.png';
+import outback from '~/src/assets/outback.png';
 
 const optimizedBackground = await getImage({ src: outback });
 const vtbotBackgroundImage = `url(${optimizedBackground.src})`;

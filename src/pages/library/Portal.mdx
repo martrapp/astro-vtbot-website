@@ -1,5 +1,5 @@
 ---
-layout: src/layouts/LibraryMdxLayout.astro
+layout: ~/src/layouts/LibraryMdxLayout.astro
 title: Portal Component
 overview: /components/
 vtn: portal-3
@@ -47,8 +47,8 @@ The component has a single property `page` that specifies the URL of the portal 
 
 ```astro title="/portal/page.astro"
 ---
-import Layout from 'src/layouts/Layout.astro';
-import 'src/css/light-dark.css';
+import Layout from '~/src/layouts/Layout.astro';
+import '~/src/css/light-dark.css';
 ---
 <Layout title="PortalPage">
 	<div transition:name="content">
