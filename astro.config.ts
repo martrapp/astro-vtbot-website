@@ -262,7 +262,7 @@ function sidebar1() {
 			link: "/jotter/snippets/css-tricks-pitfalls/"
 		}, {
 			label: "Things to write about when I find the time to do so and there are no other more important things to do",
-			link: "/jotter/snippets/thing-to-write-about/"
+			link: "/jotter/snippets/things-to-write-about/"
 		},
 		]
 	}] as SidebarItem[]);
