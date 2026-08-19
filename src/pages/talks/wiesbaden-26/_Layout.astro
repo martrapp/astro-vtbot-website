@@ -1,0 +1,236 @@
+---
+import { Font } from 'astro:assets';
+import './styles.css';
+import './vt.css';
+import './keyframes.css';
+
+export interface Props {
+	heading?: string;
+	steps: string[] | number;
+	talk?: string;
+}
+let { heading, talk = 'martrapp (vtbag.dev)', steps = [] } = Astro.props;
+if (typeof steps === 'number') {
+	steps = Array.from({ length: steps }, (_, i) => `li${i + 1}`);
+}
+---
+
+<html lang="en" data-steps={JSON.stringify(steps)}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Astro Together, Wiesbaden 2026</title>
+		<link rel="expect" href="#body" blocking="render" />
+		<style
+			is:inline
+			is:global
+			set:text={`@view-transition {navigation: auto; types: cross-document;}`}
+		></style>
+		<Font cssVariable="--font-syne" />
+		<Font cssVariable="--font-inter" />
+		<script is:inline>
+			window.SLIDES = [
+				'/talks/wiesbaden-26/index2/',
+				'/talks/wiesbaden-26/who/',
+				'/talks/wiesbaden-26/me/',
+				'/talks/wiesbaden-26/not-ready/',
+				'/talks/wiesbaden-26/in-a-nutshell/',
+				'/talks/wiesbaden-26/magnify/',
+				'/talks/wiesbaden-26/apples/',
+				'/talks/wiesbaden-26/apples2/',
+				'/talks/wiesbaden-26/trees/',
+				'/talks/wiesbaden-26/decisions/',
+			];
+			addEventListener('pagereveal', ()=>
+				(document.querySelector('#page-no').innerText = window.SLIDES.findIndex(
+					(path) => path === location.pathname
+				)
+					.toString()
+					.padStart(2, '0'))
+			);
+		</script>
+	</head>
+	<body id="body">
+		<div class="slide-viewport">
+			<div class="slide">
+				<header>
+					<h1 id="slide-heading">
+						<slot name="heading">{heading}</slot>
+					</h1>
+					<span id="counter">
+						<span id="prev">&lt;</span>
+						<span id="page-no">00</span>
+						<span id="next">&gt;</span>
+					</span>
+				</header>
+
+				<!-- Slide Body (Injected Content) -->
+				<main>
+					<slot />
+				</main>
+
+				<!-- Global Persistent Footer -->
+				<footer>
+					<span>{talk}</span>
+					<span>Wiesbaden, 2026-09-05</span>
+				</footer>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script>
+	import { mayStartViewTransition } from '@vtbag/utensil-drawer/may-start-view-transition';
+	declare global {
+		interface Window {
+			SLIDES: string[];
+		}
+	}
+	function getNavigationUrls() {
+		const currentIndex = window.SLIDES.findIndex((path) => path === location.pathname);
+		return {
+			prev: window.SLIDES[currentIndex - 1],
+			next: window.SLIDES[currentIndex + 1],
+			currentIndex,
+		};
+	}
+	const navigate = (url: string) => (location.href = url);
+
+	const doc = document.documentElement;
+	const steps = JSON.parse(doc.dataset.steps!);
+	const classes = doc.classList;
+
+	let step = -1;
+	document.addEventListener('keydown', (event) => {
+		const { prev, next } = getNavigationUrls();
+		switch (event.key) {
+			case 'ArrowRight':
+			case 'n':
+				next && navigate(next);
+				break;
+			case 'ArrowLeft':
+			case 'p':
+				prev && navigate(prev);
+				break;
+			case 'ArrowDown':
+			case 's':
+			case ' ':
+				if (step < steps.length - 1) {
+					step = Math.min(step + 1, steps.length - 1);
+					mayStartViewTransition(() => classes.add(steps[step]));
+				} else next && navigate(next);
+				break;
+			case 'ArrowUp':
+			case 'w':
+				if (step >= 0)
+					mayStartViewTransition(() => {
+						classes.remove(steps[step]);
+						step = Math.max(step - 1, -1);
+					});
+				else {
+					prev && navigate(prev);
+				}
+				break;
+		}
+	});
+	document.getElementById('prev')?.addEventListener('click', () => {
+		const { prev } = getNavigationUrls();
+		prev && navigate(prev);
+	});
+	document.getElementById('next')?.addEventListener('click', () => {
+		const { next } = getNavigationUrls();
+		next && navigate(next);
+	});
+</script>
+<style is:global>
+	:active-view-transition-type(slide) {
+		&::view-transition-old(root) {
+			animation-name: slide-out-to-left;
+		}
+		&::view-transition-new(root) {
+			animation-name: slide-in-from-right;
+		}
+	}
+
+	#li1,
+	#li2,
+	#li3,
+	#li4,
+	#li5,
+	#li6,
+	#li7 {
+		display: none;
+		width: fit-content;
+	}
+
+	:root.li1 {
+		#li1 {
+			display: list-item;
+		}
+		&:not(.li2) {
+			#li1 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li2 {
+		#li2 {
+			display: list-item;
+		}
+		&:not(.li3) {
+			#li2 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li3 {
+		#li3 {
+			display: list-item;
+		}
+		&:not(.li4) {
+			#li3 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li4 {
+		#li4 {
+			display: list-item;
+		}
+		&:not(.li5) {
+			#li4 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li5 {
+		#li5 {
+			display: list-item;
+		}
+		&:not(.li6) {
+			#li5 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li6 {
+		#li6 {
+			display: list-item;
+		}
+		&:not(.li7) {
+			#li6 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+	:root.li7 {
+		#li7 {
+			display: list-item;
+		}
+		&:not(.li8) {
+			#li7 {
+				color: var(--accent-purple);
+			}
+		}
+	}
+</style>

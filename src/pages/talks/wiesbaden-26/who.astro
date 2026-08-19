@@ -1,0 +1,78 @@
+---
+import Layout from './_Layout.astro';
+---
+<Layout heading="Who has Experience with View Transitions?" steps={4}>
+	<h2>
+		<span style="view-transition-name:w1">Who</span>
+		<span> </span>
+		<span style="view-transition-name:w2">here</span>
+		<span> </span>
+		<span style="view-transition-name:w3">is</span>
+		<span> </span>
+		<span style="view-transition-name:w4">already</span>
+		<span> </span>
+		<span style="view-transition-name:w5">animating</span>
+		<span> </span>
+		<span style="view-transition-name:w6">page</span>
+		<span> </span>
+		<span style="view-transition-name:w7">transitions</span>
+		<span> </span>
+		<span style="view-transition-name:w8">on</span>
+		<span> </span>
+		<span style="view-transition-name:w9">their</span>
+		<span> </span>
+		<span style="view-transition-name:w10">sites?</span>
+		<span id="icon">🙋</span>
+	</h2>
+	<ul>
+		<li id="li1" style="view-transition-name: a1">
+			Yes, using a library like Barba.js, Swup, Motion, or similar
+		</li>
+		<li id="li2" style="view-transition-name: a2">
+			Yes, using Astro's <code>&lt;ClientRouter&gt;</code> component
+		</li>
+		<li id="li3" style="view-transition-name: a3">
+			Yes, using the native View Transitions API directly
+		</li>
+		<li id="li4" style="view-transition-name: a4">No, none of the above</li>
+	</ul>
+</Layout>
+<style is:global>
+	h2 {
+		width: 50vw;
+	}
+
+	ul {
+		display: none;
+	}
+	#icon {
+		font-size: 25vmin;
+		view-transition-name: icon;
+		display: none;
+	}
+	:root {
+		--stop: 1;
+	}
+	:root.li1 {
+		--stop: 0;
+		h2 {
+			font-size: 4vw;
+			max-width: 50vw;
+		}
+		ul,
+		#icon {
+			display: block;
+		}
+	}
+	::view-transition-new(w1){animation-delay:calc(0.1s * var(--stop))}
+	::view-transition-new(w2){animation-delay:calc(0.2s * var(--stop))}
+	::view-transition-new(w3){animation-delay:calc(0.3s * var(--stop))}
+	::view-transition-new(w4){animation-delay:calc(0.4s * var(--stop))}
+	::view-transition-new(w5){animation-delay:calc(0.5s * var(--stop))}
+	::view-transition-new(w6){animation-delay:calc(0.6s * var(--stop))}
+	::view-transition-new(w7){animation-delay:calc(0.7s * var(--stop))}
+	::view-transition-new(w8){animation-delay:calc(0.8s * var(--stop))}
+	::view-transition-new(w9){animation-delay:calc(0.9s * var(--stop))}
+	::view-transition-new(w10){animation-delay:calc(1s * var(--stop))}
+	::view-transition-new(w11){animation-delay:calc(1.1s * var(--stop))}
+</style>

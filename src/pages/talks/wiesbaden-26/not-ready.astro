@@ -1,0 +1,102 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+---
+
+<Layout steps={['should', 'is', 'seedling', 'end']}>
+	<div slot="heading">2023:<br />The Platform Wasn't Ready</div>
+	<div id="tree">🌳</div>
+	<div id="should">
+		<h3>What it should be</h3>
+		<ul>
+			<li>Smooth navigation for MPAs</li>
+			<li>No more flash of white on page load</li>
+			<li>Browser native, no need for heavy frameworks</li>
+		</ul>
+	</div>
+	<div id="is">
+		<h3>What we had</h3>
+		<ul>
+			<li>Chromium only</li>
+			<li>Hidden behind a browser flag</li>
+			<li>Only same-document transition</li>
+		</ul>
+	</div>
+	<div id="seedling">🪴</div>
+</Layout>
+
+<style is:global>
+	#tree {
+		font-size: 66vh;
+		position: absolute;
+		width: 20vw;
+		view-transition-name: tree;
+	}
+	#should {
+		display: none;
+		position: absolute;
+		width: 40vw;
+		view-transition-name: should;
+	}
+	#is {
+		display: none;
+		width: 33vw;
+		position: absolute;
+		view-transition-name: is;
+	}
+	#seedling {
+		display: none;
+		font-size: 40vh;
+		view-transition-name: seedling;
+		position: absolute;
+	}
+	:root.should {
+		#tree {
+			transform: translate(-48vw,0);
+		}
+		#should {
+			display: block;
+			transform(10vw, 0)
+		}
+	}
+	:root.is {
+		#should {
+		}
+		#is {
+			display: block;
+		}
+		#tree {
+		}
+	}
+	:root.seedling {
+		#tree {
+		}
+		#should {
+		}
+		#is {
+		}
+		#seedling {
+			display: block;
+		}
+	}
+	:root.end {
+		view-transition-name: root;
+
+		#should {
+		}
+		#is {
+		}
+		#seedling {
+			font-size: 16vh;
+		}
+	}
+	::view-transition-group(seedling) {
+		animation-timing-function: var(--ease-spring-3);
+		animation-duration: 1s;
+	}
+	::view-transition-old(seedling) {
+		width: auto;
+		height: 100%;
+	}
+</style>

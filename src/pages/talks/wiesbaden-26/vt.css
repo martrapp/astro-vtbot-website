@@ -1,0 +1,33 @@
+::view-transition-group(*) {
+	animation-duration: 350ms;
+}
+
+::view-transition-old(*) {
+  height: 100%;
+  width: auto;
+}
+:active-view-transition-type(cross-document) {
+	#slide-heading {
+		view-transition-name: slide-header;
+	}
+	#counter {
+		view-transition-name: counter;
+	}
+
+  &::view-transition-old(slide-header) {
+		animation-name: fade-out-up;
+	}
+	&::view-transition-new(slide-header) {
+		animation-name: fade-in-down;
+	}
+}
+
+
+::view-transition-old(*):only-child {
+	animation-name: shrink-out;
+}
+::view-transition-new(*):only-child {
+	animation-name: grow-in;
+}
+
+

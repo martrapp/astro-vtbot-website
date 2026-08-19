@@ -1,0 +1,38 @@
+---
+import { Font } from 'astro:assets';
+import { ClientRouter, slide } from 'astro:transitions';
+const heading = 'When the Platform Catches Up';
+import './styles.css';
+---
+
+<html lang="en" transition:animate={slide({ duration: 1000 })}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Astro Together, Wiesbaden 2026</title>
+		<ClientRouter />
+		<slot name="head" />
+		<Font cssVariable="--font-syne" />
+		<Font cssVariable="--font-inter" />
+	</head>
+	<body id="body">
+		<div class="slide-viewport">
+			<div class="slide">
+				<header>
+					<h1 id="slide-heading">
+						<slot name="heading">{heading}</slot>
+					</h1>
+				</header>
+				<main>
+					<slot />
+				</main>
+
+				<!-- Global Persistent Footer -->
+				<footer>
+					<span id="bl"></span>
+					<span id="br">Wiesbaden, 2026-09-05</span>
+				</footer>
+			</div>
+		</div>
+	</body>
+</html>

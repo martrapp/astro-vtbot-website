@@ -1,0 +1,157 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+---
+
+<Layout heading="With Rich Feature Set" steps={['growing-red']}>
+	<div id="img">
+		<div id="tree">🌳</div>
+		<div class="red-apple" id="a1">🍎</div>
+		<div class="red-apple" id="a2">🍎</div>
+		<div class="red-apple" id="a3">🍎</div>
+		<div class="red-apple" id="a4">🍎</div>
+		<div class="red-apple" id="a5">🍎</div>
+		<div class="red-apple" id="a6">🍎</div>
+		<div class="red-apple" id="a7">🍎</div>
+	</div>
+	<div id="features">
+		<h2>Astro's client router offers&hellip;</h2>
+		<ul>
+			<li>Fallback for all browsers</li>
+			<li>Predefined animations: fade & slide</li>
+			<li>Forward/backward animations</li>
+			<li>Persist DOM trees from old to new page&nbsp;&nbsp;</li>
+			<li>Automatically respects reduced motion preferences</li>
+			<li>Automatic prefetching</li>
+			<li>Route announcer for assistive technologies</li>
+		</ul>
+	</div>
+</Layout>
+
+<style is:global>
+	h2 {
+		view-transition-name: h2;
+		width: fit-content;
+	}
+	#features {
+		transform: translateX(15vw);
+	}
+	ul {
+		--icon: '🍎';
+		scrollbar-width: thin;
+		scrollbar-color: #7cb342 transparent;
+		display: none;
+	}
+	/*
+	ul::-webkit-scrollbar {
+		width: 0.6vw;
+	}
+	ul::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	ul::-webkit-scrollbar-thumb {
+		background: linear-gradient(180deg, #a5d6a7, #558b2f);
+		border-radius: 1vw;
+	}
+	ul::-webkit-scrollbar-thumb:hover {
+		background: linear-gradient(180deg, #c5e1a5, #33691e);
+	}
+		*/
+	li {
+		position: relative;
+		list-style: none;
+		padding-left: 1vw;
+		padding-right: 1.5vw;
+		&::before {
+			content: var(--icon);
+			font-size: 1.7vw;
+			position: absolute;
+			transform: translate(-3vw, 0.8vh);
+		}
+	}
+	#img {
+		position: absolute;
+		transform: translate(-20vw, -40vh);
+	}
+	#tree {
+		font-size: 60vh;
+		position: absolute;
+		view-transition-name: tree;
+		transform: translate(-35vw, 0vh);
+	}
+
+	.red-apple {
+		font-size: 6vh;
+		position: absolute;
+		display: none;
+	}
+	.red-apple {
+		view-transition-class: red-apple;
+	}
+
+	#a1 {
+		view-transition-name: a1;
+		transform: translate(-15vw, 20vh);
+	}
+	#a2 {
+		view-transition-name: a2;
+		transform: translate(-9vw, 33vh);
+	}
+	#a3 {
+		view-transition-name: a3;
+		transform: translate(-17vw, 38vh);
+	}
+	#a4 {
+		view-transition-name: a4;
+		transform: translate(-19vw, 30vh);
+	}
+	#a5 {
+		view-transition-name: a5;
+		transform: translate(-23vw, 40vh);
+	}
+	#a6 {
+		view-transition-name: a6;
+		transform: translate(-11vw, 45vh);
+	}
+	#a7 {
+		view-transition-name: a7;
+		transform: translate(-22vw, 50vh);
+	}
+
+	:root.growing-red {
+		ul,
+		.red-apple {
+			display: block;
+		}
+		#tree {
+			view-transition-name: none;
+		}
+		&::view-transition-new(a1) {
+			animation-delay: 0s;
+		}
+		&::view-transition-new(a2) {
+			animation-delay: 1s;
+		}
+		&::view-transition-new(a3) {
+			animation-delay: 2s;
+		}
+		&::view-transition-new(a4) {
+			animation-delay: 3s;
+		}
+		&::view-transition-new(a5) {
+			animation-delay: 4s;
+		}
+		&::view-transition-new(a6) {
+			animation-delay: 5s;
+		}
+		&::view-transition-new(a7) {
+			animation-delay: 6s;
+		}
+	}
+
+	::view-transition-group(.red-apple) {
+		animation-timing-function: var(--spring-easing);
+		animation-duration: var(--spring-duration);
+	}
+</style>

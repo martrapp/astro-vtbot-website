@@ -1,0 +1,24 @@
+---
+import Layout from './_Layout.astro';
+---
+
+<Layout slideNumber={2} steps={[]}>
+	<span slot="heading"
+		><span id="about">It's All About</span>
+		<span id="trees" class="strike-marker"> Trees</span><br /><u id="decision">Educated Decisions</u
+		></span
+	>
+	<div>You have two options. Make a educated choice.</div>
+</Layout>
+
+<style is:global>
+	#about {
+		view-transition-name: about;
+	}
+	#trees {
+		view-transition-name: trees;
+	}
+	#decision {
+		view-transition-name: decision;
+	}
+</style>

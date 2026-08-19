@@ -1,0 +1,68 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+---
+
+<Layout heading="Astro Bridged the Gap" steps={['magnifier', 'tree', 'work']}>
+	<div id="seedling">🪴</div>
+	<div id="magnifier">🔎</div>
+	<div id="tree">🌳</div>
+	<div id="work">
+		<h2>Astro's view transition support</h2>
+		<ul>
+			<li>@matthewp, Astro 2.9, &lt; 150 LOC</li>
+			<li>Intercepts clicks on links</li>
+			<li>Loads and parses the new document</li>
+			<li>Starts a same-document view transition</li>
+			<li>Replaces the current document with the new one</li>
+		</ul>
+	</div>
+</Layout>
+
+<style is:global>
+	#seedling {
+		font-size: 40vh;
+		view-transition-name: seedling;
+		position: absolute;
+		transform: translate(-30vw,-5vh);
+	}
+	#magnifier {
+		display: none;
+		font-size: 70vh;
+		position: absolute;
+		transform: translate(-4vw,5vh);
+		view-transition-name: match-element;
+		transform: translateX(-33vw);
+	}
+	#tree {
+		display: none;
+		font-size: 30vh;
+		position: absolute;
+		view-transition-name: tree;
+		transform: translate(-29vw,-5vh);
+	}
+	#work {
+		display: none;
+		view-transition-name: match-element;
+		transform: translateX(18vw);
+	}
+	:root.magnifier {
+		#magnifier {
+			display: block;
+		}
+	}
+	:root.tree {
+		#tree {
+			display: block;
+		}
+	}
+	:root.work {
+		#work {
+			display: block;
+		}
+	}
+	::view-transition-group(seedling) {
+		animation-duration: 1s;
+	}
+</style>

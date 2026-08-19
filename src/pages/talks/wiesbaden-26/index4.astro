@@ -1,0 +1,31 @@
+---
+import Layout from './_Layout0.astro';
+---
+
+<Layout>
+	<div>
+		<h2 transition:name="h2">Glad you asked!</h2>
+		<pre><code>
+&lt;html lang="en" <span>transition:animate="slide"</span>>
+  &lt;head>
+    ...
+    <span>&lt;ClientRouter /></span>
+    ...
+  &lt;/head>
+  &lt;body>
+    &lt;h1>...&lt;/h1>
+    &lt;h2 <span>transition:name="h2"</span>>From Astro ...&lt;/h2>
+    ...
+	</code></pre>
+	</div>
+</Layout>
+<style>
+	code {
+		font-style: italic;
+		color: var(--text-muted);
+		span {
+			font-style: normal;
+			color: var(--accent-purple);
+		}
+	}
+</style>

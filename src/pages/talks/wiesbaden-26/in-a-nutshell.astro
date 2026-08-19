@@ -1,0 +1,120 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+---
+
+<Layout steps={[]} heading="View Transitions in a Nut Shell">
+	<div id="img">
+		<div id="root"></div>
+		<div id="s1"></div>
+		<div id="s2"></div>
+	</div>
+	<div id="is">
+		<h3>What we had</h3>
+		<ul>
+			<li>Take some snapshots of areas the old page</li>
+			<li>Put them in a layer on the new page</li>
+			<li>Add some areas from the new page</li>
+			<li>Add entry, exit, and same-element animations</li>
+		</ul>
+	</div>
+</Layout>
+
+<style is:global>
+	:root {
+		view-transition-name: none;
+	}
+	img {
+		position: absolute;
+	}
+	#root {
+		view-transition-name: root;
+	}
+	s1: {
+		view-transition-name: should;
+	}
+	s2: {
+		view-transition-name: is;
+	}
+	#should {
+		display: none;
+		width: 40vw;
+		transform: translate(0, -10vh);
+		view-transition-name: match-element;
+	}
+	#is {
+		display: none;
+		width: 30vw;
+		transform: translate(0, -10vh);
+		> div {
+			display: none;
+			position: absolute;
+		}
+		view-transition-name: match-element;
+	}
+	#seedling {
+		display: none;
+		font-size: 40vh;
+		transform: translate(-20vw, 0);
+		view-transition-name: seedling;
+		position: absolute;
+	}
+	:root.tree {
+		#tree {
+			display: block;
+		}
+	}
+	:root.should {
+		#should {
+			display: block;
+			transform: translate(10vw, -10vh);
+		}
+	}
+	:root.is {
+		#should {
+			transform: translate(-5vw, -10vh);
+		}
+		#is {
+			display: block;
+		}
+		#tree {
+			left: -25vw;
+		}
+	}
+	:root.seedling {
+		#tree {
+			transform: translate(-15vw, 0);
+		}
+		#should {
+			transform: translate(-20vw, -10vh);
+		}
+		#is {
+			transform: translate(-20vw, -10vh);
+		}
+		#seedling {
+			display: block;
+			transform: translate(35vw, -15vh);
+		}
+	}
+	:root.end {
+		#should {
+			transform: translate(-20vw, -10vh);
+		}
+		#is {
+			transform: translate(-15vw, -10vh);
+		}
+		#seedling {
+			font-size: 16vh;
+			transform: translate(35vw, -5vh);
+		}
+	}
+	::view-transition-group(seedling) {
+		animation-timing-function: var(--ease-spring-3);
+		animation-duration: 1s;
+	}
+	::view-transition-old(seedling) {
+		width: auto;
+		height: 100%;
+	}
+</style>
