@@ -78,7 +78,7 @@ The View Transition API supports view transition types that can be used to diffe
 But don't worry, the Bag has your back with the [direction script](https://vtbag.dev/tools/turn-signal/#directions-script) that can work as a drop in replacement!
 
 A future version of the web platform will cover directional navigation with the history check of the `@navigation` at-rule:
-```
+```css
 /* set the default animation for the view transition */
 ::view-transition-old(root) {
   animation-name: slideOutToLeft;
@@ -128,7 +128,7 @@ You can set view transition names for the `<ClientRouter />` using `transition:n
 The View Transition API also supports auto-assigned view transition names:
 
 ```css
-view-transition-name: auto;
+view-transition-name: match-element;
 ```
 These are also random and unique on each page. Sadly, they are even unique across all pages. This means elements from the old page never automatically match those on the new page, resulting in exit and entry animations rather than morph animations.
 
