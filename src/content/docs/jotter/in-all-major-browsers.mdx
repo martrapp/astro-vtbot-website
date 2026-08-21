@@ -15,7 +15,7 @@ OK, that might sound like a bit of a letdown. They said the View Transition API 
 
 True, but the fine print always said _same-document_ view transitions. To be exact, it said [View Transition API Level 1](https://vtbag.dev/basics/levels/). And that is perfectly fine! It is the sensible first step before we get to the real fun stuff: cross-document transitions, nested groups, scoped transitions, and all that good magic yet to come.
 
-For multi-page applications, you really want to use native cross-document view transitions. With a bit of luck, cross-document view transitions will make it into Interop 2026. And of course, that does not mean it will take until the end of next year. Safari, for example, took only a few months to follow same-document view transitions with the cross-document version.
+For multi-page applications, you really want to use native cross-document view transitions. With a bit of luck, cross-document view transitions will make it into Interop 2026. And of course, that does not necessarily mean it will take until the end of the year. Safari, for example, took only a few months to follow same-document view transitions with the cross-document version.
 
 But it gets even better: with Astro's client router, you already have cross-document view transitions in Firefox 144 and later.
 
@@ -205,7 +205,7 @@ The `:active-view-transition` pseudo class resolve to `:root` if a view transiti
 
 ### What doesn't work yet
 
-Cross-document view transitions are not implemented in Firefox yet. But there are also restrictions for same-document view transitions as Level 1 does not support all features of same-document view transitions. Some newer features are defined in Level 2 of the spec and many of them are not yet implemented in Safari, not even in Edge and of course not yet in Firefox.   
+Cross-document view transitions are not implemented in Firefox yet. But there are also restrictions for same-document view transitions as Level 1 does not support all features of same-document view transitions. Some newer features are defined in Level 2 of the spec and some of them are not yet implemented in Safari, not even in Edge and of course not yet in Firefox.   
 
 #### View Transition Types
 

@@ -446,7 +446,7 @@ So, we take an alternative approach: when condition 2) from the options above is
 	);
 </script>
 ```
-The code adds the `falseStart` type to the view transitions set of types if the old and new page URLs match. It might seem a bit complicated, but this approach also works in Safari, which lacks support for the Navigation API. The condition is determined on the old page and passed to the new page via a session storage entry.
+The code adds the `falseStart` type to the view transitions set of types if the old and new page URLs match. It might seem a bit complicated, but this approach also works in Safari, which in older versions lacks support for the Navigation API. The condition is determined on the old page and passed to the new page via a session storage entry.
 
 	</TabItem>
   <TabItem label="Astro Client Router">

@@ -25,7 +25,7 @@ Here's a breakdown of the features you'll gain and lose when migrating from Astr
 |7|[Directional Animations](#directional-animations)|Browser back button slides the other way|_[has workaround]_|
 |8|[Reduced Motion](#reduced-motion)|Automatically disables all animations|Planned: automatically disables motion of default animations|
 |9|[Event Listeners](#event-listeners)|Hook into preparation and swapping| Hook in directly before and after the page changes|
-|10|[Source Element](#source-element)|Know which element triggered the transition|Only with Navigation API (e.g. not on Safari yet)|
+|10|[Source Element](#source-element)|Know which element triggered the transition|Have to use the Navigation API instead|
 |11|[Generated Names](#generated-names)|Works cross-document| - |
 |12|[Data Attributes](data-attributes)|Control link and script behavior|_[not needed]_|
 |13|[Route Announcement](#route-announcement)|Support for assistive technology|Standard support for assistive technology|
@@ -75,7 +75,29 @@ With `<ClientRouter />`, each view transition has a direction: `forward` or `bac
 
 The View Transition API supports view transition types that can be used to differentiate forward and backward animations. However, the View Transition API doesn't automatically assign any types. With browser-native cross-document view transitions, slides will always [originate from the same direction](/signal-demo/forwardOnly/blog/), regardless of whether you're navigating forward or backward.
 
-But don't worry, the Bag has your back!
+But don't worry, the Bag has your back with the [direction script](https://vtbag.dev/tools/turn-signal/#directions-script) that can work as a drop in replacement!
+
+A future version of the web platform will cover directional navigation with the history check of the `@navigation` at-rule:
+```
+/* set the default animation for the view transition */
+::view-transition-old(root) {
+  animation-name: slideOutToLeft;
+}
+::view-transition-new(root) {
+  animation-name: slideInFromRight;
+}
+
+/* on backward history traversal, reverse the animation */
+@navigation (history: back) {
+  ::view-transition-old(root) {
+    animation-name: slideOutToRight;
+  }
+  ::view-transition-new(root) {
+    animation-name: slideInFromLeft;
+  }
+}
+```
+But it will take a bit until this gets _Baseline Widely Available_ status.
 
 ## Reduced Motion
 
@@ -93,12 +115,11 @@ The `*-preparation` events are somewhat comparable to the `navigate` event, whil
 
 
 
-## Element
+## sourceElement
 
 With the `<ClientRouter />` the `sourceElement` property of `astro:before-preparation` and `astro:before-swap` events points to the anchor or form that was clicked to initiated the view transition. This allows you to create logic based on what triggered the transition.
 
-
-The NavigationEvent of the Navigation API also provides this property. However, not all browsers that support cross-document view transitions have implemented the Navigation API yet. Looking at you, Safari 👀.
+Now that the Navigation API has _Baseline Newly Available_ status, you can use the `sourceElement` property of the NavigationEvent instead.
 
 ## Generated Names
 
