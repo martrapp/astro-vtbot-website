@@ -6,115 +6,158 @@ import 'open-props/easings';
 
 <Layout steps={[]} heading="View Transitions in a Nut Shell">
 	<div id="img">
-		<div id="root"></div>
 		<div id="s1"></div>
 		<div id="s2"></div>
+		<div id="r2"></div>
+		<div id="s3">🪴</div>
 	</div>
-	<div id="is">
-		<h3>What we had</h3>
+	<div id="works">
+		<h3>How it works</h3>
 		<ul>
-			<li>Take some snapshots of areas the old page</li>
-			<li>Put them in a layer on the new page</li>
-			<li>Add some areas from the new page</li>
-			<li>Add entry, exit, and same-element animations</li>
+			<li>Takes some snapshots of areas from the old page</li>
+			<li>Puts them in the view transition layer on top of the new page</li>
+			<li>Puts some areas from the new page into the same layer</li>
+			<li>Adds entry, exit, and shared element animations</li>
 		</ul>
 	</div>
 </Layout>
 
 <style is:global>
+	::view-transition-group(*) {
+		animation-duration: 5s;
+	}
+	#slide-heading,
+	#counter {
+		view-transition-name: none !important;
+	}
+	#img {
+		position: absolute;
+	}
+	#works {
+		position: absolute;
+		width: 30vw;
+		transform: translate(0vw, 0);
+	}
+	::view-transition-new(s3):only-child {
+		animation-delay: 2s;
+		animation-name: frame-new;
+	}
+	::view-transition-group(s3) {
+		z-index: -1;
+		animation-name: z;
+		animation-delay: 1.6s;
+	}
+
+	@keyframes z {
+		from {
+			z-index: -1;
+		}
+		1% {
+			z-index: 1;
+		}
+		to {
+			z-index: 1;
+		}
+	}
+	::view-transition-old(*) {
+		animation-name: frame-old;
+	}
+	::view-transition-new(seedling),
+	::view-transition-new(is) {
+		display: none;
+	}
+
+	::view-transition-old(root) {
+		animation-name: root-old;
+		animation-timing-function: linear;
+	}
+	::view-transition-new(root) {
+		animation-name: root-new;
+		animation-delay: 2.5s;
+	}
+
+	@keyframes frame-old {
+		to {
+			outline: 3px solid #8a4c41;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+		}
+	}
+	@keyframes frame-new {
+		from {
+			transform: translate(-5vw, -30vh) scale(0.1);
+		}
+		25% {
+			outline: 8px solid #8a4c41;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+		}
+		50% {
+			transform: translate(-5vw, -20vh) scale(0.1) ;
+			outline: 3px solid #8a4c41;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+		}
+		to {
+			outline: 3px solid #8a4c41;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+			transform: scale(1) translate(0, 0);
+		}
+	}	
+	@keyframes root-old {
+		from {
+			outline: 4px solid gray;
+			z-index: 1;
+		}
+		to {
+			transform: translate(-33vw, -15vh) scale(0.3) rotate(-12deg);
+			outline: 4px solid gray;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+			z-index: 0;
+		}
+	}
+
+	@keyframes root-new {
+		from {
+			transform: translate(15vw, -13vw) scale(0.3) rotate(5deg);
+			outline: 4px solid gray;
+			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
+			z-index: -1;
+		}
+		to {
+			outline: 4px solid gray;
+			z-index: 0;
+		}
+	}
 	:root {
-		view-transition-name: none;
+		view-transition-name: root;
 	}
 	img {
 		position: absolute;
 	}
-	#root {
-		view-transition-name: root;
-	}
-	s1: {
-		view-transition-name: should;
-	}
-	s2: {
-		view-transition-name: is;
-	}
-	#should {
-		display: none;
-		width: 40vw;
-		transform: translate(0, -10vh);
-		view-transition-name: match-element;
-	}
-	#is {
-		display: none;
-		width: 30vw;
-		transform: translate(0, -10vh);
-		> div {
-			display: none;
-			position: absolute;
-		}
-		view-transition-name: match-element;
-	}
-	#seedling {
-		display: none;
-		font-size: 40vh;
-		transform: translate(-20vw, 0);
-		view-transition-name: seedling;
+	#s1 {
 		position: absolute;
+		view-transition-name: is;
+		width: 15vw;
+		aspect-ratio: 1.5/1;
+		transform: translate(-45vw, 9vw) rotate(8deg);
 	}
-	:root.tree {
-		#tree {
-			display: block;
-		}
+	#s2 {
+		position: absolute;
+		view-transition-name: seedling;
+		width: 5vw;
+		aspect-ratio: 1/1;
+		transform: translate(-25vw, 10vw) rotate(-29deg);
 	}
-	:root.should {
-		#should {
-			display: block;
-			transform: translate(10vw, -10vh);
-		}
-	}
-	:root.is {
-		#should {
-			transform: translate(-5vw, -10vh);
-		}
-		#is {
-			display: block;
-		}
-		#tree {
-			left: -25vw;
-		}
-	}
-	:root.seedling {
-		#tree {
-			transform: translate(-15vw, 0);
-		}
-		#should {
-			transform: translate(-20vw, -10vh);
-		}
-		#is {
-			transform: translate(-20vw, -10vh);
-		}
-		#seedling {
-			display: block;
-			transform: translate(35vw, -15vh);
-		}
-	}
-	:root.end {
-		#should {
-			transform: translate(-20vw, -10vh);
-		}
-		#is {
-			transform: translate(-15vw, -10vh);
-		}
-		#seedling {
-			font-size: 16vh;
-			transform: translate(35vw, -5vh);
-		}
-	}
-	::view-transition-group(seedling) {
-		animation-timing-function: var(--ease-spring-3);
-		animation-duration: 1s;
-	}
-	::view-transition-old(seedling) {
-		width: auto;
-		height: 100%;
+	#s3 {
+		position: absolute;
+		view-transition-name: s3;
+		transform: translate(15vw, -15vw) rotate(8deg) ;
+		font-size: 22vw;
 	}
 </style>
+<script>
+	let running=true;
+
+	addEventListener('pointerdown', () => {
+		document.getAnimations().forEach((a) => running ? a.pause() : a.play());
+		running = !running;
+	})
+</script>

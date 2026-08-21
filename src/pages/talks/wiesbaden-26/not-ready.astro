@@ -32,6 +32,8 @@ import 'open-props/easings';
 		position: absolute;
 		width: 20vw;
 		view-transition-name: tree;
+		transform: translate(-18vw,0);
+		
 	}
 	#should {
 		display: none;
@@ -57,38 +59,56 @@ import 'open-props/easings';
 		}
 		#should {
 			display: block;
-			transform(10vw, 0)
+			transform: translate(20vw, 0);
 		}
 	}
 	:root.is {
 		#should {
+			transform: translate(-10vw, 0);
 		}
 		#is {
 			display: block;
+			transform: translate(30vw, 0);
 		}
 		#tree {
+			transform: translate(-70vw, 0);
 		}
 	}
 	:root.seedling {
 		#tree {
+			transform: translate(-100vw, 0);
 		}
 		#should {
+			transform: translate(-27vw, 0);
 		}
 		#is {
+			transform: translate(13vw, 0);
 		}
 		#seedling {
 			display: block;
+			transform: translate(39vw, -2vw);
 		}
 	}
 	:root.end {
 		view-transition-name: root;
-
-		#should {
-		}
-		#is {
-		}
+		background-color: var(--bg-space);
 		#seedling {
 			font-size: 16vh;
+			transform: translate(39vw, 5vw);
+			background-color: var(--bg-space);
+		}
+		#is {
+			background-color: var(--bg-space);
+		}
+		#slide-header, #counter, #tree, #should {
+			view-transition-name: none;
+		}
+		&::view-transition-old(should),
+		&::view-transition-new(should) {
+			animation-name: none;
+		}
+		#slide-heading, #counter {
+			view-transition-name: none;
 		}
 	}
 	::view-transition-group(seedling) {

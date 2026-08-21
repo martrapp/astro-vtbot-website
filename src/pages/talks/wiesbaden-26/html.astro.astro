@@ -1,0 +1,30 @@
+<html lang="en">
+	<head>
+		<style is:inline>
+			@media (prefers-reduced-motion: no-preference) {
+				@view-transition {
+					navigation: auto;
+				}
+			}
+		</style>
+	</head>
+	<body> <h2 style="view-transition-name: h2"></h2></body>
+</html>
+<style is:global>
+  ::view-transition-old(root) {
+    animation-name: slide-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: slide-in;
+  }
+  @keyframes slide-out {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes slide-in {   
+    from {
+      transform: translateX(100%);
+    }
+  }
+</style>

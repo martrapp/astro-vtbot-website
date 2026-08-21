@@ -1,0 +1,398 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+import { Code } from 'astro-expressive-code/components';
+---
+
+<Layout heading="How to Switch to the Platform" steps={['change', 'hide', 'flip']}>
+	<div id="img">
+		<div id="tree">🌳</div>
+		<div class="red-apple" id="a1">🍎</div>
+		<div class="red-apple" id="a2">🍎</div>
+		<div class="red-apple" id="a3">🍎</div>
+		<div class="red-apple" id="a4">🍎</div>
+		<div class="red-apple" id="a5">🍎</div>
+		<div class="red-apple" id="a6">🍎</div>
+		<div class="red-apple" id="a7">🍎</div>
+		<div class="green-apple" id="a8">🍏</div>
+		<div class="green-apple" id="a9">🍏</div>
+		<div class="green-apple" id="a10">🍏</div>
+		<div class="lemon" id="a11">🍋</div>
+	</div>
+
+	<div id="cr">
+		<Code
+			title="Layout.astro"
+			mark={['transition:animate="slide"', '<ClientRouter />', `transition:name="title"`]}
+			code=`
+<html lang="en" transition:animate="slide">
+  <head>
+    ...
+    <ClientRouter />
+    ...
+  </head>
+  <body>
+    <h1 transition:name="title">...</h1>
+    ...
+	</body>
+</html>`
+			lang="astro"
+		/>
+	</div>
+	<div id="api">
+		<div id="slide"><code>transition:animate="slide"</code></div>
+		<Code
+			title="Layout.astro"
+			mark={['@view-transition { navigation: auto; }', 'style="view-transition-name: title"']}
+			code=`
+<html lang="en">
+	<head>
+		...
+		<style is:inline>
+			@media (prefers-reduced-motion: no-preference) {
+				@view-transition { navigation: auto; }
+			}
+		</style>
+		...
+	</head>
+	<body>
+	  <h1 style="view-transition-name: title">...</h1>
+		...
+	</body>
+</html>`
+			lang="astro"
+		/>
+	</div>
+	<div id="css">
+		<Code
+			title="view-transition.css"
+			mark={['@view-transition { navigation: auto; }', 'style="view-transition-name: title"']}
+			code=`
+::view-transition-old(root) {
+	animation-name: slide-out;
+}
+::view-transition-new(root) {
+	animation-name: slide-in;
+}
+@keyframes slide-out {
+	to {
+		transform: translateX(-100%);
+	}
+}
+@keyframes slide-in {
+	from {
+		transform: translateX(100%);
+	}
+}`
+			lang="css"
+		/>
+	</div>
+	<div id="t2"></div>
+	<div id="t3">🌲</div>
+</Layout>
+
+<style is:global>
+	#slide {
+		position: absolute;
+		transform: translate(-20vw, 30vh) rotate(-90deg);
+		transform: translate(10vw, -10vh);
+		view-transition-name: ec-html-mark;
+		border-radius: 0.5ex;
+		background-color: #174a9099;
+		padding-bottom: 0.5ex;
+	}
+	.gutter {
+		padding-right: 0.5vw;
+	}
+	.code {
+		padding-left: 1vw;
+	}
+	#img {
+		position: absolute;
+		transform: translate(-22vw, -43vh);
+	}
+
+	#tree {
+		font-size: 60vh;
+		position: absolute;
+		transform: translate(-35vw, 0vh);
+		view-transition-name: tree;
+	}
+
+	.red-apple,
+	.green-apple,
+	.lemon {
+		font-size: 6vh;
+		position: absolute;
+	}
+	.green-apple {
+		view-transition-class: green-apple;
+	}
+	.lemon {
+		view-transition-class: lemon;
+	}
+	.red-apple {
+		view-transition-name: match-element;
+	}
+	#a1 {
+		transform: translate(-15vw, 20vh);
+	}
+	#a2 {
+		transform: translate(-9vw, 33vh);
+	}
+	#a3 {
+		transform: translate(-17vw, 38vh);
+	}
+	#a4 {
+		transform: translate(-19vw, 30vh);
+	}
+	#a5 {
+		transform: translate(-23vw, 40vh);
+	}
+	#a6 {
+		transform: translate(-11vw, 45vh);
+	}
+	#a7 {
+		transform: translate(-22vw, 50vh);
+	}
+	#a8 {
+		view-transition-name: a8;
+		transform: translate(-19vw, 47vh);
+	}
+	#a9 {
+		view-transition-name: a9;
+		transform: translate(-8vw, 52vh);
+	}
+	#a10 {
+		view-transition-name: a10;
+		transform: translate(-14vw, 28vh);
+	}
+	#a11 {
+		view-transition-name: a11;
+		transform: translate(-16vw, 55vh);
+	}
+
+	.red-apple,
+	.green-apple,
+	.lemon {
+		filter: drop-shadow(1px 0px 0px #4448) drop-shadow(-1px 0px 0px #4448)
+			drop-shadow(0px 1px 0px #4448) drop-shadow(0px -1px 0px #4448);
+	}
+
+	#t3 {
+		font-size: 20vh;
+		transform: translate(39vw, 23.5vh);
+		position: absolute;
+	}
+
+	#t3 {
+		view-transition-name: t3;
+	}
+	#cr pre,
+	#api pre,
+	#css pre {
+		view-transition-name: pre;
+	}
+	::view-transition-old(pre),
+	::view-transition-new(pre) {
+		width: 100%;
+		height: auto;
+		animation-name: shrink-out;
+	}
+	::view-transition-old(ec-activate-mark),
+	::view-transition-new(ec-activate-mark),
+	::view-transition-old(ec-h1-mark),
+	::view-transition-new(ec-h1-mark) {
+		height: 100%;
+		width: auto;
+		animation-name: shrink-out;
+	}
+
+	::view-transition-new(pre),
+	::view-transition-new(ec-activate-mark),
+	::view-transition-new(ec-h1-mark) {
+		animation-name: grow-in;
+	}
+	#cr .ec-line:nth-of-type(1),
+	#api .ec-line:nth-of-type(1) {
+		view-transition-name: ec-html;
+		mark {
+			view-transition-name: ec-html-mark;
+		}
+	}
+	#cr .ec-line:nth-of-type(2),
+	#api .ec-line:nth-of-type(2) {
+		view-transition-name: ec-head;
+	}
+	#cr .ec-line:nth-of-type(3),
+	#api .ec-line:nth-of-type(3) {
+		view-transition-name: ec-dots1;
+	}
+	#cr .ec-line:nth-of-type(4),
+	#api .ec-line:nth-of-type(6) {
+		view-transition-name: ec-activate;
+		mark {
+			view-transition-name: ec-activate-mark;
+		}
+	}
+	#api .ec-line:nth-of-type(4),
+	#api .ec-line:nth-of-type(5),
+	#api .ec-line:nth-of-type(7),
+	#api .ec-line:nth-of-type(8) {
+		view-transition-name: match-element;
+	}
+	#cr .ec-line:nth-of-type(5),
+	#api .ec-line:nth-of-type(9) {
+		view-transition-name: ec-dots2;
+	}
+	#cr .ec-line:nth-of-type(6),
+	#api .ec-line:nth-of-type(10) {
+		view-transition-name: ec-head2;
+	}
+	#cr .ec-line:nth-of-type(7),
+	#api .ec-line:nth-of-type(11) {
+		view-transition-name: ec-body;
+	}
+	#cr .ec-line:nth-of-type(8),
+	#api .ec-line:nth-of-type(12) {
+		view-transition-name: ec-h1;
+		mark {
+			view-transition-name: ec-h1-mark;
+		}
+	}
+	#cr .ec-line:nth-of-type(9),
+	#api .ec-line:nth-of-type(13) {
+		view-transition-name: ec-dots3;
+	}
+	#cr .ec-line:nth-of-type(10),
+	#api .ec-line:nth-of-type(14) {
+		view-transition-name: ec-body2;
+	}
+	#cr .ec-line:nth-of-type(11),
+	#api .ec-line:nth-of-type(15) {
+		view-transition-name: ec-html2;
+	}
+	h2 {
+		view-transition-name: h2;
+		width: fit-content;
+	}
+	#cr {
+	}
+	#api,
+	#css {
+		display: none;
+	}
+	#cr,
+	#api,
+	#css {
+		width: 45vw;
+		code {
+			font-size: 2.4vh;
+			padding: 1ex;
+		}
+		.title {
+			font-size: 2.5vh;
+			line-height: 1.5;
+			padding: 0.5ex 1ex;
+			view-transition-name: title;
+		}
+		.expressive-code {
+			view-transition-name: card;
+		}
+	}
+	:root.change {
+		#cr {
+			display: none;
+		}
+		#api {
+			display: block;
+		}
+		#img {
+			display: none;
+		}
+		#t3 {
+			font-size: 70vh;
+			transform: translate(35vw, -5vh);
+		}
+	}
+	:root.hide {
+		&,
+		* {
+			view-transition-name: none !important;
+		}
+		&::view-transition-group(*) {
+			animation-duration: 0s;
+		}
+		.expressive-code {
+			view-transition-name: card !important;
+		}
+	}
+	:root.flip {
+		#api {
+			display: none;
+		}
+		#css {
+			display: block;
+		}
+		&,
+		* {
+			view-transition-name: none !important;
+		}
+		.expressive-code {
+			view-transition-name: card !important;
+		}
+		&::view-transition-image-pair(*) {
+			perspective: 70cm;
+		}
+		&::view-transition-old(*) {
+			animation-name: turn-out;
+		}
+		&::view-transition-new(*) {
+			animation-name: turn-in;
+		}
+		&::view-transition-group(*) {
+			animation-timing-function: ease-in-out;
+			animation-duration: 0.5s;
+		}
+	}
+	@keyframes turn-out {
+		0% {
+			transform: rotateY(0deg);
+			box-shadow: 0px 0px 10px var(--accent-purple);
+		}
+		50% {
+			transform: rotateY(90deg);
+			box-shadow: 0px 0px 150px var(--accent-purple);
+			opacity: 1;
+		}
+		50.01% {
+			opacity: 0;
+			transform: rotateY(90deg);
+		}
+		100% {
+			opacity: 0;
+			transform: rotateY(90deg);
+		}
+	}
+	@keyframes turn-in {
+		0% {
+			transform: rotateY(-90deg);
+			opacity: 0;
+		}
+		49.99% {
+			opacity: 0;
+			transform: rotateY(-90deg);
+		}
+		50% {
+			opacity: 1;
+			transform: rotateY(-90deg);
+			box-shadow: 0px 0px 150px var(--accent-purple);
+		}
+
+		100% {
+			transform: rotateY(0deg);
+			box-shadow: 0px 0px 10px var(--accent-purple);
+		}
+	}
+</style>

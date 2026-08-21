@@ -20,16 +20,23 @@ import 'open-props/easings';
 		<div class="lemon" id="a11">🍋</div>
 	</div>
 	<div id="features">
-		<h2>Might raise complexity in other areas</h2>
+		<h2>Even a good abstraction might raise complexity in other areas</h2>
 		<ul>
 			<li class="green">Learn: Astro-specific abstraction plus underlying API</li>
-			<li class="green">Master: navigation events + lifecycle hooks</li>
+			<li class="green">Master: Astro-specific navigation events + lifecycle hooks</li>
 			<li class="yellow">Handle: re-initialization of state and 3rd party scripts</li>
 		</ul>
 	</div>
 </Layout>
 
 <style is:global>
+	.red-apple,
+	.green-apple,
+	.lemon {
+		filter: drop-shadow(1px 0px 0px #4448) drop-shadow(-1px 0px 0px #4448)
+			drop-shadow(0px 1px 0px #4448) drop-shadow(0px -1px 0px #4448);
+	}
+
 	h2 {
 		view-transition-name: h2;
 		width: fit-content;
@@ -54,6 +61,8 @@ import 'open-props/easings';
 			font-size: 1.7vw;
 			position: absolute;
 			transform: translate(-3vw, 0.8vh);
+			filter: drop-shadow(1px 0px 0px #ccc8) drop-shadow(-1px 0px 0px #ccc8)
+				drop-shadow(0px 1px 0px #ccc8) drop-shadow(0px -1px 0px #ccc8);
 		}
 	}
 	li.green {
