@@ -23,6 +23,9 @@ import 'open-props/easings';
 </Layout>
 
 <style is:global>
+	ul {
+		width: 33vw;
+	}
 	::view-transition-group(*) {
 		animation-duration: 5s;
 	}
@@ -35,8 +38,8 @@ import 'open-props/easings';
 	}
 	#works {
 		position: absolute;
-		width: 30vw;
-		transform: translate(0vw, 0);
+		width: 45vw;
+		transform: translate(-10vw, 0);
 	}
 	::view-transition-new(s3):only-child {
 		animation-delay: 2s;
@@ -84,14 +87,14 @@ import 'open-props/easings';
 	}
 	@keyframes frame-new {
 		from {
-			transform: translate(-5vw, -30vh) scale(0.1);
+			transform: translate(-5vw, -18vw) scale(0.1);
 		}
 		25% {
 			outline: 8px solid #8a4c41;
 			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
 		}
 		50% {
-			transform: translate(-5vw, -20vh) scale(0.1) ;
+			transform: translate(-5vw, -12vw) scale(0.1);
 			outline: 3px solid #8a4c41;
 			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
 		}
@@ -100,14 +103,14 @@ import 'open-props/easings';
 			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
 			transform: scale(1) translate(0, 0);
 		}
-	}	
+	}
 	@keyframes root-old {
 		from {
 			outline: 4px solid gray;
 			z-index: 1;
 		}
 		to {
-			transform: translate(-33vw, -15vh) scale(0.3) rotate(-12deg);
+			transform: translate(-33vw, -9vw) scale(0.3) rotate(-12deg);
 			outline: 4px solid gray;
 			box-shadow: 0 0px 25px rgba(255, 255, 255, 0.4);
 			z-index: 0;
@@ -149,15 +152,20 @@ import 'open-props/easings';
 	#s3 {
 		position: absolute;
 		view-transition-name: s3;
-		transform: translate(15vw, -15vw) rotate(8deg) ;
+		transform: translate(15vw, -15vw) rotate(8deg);
 		font-size: 22vw;
 	}
 </style>
 <script>
-	let running=true;
+	let running = true;
+		let t = 0;
 
 	addEventListener('pointerdown', () => {
-		document.getAnimations().forEach((a) => running ? a.pause() : a.play());
+		document
+			.getAnimations()
+			.forEach((a) =>
+				running ? ((t = a.currentTime as number), a.pause()) : ((a.currentTime = t), a.play())
+			);
 		running = !running;
-	})
+	});
 </script>

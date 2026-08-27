@@ -18,13 +18,13 @@ import 'open-props/easings';
 	<div id="features">
 		<h2>Astro's client router offers&hellip;</h2>
 		<ul>
-			<li>Fallback for all browsers</li>
-			<li>Predefined animations: fade & slide</li>
-			<li>Forward/backward animations</li>
+			<li>Cross-document view transitions for all browsers</li>
 			<li>Automatically respects reduced motion preferences</li>
-			<li>Automatic escaping for view transition names</li>
+			<li>Automatic escaping of view transition names</li>
+			<li>Predefined animations: fade & slide w/ parameters</li>
+			<li>Forward/backward animations</li>
 			<li>Persist DOM trees from old to new page&nbsp;&nbsp;</li>
-			<li>Automatic prefetching</li>
+			<li>Automatic prefetching and minimal render freeze</li>
 		</ul>
 	</div>
 </Layout>
@@ -39,6 +39,7 @@ import 'open-props/easings';
 	}
 	#features {
 		transform: translateX(15vw);
+		width: 60vw;
 	}
 	ul {
 		--icon: '🍎';
@@ -55,24 +56,24 @@ import 'open-props/easings';
 			content: var(--icon);
 			font-size: 1.7vw;
 			position: absolute;
-			transform: translate(-3vw, 0.8vh);
+			transform: translate(-3vw, 0.25vw);
 			filter: drop-shadow(1px 0px 0px #ccc8) drop-shadow(-1px 0px 0px #ccc8)
 				drop-shadow(0px 1px 0px #ccc8) drop-shadow(0px -1px 0px #ccc8);
 		}
 	}
 	#img {
 		position: absolute;
-		transform: translate(-20vw, -40vh);
+		transform: translate(-19vw, -30vw);
 	}
 	#tree {
-		font-size: 60vh;
+		font-size: 35vw;
 		position: absolute;
 		view-transition-name: tree;
-		transform: translate(-35vw, 0vh);
+		transform: translate(-37vw, 2vw);
 	}
 
 	.red-apple {
-		font-size: 6vh;
+		font-size: 4vw;
 		position: absolute;
 		display: none;
 	}
@@ -82,31 +83,31 @@ import 'open-props/easings';
 
 	#a1 {
 		view-transition-name: a1;
-		transform: translate(-15vw, 20vh);
+		transform: translate(-15vw, 12vw);
 	}
 	#a2 {
 		view-transition-name: a2;
-		transform: translate(-9vw, 33vh);
+		transform: translate(-9vw, 19vw);
 	}
 	#a3 {
 		view-transition-name: a3;
-		transform: translate(-17vw, 38vh);
+		transform: translate(-17vw, 25vw);
 	}
 	#a4 {
 		view-transition-name: a4;
-		transform: translate(-19vw, 30vh);
+		transform: translate(-19vw, 18vw);
 	}
 	#a5 {
 		view-transition-name: a5;
-		transform: translate(-23vw, 40vh);
+		transform: translate(-23vw, 24vw);
 	}
 	#a6 {
 		view-transition-name: a6;
-		transform: translate(-11vw, 45vh);
+		transform: translate(-11vw, 27vw);
 	}
 	#a7 {
 		view-transition-name: a7;
-		transform: translate(-22vw, 50vh);
+		transform: translate(-22vw, 30vw);
 	}
 
 	:root.growing-red {
@@ -114,8 +115,8 @@ import 'open-props/easings';
 		.red-apple {
 			display: block;
 		}
-		#tree {
-			view-transition-name: none;
+		&::view-transition-new(tree) {
+			animation-name: none;
 		}
 		&::view-transition-new(a1) {
 			animation-delay: 0s;

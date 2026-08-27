@@ -1,28 +1,30 @@
 ---
 import Layout from './_Layout.astro';
+import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
+import { Image } from 'astro:assets';
 ---
 
-<Layout heading="About me" steps={5}>
+<Layout heading="About me" steps={6}>
 	<ul>
-		<li id="li0" style="view-transition-name: a1">
+		<li id="li1" style="view-transition-name: a1">
 			<b>Martin</b><br />
 			<small
 				>View Transition enthusiast · Astro maintainer<br />
 				GitHub <code>martrapp</code> · Bluesky <code>@martr.app</code></small
 			>
 		</li>
-		<li id="li1" style="view-transition-name: a2">Found Astro in 2023</li>
-		<li id="li2" style="view-transition-name: a3">
+		<li id="li2" style="view-transition-name: a2">Found Astro in 2023</li>
+		<li id="li3" style="view-transition-name: a3">
 			Helped with <code>ClientRouter</code> implementation
 		</li>
-		<li id="li3" style="view-transition-name: a4">
+		<li id="li4" style="view-transition-name: a4">
 			Happy to give view transition support on Discord
 		</li>
-		<li id="li4" style="view-transition-name: a5">Maker of Bags of Tricks for view transitions</li>
+		<li id="li5" style="view-transition-name: a5">Maker of Bags of Tricks for view transitions</li>
 	</ul>
 	<div id="icon">
 		<div id="icon1">
-			<img id="img1" src="/bot1.png" alt="vtbot" />
+			<Image id="img1" src={bot} alt="vtbot" width="200" height="200" />
 			<div>astro-vtbot</div>
 		</div>
 		<div id="icon2">
@@ -38,7 +40,10 @@ import Layout from './_Layout.astro';
 			color: var(--accent-purple);
 		}
 	}
-	:root.li3 {
+	#li1 {
+		width: fit-content;
+	}
+	:root.li2 {
 		small code {
 			color: white;
 		}
@@ -55,20 +60,22 @@ import Layout from './_Layout.astro';
 	#icon2 {
 		view-transition-name: icon2;
 	}
-	#img1,
+	img {
+		height: 15vw;
+	}
 	#img2 {
-		height: 25vh;
+		transform: rotate(9deg)
 	}
 	#icon {
 		display: flex;
 		gap: 5vw;
 	}
-	:root.li4 {
+	:root.li5 {
 		#icon1 {
 			display: flex;
 		}
 	}
-	:root.li5 {
+	:root.li6 {
 		#icon2 {
 			display: flex;
 		}

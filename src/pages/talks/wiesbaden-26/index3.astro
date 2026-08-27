@@ -6,13 +6,14 @@ import Layout from './_Layout0.astro';
 	<div>
 		<h2 transition:name="h2">🚀 From Astro View Transitions to the Web Platform</h2>
 		<a href="../index4/">Click</a><br />
-		<p>Ah, the slide and morph effects of Astro's View Transition support!</p><p>How was this done?</p>
+		<p>Ah, the slide and morph effects of Astro's View Transition support!</p>
+		<p id="question">How was this done?</p>
 	</div>
 </Layout>
 <style is:global>
 	a {
 		display: block;
-		padding-top: 5vh;
+		padding-top: 3vw;
 		text-decoration: none;
 		font-size: 1vw;
 	}
@@ -20,4 +21,29 @@ import Layout from './_Layout0.astro';
 		width: 100%;
 		font-size: 8vw;
 	}
+	#question {
+		position: absolute;
+		display: none;
+		color: var(--accent-purple);
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 500ms ease-out,
+			transform 500ms ease-out,
+			display 500ms allow-discrete;
+	}
+
+	#question[style*='display: block'] {
+		display: block;
+
+		@starting-style {
+			opacity: 0;
+			transform: translate(75vw,-75vh) scale(30);
+		}
+	}
 </style>
+<script>
+	document.addEventListener('click', () => {
+		document.getElementById('question')!.style.display = 'block';
+	});
+</script>

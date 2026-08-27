@@ -5,7 +5,10 @@ import 'open-props/easings';
 import { Code } from 'astro-expressive-code/components';
 ---
 
-<Layout heading="How to Switch to the Platform" steps={['change', 'hide', 'flip']}>
+<Layout
+	heading="How to Switch to the Platform"
+	steps={['start', 'change', 'hide', 'flip', 'apple']}
+>
 	<div id="img">
 		<div id="tree">🌳</div>
 		<div class="red-apple" id="a1">🍎</div>
@@ -15,12 +18,12 @@ import { Code } from 'astro-expressive-code/components';
 		<div class="red-apple" id="a5">🍎</div>
 		<div class="red-apple" id="a6">🍎</div>
 		<div class="red-apple" id="a7">🍎</div>
-		<div class="green-apple" id="a8">🍏</div>
 		<div class="green-apple" id="a9">🍏</div>
 		<div class="green-apple" id="a10">🍏</div>
 		<div class="lemon" id="a11">🍋</div>
 	</div>
 
+	<div id="question"><div>❓</div><div>==></div></div>
 	<div id="cr">
 		<Code
 			title="Layout.astro"
@@ -88,19 +91,27 @@ import { Code } from 'astro-expressive-code/components';
 			lang="css"
 		/>
 	</div>
-	<div id="t2"></div>
-	<div id="t3">🌲</div>
+	<div id="t3">
+		<div>🎄</div>
+		<div id="t3apple" class="red-apple">🍎</div>
+		<div id="t4apple" class="green-apple">🍏</div>
+	</div>
 </Layout>
 
 <style is:global>
 	#slide {
 		position: absolute;
-		transform: translate(-20vw, 30vh) rotate(-90deg);
-		transform: translate(10vw, -10vh);
+		transform: translate(-15vw, 20vw) rotate(-90deg);
 		view-transition-name: ec-html-mark;
 		border-radius: 0.5ex;
 		background-color: #174a9099;
 		padding-bottom: 0.5ex;
+	}
+	:root.change {
+		&::view-transition-group(ec-html-mark) {
+			animation-duration: 1s;
+			animation-delay: 0.5s;
+		}
 	}
 	.gutter {
 		padding-right: 0.5vw;
@@ -110,67 +121,53 @@ import { Code } from 'astro-expressive-code/components';
 	}
 	#img {
 		position: absolute;
-		transform: translate(-22vw, -43vh);
+		transform: translate(-19vw, -32.2vw);
 	}
 
 	#tree {
-		font-size: 60vh;
+		font-size: 35vw;
 		position: absolute;
-		transform: translate(-35vw, 0vh);
-		view-transition-name: tree;
+		transform: translate(-37vw, 2vw);
 	}
 
 	.red-apple,
 	.green-apple,
 	.lemon {
-		font-size: 6vh;
+		font-size: 4vw;
 		position: absolute;
 	}
-	.green-apple {
-		view-transition-class: green-apple;
-	}
-	.lemon {
-		view-transition-class: lemon;
-	}
-	.red-apple {
-		view-transition-name: match-element;
-	}
 	#a1 {
-		transform: translate(-15vw, 20vh);
+		transform: translate(-15vw, 12vw);
 	}
 	#a2 {
-		transform: translate(-9vw, 33vh);
+		transform: translate(-9vw, 19vw);
 	}
 	#a3 {
-		transform: translate(-17vw, 38vh);
+		transform: translate(-17vw, 25vw);
 	}
 	#a4 {
-		transform: translate(-19vw, 30vh);
+		transform: translate(-19vw, 18vw);
 	}
 	#a5 {
-		transform: translate(-23vw, 40vh);
+		transform: translate(-23vw, 24vw);
 	}
 	#a6 {
-		transform: translate(-11vw, 45vh);
+		transform: translate(-11vw, 27vw);
 	}
 	#a7 {
-		transform: translate(-22vw, 50vh);
+		transform: translate(-22vw, 30vw);
 	}
 	#a8 {
-		view-transition-name: a8;
-		transform: translate(-19vw, 47vh);
+		transform: translate(-19vw, 28vw);
 	}
 	#a9 {
-		view-transition-name: a9;
-		transform: translate(-8vw, 52vh);
+		transform: translate(-8vw, 31vw);
 	}
 	#a10 {
-		view-transition-name: a10;
-		transform: translate(-14vw, 28vh);
+		transform: translate(-14vw, 17vw);
 	}
 	#a11 {
-		view-transition-name: a11;
-		transform: translate(-16vw, 55vh);
+		transform: translate(-16vw, 33vw);
 	}
 
 	.red-apple,
@@ -181,14 +178,25 @@ import { Code } from 'astro-expressive-code/components';
 	}
 
 	#t3 {
-		font-size: 20vh;
-		transform: translate(39vw, 23.5vh);
+		font-size: 40vw;
+		transform: translate(35vw, -6vw);
 		position: absolute;
-	}
-
-	#t3 {
 		view-transition-name: t3;
 	}
+	#t3apple {
+		font-size: 4vw;
+		position: absolute;
+		transform: translate(33vw, -16vw);
+		view-transition-name: t3apple;
+	}
+	#t4apple {
+		font-size: 4vw;
+		position: absolute;
+		transform: translate(25vw, -62vw);
+		view-transition-name: t4apple;
+		display: none;
+	}
+
 	#cr pre,
 	#api pre,
 	#css pre {
@@ -277,28 +285,54 @@ import { Code } from 'astro-expressive-code/components';
 		view-transition-name: h2;
 		width: fit-content;
 	}
-	#cr {
+
+	#question {
+		font-size: 20vw;
+		position: absolute;
+		view-transition-name: question;
+		div {
+			transform: translate(2vw, -6vw);
+		}
+		div:nth-of-type(1) {
+			transform: translate(1vw, 5vw);
+		}
 	}
-	#api,
-	#css {
-		display: none;
+	#cr {
+		z-index: 1;
 	}
 	#cr,
 	#api,
 	#css {
-		width: 45vw;
+		display: none;
+		transform: translateX(-10vw);
+	}
+	#cr {
+		transform: translate(9vw, 0);
+	}
+	#cr,
+	#api,
+	#css {
+		width: 50vw;
 		code {
-			font-size: 2.4vh;
+			font-size: 1.5vw;
 			padding: 1ex;
 		}
 		.title {
-			font-size: 2.5vh;
+			font-size: 1.5vw;
 			line-height: 1.5;
 			padding: 0.5ex 1ex;
 			view-transition-name: title;
 		}
 		.expressive-code {
 			view-transition-name: card;
+		}
+	}
+	:root.start {
+		#question {
+			display: none;
+		}
+		#cr {
+			display: block;
 		}
 	}
 	:root.change {
@@ -312,8 +346,8 @@ import { Code } from 'astro-expressive-code/components';
 			display: none;
 		}
 		#t3 {
-			font-size: 70vh;
-			transform: translate(35vw, -5vh);
+			font-size: 40vw;
+			transform: translate(35vw, -3vw);
 		}
 	}
 	:root.hide {
@@ -355,6 +389,10 @@ import { Code } from 'astro-expressive-code/components';
 			animation-timing-function: ease-in-out;
 			animation-duration: 0.5s;
 		}
+		#t4apple {
+			view-transition-name: t4apple !important;
+			display: block;
+		}
 	}
 	@keyframes turn-out {
 		0% {
@@ -393,6 +431,31 @@ import { Code } from 'astro-expressive-code/components';
 		100% {
 			transform: rotateY(0deg);
 			box-shadow: 0px 0px 10px var(--accent-purple);
+		}
+	}
+
+	:root.apple {
+		#t4apple {
+			transform: translate(25vw, -19vw);
+			view-transition-name: t4apple !important;
+		}
+		&::view-transition-group(t4apple) {
+			animation-timing-function: var(--ease-spring-3);
+			animation-duration: 1s;
+		}
+		&::view-transition-old(t4apple) {
+			display: none;
+		}
+		&::view-transition-new(t4apple) {
+			animation-name: none;
+		}
+		#css {
+			display: none;
+		}
+	}
+	:active-view-transition-type(cross-document) {
+		&::view-transition-old(tree) {
+			display: none;
 		}
 	}
 </style>

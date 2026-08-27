@@ -15,7 +15,7 @@ if (typeof steps === 'number') {
 }
 ---
 
-<html lang="en" data-steps={JSON.stringify(steps)}>
+<html lang="en" data-step="-1" data-steps={JSON.stringify(steps)}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,7 +30,7 @@ if (typeof steps === 'number') {
 		<Font cssVariable="--font-inter" />
 		<script is:inline>
 			window.SLIDES = [
-				'/talks/wiesbaden-26/index2/',
+				'/talks/wiesbaden-26/',
 				'/talks/wiesbaden-26/who/',
 				'/talks/wiesbaden-26/me/',
 				'/talks/wiesbaden-26/not-ready/',
@@ -40,16 +40,29 @@ if (typeof steps === 'number') {
 				'/talks/wiesbaden-26/apples2/',
 				'/talks/wiesbaden-26/catch-up/',
 				'/talks/wiesbaden-26/away/',
-				'/talks/wiesbaden-26/trees/',
-				'/talks/wiesbaden-26/decisions/',
+				'/talks/wiesbaden-26/escape/',
+				'/talks/wiesbaden-26/direction/',
+				'/talks/wiesbaden-26/persist/',
 			];
-			addEventListener('pagereveal', ()=>
-				(document.querySelector('#page-no').innerText = window.SLIDES.findIndex(
+			addEventListener('pagereveal', (e) => {
+				document.querySelector('#page-no').innerText = window.SLIDES.findIndex(
 					(path) => path === location.pathname
 				)
 					.toString()
-					.padStart(2, '0'))
-			);
+					.padStart(2, '0');
+				if (sessionStorage.getItem('backwards') === 'true') {
+					const doc = document.documentElement;
+					const steps = JSON.parse(doc.dataset.steps);
+					const classes = doc.classList;
+
+					let step = -1;
+					while (step < steps.length - 1) {
+						classes.add(steps[++step]);
+					}
+					doc.dataset.step = step.toString();
+				}
+				sessionStorage.removeItem('backwards');
+			});
 		</script>
 	</head>
 	<body id="body">
@@ -96,14 +109,16 @@ if (typeof steps === 'number') {
 			currentIndex,
 		};
 	}
-	const navigate = (url: string) => (location.href = url);
-
+	const navigate = (url: string, backwards = false) => {
+		sessionStorage.setItem('backwards', backwards.toString());
+		location.href = url;
+	};
 	const doc = document.documentElement;
 	const steps = JSON.parse(doc.dataset.steps!);
 	const classes = doc.classList;
 
-	let step = -1;
 	document.addEventListener('keydown', (event) => {
+		let step = parseInt(doc.dataset.step!, 10);
 		const { prev, next } = getNavigationUrls();
 		switch (event.key) {
 			case 'ArrowRight':
@@ -112,32 +127,34 @@ if (typeof steps === 'number') {
 				break;
 			case 'ArrowLeft':
 			case 'p':
-				prev && navigate(prev);
+				prev && navigate(prev, true);
 				break;
 			case 'ArrowDown':
 			case 's':
 			case ' ':
 				if (step < steps.length - 1) {
-					step = Math.min(step + 1, steps.length - 1);
-					mayStartViewTransition(() => classes.add(steps[step]));
+					mayStartViewTransition(() => {
+						classes.add(steps[++step]);
+						doc.dataset.step = step.toString();
+					});
 				} else next && navigate(next);
 				break;
 			case 'ArrowUp':
 			case 'w':
 				if (step >= 0)
 					mayStartViewTransition(() => {
-						classes.remove(steps[step]);
-						step = Math.max(step - 1, -1);
+						classes.remove(steps[step--]);
+						doc.dataset.step = step.toString();
 					});
 				else {
-					prev && navigate(prev);
+					prev && navigate(prev, true);
 				}
 				break;
 		}
 	});
 	document.getElementById('prev')?.addEventListener('click', () => {
 		const { prev } = getNavigationUrls();
-		prev && navigate(prev);
+		prev && navigate(prev, true);
 	});
 	document.getElementById('next')?.addEventListener('click', () => {
 		const { next } = getNavigationUrls();
@@ -145,6 +162,13 @@ if (typeof steps === 'number') {
 	});
 </script>
 <style is:global>
+	.slide-viewport {
+		display: grid;
+		place-items: center;
+		aspect-ratio: 192 / 120;
+		width: min(100vw, 100vh * (192 / 120));
+		max-height: 100vh;
+	}
 	:active-view-transition-type(slide) {
 		&::view-transition-old(root) {
 			animation-name: slide-out-to-left;

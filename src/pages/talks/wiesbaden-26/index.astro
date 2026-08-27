@@ -1,20 +1,32 @@
 ---
-import Layout from './_Layout.astro';
+import Layout from './_Layout0.astro';
 ---
 
-<Layout talk="" heading="When the Platform Catches Up" slideNumber={0} steps={[]}>
-	<h2>From Astro View Transitions to the Web Platform</h2>
+<Layout>
+	<div>
+		<h2 transition:name="h2">🚀 From Astro View Transitions to the Web Platform</h2>
+		<a id="click" href="./index3/">[ click ]</a>
+		<a id="start" href="./who/">[ start ]</a>
+	</div>
 </Layout>
 <style is:global>
-	h2 {
-		max-width: 55vw
+	a {
+		display: block;	
+		text-decoration: none;
+		font-size: 1vw;
+		padding-top: 2wh;
 	}
-	:active-view-transition-type(slide) {
-		&::view-transition-old(root) {
-			animation-name: slide-out-to-right;
-		}
-		&::view-transition-new(root) {
-			animation-name: slide-in-from-left;
-		}
+	#click {
+		padding-top: 15vw;
+	}
+	@view-transition {
+		navigation: auto;
+	}
+	
+	h2 {
+		width: 50%;
 	}
 </style>
+<script>
+	sessionStorage.setItem('backwards', 'false');
+</script>

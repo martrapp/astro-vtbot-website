@@ -5,6 +5,7 @@ import 'open-props/easings';
 ---
 
 <Layout heading="Astro Bridged the Gap" steps={['magnifier', 'tree', 'work']}>
+	<h3>Idea: Use client-side routing to emulate cross-document view transitions.</h3>
 	<div id="seedling">🪴</div>
 	<div id="magnifier">🔎</div>
 	<div id="tree">🌳</div>
@@ -21,30 +22,39 @@ import 'open-props/easings';
 </Layout>
 
 <style is:global>
+	h3 {
+		position: absolute;
+		transform: translateY(20vw);
+		width: 75vw;
+		display: none;
+	}
+	#work {
+		padding-bottom: 8vw;
+	}
 	#seedling {
-		font-size: 40vh;
+		font-size: 24vw;
 		view-transition-name: s3;
 		position: absolute;
-		transform: translate(-30vw,-5vh);
+		transform: translate(-30vw,-3vw);
 	}
 	#magnifier {
 		display: none;
-		font-size: 70vh;
+		font-size: 42vw;
 		position: absolute;
-		transform: translate(-4vw,5vh);
-		view-transition-name: match-element;
+		transform: translate(-4vw,3vw);
+		view-transition-name: magnifier;
 		transform: translateX(-33vw);
 	}
 	#tree {
 		display: none;
-		font-size: 30vh;
+		font-size: 18vw;
 		position: absolute;
 		view-transition-name: tree;
-		transform: translate(-29vw,-5vh);
+		transform: translate(-29vw,-3vw);
 	}
 	#work {
 		display: none;
-		view-transition-name: match-element;
+		view-transition-name: work;
 		transform: translateX(18vw);
 	}
 	:root.magnifier {
@@ -54,6 +64,9 @@ import 'open-props/easings';
 	}
 	:root.tree {
 		#tree {
+			display: block;
+		}
+		h3 {
 			display: block;
 		}
 	}

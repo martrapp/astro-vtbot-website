@@ -5,7 +5,7 @@ import 'open-props/easings';
 ---
 
 <Layout steps={['should', 'is', 'seedling', 'end']}>
-	<div slot="heading">2023:<br />The Platform Wasn't Ready</div>
+	<div slot="heading">View transitions in 2023:<br />The Platform Wasn't Ready</div>
 	<div id="tree">🌳</div>
 	<div id="should">
 		<h3>What it should be</h3>
@@ -27,8 +27,12 @@ import 'open-props/easings';
 </Layout>
 
 <style is:global>
+	:root {
+		view-transition-name: root;
+	}
+
 	#tree {
-		font-size: 66vh;
+		font-size: 40vw;
 		position: absolute;
 		width: 20vw;
 		view-transition-name: tree;
@@ -49,7 +53,7 @@ import 'open-props/easings';
 	}
 	#seedling {
 		display: none;
-		font-size: 40vh;
+		font-size: 24vw;
 		view-transition-name: seedling;
 		position: absolute;
 	}
@@ -90,10 +94,9 @@ import 'open-props/easings';
 		}
 	}
 	:root.end {
-		view-transition-name: root;
 		background-color: var(--bg-space);
 		#seedling {
-			font-size: 16vh;
+			font-size: 9vw;
 			transform: translate(39vw, 5vw);
 			background-color: var(--bg-space);
 		}

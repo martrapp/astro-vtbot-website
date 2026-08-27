@@ -1,0 +1,187 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+import { Code } from 'astro-expressive-code/components';
+
+const vtn = `---
+const slug = 'topic/sätteri';
+---
+...
+<div style=\`view-transition-name: \${slug}\`>...`;
+---
+
+<Layout heading="What About Escaping View Transionen Names?" steps={3}>
+	<div id="img">
+		<div id="basket">🧺</div>
+		<div class="apple" id="a1">🍏</div>
+		<div class="apple" id="a2">🍎</div>
+		<div class="apple" id="a3">🍎</div>
+		<div class="apple" id="a4">🍏</div>
+		<div class="apple" id="a5">🍎</div>
+		<div class="apple" id="a6">🍎</div>
+		<div class="apple" id="a7">🍎</div>
+	</div>
+	<ul>
+		<li id="li0">
+			<h3>Problem:</h3>
+			<Code lang="css" code={vtn} />
+			<p>is the same as</p>
+			<Code lang="css" code="<div style=`view-transition-name: none`>..." />
+		</li><li id="li1">
+			<h3>Solution:</h3>
+			<p>Use functions to escape view transition names properly, e.g:</p>
+			<Code
+				lang="css"
+				mark="escape"
+				code="<div style=`view-transition-name: ${escape(slug)}`>..."
+			/>
+			<p></p>
+		</li>
+		<li id="li2">
+			<h3>Result:</h3>
+			<Code lang="css" mark="\\/" code="view-transition-name: topic\/sätteri;" />
+		</li>
+	</ul>
+	<div id="t3">🎄</div>
+	<div id="t4apple" class="apple">🍏</div>
+</Layout>
+
+<style is:global>
+	ul {
+		list-style: none;
+	}
+	:root {
+		font-size: 1.5vw;
+	}
+	p {
+		margin: 1rem 0;
+	}
+	h3 {
+		margin: 1rem 0;
+	}
+	.code,
+	.gutter {
+		padding: 0 0.5rem;
+	}
+	#t3 {
+		font-size: 40vw;
+		transform: translate(35vw, -4vw);
+		position: absolute;
+		view-transition-name: t3;
+		z-index: -1;
+	}
+	#basket {
+		font-size: 10vw;
+		transform: translate(-15vw, 0vw);
+		position: absolute;
+		view-transition-name: basket;
+	}
+	.apple {
+		font-size: 4vw;
+		position: absolute;
+	}
+	#a1 {
+		view-transition-name: a1;
+		transform: translate(-15vw, 8vw);
+	}
+	#a2 {
+		transform: translate(-12vw, 8vw);
+		view-transition-name: a2;
+	}
+	#a3 {
+		transform: translate(-8vw, 2vw) rotate(30deg);
+		z-index: -1;
+		view-transition-name: a3;
+	}
+	#a4 {
+		transform: translate(-12vw, 2vw) rotate(-30deg);
+		z-index: -1;
+		view-transition-name: a4;
+	}
+	#a5 {
+		transform: translate(-14vw, 3vw);
+		z-index: -1;
+		view-transition-name: a5;
+	}
+	#a6 {
+		transform: translate(-6vw, 8vw);
+		view-transition-name: a6;
+	}
+	#a7 {
+		view-transition-name: t3apple;
+		transform: translate(67vw, 6.5vw);
+	}
+	#t4apple {
+		view-transition-name: t4apple;
+		transform: translate(35.3vw, 6.3vw);
+	}
+	::view-transition-group(t4apple) {
+		z-index: 1;
+	}
+	#li0 {
+		width: fit-content;
+		view-transition-name: li0;
+	}
+	#li1 {
+		view-transition-name: li1;
+	}
+	#li2 {
+		view-transition-name: li2;
+	}
+	#img,
+	ul {
+		transform: translate(-5vw, 0vw);
+	}
+	:root.li1 {
+		#li0 {
+			transform: scale(0.7) translateY(-5vw);
+		}
+		#li1 {
+			transform: translateY(-5vw);
+		}
+		#t3 {
+			transform: translate(35vw, -14vw);
+		}
+		#a7 {
+			transform: translate(65vw, -3.5vw);
+		}
+		#t4apple {
+			transform: translate(35.2vw, -3.7vw);
+		}
+		#img,
+		ul {
+			transform: translate(0vw, 0vw);
+		}
+		&::view-transition-group(t3apple),
+		&::view-transition-group(t4apple) {
+			animation-timing-function: ease-in-out;
+		}
+	}
+	:root.li2 {
+		#li1 {
+			display: none;
+		}
+		#a7 {
+			transform: translate(62vw, -3.5vw);
+		}
+	}
+	:root.li3 {
+		&::view-transition-group(a1) {
+			animation-duration: 2s;
+			animation-timing-function: var(--ease-spring-3);
+		}
+		#a1 {
+			transform: translate(50.5vw, -14.5vw);
+		}
+	}
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		height: 100%;
+		width: auto;
+	}
+	.apple {
+		filter: drop-shadow(1px 0px 0px #4448) drop-shadow(-1px 0px 0px #4448)
+			drop-shadow(0px 1px 0px #4448) drop-shadow(0px -1px 0px #4448);
+	}
+</style>

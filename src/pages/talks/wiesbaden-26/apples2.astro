@@ -14,7 +14,7 @@ import 'open-props/easings';
 		<div class="red-apple" id="a5">🍎</div>
 		<div class="red-apple" id="a6">🍎</div>
 		<div class="red-apple" id="a7">🍎</div>
-		<div class="green-apple" id="a8">🍏</div>
+		<!--div class="green-apple" id="a8">🍏</div-->
 		<div class="green-apple" id="a9">🍏</div>
 		<div class="green-apple" id="a10">🍏</div>
 		<div class="lemon" id="a11">🍋</div>
@@ -22,9 +22,9 @@ import 'open-props/easings';
 	<div id="features">
 		<h2>Even a good abstraction might raise complexity in other areas</h2>
 		<ul>
-			<li class="green">Learn: Astro-specific abstraction plus underlying API</li>
-			<li class="green">Master: Astro-specific navigation events + lifecycle hooks</li>
-			<li class="yellow">Handle: re-initialization of state and 3rd party scripts</li>
+			<li class="green">Learn view transitions:<br />Astro-specific abstraction plus underlying API</li>
+			<li class="green">Master navigation:<br /> Astro-specific navigation events + lifecycle hooks</li>
+			<li class="yellow">Handle MPA -> SPA implications:<br />re-initialization of state and 3rd party scripts</li>
 		</ul>
 	</div>
 </Layout>
@@ -43,7 +43,7 @@ import 'open-props/easings';
 	}
 	#features {
 		transform: translateX(15vw);
-		width: 66vw;
+		width: 60vw;
 	}
 	ul {
 		--icon: '🍎';
@@ -60,7 +60,7 @@ import 'open-props/easings';
 			content: var(--icon);
 			font-size: 1.7vw;
 			position: absolute;
-			transform: translate(-3vw, 0.8vh);
+			transform: translate(-3vw, 0.25vw);
 			filter: drop-shadow(1px 0px 0px #ccc8) drop-shadow(-1px 0px 0px #ccc8)
 				drop-shadow(0px 1px 0px #ccc8) drop-shadow(0px -1px 0px #ccc8);
 		}
@@ -73,19 +73,19 @@ import 'open-props/easings';
 	}
 	#img {
 		position: absolute;
-		transform: translate(-20vw, -40vh);
+		transform: translate(-19vw, -30vw);
 	}
 
 	#tree {
-		font-size: 60vh;
+		font-size: 35vw;
 		position: absolute;
-		transform: translate(-35vw, -0vh);
+		transform: translate(-37vw, 2vw);
 	}
 
 	.red-apple,
 	.green-apple,
 	.lemon {
-		font-size: 6vh;
+		font-size: 4vw;
 		position: absolute;
 	}
 	.green-apple,
@@ -100,43 +100,47 @@ import 'open-props/easings';
 	}
 
 	#a1 {
-		transform: translate(-15vw, 20vh);
+		transform: translate(-15vw, 12vw);
 	}
 	#a2 {
-		transform: translate(-9vw, 33vh);
+		transform: translate(-9vw, 19vw);
 	}
 	#a3 {
-		transform: translate(-17vw, 38vh);
+		transform: translate(-17vw, 25vw);
 	}
 	#a4 {
-		transform: translate(-19vw, 30vh);
+		transform: translate(-19vw, 18vw);
 	}
 	#a5 {
-		transform: translate(-23vw, 40vh);
+		transform: translate(-23vw, 24vw);
 	}
 	#a6 {
-		transform: translate(-11vw, 45vh);
+		transform: translate(-11vw, 27vw);
 	}
 	#a7 {
-		transform: translate(-22vw, 50vh);
+		transform: translate(-22vw, 30vw);
 	}
 	#a8 {
 		view-transition-name: a8;
-		transform: translate(-19vw, 47vh);
+		transform: translate(-19vw, 28vw);
 	}
 	#a9 {
 		view-transition-name: a9;
-		transform: translate(-8vw, 52vh);
+		transform: translate(-8vw, 31vw);
 	}
 	#a10 {
 		view-transition-name: a10;
-		transform: translate(-14vw, 28vh);
+		transform: translate(-14vw, 17vw);
 	}
 	#a11 {
 		view-transition-name: a11;
-		transform: translate(-16vw, 55vh);
+		transform: translate(-16vw, 33vw);
 	}
 
+	::view-transition-old(tree),
+	::view-transition-new(tree) {
+		animation-name: none;
+	}
 	:root.growing-green {
 		ul,
 		.green-apple,

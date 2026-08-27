@@ -1,0 +1,184 @@
+---
+import Layout from './_Layout.astro';
+// @ts-ignore
+import 'open-props/easings';
+import { Code } from 'astro-expressive-code/components';
+---
+
+<Layout heading="How to persist elements from the previous page?" steps={4}>
+	<div id="img">
+		<div id="basket">🧺</div>
+		<div class="apple" id="a0">🍋</div>
+		<div class="apple" id="a1">🍏</div>
+		<div class="apple" id="a2">🍎</div>
+		<div class="apple" id="a3">🍎</div>
+		<div class="apple" id="a4">🍏</div>
+		<div class="apple" id="a5">🍎</div>
+		<div class="apple" id="a6">🍎</div>
+		<div class="apple" id="a7">🍎</div>
+	</div>
+	<ul>
+		<li id="li1">
+			<p>Currently no way. MPA navigation reloads elements and their state</p>
+		</li><li id="li2">
+			<p>You can save / restore some state across navigation</p>
+		</li><li id="li3">
+			<p>
+				The future <code>@navigation</code> at-rule provides checks for the direction of traversals
+			</p>
+			<Code
+				lang="css"
+				code=`
+/* Set the default animation for the view transition */
+::view-transition-old(root) {
+  animation-name: slideOutToLeft;
+}
+::view-transition-new(root) {
+  animation-name: slideInFromRight;
+}
+/* On backward history traversal, reverse the animation */
+@navigation (history: back) {
+  ::view-transition-old(root) {
+    animation-name: slideOutToRight;
+  }
+  ::view-transition-new(root) {
+    animation-name: slideInFromLeft;
+  }
+}
+`
+			/>
+		</li>
+	</ul>
+	<div id="t3">🎄</div>
+	<div id="t4apple" class="apple">🍏</div>
+</Layout>
+
+<style is:global>
+	#t4apple {
+		view-transition-name: t4apple;
+		transform: translate(35vw, 6.3vw);
+	}
+	ul {
+		list-style: none;
+		width: 50vw;
+	}
+	p {
+		margin: 1rem 0;
+	}
+	h3 {
+		margin: 1rem 0;
+	}
+	.code,
+	.gutter {
+		padding: 0 0.5rem;
+	}
+	#t3 {
+		font-size: 40vw;
+		transform: translate(35vw, -4vw);
+		position: absolute;
+		view-transition-name: t3;
+		z-index: -1;
+	}
+	#basket {
+		font-size: 10vw;
+		transform: translate(-15vw, 0vw);
+		position: absolute;
+		view-transition-name: basket;
+	}
+	.apple {
+		font-size: 4vw;
+		position: absolute;
+	}
+	#a0 {
+		view-transition-name: a0;
+		transform: translate(-12vw, 2vw) rotate(-30deg);
+		z-index: -2;
+	}
+	#a1 {
+		view-transition-name: a1;
+		transform: translate(61vw, -4.6vw);
+	}
+	#a2 {
+		transform: translate(-12vw, 8vw);
+		view-transition-name: a2;
+	}
+	#a3 {
+		transform: translate(-8vw, 2vw) rotate(30deg);
+		z-index: -1;
+		view-transition-name: a3;
+	}
+	#a4 {
+		view-transition-name: a4;
+		transform: translate(65.1vw, -11.4vw);
+	}
+	#a5 {
+		transform: translate(-14vw, 3vw);
+		z-index: -1;
+		view-transition-name: a5;
+	}
+	#a6 {
+		transform: translate(-6vw, 8vw);
+		view-transition-name: a6;
+	}
+	#a7 {
+		transform: translate(72.5vw, 6.5vw);
+		view-transition-name: t3apple;
+	}
+	#li1 {
+		width: 50vw;
+		view-transition-name: li1;
+	}
+	#li2 {
+		view-transition-name: li2;
+	}
+	#li3 {
+		view-transition-name: li3;
+	}
+	#img,
+	ul {
+		transform: translate(-5vw, 0vw);
+	}
+	:root.li1 {
+		.expressive-code {
+			font-size: 1.2vw;
+		}
+		#a7 {
+			transform: translate(71.5vw, 6.5vw);
+		}
+		#a1 {
+			transform: translate(60vw, -4.5vw);
+		}
+		ul {
+			width: 44vw;
+		}
+		#img,
+		ul {
+			transform: translate(-7vw, 0vw);
+		}
+	}
+	:root.li3 {
+		#li1 {
+			transform: translate(-18vw, 4vw) scale(0.7);
+		}
+		#li2 {
+			transform: translate(20vw, -3.5vw) scale(0.7);
+		}
+		#li3 {
+			transform: translate(0, -4vw);
+		}
+	}
+	:root.li4 {
+		#a4 {
+			transform: translate(64.5vw, -11.5vw);
+		}
+	}
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		height: 100%;
+		width: auto;
+	}
+	.apple {
+		filter: drop-shadow(1px 0px 0px #4448) drop-shadow(-1px 0px 0px #4448)
+			drop-shadow(0px 1px 0px #4448) drop-shadow(0px -1px 0px #4448);
+	}
+</style>
