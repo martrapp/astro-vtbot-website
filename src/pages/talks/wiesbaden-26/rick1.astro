@@ -2,49 +2,10 @@
 import Layout from './_Layout.astro';
 // @ts-ignore
 import 'open-props/easings';
-import { Code } from 'astro-expressive-code/components';
 ---
 
-<Layout heading="How to persist elements from the previous page?" steps={4}>
-	<div id="img">
-		<div id="basket">🧺</div>
-		<div class="apple" id="a0">🍋</div>
-		<div class="apple" id="a1">🍏</div>
-		<div class="apple" id="a2">🍎</div>
-		<div class="apple" id="a3">🍎</div>
-		<div class="apple" id="a4">🍏</div>
-		<div class="apple" id="a5">🍎</div>
-		<div class="apple" id="a6">🍎</div>
-		<div class="apple" id="a7">🍎</div>
-	</div>
-	<ul>
-		<li id="li1">
-			<p>Currently no way. MPA navigation reloads the page, it's elements, and their state</p>
-		</li><li id="li2">
-			<p>You can save / restore <b><i>some</i></b> state across navigation, e.g. serialized via <code>sessionStorage</code></p>
-		</li><li id="li4">
-			<p>
-				There is, however, some light at the end of the tunnel:
-			</p>
-			<Code
-				lang="css" mark={["persistentwidget",'id="assistant"']}
-				code=`
-<!-- Page A: https://example.com/index.html (before navigation) -->
-<persistentwidget id="assistant" src="/assistant.html"></persistentwidget>
-
-<!-- Page B: https://example.com/dashboard.html (after same-origin navigation) -->
-<head>
-  <!-- Ensure rendering is blocked until the widget is parsed and adopted -->
-  <link rel="expect" href="#assistant" blocking="render">
-</head>
-<body>
-  <persistentwidget id="assistant" src="/assistant.html"></persistentwidget>
-</body>`
-			/>
-		</li>
-	</ul>
-	<div id="t3">🎄</div>
-	<div id="t4apple" class="apple">🍏</div>
+<Layout heading="Persisted Element I/II" steps={0}>
+	
 </Layout>
 
 <style is:global>

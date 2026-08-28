@@ -23,9 +23,7 @@ import { Code } from 'astro-expressive-code/components';
 				Currently, you need JavaScript to detect and control the direction of history traversals
 			</p>
 		</li><li id="li2">
-			<p>
-				Write it yourself or use third party libs
-			</p>
+			<p>Write it yourself or use third party libs</p>
 		</li><li id="li3">
 			<p>
 				The future <code>@navigation</code> at-rule provides checks for the direction of traversals
@@ -55,11 +53,9 @@ import { Code } from 'astro-expressive-code/components';
 	</ul>
 	<div id="t3">🎄</div>
 	<div id="t4apple" class="apple">🍏</div>
-
 </Layout>
 
 <style is:global>
-	
 	#t4apple {
 		view-transition-name: t4apple;
 		transform: translate(35vw, 6.5vw);
@@ -95,10 +91,16 @@ import { Code } from 'astro-expressive-code/components';
 		font-size: 4vw;
 		position: absolute;
 	}
+
 	#a0 {
-		view-transition-name: a0;
 		transform: translate(-12vw, 2vw) rotate(-30deg);
-		z-index: -2;
+		view-transition-name: a0;
+		z-index: -1;
+	}
+	:active-view-transition-type(cross-document) {
+		&::view-transition-new(a0) {
+			display: none;
+		}
 	}
 	#a1 {
 		view-transition-name: a1;
@@ -121,7 +123,7 @@ import { Code } from 'astro-expressive-code/components';
 	#a5 {
 		transform: translate(-14vw, 3vw);
 		z-index: -1;
-		view-transition-name: a5;	
+		view-transition-name: a5;
 	}
 	#a6 {
 		transform: translate(-6vw, 8vw);
@@ -174,10 +176,12 @@ import { Code } from 'astro-expressive-code/components';
 			transform: translate(0, -4vw);
 		}
 	}
-	::view-transition-group(a4) {
-		z-index: 2;
-		animation-duration: 2s;
-		animation-timing-function: var(--ease-spring-3)
+	:root.li4 {
+		&::view-transition-group(a4) {
+			z-index: 2;
+			animation-duration: 2s;
+			animation-timing-function: var(--ease-spring-3);
+		}
 	}
 	:root.li4 {
 		#a4 {

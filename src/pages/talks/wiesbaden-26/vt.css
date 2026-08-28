@@ -1,7 +1,9 @@
 ::view-transition-group(*) {
 	animation-duration: 350ms;
 }
-
+:root {
+	view-transition-name: none;
+}
 ::view-transition-old(*) {
   height: 100%;
   width: auto;
