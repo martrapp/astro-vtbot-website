@@ -30,11 +30,11 @@ const slug = 'topic/sätteri';
 			<Code lang="css" code="<div style=`view-transition-name: none`>..." />
 		</li><li id="li1">
 			<h3>Solution:</h3>
-			<p>Use functions to escape view transition names properly, e.g:</p>
+			<p>Escape CSS custom identifiers properly, e.g:</p>
 			<Code
 				lang="css"
-				mark="escape"
-				code="<div style=`view-transition-name: ${escape(slug)}`>..."
+				mark="CSS.escape"
+				code="element.style.viewTransitionName = CSS.escape(slug);"
 			/>
 			<p></p>
 		</li>
@@ -43,8 +43,10 @@ const slug = 'topic/sätteri';
 			<Code lang="css" mark="\\/" code="view-transition-name: topic\/sätteri;" />
 		</li>
 	</ul>
-	<div id="t3">🎄</div>
+	<div id="t3">🌲</div>
 	<div id="t4apple" class="apple">🍏</div>
+	<div class="apple" id="t3aapple">🍎</div>
+	<div class="apple" id="t3bapple">🍎</div>
 </Layout>
 
 <style is:global>
@@ -112,6 +114,14 @@ const slug = 'topic/sätteri';
 		view-transition-name: t3apple;
 		transform: translate(67vw, 6.5vw);
 	}
+	#t3aapple {
+		view-transition-name: t3aapple;
+		transform: translate(39vw, -0.5vw);
+	}
+	#t3bapple {
+		view-transition-name: t3bapple;
+		transform: translate(28vw, 9.5vw);
+	}
 	#t4apple {
 		view-transition-name: t4apple;
 		transform: translate(35.3vw, 6.3vw);
@@ -144,15 +154,23 @@ const slug = 'topic/sätteri';
 			transform: translate(35vw, -14vw);
 		}
 		#a7 {
-			transform: translate(65vw, -3.5vw);
+			transform: translate(64.25vw, -3.5vw);
 		}
 		#t4apple {
 			transform: translate(35.2vw, -3.7vw);
+		}
+		#t3aapple {
+			transform: translate(39vw, -10.5vw);
+		}
+		#t3bapple {
+			transform: translate(28vw, -0.5vw);
 		}
 		#img,
 		ul {
 			transform: translate(0vw, 0vw);
 		}
+		&::view-transition-group(t3aapple),
+		&::view-transition-group(t3bapple),
 		&::view-transition-group(t3apple),
 		&::view-transition-group(t4apple) {
 			animation-timing-function: ease-in-out;
@@ -177,7 +195,7 @@ const slug = 'topic/sätteri';
 	}
 	::view-transition-old(*),
 	::view-transition-new(*) {
-		height: 100%;
+		height:/ 100%;
 		width: auto;
 	}
 	.apple {

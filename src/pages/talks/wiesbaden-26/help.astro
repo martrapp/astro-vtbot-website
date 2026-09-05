@@ -1,0 +1,122 @@
+---
+import Layout from './_Layout.astro';
+import bot from 'astro-vtbot/assets/bag-of-tricks.svg';
+import { Image } from 'astro:assets';
+---
+
+<Layout heading="Make an Informed Decision" steps={3}>
+	<div id="astro" class="tree">🌳</div>
+	<div id="platform" class="tree">🌲</div>
+	<p id="l-a">Astro View Transitions</p>
+	<p id="l-p">View Transition API</p>
+	<div id="icon">
+		<div id="icon1">
+			<Image id="img1" src={bot} alt="vtbot" width="200" height="200" />
+		</div>
+		<div id="icon2">
+			<img id="img2" src="/bag3.png" alt="vtbag.dev" />
+		</div>
+	</div>
+	<ol>
+		<li id="li1">Find in depth info about differences<br/>and migration on <code><a href="https://vtbot.pages.dev/jotter/astro-view-transitions/">vtbot.pages.dev</a></code></li>
+		<li id="li3">Find helpful tools to enhance<br/>the native API at <code><a href="https://vtbag.dev/">vtbag.dev</a></code></li>
+	</ol>
+</Layout>
+
+<style is:global>
+	#icon {
+		position: absolute;
+	}
+	#icon1,
+	#icon2 {
+		display: none;
+		filter: drop-shadow(0 0 0.75rem saddlebrown);
+		view-transition-name: icon1;
+	}
+	#icon2 {
+		view-transition-name: icon2;
+	}
+	#img1 {
+		height: 12vw;
+	}
+	#img2 {
+		height: 10vw;
+	}
+  code {
+    font-weight: 700;
+    color: var(--dev-blue);
+  }
+	ol {
+		list-style: none;
+	}
+	li {
+		view-transition-name: match-element;
+	}
+	#img1 {
+		transform: translate(-35vw, 0vw) ;
+	}
+	#img2 {
+		transform: translate(38vw, -7vw) rotate(-9deg) ;
+	}
+	#astro {
+		font-size: 35vw;
+		position: absolute;
+		transform: translate(-35vw, 1vw);
+		view-transition-name: astro-tree;
+	}
+	#platform {
+		font-size: 40vw;
+		position: absolute;
+		transform: translate(35vw, -3vw);
+		view-transition-name: platform-tree;
+	}
+	#l-a {
+		transform: translate(-35vw, 20vw);
+		view-transition-name: astro;
+	}
+	#l-p {
+		transform: translate(35vw, 20vw);
+		view-transition-name: platform;
+	}
+	p {
+		view-transition-name: match-element;
+		font-family: 'Comic Sans MS', 'Segoe Print', cursive, handwriting;
+		font-size: 1.5vw;
+		font-weight: 700;
+		background: linear-gradient(135deg, #f5e6d3 0%, #e8d7c3 100%);
+		padding: 1.5vw 3vw;
+		border: 2px solid #d4c5b8;
+		border-radius: 0.5vw;
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.8),
+			0 2px 4px rgba(0, 0, 0, 0.1),
+			0 0 0 1px rgba(0, 0, 0, 0.05);
+		color: #1a1a1a;
+		margin: 1.5vw;
+		display: inline-block;
+		transform: rotate(-2deg) skewY(-1deg);
+		position: absolute;
+		letter-spacing: 0.05em;
+		text-shadow:
+			1px 1px 0 rgba(255, 255, 255, 0.7),
+			-1px -1px 0 rgba(0, 0, 0, 0.2);
+	}
+
+	::view-transition-group(astro),
+	::view-transition-group(platform) {
+		animation-delay: 1s;
+	}
+	:root.li2 {
+		#icon1 {
+			display: block;
+		}
+	}
+	:root.li3 {
+		#icon2 {
+			display: block;
+    }
+    #icon1 {
+			transform: translate(2vw, 18vw) rotate(19deg) ;
+		}
+	}
+</style>

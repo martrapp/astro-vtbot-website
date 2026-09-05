@@ -1,0 +1,114 @@
+---
+import Layout from './_Layout.astro';
+---
+
+<Layout heading="Make an Informed Decision" steps={3}>
+	<div>
+		<p>
+			Find a more in depth evaluation at <a
+				href="https://vtbot.pages.dev/jotter/astro-view-transitions/"
+			>
+				https://vtbot.pages.dev/jotter/astro-view-transitions/</a
+			>
+		</p>
+		<p>
+			For Astro view transitions, you can find the most comprehensive guides, examples, demos, and
+			reusable components at <code>vtbot.pages.dev</code>
+		</p>
+		<p>
+			For direct use of the View Transition API, <code>vtbag.dev</code> offers several components to fill
+			in the gaps:
+			<ul>
+				<li>turn-signal: utilities for directional view transitions</li>
+				<li>
+					element-crossing: covers many practical cases to replace <code>transition:persist</code>
+				</li>
+				<li>utensil-drawer: lots of helpers for naming, escaping, and enhancing</li>
+			</ul>
+		</p>
+	</div>
+</Layout>
+
+<style is:global>
+	#astro {
+		font-size: 40vw;
+		position: absolute;
+		transform: translate(-20vw, 0vw);
+	}
+	#platform {
+		font-size: 50vw;
+		position: absolute;
+		transform: translate(20vw, -5vw);
+	}
+	#l-a {
+		transform: translate(21vw, 33vw);
+	}
+	#l-p {
+		transform: translate(42vw, 33vw);
+	}
+	#l-b {
+		transform: translate(-21vw, 0vw) rotate(-5deg);
+		visibility: hidden;
+	}
+	#l-u {
+		transform: translate(1vw, 0vw) rotate(5deg);
+		visibility: hidden;
+	}
+	#l-e {
+		transform: translate(1vw, 0vw) rotate(-5deg);
+		visibility: hidden;
+	}
+	#s1 {
+		transform: translate(1vw, -16vw) rotate(4deg);
+		visibility: hidden;
+	}
+	#s2 {
+		transform: translate(58vw, -16vw) rotate(-4deg) skewY(-2deg);
+		visibility: hidden;
+	}
+	#s3 {
+		transform: translate(32vw, -5vw) rotate(12deg) skewY(-4deg);
+		visibility: hidden;
+	}
+	p {
+		view-transition-name: match-element;
+		font-family: 'Comic Sans MS', 'Segoe Print', cursive, handwriting;
+		font-size: 1.5vw;
+		font-weight: 700;
+		background: linear-gradient(135deg, #f5e6d3 0%, #e8d7c3 100%);
+		padding: 1.5vw 3vw;
+		border: 2px solid #d4c5b8;
+		border-radius: 0.5vw;
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.8),
+			0 2px 4px rgba(0, 0, 0, 0.1),
+			0 0 0 1px rgba(0, 0, 0, 0.05);
+		color: #1a1a1a;
+		margin: 1.5vw;
+		display: inline-block;
+		transform: rotate(-2deg) skewY(-1deg);
+		position: relative;
+		letter-spacing: 0.05em;
+		text-shadow:
+			1px 1px 0 rgba(255, 255, 255, 0.7),
+			-1px -1px 0 rgba(0, 0, 0, 0.2);
+	}
+	:root.li1 {
+		#l-b,
+		#s1 {
+			visibility: visible;
+		}
+	}
+	:root.li2 {
+		#l-u,
+		#s2 {
+			visibility: visible;
+		}
+	}
+	:root.li3 {
+		#l-e,
+		#s3 {
+			visibility: visible;
+		}
+	}
+</style>

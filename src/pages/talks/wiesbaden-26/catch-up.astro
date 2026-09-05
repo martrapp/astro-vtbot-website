@@ -4,7 +4,7 @@ import Layout from './_Layout.astro';
 import 'open-props/easings';
 ---
 
-<Layout heading="The platform catches up" steps={8}>
+<Layout heading="The Platform Catches Up" steps={10}>
 	<div id="img">
 		<div id="heading-a">Astro View Transitions</div>
 		<div id="tree">🌳</div>
@@ -21,23 +21,26 @@ import 'open-props/easings';
 		<div class="lemon" id="a11">🍋</div>
 	</div>
 	<ul>
-		<li id="li1">03 / 2023: Blink same-document</li>
-		<li id="li2">06 / 2024: Blink cross-document</li>
-		<li id="li3">09 / 2024: WebKit same-document</li>
-		<li id="li4">12 / 2024: WebKit cross-document</li>
-		<li id="li5">10 / 2025: Gecko same-document</li>
-		<li id="li6">?? / 2026: Gecko cross-document</li>
+		<li id="li1">Mar 2023 · Blink · same-document</li>
+		<li id="li2">Jun 2024 · Blink · cross-document</li>
+		<li id="li3">Sep 2024 · WebKit · same-document</li>
+		<li id="li4">Dec 2024 · WebKit · cross-document</li>
+		<li id="li5">Oct 2025 · Gecko · same-document</li>
+		<li id="li6">2026? · Gecko · cross-document</li>
 	</ul>
 	<div id="platform">
 		<div id="heading-b">The Web Platform</div>
 		<span id="t2">🌳</span>
 		<span id="t1">🪴</span>
-		<span id="t3">🎄</span>
+		<span id="t3">🌲</span>
 		<span id="t3apple" class="red-apple">🍎</span>
 	</div>
 </Layout>
 
 <style is:global>
+	#t2 {
+		display: none;
+	}
 	#t3apple {
 		view-transition-name: t3apple;
 		transform: translate(26vw, 33vw);
@@ -130,7 +133,21 @@ import 'open-props/easings';
 	#t3 {
 		display: none;
 	}
+	:root.li3 {
+		#t3aapple,
+		#t3bapple {
+			display: block;		
+		}
+	}
 	:root.li7 {
+		#t2 {
+			display: block;
+		}
+		&::view-transition-group(t2) {
+			z-index: -1;
+		}
+	}
+	:root.li8 {
 		#t1,
 		#t2 {
 			display: none;
@@ -139,12 +156,12 @@ import 'open-props/easings';
 			display: block;
 		}
 	}
-	:root.li8 {
+	:root.li9 {
 		#t3apple {
 			display: block;
 		}
 	}
-	:root.li9 {
+	:root.li10 {
 		#tree {
 			view-transition-name: tree;
 		}
@@ -158,7 +175,8 @@ import 'open-props/easings';
 	}
 	ul {
 		width: 40vw;
-		transform: translate(5vw, 0);
+		transform: translate(2.5vw, 0);
+		list-style: none;
 	}
 	#t1,
 	#t2,

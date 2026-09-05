@@ -4,7 +4,7 @@ import Layout from './_Layout.astro';
 import 'open-props/easings';
 ---
 
-<Layout steps={[]} heading="View Transitions in a Nut Shell">
+<Layout steps={0} heading="Same-Document View Transitions in a Nut Shell">
 	<div id="img">
 		<div id="s1"></div>
 		<div id="s2"></div>
@@ -14,18 +14,28 @@ import 'open-props/easings';
 	<div id="works">
 		<h3>How it works</h3>
 		<ul>
-			<li>Takes some snapshots of areas from the old page</li>
-			<li>Puts them in the view transition layer on top of the new page</li>
-			<li>Puts some areas from the new page into the same layer</li>
-			<li>Adds entry, exit, and shared element animations</li>
+			<li>Captures the old state of each named element into a snapshot pseudo-element</li>
+			<li>Runs your callback, updating the DOM to its new state</li>
+			<li>Creates a replaced pseudo-element for each new named element</li>
+			<li>Places the pseudo-elements in the view transition layer, above all other content</li>
+			<li>Applies regular CSS animations to the pseudo-elements, for entry, exit, and shared-element animations </li>
+			<li id="frame">Updates the new pseudo-element's replaced content and geometry every frame</li>
 		</ul>
 	</div>
 </Layout>
 
 <style is:global>
 	ul {
-		width: 33vw;
+		width: 45vw;
 	}
+	#frame {
+		width: 31vw;
+		position: absolute;
+		transform: translate(54vw, -12vw);
+		display: block;
+		color: gray;
+	}
+
 	::view-transition-group(*) {
 		animation-duration: 5s;
 	}
@@ -35,10 +45,11 @@ import 'open-props/easings';
 	}
 	#img {
 		position: absolute;
+		transform: translate(-4vw, -6vw);
 	}
 	#works {
 		position: absolute;
-		width: 45vw;
+		width: 66vw;
 		transform: translate(-10vw, 0);
 	}
 	::view-transition-new(s3):only-child {
@@ -158,7 +169,7 @@ import 'open-props/easings';
 </style>
 <script>
 	let running = true;
-		let t = 0;
+	let t = 0;
 
 	addEventListener('pointerdown', () => {
 		document

@@ -1,0 +1,180 @@
+---
+import Layout from './_Layout.astro';
+---
+
+<Layout heading="Waiting for Firefox Cross-Document View Transitions" steps={5}>
+	<div id="platform" class="tree">🌲</div>
+	<div id="platform2" class="tree">🎄</div>
+	<p id="l-p">View Transition API</p>
+	<ol>
+		<li id="li1">
+			Firefox is the last major browser to implement cross-document view transitions natively
+		</li>
+		<li id="li2">Cross-document view transitions are part of Interop 2026</li>
+		<li id="li3">Looking forward to the end of the year</li>
+		<li id="li5">View Transitions are always fun!</li>
+	</ol>
+</Layout>
+
+<style is:global>
+	#li5 {
+		font-size: 4vw;
+		margin-top: 4vw;
+	}
+	ol {
+		list-style: none;
+		width: 70vw;
+		transform: translate(-10vw, 0vw);
+	}
+	li {
+		view-transition-name: match-element;
+	}
+	#platform,
+	#platform2 {
+		font-size: 40vw;
+		position: absolute;
+		transform: translate(35vw, -3vw);
+		view-transition-name: platform-tree;
+	}
+	#platform2 {
+		display: none;
+	}
+	#l-p {
+		transform: translate(35vw, 20vw);
+		view-transition-name: platform;
+	}
+	p {
+		view-transition-name: match-element;
+		font-family: 'Comic Sans MS', 'Segoe Print', cursive, handwriting;
+		font-size: 1.5vw;
+		font-weight: 700;
+		background: linear-gradient(135deg, #f5e6d3 0%, #e8d7c3 100%);
+		padding: 1.5vw 3vw;
+		border: 2px solid #d4c5b8;
+		border-radius: 0.5vw;
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.8),
+			0 2px 4px rgba(0, 0, 0, 0.1),
+			0 0 0 1px rgba(0, 0, 0, 0.05);
+		color: #1a1a1a;
+		margin: 1.5vw;
+		display: inline-block;
+		transform: rotate(-2deg) skewY(-1deg);
+		position: absolute;
+		letter-spacing: 0.05em;
+		text-shadow:
+			1px 1px 0 rgba(255, 255, 255, 0.7),
+			-1px -1px 0 rgba(0, 0, 0, 0.2);
+	}
+
+	:root.li4 {
+		#platform2 {
+			display: block;
+		}
+		#platform {
+			display: none;
+		}
+		&::view-transition-group(platform-tree) {
+			animation-timing-function: linear(
+				0 0%,
+				0.0153 1.01%,
+				0.0372 1.77%,
+				0.0642 2.34%,
+				0.0947 2.79%,
+				0.1274 3.18%,
+				0.1607 3.56%,
+				0.1931 4%,
+				0.2232 4.57%,
+				0.2495 5.33%,
+				0.2705 6.33%,
+				0.2847 7.64%,
+				0.2906 9.33%,
+				0.2885 10.98%,
+				0.2803 12.21%,
+				0.2674 13.09%,
+				0.2508 13.72%,
+				0.2318 14.17%,
+				0.2117 14.53%,
+				0.1915 14.88%,
+				0.1725 15.3%,
+				0.156 15.88%,
+				0.143 16.69%,
+				0.1349 17.82%,
+				0.1328 19.36%,
+				0.1398 20.85%,
+				0.1569 21.83%,
+				0.182 22.41%,
+				0.2132 22.68%,
+				0.2484 22.74%,
+				0.2855 22.68%,
+				0.3226 22.59%,
+				0.3577 22.58%,
+				0.3886 22.73%,
+				0.4134 23.15%,
+				0.43 23.92%,
+				0.4365 25.15%,
+				0.4342 26.47%,
+				0.4268 27.51%,
+				0.4152 28.33%,
+				0.4003 29%,
+				0.3833 29.58%,
+				0.3651 30.13%,
+				0.3468 30.72%,
+				0.3292 31.4%,
+				0.3135 32.24%,
+				0.3006 33.3%,
+				0.2916 34.66%,
+				0.2874 36.36%,
+				0.2937 37.98%,
+				0.3134 39.14%,
+				0.3442 39.95%,
+				0.3833 40.52%,
+				0.4282 40.97%,
+				0.4763 41.39%,
+				0.5251 41.92%,
+				0.5719 42.66%,
+				0.6142 43.72%,
+				0.6493 45.22%,
+				0.6747 47.27%,
+				0.6879 49.98%,
+				0.6918 52.78%,
+				0.6919 55.05%,
+				0.6888 56.9%,
+				0.6832 58.39%,
+				0.6757 59.61%,
+				0.667 60.65%,
+				0.6578 61.59%,
+				0.6488 62.51%,
+				0.6406 63.5%,
+				0.6339 64.63%,
+				0.6294 66%,
+				0.6277 67.68%,
+				0.6327 69.5%,
+				0.6469 71.22%,
+				0.6686 72.87%,
+				0.6962 74.45%,
+				0.7282 75.98%,
+				0.763 77.45%,
+				0.799 78.89%,
+				0.8347 80.3%,
+				0.8684 81.7%,
+				0.8986 83.09%,
+				0.9237 84.49%,
+				0.9421 85.9%,
+				0.9554 87.36%,
+				0.9662 88.88%,
+				0.9749 90.42%,
+				0.9817 91.96%,
+				0.9869 93.45%,
+				0.9907 94.87%,
+				0.9935 96.18%,
+				0.9954 97.35%,
+				0.9967 98.36%,
+				0.9978 99.15%,
+				0.9988 99.71%,
+				1 100%
+			);
+			animation-duration: 2s;
+		}
+	}
+</style>

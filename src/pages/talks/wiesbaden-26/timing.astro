@@ -1,0 +1,608 @@
+---
+import Layout from './_Layout.astro';
+---
+
+<Layout heading="Timing Differences" steps={26}>
+	<h2 id="h21">Normal Page Load</h2>
+	<h2 id="h22">Cross-Document View Transition with the API</h2>
+	<h2 id="h23">With Astro's ClientRouter</h2>
+	<div class="timeline">
+		<div id="s1" class="screen"></div>
+		<div id="s2" class="screen"></div>
+		<div id="s2b" class="screen"></div>
+		<div id="s3" class="screen"></div>
+		<div id="s3b" class="screen"></div>
+		<div id="s4" class="screen"></div>
+		<div id="s4b" class="screen"></div>
+		<div id="s5" class="screen"></div>
+		<div id="s5b" class="screen"></div>
+		<div id="s6" class="screen"></div>
+		<div id="s6b" class="screen"></div>
+		<div id="s7" class="screen"></div>
+		<div id="s7b" class="screen"></div>
+		<div id="s8" class="screen"></div>
+		<div id="s8b" class="screen"></div>
+		<div id="s9" class="screen"></div>
+		<div id="s9b" class="screen"></div>
+		<div id="s10" class="screen"></div>
+		<div id="s10b" class="screen"></div>
+		<div id="s11b" class="screen"></div>
+		<div class="bar">Page is loading <b>in background</b></div>
+		<div class="track" aria-hidden="true"></div>
+
+		<div class="phase blocked">Renderer is blocked</div>
+		<div class="phase transitions">View transitions</div>
+
+		<div class="event click"><span class="event-label">Click</span></div>
+		<div class="event pageswap"><span class="event-label">pageswap<br />capture old</span></div>
+		<div class="event pagereveal"><span class="event-label">pagereveal<br />capture new</span></div>
+		<div class="event before-preparation"><span class="event-label">before-preparation</span></div>
+		<div class="event after-preparation"><span class="event-label">after-preparation<br/>before-swap</span></div>
+		<div class="event after-swap"><span class="event-label">after-swap</span></div>
+		<div class="event old"><span class="event-label">Capture old</span></div>
+		<div class="event new"><span class="event-label">Capture new</span></div>
+	</div>
+</Layout>
+
+<style is:global>
+	b,i {
+		display: none;
+	}
+
+	main {
+		transform: translateY(7vw);
+	}
+	h2 {
+		position: absolute;
+		top: -0.5vw;
+		display: none;
+	}
+	#h21 {
+		display: block;
+	}
+	.screen,
+	.event,
+	.phase,
+	.bar {
+		view-transition-name: match-element;
+	}
+	#s2b {
+		view-transition-name: s2b;
+	}
+	h2 {
+		view-transition-name: h2;
+	}
+
+	@keyframes out-to-left {
+		to {
+			transform: translate(-100vw, 0);
+		}
+	}
+	@keyframes in-from-right {
+		from {
+			transform: translate(100vw, 0);
+		}
+	}
+	.screen {
+		aspect-ratio: 4 / 3;
+		height: 5vw;
+		position: absolute;
+		background-color: darkolivegreen;
+		top: 6vw;
+		border: 3px dashed #8888;
+		display: none;
+	}
+	#s1 {
+		background-color: darkslateblue;
+		left: 3vw;
+	}
+	#s2 {
+		background-color: white;
+		left: 10vw;
+	}
+	#s2b {
+		background-color: darkslateblue;
+		left: 10vw;
+	}
+	#s3 {
+		left: 17vw;
+		background: linear-gradient(darkolivegreen 0%, darkolivegreen 30%, white 40%);
+	}
+	#s3b {
+		left: 17vw;
+		background-color: darkslateblue;
+	}
+	#s4 {
+		left: 24vw;
+		background: linear-gradient(darkolivegreen 0%, darkolivegreen 60%, white 70%, white);
+	}
+	#s4b {
+		left: 24vw;
+		background-color: darkslateblue;
+	}
+	#s5 {
+		left: 31vw;
+		background: linear-gradient(darkolivegreen 0%, darkolivegreen 90%, white 100%, white 100%);
+	}
+	#s5b {
+		left: 31vw;
+		background-color: darkslateblue;
+	}
+	#s6 {
+		left: 38vw;
+		background-color: darkolivegreen;
+	}
+	#s6b {
+		left: 38vw;
+		background: linear-gradient(-210deg, darkslateblue 0%, darkolivegreen 100%);
+	}
+	#s7 {
+		left: 45vw;
+		background-color: darkolivegreen;
+	}
+	#s7b {
+		left: 45vw;
+		background: linear-gradient(-210deg, darkslateblue 0%, darkolivegreen 100%);
+	}
+	#s8 {
+		left: 52vw;
+		background-color: darkolivegreen;
+	}
+	#s8b {
+		left: 52vw;
+		background: linear-gradient(-210deg, darkslateblue 0%, darkolivegreen 100%);
+	}
+	#s9 {
+		left: 38vw;
+		background-color: darkolivegreen;
+	}
+	#s9b {
+		left: 59vw;
+	}
+	#s10 {
+		left: 45vw;
+		background-color: darkolivegreen;
+	}
+	#s10b {
+		left: 38vw;
+		background: darkslateblue;
+	}
+	#s11b {
+		left: 45vw;
+		background: darkslateblue;
+	}
+	.old,
+	.new {
+		display: none;
+	}
+	:root {
+		--blue: #07557f;
+		--track: #9eb1c2;
+		--loading: #7f5507;
+		--blocked: #f3a28c;
+		--transitions: #9db79c;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	.timeline {
+		position: relative;
+		width: 90%;
+		height: 40vw;
+	}
+
+	.event {
+		position: absolute;
+		top: 1.46vw;
+		width: 0.31vw;
+		height: 28.33vw;
+		background: var(--blue);
+		z-index: 3;
+	}
+
+	.event::before {
+		content: '';
+		position: absolute;
+		top: -0.21vw;
+		left: 50%;
+		width: 1.25vw;
+		height: 1.25vw;
+		transform: translateX(-50%);
+		border-radius: 50%;
+		background: var(--blue);
+	}
+
+	.event-label {
+		position: absolute;
+		top: 1vw;
+		left: 50%;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		font-size: 2.08vw;
+		font-weight: 700;
+	}
+
+	.event.click {
+		left: 6vw;
+		display: none;
+	}
+	.event.pageswap {
+		left: 10vw;
+		display: none;
+	}
+	.event.pagereveal {
+		left: 38vw;
+		display: none;
+	}
+	.event.before-preparation {
+		left: 6vw;
+		display: none;
+	}
+	.event.after-preparation {
+		left: 51.5vw;
+		display: none;
+	}
+	.event.after-swap {
+		left: 52vw;
+		display: none;
+	}
+	.event.old {
+		left: 15.2%;
+	}
+	.event.new {
+		left: 53.8%;
+	}
+
+	.event.click .event-label {
+		transform: translate(-6vw, 27vw);
+	}
+	.event.pageswap .event-label {
+		transform: translate(-0.2vw, 27vw);
+	}
+	.event.pagereveal .event-label {
+		transform: translate(-0.2vw, 27vw);
+	}
+	.event.before-preparation .event-label {
+		transform: translate(1vw, 27vw);
+	}
+	.event.after-preparation .event-label {
+		transform: translate(-18vw, 23.5vw);
+	}
+	.event.after-swap .event-label {
+		transform: translate(0.5vw, 26vw);
+	}
+	.event.old .event-label {
+		left: -5.73vw;
+		transform: none;
+	}
+	.event.new .event-label {
+		left: -6.77vw;
+		transform: none;
+	}
+
+	.bar {
+		color: black;
+		position: absolute;
+		left: 10vw;
+		top: 12.92vw;
+		width: 42vw;
+		height: 4vw;
+		padding: 0.5vw 1vw;
+		border: 2px solid #28732e;
+		background: var(--loading);
+		display: none;
+		place-items: center;
+		font-size: 2.08vw;
+		font-weight: 700;
+		z-index: 1;
+	}
+
+	.track {
+		position: absolute;
+		left: 2.1%;
+		right: 0vw;
+		top: 20vw;
+		height: 4.58vw;
+		border: 2px solid var(--blue);
+		background: linear-gradient(#a9bac9, #8ea4b7);
+		clip-path: polygon(
+			0 30%,
+			calc(100% - 4.58vw) 30%,
+			calc(100% - 4.58vw) 0%,
+			100% 50%,
+			calc(100% - 4.58vw) 100%,
+			calc(100% - 4.58vw) 70%,
+			0 70%
+		);
+		z-index: 2;
+	}
+
+	.phase {
+		color: black;
+		position: absolute;
+		top: 17vw;
+		height: 4vw;
+		display: none;
+		place-items: center;
+		font-size: 2.08vw;
+		font-weight: 700;
+		z-index: 1;
+		padding: 0.5vw 1vw;
+	}
+
+	.blocked {
+		left: 10vw;
+		width: 28vw;
+		border-top: 1px solid #c76b55;
+		border-bottom: 1px solid #c76b55;
+		background: linear-gradient(#f7ad98, #ee967d);
+	}
+
+	.transitions {
+		left: 38vw;
+		width: 21vw;
+		border-top: 1px solid #5b9951;
+		border-bottom: 1px solid #5b9951;
+		background: linear-gradient(#a7d69b, #93c987);
+		border: 2px solid #28732e;
+	}
+
+	@media (max-width: 900px) {
+		body {
+			min-width: 70.83vw;
+		}
+		.event-label,
+		.bar,
+		.phase {
+			font-size: 1.67vw;
+		}
+	}
+
+	:root.li1 {
+		#s1 {
+			display: block;
+		}
+	}
+	:root.li2 {
+		.event.click {
+			display: block;
+		}
+	}
+	:root.li3 {
+		.bar {
+			display: block;
+		}
+	}
+	:root.li4 {
+		#s2 {
+			display: block;
+		}
+	}
+	:root.li5 {
+		#s3 {
+			display: block;
+		}
+	}
+	:root.li6 {
+		#s4 {
+			display: block;
+		}
+	}
+	:root.li7 {
+		#s5 {
+			display: block;
+		}
+	}
+	:root.li8 {
+		#s6 {
+			display: block;
+		}
+	}
+	:root.li9 {
+		#s7 {
+			display: block;
+		}
+	}
+	:root.li10 {
+		#s8 {
+			display: block;
+		}
+	}
+	:root.li11 {
+		#s2,
+		#s3,
+		#s4,
+		#s5,
+		#s6,
+		#s7,
+		#s8,
+		#s9,
+		#s10,
+		.event.click,
+		.bar,
+		#h21 {
+			display: none;
+		}
+		#h22 {
+			display: block;
+		}
+
+		&::view-transition-old(h2) {
+			animation-name: out-to-left;
+			height: 100%;
+			width: auto;
+		}
+		&::view-transition-new(h2) {
+			animation-name: in-from-right;
+			height: 100%;
+			width: auto;
+		}
+	}
+
+	:root.li12 {
+		&::view-transition-old(h2) {
+			animation-name: none;
+		}
+		&::view-transition-new(h2) {
+			animation-name: none;
+		}
+		.event.click {
+			display: block;
+		}
+	}
+
+	:root.li13 {
+		.event.pageswap {
+			display: block;
+		}
+		#s2b {
+			display: block;
+		}
+	}
+	:root.li14 {
+		.bar {
+			display: block;
+		}
+		#s2 {
+			display: block;
+			transform: translateY(-3vw);
+		}
+		&::view-transition-group(s2b) {
+			z-index: 1;
+		}
+	}
+	:root.li15 {
+		#s3b {
+			display: block;
+		}
+		#s3 {
+			display: block;
+			transform: translateY(-4vw)
+		}
+	}
+	:root.li16 {
+		#s4b {
+			display: block;
+		}
+		#s4 {
+			display: block;
+			transform: translateY(-5vw)
+		}
+	}
+	:root.li17 {
+		#s5b {
+			display: block;
+		}
+		#s5 {
+			display: block;
+			transform: translateY(-5vw)
+		}
+	}
+	:root.li18 {
+		.event.pagereveal {
+			display: block;
+		}
+	}
+	:root.li19 {
+		.blocked {
+			display: block;
+		}
+	}
+	:root.li20 {
+		.transitions {
+			display: block;
+		}
+	}
+	:root.li21 {
+		#s6b {
+			display: block;
+		}
+	}
+	:root.li22 {
+		#s7b {
+			display: block;
+		}
+	}
+	:root.li23 {
+		#s8b {
+			display: block;
+		}
+	}
+	:root.li24 {
+		#s9b {
+			display: block;
+		}
+	}
+	:root.li25 {
+		#s9, #s10 {
+			display: block;
+			transform: translateY(-5vw)
+		}
+		.event.pagereveal {
+			left: 52vw;
+		}
+		.transitions {
+			left: 52vw;
+		}
+		.blocked {
+			width: 42vw;
+		}
+		#s6b {
+			left: 52vw;
+		}
+		#s7b {
+			left: 59vw;
+		}
+		#s8b {
+			left: 66vw;
+		}
+		#s9b {
+			left: 73vw;
+		}
+		#s10b, #s11b {
+			display: block;
+		}
+	}
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		height: 100%;
+		width: auto;
+	}
+	:root.li26 {
+		#h22 {
+			display: none;
+		}
+		#h23 {
+			display: block;
+		}
+
+		&::view-transition-old(h2) {
+			animation-name: out-to-left;
+			height: 100%;
+			width: auto;
+		}
+		&::view-transition-new(h2) {
+			animation-name: in-from-right;
+			height: 100%;
+			width: auto;
+		}
+		.bar, .transitions {
+			top: 14vw;
+		}
+		.blocked {
+			display: none;
+		}
+		b {
+			display: inline;
+			text-decoration: underline wavy ;
+		}
+		.event.pageswap,.event.pagereveal {
+			display: none;
+		}
+		.event.before-preparation,.event.after-preparation, .event.after-swap {
+			display: block;
+		}
+	}
+</style>

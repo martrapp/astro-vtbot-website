@@ -5,7 +5,7 @@ import 'open-props/easings';
 import { Code } from 'astro-expressive-code/components';
 ---
 
-<Layout heading="How to persist elements from the previous page?" steps={4}>
+<Layout heading="How can we persist a DOM element across navigations?" steps={6}>
 	<div id="img">
 		<div id="basket">🧺</div>
 		<div class="apple" id="a0">🍋</div>
@@ -19,15 +19,17 @@ import { Code } from 'astro-expressive-code/components';
 	</div>
 	<ul>
 		<li id="li1">
-			<p>Currently no way. MPA navigation reloads the page, it's elements, and their state</p>
+			Today: we cannot<br />
+			MPA navigation reloads the document / DOM, and resets all state
 		</li><li id="li2">
-			<p>You can save / restore <b><i>some</i></b> state across navigation, e.g. serialized via <code>sessionStorage</code></p>
-		</li><li id="li4">
-			<p>
-				There is, however, some light at the end of the tunnel:
-			</p>
+			You can save and restore some state across navigation, for example with <code
+				>sessionStorage</code
+			>
+		</li><li id="li3">But arbitrary page state cannot be preserved</li><li id="li5">
+			<p>There is, however, some light at the end of the tunnel:</p>
 			<Code
-				lang="css" mark={["persistentwidget",'id="assistant"']}
+				lang="css"
+				mark={['persistentwidget', 'id="assistant"']}
 				code=`
 <!-- Page A: https://example.com/index.html (before navigation) -->
 <persistentwidget id="assistant" src="/assistant.html"></persistentwidget>
@@ -43,8 +45,10 @@ import { Code } from 'astro-expressive-code/components';
 			/>
 		</li>
 	</ul>
-	<div id="t3">🎄</div>
+	<div id="t3">🌲</div>
 	<div id="t4apple" class="apple">🍏</div>
+	<div class="apple" id="t3aapple">🍎</div>
+	<div class="apple" id="t3bapple">🍎</div>
 </Layout>
 
 <style is:global>
@@ -52,6 +56,15 @@ import { Code } from 'astro-expressive-code/components';
 		view-transition-name: t4apple;
 		transform: translate(35vw, 6.3vw);
 	}
+	#t3bapple {
+		view-transition-name: t3bapple;
+		transform: translate(28.5vw, 9.5vw);
+	}
+	#t3aapple {
+		view-transition-name: t3aapple;
+		transform: translate(39vw, -0.5vw);
+	}
+
 	ul {
 		list-style: none;
 		width: 50vw;
@@ -125,8 +138,11 @@ import { Code } from 'astro-expressive-code/components';
 	#li2 {
 		view-transition-name: li2;
 	}
-	#li4 {
-		view-transition-name: li4;
+	#li3 {
+		view-transition-name: li3;
+	}
+	#li5 {
+		view-transition-name: li5;
 	}
 	#img,
 	ul {
@@ -153,20 +169,32 @@ import { Code } from 'astro-expressive-code/components';
 			transform: translate(-7vw, 0vw);
 		}
 	}
-	:root.li4 {
+	:root.li5 {
 		#li1 {
 			transform: translate(-18vw, 4vw) scale(0.7);
 		}
 		#li2 {
-			transform: translate(20vw, -4vw) scale(0.7);
+			transform: translate(20vw, 4vw) scale(0.7);
+			visibility: hidden;
 		}
-		#li4 {
+		#li3 {
+			transform: translate(20vw, -16vw) scale(0.7);
+		}
+		#li5 {
 			transform: translate(-7.5vw, -5vw);
 		}
+		code .ec-line:nth-child(n + 3) {
+			visibility: hidden;
+		}
 	}
-	:root.li3 {
+	:root.li6 {
+		code .ec-line:nth-child(n + 3) {
+			visibility: visible;
+		}
+	}
+	:root.li4 {
 		#a0 {
-			transform: translate(63vw, -21vw);
+			transform: translate(63vw, -19vw);
 		}
 		&::view-transition-group(a0) {
 			animation-timing-function: var(--ease-spring-3);

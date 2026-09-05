@@ -6,36 +6,36 @@ import Layout from './_Layout.astro';
 	<h2>
 		<span style="view-transition-name:w1">Who</span>
 		<span> </span>
-		<span style="view-transition-name:w2">here</span>
+		<span style="view-transition-name:w2">has</span>
 		<span> </span>
-		<span style="view-transition-name:w3">is</span>
+		<span style="view-transition-name:w3">already</span>
 		<span> </span>
-		<span style="view-transition-name:w4">already</span>
+		<span style="view-transition-name:w4">added</span>
 		<span> </span>
-		<span style="view-transition-name:w5">animating</span>
+		<span style="view-transition-name:w5">animated</span>
 		<span> </span>
 		<span style="view-transition-name:w6">page</span>
 		<span> </span>
 		<span style="view-transition-name:w7">transitions</span>
 		<span> </span>
-		<span style="view-transition-name:w8">on</span>
+		<span style="view-transition-name:w8">to</span>
 		<span> </span>
 		<span style="view-transition-name:w9">their</span>
 		<span> </span>
-		<span style="view-transition-name:w10">sites?</span>
+		<span style="view-transition-name:w10">websites?</span>
 		<span id="icon">🙋</span>
 	</h2>
 	<ul>
 		<li id="li1" style="view-transition-name: a1">
-			Yes, using a library like Barba.js, Swup, Motion, or similar
+			With a library like Barba.js, Swup, or Motion
 		</li>
 		<li id="li2" style="view-transition-name: a2">
-			Yes, using Astro's <code>&lt;ClientRouter&gt;</code> component
+			With Astro's <code>&lt;ClientRouter&gt;</code>
 		</li>
 		<li id="li3" style="view-transition-name: a3">
-			Yes, using the native View Transitions API directly
+			With the browser's native View Transitions API
 		</li>
-		<li id="li4" style="view-transition-name: a4">No, none of the above</li>
+		<li id="li4" style="view-transition-name: a4">Not yet</li>
 	</ul>
 	<div id="frame"></div>
 </Layout>
@@ -49,9 +49,9 @@ import Layout from './_Layout.astro';
 	#frame {
 		position: absolute;
 		display: none;
-		height: 3vw;
+		height: 1vw;
 		width: 45vw;
-		transform: translate(21.5vw, 1.5vw);
+		transform: translate(19vw, 0vw);
 		padding: 2rem;
 		border-radius: 16px;
 		background: rgba(255, 255, 255, 0.02);
@@ -87,6 +87,7 @@ import Layout from './_Layout.astro';
 
 	ul {
 		display: none;
+		width: 65vw;
 	}
 	#icon {
 		font-size: 25vmin;

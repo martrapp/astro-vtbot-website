@@ -7,7 +7,7 @@ import { Code } from 'astro-expressive-code/components';
 
 <Layout
 	heading="How to Switch to the Platform"
-	steps={['start', 'change', 'hide', 'flip', 'apple']}
+	steps={['start', 'change', 'apple1', 'apple2', 'hide', 'flip', 'apple']}
 >
 	<div id="img">
 		<div id="tree">🌳</div>
@@ -92,8 +92,10 @@ import { Code } from 'astro-expressive-code/components';
 		/>
 	</div>
 	<div id="t3">
-		<div>🎄</div>
+		<div>🌲</div>
 		<div id="t3apple" class="red-apple">🍎</div>
+		<div id="t3aapple" class="red-apple">🍎</div>
+		<div id="t3bapple" class="red-apple">🍎</div>
 		<div id="t4apple" class="green-apple">🍏</div>
 	</div>
 </Layout>
@@ -189,6 +191,17 @@ import { Code } from 'astro-expressive-code/components';
 		transform: translate(33vw, -16vw);
 		view-transition-name: t3apple;
 	}
+	#t3aapple {
+		view-transition-name: t3aapple;
+		transform: translate(28.8vw, -25.9vw);
+		display: none;
+	}
+	#t3bapple {
+		view-transition-name: t3bapple;
+		transform: translate(18vw, -15.8vw);
+		display: none;
+	}
+
 	#t4apple {
 		font-size: 4vw;
 		position: absolute;
@@ -348,6 +361,16 @@ import { Code } from 'astro-expressive-code/components';
 		#t3 {
 			font-size: 40vw;
 			transform: translate(35vw, -3vw);
+		}
+	}
+	:root.apple1 {
+		#t3aapple {
+			display: block;
+		}
+	}
+	:root.apple2 {
+		#t3bapple {
+			display: block;
 		}
 	}
 	:root.hide {

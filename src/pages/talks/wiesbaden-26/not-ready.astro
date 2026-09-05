@@ -8,19 +8,19 @@ import 'open-props/easings';
 	<div slot="heading">View transitions in 2023:<br />The Platform Wasn't Ready</div>
 	<div id="tree">🌳</div>
 	<div id="should">
-		<h3>What it should be</h3>
+		<h3>What we wanted</h3>
 		<ul>
-			<li>Smooth navigation for MPAs</li>
-			<li>No more flash of white on page load</li>
-			<li>Browser native, no need for heavy frameworks</li>
+			<li>Smooth cross-document transitions when navigating multi-page apps</li>
+			<li>No flash of white during navigation</li>
+			<li>A naive browser feature, without a heavy framework</li>
 		</ul>
 	</div>
 	<div id="is">
 		<h3>What we had</h3>
 		<ul>
 			<li>Chromium only</li>
-			<li>Hidden behind a browser flag</li>
-			<li>Only same-document transition</li>
+			<li>Behind an experimental flag</li>
+			<li>Same-document transitions only</li>
 		</ul>
 	</div>
 	<div id="seedling">🪴</div>
@@ -50,7 +50,7 @@ import 'open-props/easings';
 	}
 	#is {
 		display: none;
-		width: 33vw;
+		width: 30vw;
 		position: absolute;
 		view-transition-name: is;
 	}
